@@ -7,6 +7,7 @@ import pandas as pd
 import platform
 import os
 import pwd
+import urllib2
 
 """
 Exporting data from the profiles.doe.mass.edu site does not save data as
@@ -20,7 +21,12 @@ def convertToXLS(fileName, fileLocation, index = None, header = None, skiprows =
     dfs.to_excel(writer,"Sheet1")
     writer.save()
     
-    
+def setProxy():
+    print "Turning on proxy"
+    proxy = urllib2.ProxyHandler({'http' : 'llproxy.llan.ll.mit.edu:8080'})
+    opener = urllib2.build_opener(proxy)
+    urllib2.install_opener(opener)
+        
 def setCurrDir():
     user = pwd.getpwuid(os.getuid())[0]
     
