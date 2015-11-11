@@ -13,7 +13,7 @@ import urllib2
  
 #home_dir = "/Users/ad23883/workspace/house_hunt/"
 #home_dir = "C:\\Users\\ad23883\\workspace\\house_hunt\\"
-dataLocation = "data/"
+dataLocation = "data/school/"
 
 class SchoolSiteData(object):
 
@@ -57,9 +57,6 @@ Current available options are:
 def downloadSchoolData(data = 'current'):
     print "Started downloading School data"
     sites = []      
-    proxy = urllib2.ProxyHandler({'http' : 'llproxy.llan.ll.mit.edu:8080'})
-    opener = urllib2.build_opener(proxy)
-    urllib2.install_opener(opener)
         
     sites.append(SchoolSiteData('admin', 
         'http://profiles.doe.mass.edu/search/search_export.aspx?orgCode=&orgType=5,12&runOrgSearch=Y&searchType=ORG&leftNavId=11238&showEmail=N',
