@@ -25,7 +25,31 @@ def populateMaster(fileName, df):
             writer = pd.ExcelWriter(fileName, engine='openpyxl')    
         data.to_excel(writer, sheetName)
         writer.save()
+
+"""
+Utility function to convert string of hours and minutes into minutes.
+For example, string of 1 hour 3 min will return 63
+duration string passed in is expected to be in 1 of the following formats
+# hour # min
+# hour
+# min
+"""
+def convertToMin(duration):    
+    min = 0
+    fields = duration.split(' ')
     
+    """ fields has hour and min """
+    if len(fields) == 4:
+        min = int(fields[0]) * 60 + int(fields[2])
+    elif len(fields) == 2:
+        if "hour" in fields[1]:
+            min = int(fields[0]) * 60
+        elif "min" in fields[1]:
+            min = int(fields[0])
+        else:
+            "Encountered unknown format"
+    return 	min
+
 """
 Exporting data from the profiles.doe.mass.edu site does not save data as
 true Excel files. This mehtod will save the data as an xls file so it 
@@ -61,7 +85,7 @@ def getMATowns():
     'Dalton','Dana','Danvers','Dartmouth','Dedham','Deerfield','Dennis','Dighton','Douglas','Dorchester','Dover','Dracut','Dudley','Dunstable','Duxbury',
     'East Bridgewater','East Brookfield','East Longmeadow','Eastham','Easthampton','Easton','Edgartown','Egremont','Enfield','Erving','Essex','Everett',
     'Fairhaven','Fall River','Falmouth','Fitchburg','Florida','Foxborough','Framingham','Franklin','Freetown',
-    'Gardner','Georgetown','Gill','Gloucester','Goshen','Gosnold','Grafton','Granby','Granville','Great Barrington','Greenfield','Greenwich','Groton','Groveland',
+    'Gardner','Georgetown','Gill','Gloucester','Goshen','Grafton','Granby','Granville','Great Barrington','Greenfield','Greenwich','Groton','Groveland',
     'Hadley','Halifax','Hamilton','Hampden','Hancock','Hanover','Hanson','Hardwick','Harvard','Harwich','Hatfield','Haverhill','Hawley','Heath','Hingham','Hinsdale','Holbrook','Holden','Holland','Holliston','Holyoke','Hopedale','Hopkinton','Hubbardston','Hudson','Hull','Huntington','Hyde Park',
     'Ipswich','Kingston',
     'Lakeville','Lancaster','Lanesborough','Lawrence','Lee','Leicester','Lenox','Leominster','Leverett','Lexington','Leyden','Lincoln','Littleton','Longmeadow','Lowell','Ludlow','Lunenburg','Lynn','Lynnfield',
