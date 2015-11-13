@@ -22,3 +22,37 @@ def parseCommuteData(data):
    
     df = pd.DataFrame(rows, columns = columns)
     return df
+
+'''
+Takes the town-zip.xls file, combines multiple zips for each town, and pulls county for each town
+Saves Town, zips, and county to the town_admin_data-2015.xlsx file 
+'''
+def parseTownAdminData():
+
+    currTown = ''
+    zip = ''
+    rows = []
+    county = ''
+    columns = ['Town', 'Zips', 'County']
+    
+    fileName = 'town_zips.xlsx'
+    ws = pd.ExcelFile(dataLocation+fileName).parse('Sheet1')
+    ws.sort_values(by="Town", inplace=True)
+
+    for row in range(len(ws)):
+        town = ws.iloc[row, 1]
+        # check for multiple zips per town
+        if town == currTown:
+            zip = zip + str(ws.iloc[row, 0]) +', '
+            if row < (len(ws)-1) and town != ws.iloc[row+1, 1]:
+                rows.append([town, zip, county])
+                zip = ''
+        else:
+            currTown = town
+            zip = zip + str(ws.iloc[row, 0]) +', '
+            county = ws.iloc[row, 2]
+            if row < (len(ws)-1) and town != ws.iloc[row+1, 1]:
+                rows.append([town, zip, county])
+                zip = ''
+    
+    return pd.DataFrame(rows, columns=columns)

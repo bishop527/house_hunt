@@ -1,14 +1,13 @@
 import School.ParseSchoolData as parse
 from School.SchoolSiteData import downloadSchoolData
-import utils
 from utils import *
 from collections import OrderedDict
 
 fileName = "house_hunting-School_Data-2015.xlsx"
 
-utils.setCurrDir()
+setCurrDir()
 entries = OrderedDict()
-#utils.setProxy()
+setProxy()
 
 downloadSchoolData()
 

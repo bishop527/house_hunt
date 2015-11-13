@@ -62,9 +62,9 @@ def convertToXLS(fileName, fileLocation, index = None, header = None, skiprows =
     dfs.to_excel(writer,"Sheet1")
     writer.save()
     
-def setProxy():
-    print "Turning on proxy"
-    proxy = urllib2.ProxyHandler({'http' : 'llproxy.llan.ll.mit.edu:8080'})
+def setProxy(type='http'):
+    print "Turning on", type, "proxy"
+    proxy = urllib2.ProxyHandler({type : 'llproxy.llan.ll.mit.edu:8080'})
     opener = urllib2.build_opener(proxy)
     urllib2.install_opener(opener)
         
