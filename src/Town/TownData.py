@@ -11,8 +11,8 @@ dataLocation = 'data/town/'
 
 def getCommuateData():    
     googleAPIkey = 'AIzaSyDtNP2h8YzQzUdWJ_2JvspP4nAJhg7m9LQ'
-    gmaps = googlemaps.Client(key=googleAPIkey, requests_kwargs={'proxies':{'https':'http://llproxy.llan.ll.mit.edu:8080'}})
-    #gmaps = googlemaps.Client(key=googleAPIkey)
+    #gmaps = googlemaps.Client(key=googleAPIkey, requests_kwargs={'proxies':{'https':'http://llproxy.llan.ll.mit.edu:8080'}})
+    gmaps = googlemaps.Client(key=googleAPIkey)
     destination = '244 Wood St. Lexington, MA'
     mode = 'driving'
     language = 'en'
