@@ -2,14 +2,11 @@
 Created on Nov 12, 2015
 
 @author: ad23883
+@todo: 
 '''
-import urllib
 import urllib2
-import xml.etree.ElementTree
 from bs4 import BeautifulSoup
 import pandas as pd
-from itertools import product
-from sympy.concrete.products import Product
 import time
 from TownData import townLookup
 from Town.TownData import countyLookup, taxRateLookup
@@ -20,7 +17,7 @@ ext = ".xlsx"
 truliaKey = '9z8g9yszfkukswpj5q3ry5a4'
 
 def getTruliaCities(state='MA'):
-    print "Downloading Trulia data for cities in", state
+    print "        Downloading Trulia data for cities in", state
 
     data = []
     
@@ -49,7 +46,7 @@ def getTruliaNeighborhoods(city, state='MA'):
     return data
 
 def getTruliaZipCodesInState(state='MA'):
-    print "Downloading Trulia zip codes for", state
+    print "        Downloading Trulia zip codes for", state
     data = []
     
     url_base = 'http://api.trulia.com/webservices.php?library=LocationInfo&function=getZipCodesInState&'
@@ -63,7 +60,7 @@ def getTruliaZipCodesInState(state='MA'):
     return data
 
 def getTruliaZipCodeStats(zips, startDate, endDate):
-    print "Downloading Trulia housing data"
+    print "        Downloading Trulia Housing Data"
     fileName = 'House_Data-2015'+ext
     data = []
     retry = []
@@ -123,7 +120,7 @@ def getTruliaZipCodeStats(zips, startDate, endDate):
             print "HTTP Error, skipping zip ", zipCode
             retry.append(zipCode)
             
-    print "Skipped ", len(retry), "zip codes"
+    print "            Skipped ", len(retry), "zip codes"
     df = pd.DataFrame(data, columns=columns)
     
     writer = pd.ExcelWriter(dataLocation+fileName, engine="openpyxl")
