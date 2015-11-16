@@ -8,6 +8,11 @@ import urllib2
 import xml.etree.ElementTree
 from bs4 import BeautifulSoup
 import pandas as pd
+from itertools import product
+from sympy.concrete.products import Product
+import time
+from TownData import townLookup
+from Town.TownData import countyLookup, taxRateLookup
 
 dataLocation = "data/town/"
 ext = ".xlsx"
@@ -15,6 +20,8 @@ ext = ".xlsx"
 truliaKey = '9z8g9yszfkukswpj5q3ry5a4'
 
 def getTruliaCities(state='MA'):
+    print "Downloading Trulia data for cities in", state
+
     data = []
     
     url_base = 'http://api.trulia.com/webservices.php?library=LocationInfo&function=getCitiesInState&'
@@ -41,51 +48,82 @@ def getTruliaNeighborhoods(city, state='MA'):
     
     return data
 
-def getTruliaZipCodeStats(zip, startDate, endDate):
+def getTruliaZipCodesInState(state='MA'):
+    print "Downloading Trulia zip codes for", state
+    data = []
     
-    fileName = 'House_Data-2015'+ext
-    
-    data = [['NA','NA','NA','NA','NA','NA','NA','NA','NA']]
-    
-    medianListPrice = ''
-    avgListPrice = ''
-    #columns = ['Zip, All-Avg List, All-Med List, 3-Avg List, 3-Med List, 2-Avg List, 2-Med List, 1-Avg List, 1-Med List']
-    columns = pd.MultiIndex.from_tuples([('Zip', ''),
-                                         ('All Properties', 'Avg List Price'),('All Properties', 'Median List Price'),
-                                         ('3 Bedroom', 'Avg List Price'),('3 Bedroom', 'Median List Price'),
-                                         ('2 Bedroom', 'Avg List Price'),('2 Bedroom', 'Median List Price'),
-                                         ('1 Bedroom', 'Avg List Price'),('1 Bedroom', 'Median List Price')])
-         
-    url_base = 'http://api.trulia.com/webservices.php?library=TruliaStats&function=getZipCodeStats&'
-    url = url_base+'zipCode='+zip+'&startDate='+startDate+'&endDate='+endDate+'&apikey='+truliaKey
-    print url
+    url_base = 'http://api.trulia.com/webservices.php?library=LocationInfo&function=getZipCodesInState&'
+    url = url_base+'state='+state+'&apikey='+truliaKey
 
     e = BeautifulSoup(urllib2.urlopen(url).read(), 'lxml')
 
-    data[0][0] = zip
+    for each in e.findAll('zipcode'):
+        data.append(each.find('name').text)
     
-    for each in e.findAll('subcategory'):
-        if each.type.text == 'All Properties':
-            avgListPrice = each.averagelistingprice.text
-            data[0][1] = avgListPrice
-            medianListPrice = each.medianlistingprice.text
-            data[0][2] = medianListPrice
-        if each.type.text == '3 Bedroom Properties':
-            avgListPrice = each.averagelistingprice.text
-            data[0][3] = avgListPrice
-            medianListPrice = each.medianlistingprice.text
-            data[0][4] = medianListPrice
-        if each.type.text == '2 Bedroom Properties':
-            avgListPrice = each.averagelistingprice.text
-            data[0][5] = avgListPrice
-            medianListPrice = each.medianlistingprice.text
-            data[0][6] = medianListPrice
-        if each.type.text == '1 Bedroom Properties':
-            avgListPrice = each.averagelistingprice.text
-            data[0][7] = avgListPrice
-            medianListPrice = each.medianlistingprice.text
-            data[0][8] = medianListPrice
+    return data
+
+def getTruliaZipCodeStats(zips, startDate, endDate):
+    print "Downloading Trulia housing data"
+    fileName = 'House_Data-2015'+ext
+    data = []
+    retry = []
     
+    medianListPrice = ''
+    avgListPrice = ''
+    columns = pd.MultiIndex.from_tuples([('Zip',''),('Town',''),('County',''),('Tax Rate', ''),
+                                         ('All Properties', 'Avg List Price'),('All Properties', 'Median List Price'),('All Properties', 'Median Tax Cost'),
+                                         ('3 Bedroom', 'Avg List Price'),('3 Bedroom', 'Median List Price'),('3 Bedroom', 'Median Tax Cost'),
+                                         ('2 Bedroom', 'Avg List Price'),('2 Bedroom', 'Median List Price'),('2 Bedroom', 'Median Tax Cost'),
+                                         ('1 Bedroom', 'Avg List Price'),('1 Bedroom', 'Median List Price'),('1 Bedroom', 'Median Tax Cost'),])
+    #cols = product(['All Properties', '3 Bedroom', '2 Bedroom', '1 Bedroom'], ['Avg List Price', 'Median List Price'])
+    #columns = pd.MultiIndex.from_tuples(list(cols))
+    
+    url_base = 'http://api.trulia.com/webservices.php?library=TruliaStats&function=getZipCodeStats&'
+    
+    # Iterate through all zips passed in
+    for row in range(len(zips)):
+        if row % 2 == 0:
+            time.sleep(1)
+
+        zipCode = zips[row]
+        town = townLookup(zipCode)
+        taxRate = float(taxRateLookup(town))
+        county = countyLookup(zipCode)
+        
+        # Need to initialize data array for 15 positions because not all city entries contain data for all 15 values
+        data.append([zipCode, town, county, taxRate, 'NA','NA','NA','NA','NA','NA','NA','NA','NA','NA','NA','NA'])
+        
+        url = url_base+'zipCode='+zipCode+'&startDate='+startDate+'&endDate='+endDate+'&apikey='+truliaKey
+        try:
+            e = BeautifulSoup(urllib2.urlopen(url).read(), 'lxml')
+            
+            for each in e.findAll('subcategory'):
+                avgListPrice = float(each.averagelistingprice.text)
+                medianListPrice = float(each.medianlistingprice.text)
+                medianTaxCost = round(taxRate*(medianListPrice/1000), 2)
+
+                if each.type.text == 'All Properties':
+                    data[row][4] = avgListPrice
+                    data[row][5] = medianListPrice
+                    data[row][6] = medianTaxCost
+                elif each.type.text == '3 Bedroom Properties':
+                    data[row][7] = avgListPrice
+                    data[row][8] = medianListPrice
+                    data[row][9] = medianTaxCost
+                elif each.type.text == '2 Bedroom Properties':
+                    data[row][10] = avgListPrice
+                    data[row][11] = medianListPrice
+                    data[row][12] = medianTaxCost
+                elif each.type.text == '1 Bedroom Properties':
+                    data[row][13] = avgListPrice
+                    data[row][14] = medianListPrice
+                    data[row][15] = medianTaxCost
+            
+        except urllib2.HTTPError as e:
+            print "HTTP Error, skipping zip ", zipCode
+            retry.append(zipCode)
+            
+    print "Skipped ", len(retry), "zip codes"
     df = pd.DataFrame(data, columns=columns)
     
     writer = pd.ExcelWriter(dataLocation+fileName, engine="openpyxl")
