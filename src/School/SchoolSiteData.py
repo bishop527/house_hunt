@@ -8,6 +8,7 @@ currYear - the most current year of data
 availYears - list of other years available for download
 
 @author: AD23883
+@todo: 
 '''
 import urllib2
  
@@ -55,7 +56,7 @@ Current available options are:
     account-School
 """
 def downloadSchoolData(data = 'current'):
-    print "Started downloading School data"
+    print "        Started Downloading School Data"
     sites = []      
         
     sites.append(SchoolSiteData('admin', 
