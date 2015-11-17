@@ -22,7 +22,7 @@ def processCommuteData():
     df3 = parseCommuteData(commuteData3)
     df4 = parseCommuteData(commuteData4)
     frames = [df1,df2,df3,df4]
-    entries['Commute'] = pd.concat(frames, ignore_index=True)
+    entries['Commute-Data'] = pd.concat(frames, ignore_index=True)
     
     populateMaster(fileName, entries)
     
