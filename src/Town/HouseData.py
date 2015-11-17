@@ -72,8 +72,6 @@ def getTruliaZipCodeStats(zips, startDate, endDate):
                                          ('3 Bedroom', 'Avg List Price'),('3 Bedroom', 'Median List Price'),('3 Bedroom', 'Median Tax Cost'),
                                          ('2 Bedroom', 'Avg List Price'),('2 Bedroom', 'Median List Price'),('2 Bedroom', 'Median Tax Cost'),
                                          ('1 Bedroom', 'Avg List Price'),('1 Bedroom', 'Median List Price'),('1 Bedroom', 'Median Tax Cost'),])
-    #cols = product(['All Properties', '3 Bedroom', '2 Bedroom', '1 Bedroom'], ['Avg List Price', 'Median List Price'])
-    #columns = pd.MultiIndex.from_tuples(list(cols))
     
     url_base = 'http://api.trulia.com/webservices.php?library=TruliaStats&function=getZipCodeStats&'
     
