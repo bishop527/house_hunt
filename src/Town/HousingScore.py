@@ -7,7 +7,6 @@ Created on Nov 17, 2015
 
 import pandas as pd
 import numpy as np
-import math
 
 '''
 Calculates the tax score for a town based on the tax rate passed in.
@@ -20,7 +19,7 @@ def calculateTaxScore(taxRate):
     score = 0
     minValue = 11.0
     maxValue = 21.0
-    medianValue = 16.0
+    medianValue = (maxValue + minValue)/2
     maxScore = 10
     minScore = -10
     medianScore = 0
@@ -47,7 +46,7 @@ def calculateHousePriceScore(houseCost):
     score = 0
     minValue = 350000
     maxValue = 450000
-    medianValue = 400000
+    medianValue = (maxValue + minValue) / 2
     maxScore = 10
     minScore = -10
     medianScore = 0
