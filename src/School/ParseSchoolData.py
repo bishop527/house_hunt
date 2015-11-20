@@ -36,8 +36,11 @@ def parseAdminData(year = "2015"):
     ws = pd.read_excel(dataLocation+fileName, 0)
      
     for row in range(len(ws)):
-        town = ws.iloc[row, 0]
-        school_name = ws.iloc[row, 1]
+        """ Skip Charter schools """
+        if 'Charter' in ws.iloc[row,1]:
+            continue
+        town = ws.iloc[row, 0].capitalize()
+        school_name = str(ws.iloc[row, 1].replace(' (District)', '', 1)).capitalize()
         school_code = ws.iloc[row, 2]
         school_type = ws.iloc[row, 3]
         function = ws.iloc[row, 4]
@@ -71,7 +74,10 @@ def parseAccountDistrictData(year="2014"):
     ws = pd.read_excel(dataLocation+fileName, 0)
      
     for row in range(len(ws)):
-        district = ws.iloc[row, 0]
+        """ Skip Charter schools """
+        if 'Charter' in ws.iloc[row,0]:
+            continue
+        district = str(ws.iloc[row, 0].replace(' (District)', '', 1)).capitalize()
         school_code = ws.iloc[row, 1]
         level = ws.iloc[row, 2]
         notes = ws.iloc[row, 3]
@@ -98,21 +104,24 @@ def parseAccountSchoolData(year="2014"):
      
     for row in range(len(ws)):        
         """ Skip Charter schools """
-        if 'Charter' not in ws.iloc[row,0]:
-            # hack because this entry has 2 ' - '
-            if ws.iloc[row,0] == "Boston - ELC - West Zone":
-                town = "Boston"
-                school = "ELC-West Zone"
-            else:
-                town, school = ws.iloc[row, 0].split(' - ')
-            
-            school_code = ws.iloc[row, 1]
-            level = ws.iloc[row, 2]
-            notes = ws.iloc[row, 3]
-            type = ws.iloc[row, 4]
-            percentile = ws.iloc[row, 5]
-            
-            rows.append([town, school, type, level, notes, percentile])
+        if 'Charter' in ws.iloc[row,0]:
+            continue
+        # hack because this entry has 2 ' - '
+        if ws.iloc[row,0] == "Boston - ELC - West Zone":
+            town = "Boston"
+            school = "ELC-West Zone"
+        else:
+            town, school = ws.iloc[row, 0].split(' - ')
+            town = town.capitalize()
+            school = school.capitalize()
+        
+        school_code = ws.iloc[row, 1]
+        level = ws.iloc[row, 2]
+        notes = ws.iloc[row, 3]
+        type = ws.iloc[row, 4]
+        percentile = ws.iloc[row, 5]
+        
+        rows.append([town, school, type, level, notes, percentile])
 
     df = pd.DataFrame(rows, columns = columns)
     
@@ -131,7 +140,10 @@ def parseClassSizeDistrictData(year='2014'):
     ws = pd.read_excel(dataLocation+fileName, 0)
      
     for row in range(len(ws)):        
-        district = ws.iloc[row, 0]
+        """ Skip Charter schools """
+        if 'Charter' in ws.iloc[row,0]:
+            continue
+        district = str(ws.iloc[row, 0].replace(' (District)', '', 1)).capitalize()
         school_code = ws.iloc[row, 1]
         total_classes = ws.iloc[row, 2]
         avg_size = ws.iloc[row, 3]
@@ -163,26 +175,29 @@ def parseClassSizeSchoolData(year='2014'):
      
     for row in range(len(ws)):        
         """ Skip Charter schools """
-        if 'Charter' not in ws.iloc[row,0]:
-            # hack because this entry has 2 ' - '
-            if ws.iloc[row,0] == "Boston - ELC - West Zone":
-                town = "Boston"
-                school = "ELC-West Zone"
-            else:
-                town, school = ws.iloc[row, 0].split(' - ')
-            
-            total_classes = ws.iloc[row, 2]
-            avg_size = ws.iloc[row, 3]
-            num_students = ws.iloc[row, 4]
-            african_perc = ws.iloc[row,5]
-            asian_perc = ws.iloc[row,6]
-            hisp_perc = ws.iloc[row,7]
-            white_perc = ws.iloc[row,8]
-            native_perc = ws.iloc[row,9]
-            island_perc = ws.iloc[row,10]
-            multi_perc = ws.iloc[row,11]
-            
-            rows.append([town, school, total_classes, num_students, avg_size])
+        if 'Charter' in ws.iloc[row,0]:
+            continue
+        # hack because this entry has 2 ' - '
+        if ws.iloc[row,0] == "Boston - ELC - West Zone":
+            town = "Boston"
+            school = "ELC-West Zone"
+        else:
+            town, school = ws.iloc[row, 0].split(' - ')
+            town = town.capitalize()
+            school = school.capitalize()
+        
+        total_classes = ws.iloc[row, 2]
+        avg_size = ws.iloc[row, 3]
+        num_students = ws.iloc[row, 4]
+        african_perc = ws.iloc[row,5]
+        asian_perc = ws.iloc[row,6]
+        hisp_perc = ws.iloc[row,7]
+        white_perc = ws.iloc[row,8]
+        native_perc = ws.iloc[row,9]
+        island_perc = ws.iloc[row,10]
+        multi_perc = ws.iloc[row,11]
+        
+        rows.append([town, school, total_classes, num_students, avg_size])
 
     df = pd.DataFrame(rows, columns = columns)
     
@@ -201,7 +216,10 @@ def parseDropoutDistrictData(year="2014"):
     ws = pd.read_excel(dataLocation+fileName, 0)
      
     for row in range(len(ws)):
-        district = ws.iloc[row, 0]
+        """ Skip Charter schools """
+        if 'Charter' in ws.iloc[row,0]:
+            continue
+        district = str(ws.iloc[row, 0].replace(' (District)', '', 1)).capitalize()
         school_code = ws.iloc[row, 1]
         num_enrolled = ws.iloc[row, 2]
         total_drop = ws.iloc[row, 3]
@@ -231,24 +249,27 @@ def parseDropoutSchoolData(year="2014"):
      
     for row in range(len(ws)):        
         """ Skip Charter schools """
-        if 'Charter' not in ws.iloc[row,0]:
-            # hack because this entry has 2 ' - '
-            if ws.iloc[row,0] == "Boston - ELC - West Zone":
-                town = "Boston"
-                school = "ELC-West Zone"
-            else:
-                town, school = ws.iloc[row, 0].split(' - ')
-            
-            school_code = ws.iloc[row, 1]
-            num_enrolled = ws.iloc[row, 2]
-            total_drop = ws.iloc[row, 3]
-            perc_total_drop = ws.iloc[row, 4]
-            perc_gr9_drop = ws.iloc[row, 5]
-            perc_gr10_drop = ws.iloc[row, 6]
-            perc_gr11_drop = ws.iloc[row, 7]           
-            perc_gr12_drop = ws.iloc[row, 8]
-            
-            rows.append([town, school, num_enrolled, total_drop, perc_total_drop])
+        if 'Charter' in ws.iloc[row,0]:
+            continue
+        # hack because this entry has 2 ' - '
+        if ws.iloc[row,0] == "Boston - ELC - West Zone":
+            town = "Boston"
+            school = "ELC-West Zone"
+        else:
+            town, school = ws.iloc[row, 0].split(' - ')
+            town = town.capitalize()
+            school = school.capitalize()
+        
+        school_code = ws.iloc[row, 1]
+        num_enrolled = ws.iloc[row, 2]
+        total_drop = ws.iloc[row, 3]
+        perc_total_drop = ws.iloc[row, 4]
+        perc_gr9_drop = ws.iloc[row, 5]
+        perc_gr10_drop = ws.iloc[row, 6]
+        perc_gr11_drop = ws.iloc[row, 7]           
+        perc_gr12_drop = ws.iloc[row, 8]
+        
+        rows.append([town, school, num_enrolled, total_drop, perc_total_drop])
 
     df = pd.DataFrame(rows, columns = columns)
     
@@ -267,7 +288,10 @@ def parseHigherEdDistrictData(year="2013"):
     ws = pd.read_excel(dataLocation+fileName, 0)
      
     for row in range(len(ws)):
-        district = ws.iloc[row, 0]
+        """ Skip Charter schools """
+        if 'Charter' in ws.iloc[row,0]:
+            continue
+        district = str(ws.iloc[row, 0].replace(' (District)', '', 1)).capitalize()
         school_code = ws.iloc[row, 1]
         num_hs_grad = ws.iloc[row, 2]
         num_to_coll = ws.iloc[row, 3]
@@ -300,27 +324,30 @@ def parseHigherEdSchoolData(year="2013"):
      
     for row in range(len(ws)):        
         """ Skip Charter schools """
-        if 'Charter' not in ws.iloc[row,0]:
-            # hack because this entry has 2 ' - '
-            if ws.iloc[row,0] == "Boston - ELC - West Zone":
-                town = "Boston"
-                school = "ELC-West Zone"
-            else:
-                town, school = ws.iloc[row, 0].split(' - ')
+        if 'Charter' in ws.iloc[row,0]:
+            continue
+        # hack because this entry has 2 ' - '
+        if ws.iloc[row,0] == "Boston - ELC - West Zone":
+            town = "Boston"
+            school = "ELC-West Zone"
+        else:
+            town, school = ws.iloc[row, 0].split(' - ')
+            town = town.capitalize()
+            school = school.capitalize()
+        
+        school_code = ws.iloc[row, 1]
+        num_hs_grad = ws.iloc[row, 2]
+        num_to_coll = ws.iloc[row, 3]
+        perc_to_coll = ws.iloc[row, 4]
+        perc_priv_2yr = ws.iloc[row, 5]
+        perc_priv_4yr = ws.iloc[row, 6]
+        perc_pub_2yr = ws.iloc[row, 7]           
+        perc_pub_4yr = ws.iloc[row, 8]
+        perc_MA_cc = ws.iloc[row, 9]
+        perc_MA_state = ws.iloc[row, 10]
+        perc_UMass = ws.iloc[row, 11]
             
-            school_code = ws.iloc[row, 1]
-            num_hs_grad = ws.iloc[row, 2]
-            num_to_coll = ws.iloc[row, 3]
-            perc_to_coll = ws.iloc[row, 4]
-            perc_priv_2yr = ws.iloc[row, 5]
-            perc_priv_4yr = ws.iloc[row, 6]
-            perc_pub_2yr = ws.iloc[row, 7]           
-            perc_pub_4yr = ws.iloc[row, 8]
-            perc_MA_cc = ws.iloc[row, 9]
-            perc_MA_state = ws.iloc[row, 10]
-            perc_UMass = ws.iloc[row, 11]
-                
-            rows.append([town, school, num_hs_grad, num_to_coll, perc_to_coll])
+        rows.append([town, school, num_hs_grad, num_to_coll, perc_to_coll])
 
     df = pd.DataFrame(rows, columns = columns)
     
@@ -339,7 +366,10 @@ def parseGraduationRateDistrictData(year="2014"):
     ws = pd.read_excel(dataLocation+fileName, 0)
      
     for row in range(len(ws)):
-        district = ws.iloc[row, 0]
+        """ Skip Charter schools """
+        if 'Charter' in ws.iloc[row,0]:
+            continue
+        district = str(ws.iloc[row, 0].replace(' (District)', '', 1)).capitalize()
         school_code = ws.iloc[row, 1]
         num_students = ws.iloc[row, 2]
         perc_grad = ws.iloc[row, 3]
@@ -369,24 +399,27 @@ def parseGraduationRateSchoolData(year="2014"):
      
     for row in range(len(ws)):        
         """ Skip Charter schools """
-        if 'Charter' not in ws.iloc[row,0]:
-            # hack because this entry has 2 ' - '
-            if ws.iloc[row,0] == "Boston - ELC - West Zone":
-                town = "Boston"
-                school = "ELC-West Zone"
-            else:
-                town, school = ws.iloc[row, 0].split(' - ')
+        if 'Charter' in ws.iloc[row,0]:
+            continue
+        # hack because this entry has 2 ' - '
+        if ws.iloc[row,0] == "Boston - ELC - West Zone":
+            town = "Boston"
+            school = "ELC-West Zone"
+        else:
+            town, school = ws.iloc[row, 0].split(' - ')
+            town = town.capitalize()
+            school = school.capitalize()
+        
+        school_code = ws.iloc[row, 1]
+        num_students = ws.iloc[row, 2]
+        perc_grad = ws.iloc[row, 3]
+        perc_in_school = ws.iloc[row, 4]
+        perc_non_grad_complete = ws.iloc[row, 5]
+        perc_ged = ws.iloc[row, 6]
+        perc_dropped = ws.iloc[row, 7]           
+        perc_excluded = ws.iloc[row, 8]
             
-            school_code = ws.iloc[row, 1]
-            num_students = ws.iloc[row, 2]
-            perc_grad = ws.iloc[row, 3]
-            perc_in_school = ws.iloc[row, 4]
-            perc_non_grad_complete = ws.iloc[row, 5]
-            perc_ged = ws.iloc[row, 6]
-            perc_dropped = ws.iloc[row, 7]           
-            perc_excluded = ws.iloc[row, 8]
-                
-            rows.append([town, school, num_students, perc_grad])
+        rows.append([town, school, num_students, perc_grad])
 
     df = pd.DataFrame(rows, columns = columns)
     
@@ -395,17 +428,20 @@ def parseGraduationRateSchoolData(year="2014"):
 def parseMCASDistrictData(year="2015"):
     print "            Parsing MCAS District Data"
     fileName = "mcas-district-"+year+ext
-    columns = ['District', '# Students', 'Subject', '# Adv', '% Adv', '# Prof', '% Prof', '# NI', '% NI']
+    columns = ['District', '# Students', 'Subject', '# Adv+Prof', '% Adv+Prof', '# Adv', '% Adv', '# Prof', '% Prof', '# NI', '% NI', '# W/F', '% W/F']
     rows = []
 
     """ Convert to true xls """    
     utils.convertToXLS(fileName, dataLocation, header=0)        
-#     
+        
     """ Open new xls file """
     ws = pd.read_excel(dataLocation+fileName, 0)
      
     for row in range(len(ws)):
-        district = ws.iloc[row, 0]
+        """ Skip Charter schools """
+        if 'Charter' in ws.iloc[row,0]:
+            continue
+        district = str(ws.iloc[row, 0].replace(' (District)', '', 1)).capitalize()
         school_code = ws.iloc[row, 1]
         subject = ws.iloc[row, 2]
         num_prof_adv = ws.iloc[row, 3]
@@ -423,7 +459,7 @@ def parseMCASDistrictData(year="2015"):
         sgp = ws.iloc[row, 15]
         num_sgp = ws.iloc[row, 16]    
         
-        rows.append([district, num_students, subject, num_adv, perc_adv, num_prof, perc_prof, num_NI, perc_NI])
+        rows.append([district, num_students, subject, num_prof_adv, perc_prof_adv, num_adv, perc_adv, num_prof, perc_prof, num_NI, perc_NI, num_WF, perc_WF])
 
     df = pd.DataFrame(rows, columns = columns)
     
@@ -432,7 +468,7 @@ def parseMCASDistrictData(year="2015"):
 def parseMCASSchoolData(year="2015"):
     print "            Parsing MCAS School Data"
     fileName = "mcas-school-"+year+ext
-    columns = ['Town', 'School', '# Students', 'Subject', '# Adv', '% Adv', '# Prof', '% Prof', '# NI', '% NI']
+    columns = ['Town', 'School', '# Students', 'Subject', '# Adv', '% Adv', '# Prof', '% Prof', '# NI', '% NI', '# W/F', '% W/F' ]
     rows = []
 
     """ Convert to true xls file """    
@@ -443,35 +479,38 @@ def parseMCASSchoolData(year="2015"):
      
     for row in range(len(ws)):        
         """ Skip Charter schools """
-        if 'Charter' not in ws.iloc[row,0]:
-            # hack because these entry has 2 ' - '
-            if ws.iloc[row,0] == "Boston - ELC - West Zone":
-                town = "Boston"
-                school = "ELC-West Zone"
-            elif "Easton - Richardson" in ws.iloc[row,0]:
-                town = "Easton"
-                school = "Olmstead School"
-            else:
-                town, school = ws.iloc[row, 0].split(' - ')
+        if 'Charter' in ws.iloc[row,0]:
+            continue
+        # hack because these entry has 2 ' - '
+        if ws.iloc[row,0] == "Boston - ELC - West Zone":
+            town = "Boston"
+            school = "ELC-West Zone"
+        elif "Easton - Richardson" in ws.iloc[row,0]:
+            town = "Easton"
+            school = "Olmstead School"
+        else:
+            town, school = ws.iloc[row, 0].split(' - ')
+            town = town.capitalize()
+            school = school.capitalize()
+        
+        school_code = ws.iloc[row, 1]
+        subject = ws.iloc[row, 2]
+        num_prof_adv = ws.iloc[row, 3]
+        perc_prof_adv = ws.iloc[row, 4]
+        num_adv = ws.iloc[row, 5]
+        perc_adv = ws.iloc[row, 6]
+        num_prof = ws.iloc[row, 7]           
+        perc_prof = ws.iloc[row, 8]
+        num_NI = ws.iloc[row, 9]
+        perc_NI = ws.iloc[row, 10]
+        num_WF = ws.iloc[row, 11]
+        perc_WF = ws.iloc[row, 12]
+        num_students = ws.iloc[row, 13]
+        cpi = ws.iloc[row, 14]
+        sgp = ws.iloc[row, 15]
+        num_sgp = ws.iloc[row, 16]    
             
-            school_code = ws.iloc[row, 1]
-            subject = ws.iloc[row, 2]
-            num_prof_adv = ws.iloc[row, 3]
-            perc_prof_adv = ws.iloc[row, 4]
-            num_adv = ws.iloc[row, 5]
-            perc_adv = ws.iloc[row, 6]
-            num_prof = ws.iloc[row, 7]           
-            perc_prof = ws.iloc[row, 8]
-            num_NI = ws.iloc[row, 9]
-            perc_NI = ws.iloc[row, 10]
-            num_WF = ws.iloc[row, 11]
-            perc_WF = ws.iloc[row, 12]
-            num_students = ws.iloc[row, 13]
-            cpi = ws.iloc[row, 14]
-            sgp = ws.iloc[row, 15]
-            num_sgp = ws.iloc[row, 16]    
-            
-            rows.append([town, school, num_students, subject, num_adv, perc_adv, num_prof, perc_prof, num_NI, perc_NI])
+        rows.append([town, school, num_students, subject, num_adv, perc_adv, num_prof, perc_prof, num_NI, perc_NI, num_WF, perc_WF])
 
     df = pd.DataFrame(rows, columns = columns)
     
@@ -490,7 +529,10 @@ def parseSATDistrictData(year="2015"):
     ws = pd.read_excel(dataLocation+fileName, 0)
      
     for row in range(len(ws)):
-        district = ws.iloc[row, 0]
+        """ Skip Charter schools """
+        if 'Charter' in ws.iloc[row,0]:
+            continue
+        district = str(ws.iloc[row, 0].replace(' (District)', '', 1)).capitalize()
         school_code = ws.iloc[row, 1]
         tests_taken = ws.iloc[row, 2]
         reading = ws.iloc[row, 3]
@@ -517,24 +559,27 @@ def parseSATSchoolData(year="2015"):
      
     for row in range(len(ws)):        
         """ Skip Charter schools """
-        if 'Charter' not in ws.iloc[row,0]:
-            # hack because these entry has 2 ' - '
-            if ws.iloc[row,0] == "Boston - ELC - West Zone":
-                town = "Boston"
-                school = "ELC-West Zone"
-            elif "Easton - Richardson" in ws.iloc[row,0]:
-                town = "Easton"
-                school = "Olmstead School"
-            else:
-                town, school = ws.iloc[row, 0].split(' - ')
-            
-            school_code = ws.iloc[row, 1]
-            tests_taken = ws.iloc[row, 2]
-            reading = ws.iloc[row, 3]
-            writing = ws.iloc[row, 4]
-            math = ws.iloc[row, 5]
-               
-            rows.append([town, school, tests_taken, reading, writing, math])
+        if 'Charter' in ws.iloc[row,0]:
+            continue
+        # hack because these entry has 2 ' - '
+        if ws.iloc[row,0] == "Boston - ELC - West Zone":
+            town = "Boston"
+            school = "ELC-West Zone"
+        elif "Easton - Richardson" in ws.iloc[row,0]:
+            town = "Easton"
+            school = "Olmstead School"
+        else:
+            town, school = ws.iloc[row, 0].split(' - ')
+            town = town.capitalize()
+            school = school.capitalize()
+        
+        school_code = ws.iloc[row, 1]
+        tests_taken = ws.iloc[row, 2]
+        reading = ws.iloc[row, 3]
+        writing = ws.iloc[row, 4]
+        math = ws.iloc[row, 5]
+           
+        rows.append([town, school, tests_taken, reading, writing, math])
 
     df = pd.DataFrame(rows, columns = columns)
     
@@ -558,7 +603,10 @@ def parseSPEDPerfData(year="2014"):
     ws = pd.read_excel(dataLocation+fileName, 0)
      
     for row in range(len(ws)):
-        district = ws.iloc[row, 0]
+        """ Skip Charter schools """
+        if 'Charter' in ws.iloc[row,0]:
+            continue
+        district = str(ws.iloc[row, 0].replace(' (District)', '', 1)).capitalize()
         school_code = ws.iloc[row, 1]
         ind1_num_cohort = ws.iloc[row, 2]
         ind1_num_grad = ws.iloc[row, 3]
@@ -604,7 +652,10 @@ def parseSPEDComplianceData(year="2014"):
     ws = pd.read_excel(dataLocation+fileName, 0)
      
     for row in range(len(ws)):
-        district = ws.iloc[row, 0]
+        """ Skip Charter schools """
+        if 'Charter' in ws.iloc[row,0]:
+            continue
+        district = str(ws.iloc[row, 0].replace(' (District)', '', 1)).capitalize()
         school_code = ws.iloc[row, 1]
         ind4a_num_students = ws.iloc[row, 2]
         ind4a_num_susp = ws.iloc[row, 3]
@@ -643,7 +694,10 @@ def parseTeacherSalaryData(year="2013"):
     ws = pd.read_excel(dataLocation+fileName, 0)
      
     for row in range(len(ws)):
-        district = ws.iloc[row, 0]
+        """ Skip Charter schools """
+        if 'CHARTER' in ws.iloc[row,0]:
+            continue        
+        district = str(ws.iloc[row, 0].replace(' (District)', '', 1)).capitalize()
         school_code = ws.iloc[row, 1]
         salary_total = ws.iloc[row, 2]
         avg_salary = ws.iloc[row, 3]
