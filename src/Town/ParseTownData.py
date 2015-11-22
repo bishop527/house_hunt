@@ -35,6 +35,9 @@ def parseTownAdminData():
             zipCode= '0'+zipCode
         zips = zips+zipCode +','.strip()
         town = ws.iloc[row, 1]
+        
+        if not TownData.townExists(town):
+            print town, ' is not in the list'
             
         taxRate = TownData.taxRateLookup(town)
         # check for multiple zips per town

@@ -22,7 +22,7 @@ def getMATowns():
     'Hadley','Halifax','Hamilton','Hampden','Hancock','Hanover','Hanson','Hardwick','Harvard','Harwich','Hatfield','Haverhill','Hawley','Heath','Hingham','Hinsdale','Holbrook','Holden','Holland','Holliston','Holyoke','Hopedale','Hopkinton','Hubbardston','Hudson','Hull','Huntington','Hyde Park',
     'Ipswich','Kingston',
     'Lakeville','Lancaster','Lanesborough','Lawrence','Lee','Leicester','Lenox','Leominster','Leverett','Lexington','Leyden','Lincoln','Littleton','Longmeadow','Lowell','Ludlow','Lunenburg','Lynn','Lynnfield',
-    'Malden','Manchester-By-The-Sea','Mansfield','Marblehead','Marion','Marlborough','Marshfield','Mashpee','Mattapoisett','Maynard','Medfield','Medford','Medway','Melrose','Mendon','Merrimac','Methuen','Middleborough','Middlefield','Middleton','Milford','Millbury','Millis','Millville','Milton','Monroe','Monson','Montague','Monterey','Montgomery','Mount Washington',
+    'Malden','Manchester By The Sea','Mansfield','Marblehead','Marion','Marlborough','Marshfield','Mashpee','Mattapoisett','Maynard','Medfield','Medford','Medway','Melrose','Mendon','Merrimac','Methuen','Middleborough','Middlefield','Middleton','Milford','Millbury','Millis','Millville','Milton','Monroe','Monson','Montague','Monterey','Montgomery','Mount Washington',
     'Nahant','Nantucket','Natick','Needham','New Ashford','New Bedford','New Braintree','New Marlborough','New Salem','Newbury','Newburyport','Newton','Norfolk','North Adams','North Andover','North Attleborough','North Brookfield','North Reading','Northampton','Northborough','Northbridge','Northfield','Norton','Norwell','Norwood',
     'Oak Bluffs','Oakham','Orange','Orleans','Otis','Oxford',
     'Palmer','Paxton','Peabody','Pelham','Pembroke','Pepperell','Peru','Petersham','Phillipston','Pittsfield','Plainfield','Plainville','Plymouth','Plympton','Prescott','Princeton','Provincetown',
@@ -47,8 +47,11 @@ def getMAZips():
         zips.append('0'+str(zipCode))
         
     return zips
-
-def townLookup(zip):
+'''
+This method looks for the passed zip in the Town_Admin sheet. 
+If it exists then return the associated town name. If not return None
+'''
+def zipLookup(zip):
     town = None
     
     # Check if Town_Admin-2015.xlsx exists
@@ -65,6 +68,15 @@ def townLookup(zip):
     
     return town
 
+def townExists(town):
+    exists = False
+    
+    allTowns = getMATowns()
+    if town in allTowns:
+        exists = True
+        
+    return exists
+    
 def taxRateLookup(town):
     taxRate = None
 

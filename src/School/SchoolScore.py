@@ -9,6 +9,10 @@ import numpy as np
 maxScore = 10
 minScore = -10
 medianScore = 0
+
+dataLocation = 'data/school/'
+fileName = 'Master-School_Data-2015'
+ext = '.xlsx'
     
 def normalizeScore(score):
         # Restrict score to no greater then maxScore and no less then minScore
@@ -159,7 +163,7 @@ def calculateSchoolScores():
     columns = ['Accnt Level ', 'Class Size', 'Parent Involve', 'SPED %', 'Dropout %', 'Grad %', 'HigherEd %', 'MCAS', 'SAT', 'School Rank']
         
     # Accountability Level Score
-    accntData = pd.read_excel('Master-School_Data-2015.xlsx', sheetname='Accountability-District', header=0)    
+    accntData = pd.read_excel(dataLocation+fileName+ext, sheetname='Accountability-District', header=0)    
     for row in range(len(accntData)):
         district = accntData.iloc[row, 0]
         level = accntData.iloc[row, 1]
@@ -172,13 +176,11 @@ def calculateSchoolScores():
             data[district][0] = accntScore
     
     # Class Size and SPED % Score
-    classSizeData = pd.read_excel('Master-School_Data-2015.xlsx', sheetname='Class_Size-District', header=0)
+    classSizeData = pd.read_excel(dataLocation+fileName+ext, sheetname='Class_Size-District', header=0)
     
     # Class Size
     for row in range(len(classSizeData)):
         district = classSizeData.iloc[row, 0]
-        if district == 'State totals':
-            continue
         classSize = classSizeData.iloc[row, 1]
         if np.isnan(classSize):
             continue
@@ -194,8 +196,6 @@ def calculateSchoolScores():
     # SPED %
     for row in range(len(classSizeData)):
         district = classSizeData.iloc[row, 0]
-        if district == 'State totals':
-            continue
         spedPerc = classSizeData.iloc[row, 2]
         if np.isnan(spedPerc):
             continue
@@ -209,12 +209,10 @@ def calculateSchoolScores():
             data[district][3] = spedPercScore
     
     # SPED Parent Involvement Score
-    parentData = pd.read_excel('Master-School_Data-2015.xlsx', sheetname='SPED-Performance', header=0, skiprows=2)
+    parentData = pd.read_excel(dataLocation+fileName+ext, sheetname='SPED-Performance', header=0, skiprows=2)
     
     for row in range(len(parentData)):
         district = parentData.iloc[row, 1]
-        if district == 'State totals':
-            continue
         parentPerc = parentData.iloc[row, 13]
         if parentPerc == 'NR' or parentPerc == '-':
             continue
@@ -231,12 +229,10 @@ def calculateSchoolScores():
             data[district][2] = parentScore
             
     # Dropout Rate Score
-    dropoutData = pd.read_excel('Master-School_Data-2015.xlsx', sheetname='Dropout-District', header=0)
+    dropoutData = pd.read_excel(dataLocation+fileName+ext, sheetname='Dropout-District', header=0)
     
     for row in range(len(dropoutData)):
         district = dropoutData.iloc[row, 0]
-        if district == 'State totals':
-            continue
         dropPerc = dropoutData.iloc[row, 3]
         if np.isnan(dropPerc):
             continue
@@ -250,12 +246,10 @@ def calculateSchoolScores():
             data[district][4] = dropoutScore
 
     # Graduation Rate Score
-    graduationData = pd.read_excel('Master-School_Data-2015.xlsx', sheetname='GraduationRates-District', header=0)
+    graduationData = pd.read_excel(dataLocation+fileName+ext, sheetname='GraduationRates-District', header=0)
     
     for row in range(len(graduationData)):
         district = graduationData.iloc[row, 0]
-        if district == 'State totals':
-            continue
         gradPerc = graduationData.iloc[row, 2]
         if np.isnan(gradPerc):
             continue
@@ -269,12 +263,10 @@ def calculateSchoolScores():
             data[district][5] = gradScore
 
     # Higher Education Rate Score
-    higherEdData = pd.read_excel('Master-School_Data-2015.xlsx', sheetname='HigherEd-District', header=0)
+    higherEdData = pd.read_excel(dataLocation+fileName+ext, sheetname='HigherEd-District', header=0)
     
     for row in range(len(higherEdData)):
         district = higherEdData.iloc[row, 0]
-        if district == 'State totals':
-            continue
         higherEdPerc = higherEdData.iloc[row, 3]
         if np.isnan(higherEdPerc):
             continue
@@ -288,7 +280,7 @@ def calculateSchoolScores():
             data[district][6] = higherEdScore
 
     # MCAS Score
-    mcasData = pd.ExcelFile('Master-School_Data-2015.xlsx').parse('MCAS-District')
+    mcasData = pd.ExcelFile(dataLocation+fileName+ext).parse('MCAS-District')
     mcasData.sort_values(by="District", inplace=True)
     
     totalELA = 0
@@ -299,11 +291,10 @@ def calculateSchoolScores():
     countSCI = 0        
     for row in range(len(mcasData)):        
         district = mcasData.iloc[row, 0]
-        if district == 'State Totals':
-            continue
+
         subject = mcasData.iloc[row, 2]
         
-        # calculate Prf+Adv score
+        # calculate Prof+Adv score
         prof_advValue = mcasData.iloc[row, 4]
         if np.isnan(prof_advValue):
             continue
@@ -384,12 +375,10 @@ def calculateSchoolScores():
             countSCI = 0
 
     # SAT Score
-    satData = pd.read_excel('Master-School_Data-2015.xlsx', sheetname='SAT-District', header=0)
+    satData = pd.read_excel(dataLocation+fileName+ext, sheetname='SAT-District', header=0)
     
     for row in range(len(satData)):
         district = satData.iloc[row, 0]
-        if district == 'State totals':
-            continue
         reading = satData.iloc[row, 2]
         writing = satData.iloc[row, 3]
         math = satData.iloc[row, 4]
@@ -407,12 +396,10 @@ def calculateSchoolScores():
             data[district][8] = satScore
   
 #     # Teacher Salary Score
-#     salaryData = pd.read_excel('Master-School_Data-2015.xlsx', sheetname='Teacher-Salary', header=0)
+#     salaryData = pd.read_excel(dataLocation+fileName+ext, sheetname='Teacher-Salary', header=0)
 # 
 #     for row in range(len(salaryData)):
 #         district = salaryData.iloc[row, 0]
-#         if district == 'State total':
-#             continue
 #         salary = salaryData.iloc[row, 2]
 #         # remove $ and , from value
 #         salary = int(salary[1:].replace(',', '', 1))
@@ -428,18 +415,20 @@ def calculateSchoolScores():
 #             data[district][9] = salaryScore  
 
     # School Rank Score
-    rankData = pd.read_excel('Master-School_Data-2015.xlsx', sheetname='Ranks-District', header=0)
-
+    rankData = pd.read_excel(dataLocation+fileName+ext, sheetname='Rank-District', header=0)
+  
     for row in range(len(rankData)):
-        district = str(rankData.iloc[row, 0]).capitalize()
-        if district == 'State total':
-            continue
-        rank = rankData.iloc[row, 1]
-        if np.isnan(rank):
-            continue
-        else:
-            rankScore = calculateRankScore(rank)
+        district = str(rankData.iloc[row, 0])
+        school_type = str(rankData.iloc[row, 1])
+        rank = rankData.iloc[row, 2]
+        grade = str(rankData.iloc[row, 3])
         
+        if np.isnan(float(rank)):
+            rankScore = 0
+        else:
+            rank = int(rank)
+            rankScore = calculateRankScore(rank)
+          
         if district in data:
             data[district][9] = rankScore
         else:

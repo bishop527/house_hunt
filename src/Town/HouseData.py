@@ -8,8 +8,7 @@ import urllib2
 from bs4 import BeautifulSoup
 import pandas as pd
 import time
-from TownData import townLookup
-from Town.TownData import countyLookup, taxRateLookup
+from Town.TownData import countyLookup, taxRateLookup, zipLookup, townExists
 
 dataLocation = "data/town/"
 ext = ".xlsx"
@@ -81,7 +80,11 @@ def getTruliaZipCodeStats(zips, startDate, endDate):
             time.sleep(1)
 
         zipCode = zips[row]
-        town = townLookup(zipCode)
+        town = zipLookup(zipCode)
+        
+        if not townExists(town):
+            print town, ' is not in the list'
+            
         taxRate = float(taxRateLookup(town))
         county = countyLookup(zipCode)
         
