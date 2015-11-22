@@ -10,6 +10,117 @@ import pandas as pd
 dataLocation = "data/school/"
 ext = ".xlsx"
 
+regionalSchools = {'Acton-Boxborough': ['Acton', 'Boxborough'],
+                   'Adams-Cheshire': ['Adams', 'Cheshire'],
+                   'Amherst-Pelham': ['Amherst', 'Leverett', 'Pelham', 'Shutesbury'],
+                   'Ashburnham-Westminster':['Ashburnham', 'Westminster'],
+                   'Athol-Royalston': ['Athol', 'Royalston'],
+                   'Ayer Shirley School District': ['Ayer', 'Shirley'],
+                   'Berkshire Hills': ['Great Barrington', 'Stockbridge', 'West Stockbridge'],
+                   'Berlin-Boylston': ['Berlin','Boylston'],
+                   'Blackstone-Millville':['Blackstone', 'Millville'],
+                   'Bridgewater-Raynham': ['Bridgewater', 'Raynham'],
+                   'Chesterfield-Goshen':['Chesterfield', 'Goshen'],
+                   'Central Berkshire': ['Becket', 'Cummington', 'Dalton', 'Hindsdale', 'Peru', 'Washington', 'Windsor'],
+                   'Concord-Carlisle': ['Concord', 'Carlisle'],
+                   'Dennis-Yarmouth': ['Dennis', 'Yarmouth'],
+                   'Dighton-Rehoboth': ['Dighton', 'Rehoboth'],
+                   'Dover-Sherborn': ['Dover', 'Sherborn'],
+                   'Dudley-Charlton': ['Dudley', 'Charlton'],
+                   'Nauset': ['Brewster', 'Eastham', 'Orleans', 'Wellfleet'],
+                   'Farmington River Reg': ['Otis', 'Sandisfield'],
+                   'Freetown-Lakeville': ['Freetown', 'Lakeville'],
+                   'Frontier': ['Conway', 'Deerfield', 'Sunderland', 'Whately'],
+                   'Gateway': ['Blandord', 'Chester', 'Huntington', 'Middlefield', 'Montgomery', 'Russell'],
+                   'Groton-Dunstable':['Groton', 'Dunstable'],
+                   'Gill-Montague':['Gill', 'Montague'],
+                   'Hamilton-Wenham': ['Hamilton', 'Wenham'],
+                   'Hampden-Wilbraham': ['Hampden', 'Wilbraham'],
+                   'Hampshire': ['Chesterfield', 'Goshen', 'Southampton', 'Westhampton', 'Williamsburg'],
+                   'Hawlemont': ['Charlemont', 'Hawley'],
+                   'King Philip': ['Norfolk', 'Plainville', 'Wrentham'],
+                   'Lincoln-Sudbury': ['Lincoln', 'Sudbury'],
+                   'Manchester Essex Regional': ['Essex', 'Manchester'],
+                   "Martha's Vineyard": ['Chilmark', 'Edgartown', 'Aquinnah', 'Oak Bluffs', 'Tisbury', 'West Tisbury'],
+                   'Masconomet': ['Boxford', 'Middleton', 'Topsfield'],
+                   'Mendon-Upton': ['Mendon', 'Updton'],
+                   'Mount Greylock': ['Lanesborough', 'Williamstown'],
+                   'Monomoy Regional School District': ['Chatham', 'Harwich'],
+                   'Mohawk Trail': ['Ashfield', 'Buckland', 'Charlemont', 'Colrain', 'Hawley', 'Heath', 'Plainfiled', 'Shelburne'],
+                   'Narragansett': ['Phillipston', 'Templeton'],
+                   'Nashoba': ['Bolton', 'Lancaster', 'Stow'],
+                   'New Salem-Wendell': ['New Salem', 'Wendell'],
+                   'Northboro-Southboro': ['Northboro', 'Southboro'],
+                   'North Middlesex': ['Ashby', 'Pepperell', 'Townsend'],
+                   'Old Rochester': ['Marion', 'Mattapoisett', 'Rochester'],
+                   'Pentucket': ['Groveland', 'Merrimac', 'West Newbury'],
+                   'Pioneer Valley': ['Bernardston', 'Leyden', 'Northfield', 'Warwick'],
+                   'Quabbin': ['Barre', 'Hardwick', 'Hubbardston', 'New Braintree', 'Oakham'],
+                   'Ralph C Mahar': ['New Salem', 'Orange', 'Petersham', 'Wendell'],
+                   'Silver Lake': ['Halifax', 'Kingston', 'Plympton'],
+                   'Somerset-Berkley Regional School District': ['Somerset', 'Berkley'],
+                   'Southern Berkshire': ['Alford', 'Egremont', 'Monterey', 'New Marlborough', 'Sheffield'],
+                   'Southwick-Tolland-Granville Regional School District': ['Southwick', 'Tolland', 'Granville'],
+                   'Spencer-E Brookfield': ['East Brookfield', 'Spencer'],
+                   'Tantasqua': ['Brimfield', 'Brookfield', 'Holland', 'Sturbridge', 'Wales'],
+                   'Triton': ['Newbury', 'Rowley', 'Salisbury'],
+                   'Up-Island Regional': ['Chilmark', 'Aquinnah', 'West Tisbury'],
+                   'Wachusett': ['Holden', 'Paxton', 'Princeton', 'Rutland', 'Sterling'],
+                   'Quaboag Regional': ['Warren', 'West Brookfield'],
+                   'Whitman-Hanson': ['Hanson', 'Whitman']}
+
+
+'''
+This method takes in the org name of a school and returns the district, school 
+name, and determines if it is a public, charter, regional, or vocational school
+'''
+def getSchoolinfo(name):
+    type = 'Public'
+    district, school = name.split(':', 1)
+    district = district.strip()
+    district = district.replace(' (District)', '', 1)
+    school = school.strip()
+    
+    if regionalSchools.has_key(district):
+        type = 'Regional'
+    
+    if 'Charter' in school:
+        type = 'Charter'
+    
+    if 'Voc' in district or 'Voc' in school:
+        type = 'Vocational'
+        
+    return district, school, type
+
+'''
+This method checks if the passed district name exists in the school admin sheet.
+If district name exists it returns True, otherwise False
+'''
+def districtExists(district):
+    exists = False
+    
+    ws = pd.read_excel(dataLocation+'Master-School_Data-2015.xlsx', sheetname='Admin-School', header=0)
+    
+    for row in range(len(ws)):
+        if district == ws.iloc[row, 1]:
+            exists = True
+            break
+        
+    return exists
+
+'''
+This method looks through the list of regional schools for the passed in town name.
+If the town is part of a regional school, the name is returned. 
+If not, the passed town name is returned. 
+'''
+def districtLookup(town):
+    district = town
+    
+    for k,v in regionalSchools.iteritems():
+        if town in v:
+            district = k
+            
+    return district
 
 """
 Parse the relevant information out of the data received from the admin site
@@ -21,11 +132,11 @@ Current relevant fields are:
     Grades
 
 This method will ignore no-op (not operational) schools
-This methid defaults to parsing data from 2015
+This method defaults to parsing data from 2015
 """ 
-def parseAdminData(year = "2015"):
-    print "            Parsing Admin Data"
-    fileName = "admin-"+year+ext
+def parseDistrictAdminData(year = "2015"):
+    print "            Parsing District Admin Data"
+    fileName = "admin-district-"+year+ext
     columns = ['Town', 'School Name', 'School Type', 'School Address', 'Grades']
     rows = []
             
@@ -40,7 +151,7 @@ def parseAdminData(year = "2015"):
         if 'Charter' in ws.iloc[row,1]:
             continue
         town = ws.iloc[row, 0].capitalize()
-        school_name = str(ws.iloc[row, 1].replace(' (District)', '', 1)).capitalize()
+        school_name = ws.iloc[row, 1].replace(' (District)', '', 1)
         school_code = ws.iloc[row, 2]
         school_type = ws.iloc[row, 3]
         function = ws.iloc[row, 4]
@@ -56,6 +167,50 @@ def parseAdminData(year = "2015"):
         # skip no-op schools        
         if grades != 'nan':
             rows.append([town, school_name, school_type, address, grades])
+
+    df = pd.DataFrame(rows, columns = columns)
+    
+    return df
+
+"""
+Parse the relevant information out of the data received from the admin site
+Current relevant fields are:
+    Town Name
+    District Name
+    School Name
+    School Type (Public, Charter, Regional, Vocational)
+    Zip Code
+    Grades
+
+This method defaults to parsing data from 2015
+""" 
+def parseSchoolAdminData(year = "2015"):
+    print "            Parsing School Admin Data"
+    fileName = "admin-school-"+year+ext
+    columns = ['Town', 'District', 'School Name', 'School Type', 'Zip Code', 'Grades']
+    rows = []
+            
+    """ Convert to true xls file """  
+    utils.convertToXLS(fileName, dataLocation, 7, 0)
+    
+    """ Open new xls file """
+    ws = pd.read_excel(dataLocation+fileName, 0)
+     
+    for row in range(len(ws)):
+        town = ws.iloc[row, 0]
+        district_name, school_name, school_type = getSchoolinfo(ws.iloc[row,1])
+        school_code = ws.iloc[row, 2]
+        function = ws.iloc[row, 4]
+        contact_name = ws.iloc[row, 5]
+        address1 = ws.iloc[row, 6]
+        address2 = ws.iloc[row, 7]
+        state = ws.iloc[row, 8]
+        zipCode = '0'+str(ws.iloc[row, 9])
+        contact_phone = ws.iloc[row, 10]
+        contact_fax = ws.iloc[row, 11]
+        grades = str(ws.iloc[row, 12])
+
+        rows.append([town, district_name, school_name, school_type, zipCode, grades])
 
     df = pd.DataFrame(rows, columns = columns)
     
@@ -77,7 +232,12 @@ def parseAccountDistrictData(year="2014"):
         """ Skip Charter schools """
         if 'Charter' in ws.iloc[row,0]:
             continue
-        district = str(ws.iloc[row, 0].replace(' (District)', '', 1)).capitalize()
+        district = ws.iloc[row, 0].replace(' (District)', '', 1)
+        
+        if not districtExists(district):
+            print 'Account-District: Skipping district ', district
+            continue
+        
         school_code = ws.iloc[row, 1]
         level = ws.iloc[row, 2]
         notes = ws.iloc[row, 3]
@@ -85,6 +245,7 @@ def parseAccountDistrictData(year="2014"):
         highNeed_students = ws.iloc[row, 5]
         
         rows.append([district, level, notes])
+       
 
     df = pd.DataFrame(rows, columns = columns)
     
@@ -143,7 +304,12 @@ def parseClassSizeDistrictData(year='2014'):
         """ Skip Charter schools """
         if 'Charter' in ws.iloc[row,0]:
             continue
-        district = str(ws.iloc[row, 0].replace(' (District)', '', 1)).capitalize()
+        district = ws.iloc[row, 0].replace(' (District)', '', 1)
+        
+        if not districtExists(district):
+            print 'ClassSize-District: Skipping district ', district
+            continue
+        
         school_code = ws.iloc[row, 1]
         total_classes = ws.iloc[row, 2]
         avg_size = ws.iloc[row, 3]
@@ -219,7 +385,12 @@ def parseDropoutDistrictData(year="2014"):
         """ Skip Charter schools """
         if 'Charter' in ws.iloc[row,0]:
             continue
-        district = str(ws.iloc[row, 0].replace(' (District)', '', 1)).capitalize()
+        district = ws.iloc[row, 0].replace(' (District)', '', 1)
+                
+        if not districtExists(district):
+            print 'Dropout-District: Skipping district ', district
+            continue
+        
         school_code = ws.iloc[row, 1]
         num_enrolled = ws.iloc[row, 2]
         total_drop = ws.iloc[row, 3]
@@ -291,7 +462,12 @@ def parseHigherEdDistrictData(year="2013"):
         """ Skip Charter schools """
         if 'Charter' in ws.iloc[row,0]:
             continue
-        district = str(ws.iloc[row, 0].replace(' (District)', '', 1)).capitalize()
+        district = ws.iloc[row, 0].replace(' (District)', '', 1)
+                
+        if not districtExists(district):
+            print 'HigherEd-District: Skipping district ', district
+            continue
+        
         school_code = ws.iloc[row, 1]
         num_hs_grad = ws.iloc[row, 2]
         num_to_coll = ws.iloc[row, 3]
@@ -369,7 +545,12 @@ def parseGraduationRateDistrictData(year="2014"):
         """ Skip Charter schools """
         if 'Charter' in ws.iloc[row,0]:
             continue
-        district = str(ws.iloc[row, 0].replace(' (District)', '', 1)).capitalize()
+        district = ws.iloc[row, 0].replace(' (District)', '', 1)
+                
+        if not districtExists(district):
+            print 'Graduation-District: Skipping district ', district
+            continue
+        
         school_code = ws.iloc[row, 1]
         num_students = ws.iloc[row, 2]
         perc_grad = ws.iloc[row, 3]
@@ -441,7 +622,12 @@ def parseMCASDistrictData(year="2015"):
         """ Skip Charter schools """
         if 'Charter' in ws.iloc[row,0]:
             continue
-        district = str(ws.iloc[row, 0].replace(' (District)', '', 1)).capitalize()
+        district = ws.iloc[row, 0].replace(' (District)', '', 1)
+                
+        if not districtExists(district):
+            print 'MCAS-District: Skipping district ', district
+            continue
+        
         school_code = ws.iloc[row, 1]
         subject = ws.iloc[row, 2]
         num_prof_adv = ws.iloc[row, 3]
@@ -532,7 +718,12 @@ def parseSATDistrictData(year="2015"):
         """ Skip Charter schools """
         if 'Charter' in ws.iloc[row,0]:
             continue
-        district = str(ws.iloc[row, 0].replace(' (District)', '', 1)).capitalize()
+        district = ws.iloc[row, 0].replace(' (District)', '', 1)
+                
+        if not districtExists(district):
+            print 'SAT-District: Skipping district ', district
+            continue
+        
         school_code = ws.iloc[row, 1]
         tests_taken = ws.iloc[row, 2]
         reading = ws.iloc[row, 3]
@@ -606,7 +797,12 @@ def parseSPEDPerfData(year="2014"):
         """ Skip Charter schools """
         if 'Charter' in ws.iloc[row,0]:
             continue
-        district = str(ws.iloc[row, 0].replace(' (District)', '', 1)).capitalize()
+        district = ws.iloc[row, 0].replace(' (District)', '', 1)
+                
+        if not districtExists(district):
+            print 'SPED-Perf: Skipping district ', district
+            continue
+        
         school_code = ws.iloc[row, 1]
         ind1_num_cohort = ws.iloc[row, 2]
         ind1_num_grad = ws.iloc[row, 3]
@@ -655,7 +851,12 @@ def parseSPEDComplianceData(year="2014"):
         """ Skip Charter schools """
         if 'Charter' in ws.iloc[row,0]:
             continue
-        district = str(ws.iloc[row, 0].replace(' (District)', '', 1)).capitalize()
+        district = ws.iloc[row, 0].replace(' (District)', '', 1)
+                               
+        if not districtExists(district):
+            print 'SPED-Comp: Skipping district ', district
+            continue
+        
         school_code = ws.iloc[row, 1]
         ind4a_num_students = ws.iloc[row, 2]
         ind4a_num_susp = ws.iloc[row, 3]
@@ -697,13 +898,107 @@ def parseTeacherSalaryData(year="2013"):
         """ Skip Charter schools """
         if 'CHARTER' in ws.iloc[row,0]:
             continue        
-        district = str(ws.iloc[row, 0].replace(' (District)', '', 1)).capitalize()
+        district = ws.iloc[row, 0].replace(' (District)', '', 1)
+                
+        if not districtExists(district):
+            print 'Salary: Skipping district ', district
+            continue
+        
         school_code = ws.iloc[row, 1]
         salary_total = ws.iloc[row, 2]
         avg_salary = ws.iloc[row, 3]
         fte_count = ws.iloc[row, 4]
                
         rows.append([district, salary_total, avg_salary, fte_count])
+
+    df = pd.DataFrame(rows, columns = columns)
+    
+    return df
+
+'''
+This method will create a worksheet that can be used to save school ranks for 
+each school. The worksheet will contain a column for each town, the school
+district for that town, and a column for Rank.
+The District column will contain duplicate entries for each town in that
+district. 
+'''
+def prepSchoolTownRankData():
+    
+    print '            Preparing School Town Ranking Sheet'
+    columns = ['Town','District','Rank']
+    data = []
+    currTown = ''
+    currDistrict = ''
+    
+    schoolData = pd.read_excel(dataLocation+'Master-School_Data-2015'+ext, sheetname='Admin-School', header=0)
+    schoolData.sort_values(by=['District', 'Town'], inplace=True)
+    
+    for each in range(len(schoolData)):
+        town = schoolData.iloc[each, 0]    
+        district = schoolData.iloc[each, 1]
+        
+        if district == currDistrict:
+            if town == currTown:
+                continue
+            else:
+                currTown = town
+                data.append([town, district, ''])        
+        else:
+            currDistrict = district
+            currTown = town
+            data.append([town, district, ''])    
+    
+    df = pd.DataFrame(data, columns = columns)
+    
+    return df
+
+def prepSchoolDistrictRankData():
+    print '            Preparing School District Ranking Sheet'
+    columns = ['District','Rank']
+    data = []
+    currDistrict = ''
+    
+    schoolData = pd.read_excel(dataLocation+'Master-School_Data-2015'+ext, sheetname='Admin-School', header=0)
+    schoolData.sort_values(by=['District', 'Town'], inplace=True)
+    
+    for each in range(len(schoolData)):
+        town = schoolData.iloc[each, 0]    
+        district = schoolData.iloc[each, 1]
+        
+        # Skip duplicate districts
+        if district == currDistrict:
+                continue
+        else:
+            currDistrict = district
+            data.append([district, ''])    
+    
+    df = pd.DataFrame(data, columns = columns)
+    
+    return df
+
+def parseSchoolDistrictRankData():
+    print '            Parsing School District Rank Data'
+    
+    fileName = 'school-rank-2015.xlsx'
+    columns = ['District', 'School Type', 'Rank', 'Grade']
+    rows = []
+    
+    ws = pd.read_excel(dataLocation+fileName, 0)
+     
+    for row in range(len(ws)):
+        """ Skip Charter schools """
+        if 'Charter' in ws.iloc[row,0]:
+            continue        
+        district = ws.iloc[row, 0]
+        school_type = ws.iloc[row, 1]
+        district_rank = ws.iloc[row, 2]
+        grade = ws.iloc[row, 3]
+                
+        if not districtExists(district):
+            print 'District Rank: Skipping district ', district
+            continue
+               
+        rows.append([district, school_type, district_rank, grade])
 
     df = pd.DataFrame(rows, columns = columns)
     

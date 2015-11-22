@@ -58,9 +58,12 @@ Current available options are:
 def downloadSchoolData(data = 'current'):
     print "        Started Downloading School Data"
     sites = []      
-        
-    sites.append(SchoolSiteData('admin', 
+              
+    sites.append(SchoolSiteData('admin-district', 
         'http://profiles.doe.mass.edu/search/search_export.aspx?orgCode=&orgType=5,12&runOrgSearch=Y&searchType=ORG&leftNavId=11238&showEmail=N',
+        '2015', 'NA'))
+    sites.append(SchoolSiteData('admin-school', 
+        'http://profiles.doe.mass.edu/search/search_export.aspx?orgCode=&orgType=6,13&runOrgSearch=Y&searchType=ORG&leftNavId=11238&showEmail=N',
         '2015', 'NA'))
     sites.append(SchoolSiteData('account-district',
         'http://profiles.doe.mass.edu/state_report/accountability.aspx?year=2014&export_excel=yes', 

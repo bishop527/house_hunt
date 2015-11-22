@@ -17,7 +17,7 @@ fileName = "Master-House_Hunt_Matrix-2015.xlsx"
 
 print 'Started Processing Master Matrix'
 setCurrDir()
-setProxy()
+# setProxy()
 
 # Gather and parse all the data
 processSchoolData()

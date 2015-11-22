@@ -9,16 +9,21 @@ import School.ParseSchoolData as parse
 from School.SchoolSiteData import downloadSchoolData
 from utils import *
 from collections import OrderedDict
+from School.ParseSchoolData import prepSchoolTownRankData,\
+    prepSchoolDistrictRankData
 
 def processSchoolData():
     print "    Started Processing School Data"
     
     fileName = "Master-School_Data-2015.xlsx"
+    dataLocation = 'data/school/'
     entries = OrderedDict()
     
     downloadSchoolData()
-    
-    entries['School_Admin'] = parse.parseAdminData()
+       
+    entries['Admin-School'] = parse.parseSchoolAdminData()
+    populateMaster(dataLocation+fileName, entries)
+       
     entries['Accountability-District'] = parse.parseAccountDistrictData()
     entries['Accountability-School'] = parse.parseAccountSchoolData()   
     entries['Class_Size-District'] = parse.parseClassSizeDistrictData()
@@ -34,10 +39,13 @@ def processSchoolData():
     entries['SAT-District'] = parse.parseSATDistrictData()
     entries['SAT-School'] = parse.parseSATSchoolData()
     entries['SPED-Performance'] = parse.parseSPEDPerfData()
-    # # """Not sure what data is relevant so not adding to Master yet"""
-    # entries['SPED-Compliance'] = parse.parseSPEDComplianceData()
-    entries['Teacher-Salary'] = parse.parseTeacherSalaryData()
-    
-    populateMaster(fileName, entries)
+    # """Not sure what data is relevant so not adding to Master yet"""
+#     entries['SPED-Compliance'] = parse.parseSPEDComplianceData()
+#     entries['Teacher-Salary'] = parse.parseTeacherSalaryData()
+    #entries['Rank-School'] = prepSchoolTownRankData()
+    #entries['Rank-District'] = prepSchoolDistrictRankData()     
+    entries['Rank-District'] = parse.parseSchoolDistrictRankData()
+    populateMaster(dataLocation+fileName, entries)
+
     
     print "    Done Processing School Data\n"

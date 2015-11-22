@@ -8,6 +8,7 @@ Created on Nov 17, 2015
 import pandas as pd
 import numpy as np
 
+dataLocation = 'data/town/'
 '''
 Calculates the tax score for a town based on the tax rate passed in.
 Score will be a positive or negative value between -10 to 10 with increments calculated based on the min and max values.
@@ -68,11 +69,11 @@ If there is not data for 3 bedroom properties then th median list price for All 
 '''
 def calculateHousingScores():
     print 'Calculating Housing Scores'
-    
+    fileName = 'Master-Town_Data-2015.xlsx'
     score = 0
     data = []
     columns = ['Zip Code', 'Town', 'Tax Rate', 'Median House Cost', 'Tax Score', 'Housing Score']
-    houseData = pd.ExcelFile('Master-Town_Data-2015.xlsx').parse('Housing-Data')
+    houseData = pd.ExcelFile(dataLocation+fileName).parse('Housing-Data')
     houseData.sort_values(by="Town", inplace=True)
     
     for row in range(len(houseData)-2):

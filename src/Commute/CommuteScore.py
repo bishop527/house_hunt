@@ -6,6 +6,8 @@ Created on Nov 17, 2015
 '''
 import pandas as pd
 
+fileName = 'Master-Commute_Data-2015.xlsx'
+dataLocation = 'data/commute/'
 '''
 Calculates the commute score for a distance value passed in.
 Score will be a positive or negative value between -10 to 10 with increments calculated based on the min and max values.
@@ -38,7 +40,7 @@ def calculateCommuteScores():
     score = 0
     data = []
     columns = ['Town', 'Distance', 'Commute Score']
-    commuteData = pd.read_excel('Master-Commute_Data-2015.xlsx', header=0)
+    commuteData = pd.read_excel(dataLocation+fileName, header=0)
     
     for row in range(len(commuteData)):
         town = commuteData.iloc[row, 0]
