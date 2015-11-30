@@ -5,7 +5,7 @@ Created on Nov 16, 2015
 @todo: 
 '''
 from Commute.ParseCommuteData import parseCommuteData
-from Commute.CommuteData import getCommuateData
+from Commute.CommuteData import getCommuteData
 from utils import *
 from collections import OrderedDict
 
@@ -16,7 +16,7 @@ def processCommuteData():
     fileName = "Master-Commute_Data-2015.xlsx"
     entries = OrderedDict()
     
-    commuteData1, commuteData2, commuteData3, commuteData4 = getCommuateData()
+    commuteData1, commuteData2, commuteData3, commuteData4 = getCommuteData()
     df1 = parseCommuteData(commuteData1)
     df2 = parseCommuteData(commuteData2)
     df3 = parseCommuteData(commuteData3)

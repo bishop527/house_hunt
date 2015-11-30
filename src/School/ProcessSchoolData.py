@@ -9,8 +9,7 @@ import School.ParseSchoolData as parse
 from School.SchoolSiteData import downloadSchoolData
 from utils import *
 from collections import OrderedDict
-from School.ParseSchoolData import prepSchoolTownRankData,\
-    prepSchoolDistrictRankData
+from School.ParseSchoolData import prepSchoolDistrictRankData, prepSchoolTownRankData
 
 def processSchoolData():
     print "    Started Processing School Data"
