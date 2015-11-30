@@ -11,6 +11,10 @@ import urllib2
 import openpyxl as pyxl
 import os.path
 
+maxScore = 10
+minScore = -10
+medianScore = 0
+
 """ 
 Appends the given DataFrame with the master workbook and names the worksheet the given sheetName 
 """
@@ -79,5 +83,14 @@ def setCurrDir():
         os.chdir("c:\\Users\\"+user+"\\workspace\\house_hunt\\")
         print "Changed directory to c:\\Users\\"+user+"\\workspace\\house_hunt\\"
 
-
+'''
+Restrict score to no greater then maxScore and no less then minScore
+'''
+def normalizeScore(score):
+        
+    if score > maxScore:
+        score = maxScore
+    elif score < minScore:
+        score = minScore
+    return score
         

@@ -7,8 +7,9 @@ Created on Nov 12, 2015
 import urllib2
 from bs4 import BeautifulSoup
 import pandas as pd
+import numpy as np
 import time
-from Town.TownData import countyLookup, taxRateLookup, zipLookup, townExists
+from House.HouseData import countyLookup, taxRateLookup, zipLookup, townExists
 
 dataLocation = "data/town/"
 ext = ".xlsx"
@@ -58,6 +59,94 @@ def getTruliaZipCodesInState(state='MA'):
     
     return data
 
+'''
+This method pulls data from Trulia.com using their API. 
+The API can only do lookups by zip code, not by town name. This causes problems especially for 
+towns with multiple zip codes and the data received does not match with the data shown on the
+main Trulia.com website in an immediately obvious way. 
+Decided to move away from collecting data in this way. Keeping the method here for historical
+purposes.
+'''
+def getCombinedTruliaZipCodeStats(startDate, endDate):
+    print "        Downloading Trulia Housing Data"
+    data = []
+    retry = []
+    finalAverageListPrice = 0
+    finalMedianListPrice = 0
+    
+    columns = ['House', 'Zip Code', 'Tax Rate', 'Avg List Price', 'Avg Tax Cost', 'Median List Price', 'Median Tax Cost']
+        
+    url_base = 'http://api.trulia.com/webservices.php?library=TruliaStats&function=getZipCodeStats&'
+
+    townData = pd.read_excel(dataLocation+'Town_Admin-2015'+ext, header=0)
+    for row in range(len(townData)):
+        count = 0
+        finalAverageListPrice = 0
+        finalAverageTaxCost = 0
+        finalMedianListPrice = 0
+        finalMedianTaxCost = 0
+        
+        town = townData.iloc[row, 0]
+
+        # get all zips in current row seperated by comma and strip tail comma
+        zipCodes = townData.iloc[row, 1].split(',')[:-1]
+        taxRate = townData.iloc[row, 3]
+        
+        # get stats for each zip
+        for zipCode in zipCodes:
+            totalAverageListPrice = 0
+            totalAverageTaxCost = 0
+            totalMedianListPrice = 0
+            totalMedianTaxCost = 0
+            
+            url = url_base+'zipCode='+zipCode+'&startDate='+startDate+'&endDate='+endDate+'&apikey='+truliaKey
+            try:
+                time.sleep(1)
+                e = BeautifulSoup(urllib2.urlopen(url).read(), 'lxml')
+                
+                for each in e.findAll('subcategory'):
+                    averageListPrice = int(each.averagelistingprice.text)
+                    medianListPrice = int(each.medianlistingprice.text)
+                    averageTaxCost = round(taxRate*(averageListPrice/1000), 2)
+                    medianTaxCost = round(taxRate*(medianListPrice/1000), 2)
+                    
+                    if np.isnan(medianListPrice):
+                        continue
+                    
+                    if each.type.text == 'All Properties' and count < 12:
+                        totalAverageListPrice += averageListPrice
+                        totalAverageTaxCost += averageTaxCost
+                        totalMedianListPrice += medianListPrice
+                        totalMedianTaxCost += medianTaxCost
+                        count += 1
+                        
+                if count > 0:
+                    totalAverageListPrice = totalAverageListPrice / count
+                    totalAverageTaxCost = totalAverageTaxCost / count
+                    totalMedianListPrice = totalMedianListPrice / count
+                    totalMedianTaxCost = totalMedianTaxCost / count
+                    if totalAverageListPrice > finalAverageListPrice:
+                        finalAverageListPrice = totalAverageListPrice
+                        finalAverageTaxCost = totalAverageTaxCost
+                    if totalMedianListPrice > finalMedianListPrice:
+                        finalMedianListPrice = totalMedianListPrice
+                        finalMedianTaxCost = totalMedianTaxCost    
+                        
+            except urllib2.HTTPError as e:
+                print "HTTP Error, skipping zip ", zipCode
+                retry.append(zipCode)
+        
+        if count > 0:
+            data.append([town, zipCodes, taxRate, finalAverageListPrice, finalAverageTaxCost, finalMedianListPrice, finalMedianTaxCost])
+            count = 0
+            
+    df = pd.DataFrame(data, columns=columns)
+#     writer = pd.ExcelWriter(dataLocation+fileName, engine="openpyxl")
+#     df.to_excel(writer,"Sheet1")
+#     writer.save()
+    
+    return df
+
 def getTruliaZipCodeStats(zips, startDate, endDate):
     print "        Downloading Trulia Housing Data"
     fileName = 'House_Data-2015'+ext
@@ -66,14 +155,14 @@ def getTruliaZipCodeStats(zips, startDate, endDate):
     
     medianListPrice = ''
     avgListPrice = ''
-    columns = pd.MultiIndex.from_tuples([('Zip',''),('Town',''),('County',''),('Tax Rate', ''),
+    columns = pd.MultiIndex.from_tuples([('Zip',''),('House',''),('County',''),('Tax Rate', ''),
                                          ('All Properties', 'Avg List Price'),('All Properties', 'Median List Price'),('All Properties', 'Median Tax Cost'),
                                          ('3 Bedroom', 'Avg List Price'),('3 Bedroom', 'Median List Price'),('3 Bedroom', 'Median Tax Cost'),
                                          ('2 Bedroom', 'Avg List Price'),('2 Bedroom', 'Median List Price'),('2 Bedroom', 'Median Tax Cost'),
                                          ('1 Bedroom', 'Avg List Price'),('1 Bedroom', 'Median List Price'),('1 Bedroom', 'Median Tax Cost'),])
     
     url_base = 'http://api.trulia.com/webservices.php?library=TruliaStats&function=getZipCodeStats&'
-    
+        
     # Iterate through all zips passed in
     for row in range(len(zips)):
         if row % 2 == 0:
@@ -124,8 +213,8 @@ def getTruliaZipCodeStats(zips, startDate, endDate):
     print "            Skipped ", len(retry), "zip codes"
     df = pd.DataFrame(data, columns=columns)
     
-    writer = pd.ExcelWriter(dataLocation+fileName, engine="openpyxl")
-    df.to_excel(writer,"Sheet1")
-    writer.save()
+#     writer = pd.ExcelWriter(dataLocation+fileName, engine="openpyxl")
+#     df.to_excel(writer,"Sheet1")
+#     writer.save()
     
     return df

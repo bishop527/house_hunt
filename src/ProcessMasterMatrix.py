@@ -6,14 +6,16 @@ Created on Nov 16, 2015
 '''
 
 from utils import *
+from collections import OrderedDict
 from Commute.ProcessCommuteData import processCommuteData
 from Commute.CommuteScore import calculateCommuteScores
 from School.ProcessSchoolData import processSchoolData
 from School.SchoolScore import calculateSchoolScores
-from Town.ProcessTownData import processTownData
-from Town.HousingScore import calculateHousingScores
+from House.ProcessHouseData import processHouseData
+from House.HousingScore import calculateHouseScores
+from CombinedScores import calculateCombinedScores
 
-fileName = "Master-House_Hunt_Matrix-2015.xlsx"
+fileName = "Master_Scores-2015.xlsx"
 
 print 'Started Processing Master Matrix'
 setCurrDir()
@@ -21,12 +23,16 @@ setCurrDir()
 
 # Gather and parse all the data
 processSchoolData()
-processTownData()
-processCommuteData()
+# processHouseData()
+# processCommuteData()
             
 # Calculate scores based on the data
-calculateHousingScores()
-calculateCommuteScores()
-calculateSchoolScores()
+scoreEntries = OrderedDict()
+scoreEntries['Housing-Scores'] = calculateHouseScores()
+scoreEntries['Commute-Scores'] = calculateCommuteScores()
+scoreEntries['School-Scores'] = calculateSchoolScores()
+populateMaster(fileName, scoreEntries)
+scoreEntries['Combined-Scores'] = calculateCombinedScores()
+populateMaster(fileName, scoreEntries)
 
 print 'Done Processing Master Matrix'

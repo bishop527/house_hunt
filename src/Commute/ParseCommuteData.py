@@ -12,7 +12,7 @@ ext = ".xlsx"
 
 def parseCommuteData(data):
     print '            Parsing Commute Data'
-    columns = ['Town', 'Distance to Work', 'Min to Work']
+    columns = ['House', 'Distance to Work', 'Min to Work']
     rows = []
     
     for row in range(len(data["rows"])):

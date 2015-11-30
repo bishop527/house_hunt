@@ -8,6 +8,33 @@ import pandas as pd
 
 fileName = 'Master-Commute_Data-2015.xlsx'
 dataLocation = 'data/commute/'
+
+priorities = {'Distance': [10]}
+
+'''
+THis method uses relative frequency to assign a weight to each item in the 
+priorities list. These weights will then used to calculate the total score of 
+each school.
+'''
+def calculatePriorityWeights():
+    sum = 0.0
+        
+    # calculate sum
+    for k, v in priorities.iteritems():
+        sum += v[0]
+        
+    # calculate weight
+    for k, v in priorities.iteritems():
+        priorities[k].append(round(v[0]/sum,2))
+
+def calculateWeightedScore(value):
+    k = value[0]
+    v = value[1]
+    weight = priorities[k][1]
+    score = (weight * v)
+    
+    return score
+        
 '''
 Calculates the commute score for a distance value passed in.
 Score will be a positive or negative value between -10 to 10 with increments calculated based on the min and max values.
@@ -16,40 +43,41 @@ A commute value >= the max value will have a score of -10.
 A commute value = the median value will have a score of 0.
 '''
 def calculateCommuteDistanceScore(distance):
-    score = 0
+    
     minValue = 10
     maxValue = 60
-    medianValue = 35
-    maxScore = 10
-    minScore = -10
-    medianScore = 0
+    threshold = 40
+    medianValue = (maxValue + minValue) / 2
     
-    step = int((maxValue-minValue)/10)    
-    score = int((medianValue - round(distance)))/step*2 
-    
-    # Restrict score to no greater then maxScore and no less then minScore
-    if score > maxScore:
-        score = maxScore
-    elif score < minScore:
-        score = minScore
+    if distance < threshold:
+        step = int((maxValue-minValue)/10)    
+        score = int((medianValue - round(distance))/step)*2 
+    else:
+        score = -100
+        
     return score
 
 def calculateCommuteScores():
     print 'Calculating Commute Scores'
+
+    data = {}
+    columns = ['Distance', 'Commute Score', 'Weighted Score']
+    calculatePriorityWeights()
     
-    score = 0
-    data = []
-    columns = ['Town', 'Distance', 'Commute Score']
     commuteData = pd.read_excel(dataLocation+fileName, header=0)
     
     for row in range(len(commuteData)):
         town = commuteData.iloc[row, 0]
+        if not town in data:
+            data[town] = [0, 0, 0]
+            
         distance = commuteData.iloc[row, 1]
-
-        commuteScore = calculateCommuteDistanceScore(distance)
-        data.append([town, distance, commuteScore])
+        distanceScore = calculateCommuteDistanceScore(distance)
         
-    df = pd.DataFrame(data, columns=columns)
-    writer = pd.ExcelWriter('Master_Scores-2015.xlsx', engine="openpyxl")
-    df.to_excel(writer,"Commute-Scores")
-    writer.save()
+        currScore = float(data[town][-1])
+        currScore += calculateWeightedScore(['Distance', distanceScore])
+        data[town] = [distance, distanceScore, round(currScore, 2)]
+        
+    df = pd.DataFrame.from_items(data.items(), columns=columns, orient='index')
+    
+    return df
