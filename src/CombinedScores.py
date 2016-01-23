@@ -6,6 +6,7 @@ Created on Nov 23, 2015
 
 import pandas as pd
 from School.ParseSchoolData import districtLookup
+from utils import *
 
 priorities = {'School': [5],
             'Commute':  [2],
@@ -31,20 +32,16 @@ def calculateWeightedScore(value):
     return score
 
 def calculateCombinedScores():
-
+    fileName = 'Master_Scores-2015'
     data = {}
     columns = ['District', 'Distance', 'Avg House Cost', 'Tax Rate', 'Commute Score', 'House Score', 'School Score', 'Combined Score']
     
     calculatePriorityWeights()
-        
-    schoolDataLocation = 'data/school/'
-    commuteDataLocation = 'data/commute/'
-    houseDataLocation = 'data/house/'
     
-    commuteScores = pd.read_excel('Master_Scores-2015.xlsx', sheetname='Commute-Scores', header=0)
-    schoolScores = pd.read_excel('Master_Scores-2015.xlsx', sheetname='School-Scores', header=0)
-    houseScores = pd.read_excel('Master_Scores-2015.xlsx', sheetname='Housing-Scores', header=0)
-    schoolData = pd.read_excel(schoolDataLocation+'Master-School_Data-2015.xlsx', sheetname='Admin-School', header=0)
+    commuteScores = pd.read_excel(fileName+ext, sheetname='Commute-Scores', header=0)
+    schoolScores = pd.read_excel(fileName+ext, sheetname='School-Scores', header=0)
+    houseScores = pd.read_excel(fileName+ext, sheetname='Housing-Scores', header=0)
+    schoolData = pd.read_excel(os.path.join(schoolDataLocation, 'Master-School_Data-2015'+ext), sheetname='Admin-School', header=0)
 
     # Parse Commute Scores, get town name and weighted score
     for row in range(len(commuteScores)):

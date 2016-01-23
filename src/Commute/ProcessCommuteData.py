@@ -9,11 +9,10 @@ from Commute.CommuteData import getCommuteData
 from utils import *
 from collections import OrderedDict
 
-dataLocation = 'data/commute/'
 def processCommuteData():
     print '    Started Processing Commute Data'
     
-    fileName = "Master-Commute_Data-2015.xlsx"
+    fileName = "Master-Commute_Data-2015"
     entries = OrderedDict()
     
     commuteData1, commuteData2, commuteData3, commuteData4 = getCommuteData()
@@ -24,6 +23,6 @@ def processCommuteData():
     frames = [df1,df2,df3,df4]
     entries['Commute-Data'] = pd.concat(frames, ignore_index=True)
     
-    populateMaster(dataLocation+fileName, entries)
+    populateMaster(os.path.join(commuteDataLocation, fileName+ext), entries)
     
     print '    Done Processing Commute Data\n'

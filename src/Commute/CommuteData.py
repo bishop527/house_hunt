@@ -4,17 +4,18 @@ Created on Nov 16, 2015
 @author: ad23883
 @todo: 
 '''
+from utils import *
 import googlemaps
 from House.HouseData import getMATowns
-
-dataLocation = 'data/commute/'
-ext = 'xlsx'
 
 def getCommuteData():    
     print '        Downloading Commute Data'
     googleAPIkey = 'AIzaSyDtNP2h8YzQzUdWJ_2JvspP4nAJhg7m9LQ'
-    gmaps = googlemaps.Client(key=googleAPIkey, requests_kwargs={'proxies':{'https':'http://llproxy.llan.ll.mit.edu:8080'}})
-#     gmaps = googlemaps.Client(key=googleAPIkey)
+    if proxy_on:
+        gmaps = googlemaps.Client(key=googleAPIkey, requests_kwargs={'proxies':{'https':'http://llproxy.llan.ll.mit.edu:8080'}})
+    else:
+        gmaps = googlemaps.Client(key=googleAPIkey)
+        
     destination = '244 Wood St. Lexington, MA'
     mode = 'driving'
     language = 'en'

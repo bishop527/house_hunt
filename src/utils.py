@@ -6,7 +6,7 @@ Created on Nov 4, 2015
 '''
 import pandas as pd
 import platform
-import pwd
+#import pwd
 import urllib2
 import openpyxl as pyxl
 import os.path
@@ -14,6 +14,15 @@ import os.path
 maxScore = 10
 minScore = -10
 medianScore = 0
+
+houseDataLocation = os.path.join('..', 'data', 'house')
+schoolDataLocation = os.path.join('..', 'data', 'school')
+commuteDataLocation = os.path.join('..', 'data', 'commute')
+townDataLocation = os.path.join('..', 'data', 'town')
+
+ext = '.xlsx'
+
+proxy_on = False
 
 """ 
 Appends the given DataFrame with the master workbook and names the worksheet the given sheetName 
@@ -62,13 +71,14 @@ can be used by libraries such as openpyxl and xlrd.
 """   
 def convertToXLS(fileName, fileLocation, index = None, header = None, skiprows = None):
     """ Convert to true xls file """
-    dfs = pd.read_html(fileLocation+fileName, index_col=index, skiprows=skiprows, header=header, thousands=None, )[-1]
-    writer = pd.ExcelWriter(fileLocation+fileName, engine="openpyxl")
+    dfs = pd.read_html(os.path.join(fileLocation, fileName), index_col=index, skiprows=skiprows, header=header, thousands=None, )[-1]
+    writer = pd.ExcelWriter(os.path.join(fileLocation, fileName), engine="openpyxl")
     dfs.to_excel(writer,"Sheet1")
     writer.save()
     
 def setProxy(type='http'):
     print "Turning on", type, "proxy"
+    proxy_on = True
     proxy = urllib2.ProxyHandler({type : 'llproxy.llan.ll.mit.edu:8080'})
     opener = urllib2.build_opener(proxy)
     urllib2.install_opener(opener)

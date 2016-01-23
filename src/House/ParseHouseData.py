@@ -6,9 +6,7 @@ Created on Nov 10, 2015
 '''
 import pandas as pd
 from House.HouseData import townExists, taxRateLookup
-
-dataLocation = "data/house/"
-ext = ".xlsx"
+from utils import *
 
 '''
 Takes the town_zip.xls file, combines multiple zips for each town.
@@ -24,8 +22,8 @@ def parseTownAdminData():
     county = ''
     columns = ['Town', 'Zip Codes', 'County', 'Tax Rate']
     
-    fileName = 'town_zips.xlsx'
-    ws = pd.ExcelFile(dataLocation+fileName).parse('Sheet1')
+    fileName = 'town_zips'
+    ws = pd.ExcelFile(os.path.join(houseDataLocation, fileName+ext)).parse('Sheet1')
     ws.sort_values(by="Town", inplace=True)
 
     for row in range(len(ws)):
@@ -61,7 +59,7 @@ def parseTownAdminData():
                 data.append([town, zips, county, taxRate])
     
     df = pd.DataFrame(data, columns=columns)
-    writer = pd.ExcelWriter(dataLocation+'Town_Admin-2015.xlsx', engine="openpyxl")
+    writer = pd.ExcelWriter(os.path.join(houseDataLocation, 'Town_Admin-2015'+ext), engine="openpyxl")
     df.to_excel(writer,"Sheet1")
     writer.save()
     
@@ -74,11 +72,11 @@ The word doc is manually converted to a spreadsheet. The current version of the 
 is from August 2015.
 '''
 def parseMLSHouseData():
-    fileName = 'mls_house_data-Oct_2015'
+    fileName = 'mls_house_data-Aug_2015'
     columns = ['Town', 'Tax Rate', 'Median Sales Price', 'Tax Cost']
     data = []
     
-    houseData = pd.read_excel(dataLocation+fileName+ext, header=0)
+    houseData = pd.read_excel(os.path.join(houseDataLocation, fileName+ext), header=0)
     houseData.sort_values(by='Town', inplace=True)
     
     for row in range(len(houseData)):
