@@ -19,11 +19,11 @@ fileName = "Master_Scores-2015.xlsx"
 
 print 'Started Processing Master Matrix'
 setCurrDir()
-# setProxy()
+setProxy()
 
 # Gather and parse all the data
-processSchoolData()
-# processHouseData()
+# processSchoolData()
+processHouseData()
 # processCommuteData()
             
 # Calculate scores based on the data
