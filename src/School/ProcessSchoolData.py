@@ -14,14 +14,13 @@ from School.ParseSchoolData import prepSchoolDistrictRankData, prepSchoolTownRan
 def processSchoolData():
     print "    Started Processing School Data"
     
-    fileName = "Master-School_Data-2015.xlsx"
-    dataLocation = 'data/school/'
+    fileName = "Master-School_Data-2015"
     entries = OrderedDict()
     
     downloadSchoolData()
        
     entries['Admin-School'] = parse.parseSchoolAdminData()
-    populateMaster(dataLocation+fileName, entries)
+    populateMaster(os.path.join(schoolDataLocation, fileName+ext), entries)
        
     entries['Accountability-District'] = parse.parseAccountDistrictData()
     entries['Accountability-School'] = parse.parseAccountSchoolData()   
@@ -44,7 +43,6 @@ def processSchoolData():
     #entries['Rank-School'] = prepSchoolTownRankData()
     #entries['Rank-District'] = prepSchoolDistrictRankData()     
     entries['Rank-District'] = parse.parseSchoolDistrictRankData()
-    populateMaster(dataLocation+fileName, entries)
-
+    populateMaster(os.path.join(schoolDataLocation, fileName+ext), entries)
     
     print "    Done Processing School Data\n"

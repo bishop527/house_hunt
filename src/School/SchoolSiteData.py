@@ -11,10 +11,9 @@ availYears - list of other years available for download
 @todo: 
 '''
 import urllib2
+from utils import *
  
-#home_dir = "/Users/ad23883/workspace/house_hunt/"
-#home_dir = "C:\\Users\\ad23883\\workspace\\house_hunt\\"
-dataLocation = "data/school/"
+dataLocation = os.path.join('..', 'data', 'school')
 
 class SchoolSiteData(object):
 
@@ -123,6 +122,6 @@ def downloadSchoolData(data = 'current'):
             url = site.getURL()
             currYear = site.getCurrYear()
             
-            with open(dataLocation+name+'-'+currYear+'.xlsx', 'wb') as f:
+            with open(os.path.join(schoolDataLocation, name+'-'+currYear+ext), 'w') as f:
                 f.write(urllib2.urlopen(url).read())
                 f.close()

@@ -5,9 +5,9 @@ Created on Nov 17, 2015
 @todo: 
 '''
 import pandas as pd
+from utils import *
 
-fileName = 'Master-Commute_Data-2015.xlsx'
-dataLocation = 'data/commute/'
+fileName = 'Master-Commute_Data-2015'
 
 priorities = {'Distance': [10]}
 
@@ -64,7 +64,7 @@ def calculateCommuteScores():
     columns = ['Distance', 'Commute Score', 'Weighted Score']
     calculatePriorityWeights()
     
-    commuteData = pd.read_excel(dataLocation+fileName, header=0)
+    commuteData = pd.read_excel(os.path.join(commuteDataLocation, fileName+ext), header=0)
     
     for row in range(len(commuteData)):
         town = commuteData.iloc[row, 0]
