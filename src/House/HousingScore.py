@@ -66,10 +66,10 @@ A house value = the median value will have a score of 0.
 '''
 def calculateHousePriceScore(houseCost):
     
-    minValue = 325000
-    maxValue = 450000
+    minValue = 320000
+    maxValue = 420000
     minThreshold = 285000
-    maxThreshold = 450000
+    maxThreshold = 420000
     
     if houseCost > minThreshold and houseCost < maxThreshold:
         medianValue = (maxValue + minValue) / 2
