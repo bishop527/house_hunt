@@ -24,7 +24,6 @@ uSchoolData = raw_input('Do you want to update school data? [Y/n] ')
 
 
 print 'Started Processing Master Matrix'
-#setCurrDir()
 if uProxy == 'y':
     setProxy()
 

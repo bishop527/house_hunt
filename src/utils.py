@@ -5,15 +5,15 @@ Created on Nov 4, 2015
 @todo: 
 '''
 import pandas as pd
-import platform
+#import platform
 #import pwd
 import urllib2
 import openpyxl as pyxl
 import os.path
 
-maxScore = 10
-minScore = -10
-medianScore = 0
+MAX_SCORE = 10
+MIN_SCORE = -10
+MEDIAN_SCORE = 0
 
 houseDataLocation = os.path.join('..', 'data', 'house')
 schoolDataLocation = os.path.join('..', 'data', 'school')
@@ -23,6 +23,12 @@ townDataLocation = os.path.join('..', 'data', 'town')
 ext = '.xlsx'
 
 proxy_on = False
+
+# seconds from 1 Jan 1970 to 2 May 2016 07:00 EST
+DEPARTURE_TIME = 1462186800
+TRAFFIC_MODEL = 'optimistic'
+
+MLS_DATA_FILE = 'mls_house_data-Aug_2015'
 
 """ 
 Appends the given DataFrame with the master workbook and names the worksheet the given sheetName 
@@ -83,24 +89,24 @@ def setProxy(type='http'):
     opener = urllib2.build_opener(proxy)
     urllib2.install_opener(opener)
         
-def setCurrDir():
-    user = pwd.getpwuid(os.getuid())[0]
-    
-    if platform.system() == "Darwin":
-        os.chdir("/Users/"+user+"/workspace/house_hunt/")
-        print "Changed directory to /Users/"+user+"/workspace/house_hunt/"
-    elif platform.system() == "Windows":
-        os.chdir("c:\\Users\\"+user+"\\workspace\\house_hunt\\")
-        print "Changed directory to c:\\Users\\"+user+"\\workspace\\house_hunt\\"
+# def setCurrDir():
+#     user = pwd.getpwuid(os.getuid())[0]
+#     
+#     if platform.system() == "Darwin":
+#         os.chdir("/Users/"+user+"/workspace/house_hunt/")
+#         print "Changed directory to /Users/"+user+"/workspace/house_hunt/"
+#     elif platform.system() == "Windows":
+#         os.chdir("c:\\Users\\"+user+"\\workspace\\house_hunt\\")
+#         print "Changed directory to c:\\Users\\"+user+"\\workspace\\house_hunt\\"
 
 '''
-Restrict score to no greater then maxScore and no less then minScore
+Restrict score to no greater then maxScore and no less than MIN_SCORE
 '''
 def normalizeScore(score):
         
-    if score > maxScore:
-        score = maxScore
-    elif score < minScore:
-        score = minScore
+    if score > MAX_SCORE:
+        score = MAX_SCORE
+    elif score < MIN_SCORE:
+        score = MIN_SCORE
     return score
         

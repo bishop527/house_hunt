@@ -16,6 +16,7 @@ def processCommuteData():
     entries = OrderedDict()
     
     commuteData1, commuteData2, commuteData3, commuteData4 = getCommuteData()
+    
     df1 = parseCommuteData(commuteData1)
     df2 = parseCommuteData(commuteData2)
     df3 = parseCommuteData(commuteData3)

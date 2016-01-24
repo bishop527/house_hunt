@@ -21,6 +21,9 @@ def getCommuteData():
     language = 'en'
     avoid = 'tolls'
     units = 'imperial'
+    # seconds from 1 Jan 1970 to 2 May 2016 07:00 EST
+    departure_time = DEPARTURE_TIME
+    traffic_model = TRAFFIC_MODEL
     
     towns = getMATowns()
     origins = ''
@@ -30,27 +33,31 @@ def getCommuteData():
         origins += each+', MA|'
     origins = origins[:-1]
      
-    commuteData1 = gmaps.distance_matrix(origins, destination, mode=mode, language=language, avoid=avoid, units=units)
+    commuteData1 = gmaps.distance_matrix(origins, destination, mode=mode, language=language, avoid=avoid, 
+                                         units=units, departure_time=departure_time, traffic_model=traffic_model)
      
     origins = ''
     for each in towns[100:200]:
         origins += each+', MA|'
     origins = origins[:-1]
+      
+    commuteData2 = gmaps.distance_matrix(origins, destination, mode=mode, language=language, avoid=avoid, 
+                                         units=units, departure_time=departure_time, traffic_model=traffic_model)
      
-    commuteData2 = gmaps.distance_matrix(origins, destination, mode=mode, language=language, avoid=avoid, units=units)
-    
     origins = ''
     for each in towns[200:300]:
         origins += each+', MA|'
     origins = origins[:-1]
+      
+    commuteData3 = gmaps.distance_matrix(origins, destination, mode=mode, language=language, avoid=avoid, 
+                                         units=units, departure_time=departure_time, traffic_model=traffic_model)
      
-    commuteData3 = gmaps.distance_matrix(origins, destination, mode=mode, language=language, avoid=avoid, units=units)
-    
     origins = ''
     for each in towns[300:]:
         origins += each+', MA|'
     origins = origins[:-1]
+      
+    commuteData4 = gmaps.distance_matrix(origins, destination, mode=mode, language=language, avoid=avoid, 
+                                         units=units, departure_time=departure_time, traffic_model=traffic_model)
      
-    commuteData4 = gmaps.distance_matrix(origins, destination, mode=mode, language=language, avoid=avoid, units=units)
-    
     return commuteData1, commuteData2, commuteData3, commuteData4
