@@ -72,7 +72,7 @@ The word doc is manually converted to a spreadsheet. The current version of the 
 is from August 2015.
 '''
 def parseMLSHouseData():
-    fileName = 'mls_house_data-Aug_2015'
+    fileName = MLS_DATA_FILE
     columns = ['Town', 'Tax Rate', 'Median Sales Price', 'Tax Cost']
     data = []
     
