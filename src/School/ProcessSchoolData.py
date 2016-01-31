@@ -12,7 +12,7 @@ from collections import OrderedDict
 from School.ParseSchoolData import prepSchoolDistrictRankData, prepSchoolTownRankData
 
 def processSchoolData():
-    print "    Started Processing School Data"
+    print "  Started Processing School Data"
     
     fileName = "Master-School_Data-2015"
     entries = OrderedDict()

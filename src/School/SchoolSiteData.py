@@ -55,7 +55,7 @@ Current available options are:
     account-School
 """
 def downloadSchoolData(data = 'current'):
-    print "        Started Downloading School Data"
+    print "    Started Downloading School Data"
     sites = []      
               
     sites.append(SchoolSiteData('admin-district', 
