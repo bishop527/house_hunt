@@ -15,6 +15,7 @@ MAX_SCORE = 10
 MIN_SCORE = -10
 MEDIAN_SCORE = 0
 
+dataLocation = os.path.join('..', 'data')
 houseDataLocation = os.path.join('..', 'data', 'house')
 schoolDataLocation = os.path.join('..', 'data', 'school')
 commuteDataLocation = os.path.join('..', 'data', 'commute')
@@ -26,9 +27,7 @@ proxy_on = False
 
 # seconds from 1 Jan 1970 to 2 May 2016 07:00 EST
 DEPARTURE_TIME = 1462186800
-TRAFFIC_MODEL = 'optimistic'
-
-MLS_DATA_FILE = 'mls_house_data-Aug_2015'
+TRAFFIC_MODEL = 'best_guess'
 
 """ 
 Appends the given DataFrame with the master workbook and names the worksheet the given sheetName 

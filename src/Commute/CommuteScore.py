@@ -9,8 +9,8 @@ from utils import *
 
 fileName = 'Master-Commute_Data-2015'
 
-priorities = {'Distance': [5],
-              'Duration': [5]}
+priorities = {'Distance': [3],
+              'Duration': [7]}
 
 '''
 THis method uses relative frequency to assign a weight to each item in the 
@@ -68,8 +68,8 @@ A commute value = the median value will have a score of 0.
 def calculateCommuteDurationScore(duratoin):
     
     minValue = 10
-    maxValue = 60
-    threshold = 40
+    maxValue = 70
+    threshold = 60
     medianValue = (maxValue + minValue) / 2
     
     if duratoin < threshold:

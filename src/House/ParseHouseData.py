@@ -71,7 +71,7 @@ Currently the only way of obtaining this spreadsheet is from the realtor as a wo
 The word doc is manually converted to a spreadsheet. The current version of the data
 is from August 2015.
 '''
-def parseMLSHouseData():
+def parseMLSHouseData(MLS_DATA_FILE):
     fileName = MLS_DATA_FILE
     columns = ['Town', 'Tax Rate', 'Median Sales Price', 'Tax Cost']
     data = []
