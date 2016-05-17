@@ -28,6 +28,8 @@ proxy_on = False
 # seconds from 1 Jan 1970 to 2 May 2016 07:00 EST
 DEPARTURE_TIME = 1462186800
 TRAFFIC_MODEL = 'best_guess'
+DESTINATION = '244 Wood St. Lexington, MA'
+AVOID_TOLLS = ''
 
 """ 
 Appends the given DataFrame with the master workbook and names the worksheet the given sheetName 

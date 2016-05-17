@@ -9,7 +9,7 @@ import pandas as pd
 
 def parseCommuteData(data):
     print '            Parsing Commute Data'
-    columns = ['House', 'Distance to Work', 'Min to Work', TRAFFIC_MODEL+' traffic']
+    columns = ['Town', 'Distance to Work', 'Min to Work', TRAFFIC_MODEL+' traffic']
     rows = []
     
     for row in range(len(data["rows"])):

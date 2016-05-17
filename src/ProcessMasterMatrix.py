@@ -19,10 +19,12 @@ from CombinedScores import calculateCombinedScores
 #masterFile = os.path.join(dataLocation, MASTER_FILE_NAME)
 traffic = 'bg'
 mls = 'Aug-2015'
+tolls = 'noTolls'
 
 print 'Choose an MLS data file'
 print '  1 = August 2015'
 print '  2 = October 2015'
+print '  3 = December 2015'
 uMLSData = int(raw_input('mls data: '))
 if uMLSData == 1: 
     MLS_DATA_FILE = 'mls_house_data-Aug_2015'
@@ -30,6 +32,9 @@ if uMLSData == 1:
 elif uMLSData == 2: 
     MLS_DATA_FILE = 'mls_house_data-Oct_2015'
     mls = 'Oct-2015'
+elif uMLSData == 3: 
+    MLS_DATA_FILE = 'mls_house_data-Dec_2015'
+    mls = 'Dec-2015'
 
 if raw_input('Set traffic model? [y/n]') == 'y':
     print '  1 = best_guess'
@@ -46,7 +51,11 @@ if raw_input('Set traffic model? [y/n]') == 'y':
         TRAFFIC_MODEL = 'pessimistic'
         traffic = 'pess'
         
-masterFileName = os.path.join(dataLocation, 'Master_Scores-'+mls+'-'+traffic)
+if raw_input('Avoid Tolls? (y/n)') == 'y':
+    AVOID_TOLLS = 'tolls'
+    tolls = 'tolls' 
+        
+masterFileName = os.path.join(dataLocation, 'Master_Scores-'+mls+'-'+traffic+'-'+tolls)
     
 uProxy = raw_input('Behind a proxy? [y/N]')
 uHouseData = raw_input('Do you want to update house data? [Y/n] ')
