@@ -5,16 +5,10 @@ Created on Nov 4, 2015
 @todo: 
 '''
 import os.path
-# import platform
-# import pwd
 import urllib
+from constants import *
 
-import openpyxl
 import pandas as pd
-
-MAX_SCORE = 10
-MIN_SCORE = -10
-MEDIAN_SCORE = 0
 
 dataLocation = os.path.join('..', 'data')
 houseDataLocation = os.path.join('..', 'data', 'house')
@@ -22,15 +16,7 @@ schoolDataLocation = os.path.join('..', 'data', 'school')
 commuteDataLocation = os.path.join('..', 'data', 'commute')
 townDataLocation = os.path.join('..', 'data', 'town')
 
-ext = '.xlsx'
-
 proxy_on = False
-
-# seconds from 1 Jan 1970 to 2 May 2016 07:00 EST
-DEPARTURE_TIME = 1462186800
-TRAFFIC_MODEL = 'best_guess'
-DESTINATION = '244 Wood St. Lexington, MA'
-AVOID_TOLLS = ''
 
 """ 
 Appends the given DataFrame with the master workbook and names the worksheet the given sheetName 

@@ -7,6 +7,7 @@ Created on Nov 17, 2015
 import os
 from utils import *
 import pandas as pd
+from constants import *
 
 fileName = 'Master-Commute_Data-2015'
 
@@ -14,7 +15,7 @@ priorities = {'Distance': [3],
               'Duration': [7]}
 
 '''
-THis method uses relative frequency to assign a weight to each item in the 
+This method uses relative frequency to assign a weight to each item in the 
 priorities list. These weights will then used to calculate the total score of 
 each school.
 '''
@@ -88,7 +89,7 @@ def calculateCommuteScores():
     columns = ['Distance', 'Duration', 'Distance Score', 'Duration Score', 'Weighted Score']
     calculatePriorityWeights()
     
-    commuteData = pd.read_excel(os.path.join(commuteDataLocation, fileName+ext), header=0)
+    commuteData = pd.read_excel(os.path.join(commuteDataLocation, fileName+EXT), header=0)
     
     for row in range(len(commuteData)):
         distanceScore = 0

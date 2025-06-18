@@ -6,6 +6,7 @@ Created on Nov 9, 2015
 '''
 import os
 from utils import *
+from constants import *
 
 def getMATowns():
     towns = ['Abington','Acton','Acushnet','Adams','Agawam','Alford','Amesbury','Amherst','Andover','Arlington','Ashburnham','Ashby','Ashfield','Ashland','Athol','Attleboro','Auburn','Avon','Ayer',
@@ -36,7 +37,7 @@ def getMAZips():
     fileName = 'town_zips'
     zips = []
 
-    data = pd.read_excel(os.path.join(houseDataLocation, fileName+ext), header=0)
+    data = pd.read_excel(os.path.join(houseDataLocation, fileName+EXT), header=0)
     
     for zipCode in data.Zip:
         # Leading zero is stripped so need to re-add
@@ -51,7 +52,7 @@ def zipLookup(zip):
     town = None
     fileName = 'Town_Admin-2015'
     
-    townData = pd.read_excel(os.path.join(houseDataLocation, fileName+ext))
+    townData = pd.read_excel(os.path.join(houseDataLocation, fileName+EXT))
     
     for row in range(len(townData)):
         zips = (townData.iloc[row][1].split(','))
@@ -73,7 +74,7 @@ def townExists(town):
 def taxRateLookup(town):
     taxRate = None
     fileName = 'TownTaxRates-2015'
-    taxData = pd.read_excel(os.path.join(houseDataLocation, fileName+ext))
+    taxData = pd.read_excel(os.path.join(houseDataLocation, fileName+EXT))
     
     for row in range(len(taxData)):
         if taxData.iloc[row][1] == town:
@@ -85,7 +86,7 @@ def countyLookup(zip):
     county = None
     fileName = 'Town_Admin-2015'
     
-    townData = pd.read_excel(os.path.join(houseDataLocation, fileName+ext))
+    townData = pd.read_excel(os.path.join(houseDataLocation, fileName+EXT))
     
     for row in range(len(townData)):
         zips = (townData.iloc[row][1].split(','))

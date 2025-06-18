@@ -5,6 +5,7 @@ Created on Nov 16, 2015
 @todo: 
 '''
 from utils import *
+from constants import *
 import pandas as pd
 
 class SchoolData(object):
@@ -148,7 +149,7 @@ If district name exists it returns True, otherwise False
 def districtExists(district):
     exists = False
     fileName = 'Master-School_Data-2015'
-    ws = pd.read_excel(os.path.join(schoolDataLocation, fileName+ext), sheetname='Admin-School', header=0)
+    ws = pd.read_excel(os.path.join(schoolDataLocation, fileName+EXT), sheetname='Admin-School', header=0)
     
     for row in range(len(ws)):
         if district == ws.iloc[row, 1]:
@@ -192,7 +193,7 @@ def parseDistrictAdminData(year = "2015"):
     """ Convert to true xls file """  
     convertToXLS(fileName, schoolDataLocation, 7, 0)
 
-    ws = pd.read_excel(os.path.join(schoolDataLocation, fileName+ext), 0)
+    ws = pd.read_excel(os.path.join(schoolDataLocation, fileName+EXT), 0)
 
     for row in range(len(ws)):
         """ Skip Charter schools """
@@ -234,7 +235,7 @@ This method defaults to parsing data from 2015
 """ 
 def parseSchoolAdminData(year = "2015"):
     print("            Parsing School Admin Data")
-    fileName = "admin-school-"+year+ext
+    fileName = "admin-school-"+year+EXT
     columns = ['Town', 'District', 'School Name', 'School Type', 'Zip Code', 'Grades']
     rows = []
             
@@ -269,7 +270,7 @@ def parseSchoolAdminData(year = "2015"):
 
 def parseAccountDistrictData(year="2014"):
     print("            Parsing Accountability District Data")
-    fileName = "account-district-"+year+ext
+    fileName = "account-district-"+year+EXT
     columns = ['District', 'Level', 'Notes']
     rows = []
 
@@ -299,7 +300,7 @@ def parseAccountDistrictData(year="2014"):
 
 def parseAccountSchoolData(year="2014"):
     print("            Parsing Accountability School Data")
-    fileName = "account-school-"+year+ext
+    fileName = "account-school-"+year+EXT
     columns = ['Town', 'School', 'Type', 'Level', 'Notes', 'Percentile']
     rows = []
 
@@ -335,7 +336,7 @@ def parseAccountSchoolData(year="2014"):
 
 def parseClassSizeDistrictData(year='2014'):
     print("            Parsing Class Size District Data")
-    fileName = "class_size-district-"+year+ext
+    fileName = "class_size-district-"+year+EXT
     columns = ['District', 'Avg Size', 'SPED %']
     rows = []
 
@@ -370,7 +371,7 @@ def parseClassSizeDistrictData(year='2014'):
 def parseClassSizeSchoolData(year='2014'):
     print("            Parsing Class Size School Data")
     
-    fileName = "class_size-school-"+year+ext
+    fileName = "class_size-school-"+year+EXT
     columns = ['Town', 'School', 'Total Classes', '# Students', 'Avg Size']
     rows = []
 
@@ -411,7 +412,7 @@ def parseClassSizeSchoolData(year='2014'):
 
 def parseDropoutDistrictData(year="2014"):
     print("            Parsing Dropout District Data")
-    fileName = "dropout-district-"+year+ext
+    fileName = "dropout-district-"+year+EXT
     columns = ['District', '# Enrolled', 'Total Drop', 'Total Drop %']
     rows = []
 
@@ -444,7 +445,7 @@ def parseDropoutDistrictData(year="2014"):
 
 def parseDropoutSchoolData(year="2014"):
     print("            Parsing Dropout School Data")
-    fileName = "dropout-school-"+year+ext
+    fileName = "dropout-school-"+year+EXT
     columns = ['Town', 'School', '# Enrolled', 'Total Drop', 'Total Drop %']
     rows = []
 
@@ -483,7 +484,7 @@ def parseDropoutSchoolData(year="2014"):
 
 def parseHigherEdDistrictData(year="2013"):
     print("            Parsing Higher Education District Data")
-    fileName = "higher_edu-district-"+year+ext
+    fileName = "higher_edu-district-"+year+EXT
     columns = ['District', '# Grads', '# to College', '% to College']
     rows = []
 
@@ -519,7 +520,7 @@ def parseHigherEdDistrictData(year="2013"):
 
 def parseHigherEdSchoolData(year="2013"):
     print("            Parsing Higher Ed School Data")
-    fileName = "higher_edu-school-"+year+ext
+    fileName = "higher_edu-school-"+year+EXT
     columns = ['Town', 'School', '# Grads', '# to College', '% to College']
     rows = []
 
@@ -561,7 +562,7 @@ def parseHigherEdSchoolData(year="2013"):
 
 def parseGraduationRateDistrictData(year="2014"):
     print("            Parsing Graduation Rates District Data")
-    fileName = "grad_rates-district-"+year+ext
+    fileName = "grad_rates-district-"+year+EXT
     columns = ['District', '# Students', '% Graduated']
     rows = []
 
@@ -594,7 +595,7 @@ def parseGraduationRateDistrictData(year="2014"):
 
 def parseGraduationRateSchoolData(year="2014"):
     print("            Parsing Graduation Rates School Data")
-    fileName = "grad_rates-school-"+year+ext
+    fileName = "grad_rates-school-"+year+EXT
     columns = ['Town', 'School', '# Students', '% Grad']
     rows = []
 
@@ -633,7 +634,7 @@ def parseGraduationRateSchoolData(year="2014"):
 
 def parseMCASDistrictData(year="2015"):
     print("            Parsing MCAS District Data")
-    fileName = "mcas-district-"+year+ext
+    fileName = "mcas-district-"+year+EXT
     columns = ['District', '# Students', 'Subject', '# Adv+Prof', '% Adv+Prof', '# Adv', '% Adv', '# Prof', '% Prof', '# NI', '% NI', '# W/F', '% W/F']
     rows = []
 
@@ -674,7 +675,7 @@ def parseMCASDistrictData(year="2015"):
 
 def parseMCASSchoolData(year="2015"):
     print("            Parsing MCAS School Data")
-    fileName = "mcas-school-"+year+ext
+    fileName = "mcas-school-"+year+EXT
     columns = ['Town', 'School', '# Students', 'Subject', '# Adv', '% Adv', '# Prof', '% Prof', '# NI', '% NI', '# W/F', '% W/F' ]
     rows = []
 
@@ -724,7 +725,7 @@ def parseMCASSchoolData(year="2015"):
 
 def parseSATDistrictData(year="2015"):
     print("            Parsing SAT District Data")
-    fileName = "sat-district-"+year+ext
+    fileName = "sat-district-"+year+EXT
     columns = ['District', '# Tests', 'Reading', 'Writing', 'Math']
     rows = []
 
@@ -754,7 +755,7 @@ def parseSATDistrictData(year="2015"):
 
 def parseSATSchoolData(year="2015"):
     print("            Parsing SAT School Data")
-    fileName = "sat-school-"+year+ext
+    fileName = "sat-school-"+year+EXT
     columns = ['Town', 'School', 'Tests Taken', 'Reading', 'Writing', 'Math']
     rows = []
 
@@ -793,7 +794,7 @@ def parseSATSchoolData(year="2015"):
 
 def parseSPEDPerfData(year="2014"):
     print("            Parsing SPED Performance Data")
-    fileName = "sped-performance-"+year+ext
+    fileName = "sped-performance-"+year+EXT
     columns = pd.MultiIndex.from_tuples([('District', ''),
                                          ('SPED Grad Rate', 'Cohort #'), ('SPED Grad Rate', 'Grad #'), ('SPED Grad Rate', 'Grad %'), 
                                          ('SPED Dropout', 'Enrolled'), ('SPED Dropout', '# Dropped'), ('SPED Dropout', '% Dropped'),
@@ -848,7 +849,7 @@ def parseSPEDPerfData(year="2014"):
 
 def parseSPEDComplianceData(year="2014"):
     print("            Parsing SPED Compliance Data")
-    fileName = "sped-compliance-"+year+ext
+    fileName = "sped-compliance-"+year+EXT
     columns = pd.MultiIndex.from_tuples([('District', )])
     rows = []
 
@@ -895,7 +896,7 @@ def parseSPEDComplianceData(year="2014"):
 
 def parseTeacherSalaryData(year="2013"):
     print("            Parsing Teacher Salary Data")
-    fileName = "teacher-salary-"+year+ext
+    fileName = "teacher-salary-"+year+EXT
     columns = ['District', 'Salary Total', 'Avg Salary', 'FTE Count']
     rows = []
 
@@ -938,7 +939,7 @@ def prepSchoolTownRankData():
     currDistrict = ''
     fileName = 'Master-School_Data-2015'
     
-    schoolData = pd.read_excel(os.path.join(schoolDataLocation, fileName+ext), sheetname='Admin-School', header=0)
+    schoolData = pd.read_excel(os.path.join(schoolDataLocation, fileName+EXT), sheetname='Admin-School', header=0)
     schoolData.sort_values(by=['District', 'Town'], inplace=True)
     
     for each in range(len(schoolData)):
@@ -967,7 +968,7 @@ def prepSchoolDistrictRankData():
     currDistrict = ''
     fileName = 'Master-School_Data-2015'
     
-    schoolData = pd.read_excel(os.path.join(schoolDataLocation, fileName+ext), sheetname='Admin-School', header=0)
+    schoolData = pd.read_excel(os.path.join(schoolDataLocation, fileName+EXT), sheetname='Admin-School', header=0)
     schoolData.sort_values(by=['District', 'Town'], inplace=True)
     
     for each in range(len(schoolData)):
@@ -992,7 +993,7 @@ def parseSchoolDistrictRankData():
     columns = ['District', 'School Type', 'Rank', 'Grade']
     rows = []
     
-    ws = pd.read_excel(os.path.join(schoolDataLocation, fileName+ext), 0)
+    ws = pd.read_excel(os.path.join(schoolDataLocation, fileName+EXT), 0)
      
     for row in range(len(ws)):
         """ Skip Charter schools """

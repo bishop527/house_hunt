@@ -2,10 +2,11 @@
 Created on Nov 16, 2015
 
 @author: ad23883
-@todo: 
 '''
+
 import googlemaps
 from utils import *
+from constants import *
 
 def getCommuteData(origins, departure_time = DEPARTURE_TIME, destination = DESTINATION):    
     print('        Downloading Commute Data')

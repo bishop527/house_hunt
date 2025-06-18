@@ -6,6 +6,7 @@ Created on Nov 23, 2015
 
 from School.ParseSchoolData import districtLookup
 from utils import *
+from constants import *
 
 priorities = {'School': [5],
             'Commute':  [2],
@@ -37,10 +38,10 @@ def calculateCombinedScores(fileName):
     
     calculatePriorityWeights()
     
-    commuteScores = pd.read_excel(masterFile+ext, sheetname='Commute-Scores', header=0)
-    schoolScores = pd.read_excel(masterFile+ext, sheetname='School-Scores', header=0)
-    houseScores = pd.read_excel(masterFile+ext, sheetname='Housing-Scores', header=0)
-    schoolData = pd.read_excel(os.path.join(schoolDataLocation, 'Master-School_Data-2015'+ext), sheetname='Admin-School', header=0)
+    commuteScores = pd.read_excel(masterFile+EXT, sheetname='Commute-Scores', header=0)
+    schoolScores = pd.read_excel(masterFile+EXT, sheetname='School-Scores', header=0)
+    houseScores = pd.read_excel(masterFile+EXT, sheetname='Housing-Scores', header=0)
+    schoolData = pd.read_excel(os.path.join(schoolDataLocation, 'Master-School_Data-2015'+EXT), sheetname='Admin-School', header=0)
 
     # Parse Commute Scores, get town name and weighted score
     for row in range(len(commuteScores)):

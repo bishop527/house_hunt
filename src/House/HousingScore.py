@@ -8,6 +8,7 @@ Created on Nov 17, 2015
 import pandas as pd
 import numpy as np
 from utils import *
+from constants import *
 
 priorities = {'House Cost': [8],
               'Tax Cost':   [2]}
@@ -86,7 +87,7 @@ def calculateHouseScores():
     calculatePriorityWeights()
         
     columns = ['Tax Rate', 'Median House Cost', 'Tax Score', 'Housing Score', 'Weighted Score']
-    houseData = pd.read_excel(os.path.join(houseDataLocation, fileName+ext), sheetname='House-Data')
+    houseData = pd.read_excel(os.path.join(houseDataLocation, fileName+EXT), sheetname='House-Data')
 
     for row in range(len(houseData)):
         taxScore = 0
@@ -124,7 +125,7 @@ def calculateTruliaScores():
     calculatePriorityWeights()
         
     columns = ['Tax Rate', 'Median House Cost', 'Tax Score', 'Housing Score', 'Weighted Score']
-    houseData = pd.ExcelFile(os.path.join(houseDataLocation, fileName+ext)).parse('All Properties Housing Data')
+    houseData = pd.ExcelFile(os.path.join(houseDataLocation, fileName+EXT)).parse('All Properties Housing Data')
     houseData.sort_values(by="House", inplace=True)
     
     for row in range(len(houseData)):

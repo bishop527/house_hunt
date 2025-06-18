@@ -6,6 +6,7 @@ Created on Nov 16, 2015
 '''
 from collections import OrderedDict
 from utils import *
+from constants import *
 import pandas as pd
 from CommuteData import getCommuteData
 from ParseCommuteData import parseCommuteData
@@ -35,6 +36,6 @@ def processCommuteData():
         
     entries['Commute-Data'] = pd.concat(frames, ignore_index=True)
     
-    populateMaster(os.path.join(commuteDataLocation, fileName+ext), entries)
+    populateMaster(os.path.join(commuteDataLocation, fileName+EXT), entries)
     
     print('    Done Processing Commute Data\n')

@@ -11,6 +11,7 @@ import numpy as np
 import time
 from House.HouseData import countyLookup, taxRateLookup, zipLookup, townExists
 from utils import *
+from constants import *
 import os
 
 truliaKey = '9z8g9yszfkukswpj5q3ry5a4'
@@ -77,7 +78,7 @@ def getCombinedTruliaZipCodeStats(startDate, endDate):
         
     url_base = 'http://api.trulia.com/webservices.php?library=TruliaStats&function=getZipCodeStats&'
 
-    townData = pd.read_excel(os.path.join(townDataLocation, 'Town_Admin-2015'+ext), header=0)
+    townData = pd.read_excel(os.path.join(townDataLocation, 'Town_Admin-2015'+EXT), header=0)
     for row in range(len(townData)):
         count = 0
         finalAverageListPrice = 0
@@ -148,7 +149,7 @@ def getCombinedTruliaZipCodeStats(startDate, endDate):
 
 def getTruliaZipCodeStats(zips, startDate, endDate):
     print("        Downloading Trulia Housing Data")
-    fileName = 'House_Data-2015'+ext
+    fileName = 'House_Data-2015'+EXT
     data = []
     retry = []
     

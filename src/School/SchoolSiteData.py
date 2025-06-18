@@ -12,6 +12,7 @@ availYears - list of other years available for download
 '''
 import urllib
 from utils import *
+from constants import *
  
 dataLocation = os.path.join('..', 'data', 'school')
 
@@ -122,6 +123,6 @@ def downloadSchoolData(data = 'current'):
             url = site.getURL()
             currYear = site.getCurrYear()
             
-            with open(os.path.join(schoolDataLocation, name+'-'+currYear+ext), 'w') as f:
+            with open(os.path.join(schoolDataLocation, name+'-'+currYear+EXT), 'w') as f:
                 f.write(urllib.urlopen(url).read())
                 f.close()

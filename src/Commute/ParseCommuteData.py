@@ -6,6 +6,7 @@ Created on Nov 16, 2015
 '''
 import pandas as pd
 from utils import *
+from constants import *
 
 def parseCommuteData(data):
     print('            Parsing Commute Data')

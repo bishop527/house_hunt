@@ -8,6 +8,7 @@ Created on Nov 16, 2015
 import os
 from collections import OrderedDict
 from utils import *
+from constants import *
 from CombinedScores import calculateCombinedScores
 from Commute.CommuteScore import calculateCommuteScores
 from Commute.ProcessCommuteData import processCommuteData
@@ -77,8 +78,8 @@ scoreEntries = OrderedDict()
 scoreEntries['Housing-Scores'] = calculateHouseScores()
 scoreEntries['Commute-Scores'] = calculateCommuteScores()
 scoreEntries['School-Scores'] = calculateSchoolScores()
-populateMaster(masterFileName+ext, scoreEntries)
+populateMaster(masterFileName+EXT, scoreEntries)
 scoreEntries['Combined-Scores'] = calculateCombinedScores(masterFileName)
-populateMaster(masterFileName+ext, scoreEntries)
+populateMaster(masterFileName+EXT, scoreEntries)
 
 print('Done Processing Master Matrix')
