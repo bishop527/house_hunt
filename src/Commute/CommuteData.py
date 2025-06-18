@@ -19,11 +19,8 @@ def getCommuteData(origins, departure_time = DEPARTURE_TIME, destination = DESTI
     mode = 'driving'
     language = 'en'
     units = 'imperial'
-    
-    traffic_model = TRAFFIC_MODEL
         
     commuteData = gmaps.distance_matrix(origins, destination, mode=mode, language=language, avoid=AVOID_TOLLS, 
-                                         units=units, departure_time=departure_time, traffic_model=traffic_model)
-     
-     
+                                         units=units, departure_time=departure_time, traffic_model=TRAFFIC_MODEL)
+
     return commuteData

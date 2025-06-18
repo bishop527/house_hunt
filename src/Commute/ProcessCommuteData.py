@@ -36,6 +36,6 @@ def processCommuteData():
         
     entries['Commute-Data'] = pd.concat(frames, ignore_index=True)
     
-    populateMaster(os.path.join(commuteDataLocation, fileName+EXT), entries)
+    populateMaster(os.path.join(COMMUTE_DATA, fileName + EXT), entries)
     
     print('    Done Processing Commute Data\n')

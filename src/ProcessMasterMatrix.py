@@ -2,10 +2,9 @@
 Created on Nov 16, 2015
 
 @author: ad23883
-@todo: 
+
 '''
 
-import os
 from collections import OrderedDict
 from utils import *
 from constants import *
@@ -16,7 +15,7 @@ from House.HousingScore import calculateHouseScores
 from House.ProcessHouseData import processHouseData
 from School.ProcessSchoolData import processSchoolData
 from School.SchoolScore import calculateSchoolScores
-from School.SchoolSiteData import dataLocation
+from School.SchoolSiteData import DATA
 
 #masterFile = os.path.join(dataLocation, MASTER_FILE_NAME)
 traffic = 'bg'
@@ -57,7 +56,7 @@ if input('Avoid Tolls? (y/n)') == 'y':
     AVOID_TOLLS = 'tolls'
     tolls = 'tolls' 
         
-masterFileName = os.path.join(dataLocation, 'Master_Scores-'+mls+'-'+traffic+'-'+tolls)
+masterFileName = os.path.join(DATA, 'Master_Scores-' + mls + '-' + traffic + '-' + tolls)
     
 uProxy = input('Behind a proxy? [y/N]')
 uHouseData = input('Do you want to update house data? [Y/n] ')

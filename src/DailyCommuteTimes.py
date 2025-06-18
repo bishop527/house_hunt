@@ -12,7 +12,6 @@ destination during a given time range.
 
 '''
 import datetime
-import os.path
 import time
 from collections import OrderedDict
 from Commute.CommuteData import getCommuteData
@@ -130,7 +129,7 @@ while True:
                 writeData = [[]]
                 for town in data:
                     writeData[0] = [date, weekDay]
-                    currDf = pd.read_excel(os.path.join(commuteDataLocation, fileName+EXT), index_col=[0], sheet_name=town, engine='openpyxl')
+                    currDf = pd.read_excel(os.path.join(COMMUTE_DATA, fileName + EXT), index_col=[0], sheet_name=town, engine='openpyxl')
                     col = currDf.columns
                     for t in data[town]['times']:
                         writeData[0].append(data[town]['times'][t]['dist'])
@@ -148,7 +147,7 @@ while True:
                     count = 0
                     total = 0
     
-                populateMaster(os.path.join(commuteDataLocation, fileName+EXT), entries)
+                populateMaster(os.path.join(COMMUTE_DATA, fileName + EXT), entries)
                 print('Wrote data for the day to file')
                 time.sleep(3600)
                 

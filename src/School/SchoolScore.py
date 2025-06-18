@@ -3,9 +3,7 @@ Created on Nov 17, 2015
 
 @author: ad23883
 '''
-import pandas as pd
 import numpy as np
-from utils import normalizeScore
 from utils import *
 from constants import *
 
@@ -200,7 +198,7 @@ def calculateSchoolScores():
     calculatePriorityWeights()
     
     # Accountability Level Score
-    accntData = pd.read_excel(os.path.join(schoolDataLocation, fileName+EXT), sheetname='Accountability-District', header=0)    
+    accntData = pd.read_excel(os.path.join(SCHOOL_DATA, fileName + EXT), sheetname='Accountability-District', header=0)
     for row in range(len(accntData)):
         district = accntData.iloc[row, 0]
         level = accntData.iloc[row, 1]
@@ -213,7 +211,7 @@ def calculateSchoolScores():
         data[district][-1] = round(currScore, 2)
     
     # Class Size and SPED % Score
-    classSizeData = pd.read_excel(os.path.join(schoolDataLocation, fileName+EXT), sheetname='Class_Size-District', header=0)
+    classSizeData = pd.read_excel(os.path.join(SCHOOL_DATA, fileName + EXT), sheetname='Class_Size-District', header=0)
     
     # Class Size
     for row in range(len(classSizeData)):
@@ -250,7 +248,7 @@ def calculateSchoolScores():
         data[district][-1] = round(currScore, 2)
     
     # SPED Parent Involvement Score
-    parentData = pd.read_excel(os.path.join(schoolDataLocation, fileName+EXT), sheetname='SPED-Performance', header=0, skiprows=2)
+    parentData = pd.read_excel(os.path.join(SCHOOL_DATA, fileName + EXT), sheetname='SPED-Performance', header=0, skiprows=2)
     
     for row in range(len(parentData)):
         district = parentData.iloc[row, 1]
@@ -293,7 +291,7 @@ def calculateSchoolScores():
 #         data[district][-1] = round(currScore, 2)
 
     # Graduation Rate Score
-    graduationData = pd.read_excel(os.path.join(schoolDataLocation, fileName+EXT), sheetname='GraduationRates-District', header=0)
+    graduationData = pd.read_excel(os.path.join(SCHOOL_DATA, fileName + EXT), sheetname='GraduationRates-District', header=0)
     
     for row in range(len(graduationData)):
         district = graduationData.iloc[row, 0]
@@ -313,7 +311,7 @@ def calculateSchoolScores():
         data[district][-1] = round(currScore, 2)
 
     # Higher Education Rate Score
-    higherEdData = pd.read_excel(os.path.join(schoolDataLocation, fileName+EXT), sheetname='HigherEd-District', header=0)
+    higherEdData = pd.read_excel(os.path.join(SCHOOL_DATA, fileName + EXT), sheetname='HigherEd-District', header=0)
     
     for row in range(len(higherEdData)):
         district = higherEdData.iloc[row, 0]
@@ -333,7 +331,7 @@ def calculateSchoolScores():
         data[district][-1] = round(currScore, 2)
         
     # MCAS Score
-    mcasData = pd.ExcelFile(os.path.join(schoolDataLocation, fileName+EXT)).parse('MCAS-District')
+    mcasData = pd.ExcelFile(os.path.join(SCHOOL_DATA, fileName + EXT)).parse('MCAS-District')
     mcasData.sort_values(by="District", inplace=True)
     
     totalELA = 0
@@ -435,7 +433,7 @@ def calculateSchoolScores():
                 continue
 
     # SAT Score
-    satData = pd.read_excel(os.path.join(schoolDataLocation, fileName+EXT), sheetname='SAT-District', header=0)
+    satData = pd.read_excel(os.path.join(SCHOOL_DATA, fileName + EXT), sheetname='SAT-District', header=0)
     
     for row in range(len(satData)):
         district = satData.iloc[row, 0]
@@ -477,7 +475,7 @@ def calculateSchoolScores():
 #             data[district][9] = salaryScore  
 
     # School Rank Score
-    rankData = pd.read_excel(os.path.join(schoolDataLocation, fileName+EXT), sheetname='Rank-District', header=0)
+    rankData = pd.read_excel(os.path.join(SCHOOL_DATA, fileName + EXT), sheetname='Rank-District', header=0)
   
     for row in range(len(rankData)):
         district = str(rankData.iloc[row, 0])

@@ -149,7 +149,7 @@ If district name exists it returns True, otherwise False
 def districtExists(district):
     exists = False
     fileName = 'Master-School_Data-2015'
-    ws = pd.read_excel(os.path.join(schoolDataLocation, fileName+EXT), sheetname='Admin-School', header=0)
+    ws = pd.read_excel(os.path.join(SCHOOL_DATA, fileName + EXT), sheetname='Admin-School', header=0)
     
     for row in range(len(ws)):
         if district == ws.iloc[row, 1]:
@@ -191,9 +191,9 @@ def parseDistrictAdminData(year = "2015"):
     rows = []
             
     """ Convert to true xls file """  
-    convertToXLS(fileName, schoolDataLocation, 7, 0)
+    convertToXLS(fileName, SCHOOL_DATA, 7, 0)
 
-    ws = pd.read_excel(os.path.join(schoolDataLocation, fileName+EXT), 0)
+    ws = pd.read_excel(os.path.join(SCHOOL_DATA, fileName + EXT), 0)
 
     for row in range(len(ws)):
         """ Skip Charter schools """
@@ -240,9 +240,9 @@ def parseSchoolAdminData(year = "2015"):
     rows = []
             
     """ Convert to true xls file """  
-    convertToXLS(fileName, schoolDataLocation, 7, 0)
+    convertToXLS(fileName, SCHOOL_DATA, 7, 0)
 
-    ws = pd.read_excel(os.path.join(schoolDataLocation, fileName), header=0)
+    ws = pd.read_excel(os.path.join(SCHOOL_DATA, fileName), header=0)
     ws.sort_values(by='Org Name', inplace=True)
         
     findRelevantDistricts(ws)
@@ -275,9 +275,9 @@ def parseAccountDistrictData(year="2014"):
     rows = []
 
     """ Convert to true xls """    
-    convertToXLS(fileName, schoolDataLocation, skiprows=2)        
+    convertToXLS(fileName, SCHOOL_DATA, skiprows=2)
 
-    ws = pd.read_excel(os.path.join(schoolDataLocation, fileName), 0)
+    ws = pd.read_excel(os.path.join(SCHOOL_DATA, fileName), 0)
      
     for row in range(len(ws)):
         """ Skip Charter schools """
@@ -305,9 +305,9 @@ def parseAccountSchoolData(year="2014"):
     rows = []
 
     """ Convert to true xls file """    
-    convertToXLS(fileName, schoolDataLocation, skiprows=2)        
+    convertToXLS(fileName, SCHOOL_DATA, skiprows=2)
 
-    ws = pd.read_excel(os.path.join(schoolDataLocation, fileName), 0)
+    ws = pd.read_excel(os.path.join(SCHOOL_DATA, fileName), 0)
      
     for row in range(len(ws)):        
         """ Skip Charter schools """
@@ -341,9 +341,9 @@ def parseClassSizeDistrictData(year='2014'):
     rows = []
 
     """ Convert to true xls file """    
-    convertToXLS(fileName, schoolDataLocation, header=0)        
+    convertToXLS(fileName, SCHOOL_DATA, header=0)
 
-    ws = pd.read_excel(os.path.join(schoolDataLocation, fileName), 0)
+    ws = pd.read_excel(os.path.join(SCHOOL_DATA, fileName), 0)
      
     for row in range(len(ws)):        
         """ Skip Charter schools """
@@ -376,9 +376,9 @@ def parseClassSizeSchoolData(year='2014'):
     rows = []
 
     """ Convert to true xls file """    
-    convertToXLS(fileName, schoolDataLocation, header=0)        
+    convertToXLS(fileName, SCHOOL_DATA, header=0)
 
-    ws = pd.read_excel(os.path.join(schoolDataLocation, fileName), 0)
+    ws = pd.read_excel(os.path.join(SCHOOL_DATA, fileName), 0)
      
     for row in range(len(ws)):        
         """ Skip Charter schools """
@@ -417,9 +417,9 @@ def parseDropoutDistrictData(year="2014"):
     rows = []
 
     """ Convert to true xls """    
-    convertToXLS(fileName, schoolDataLocation, skiprows = 1, header=0)        
+    convertToXLS(fileName, SCHOOL_DATA, skiprows = 1, header=0)
 
-    ws = pd.read_excel(os.path.join(schoolDataLocation, fileName), 0)
+    ws = pd.read_excel(os.path.join(SCHOOL_DATA, fileName), 0)
      
     for row in range(len(ws)):
         """ Skip Charter schools """
@@ -450,9 +450,9 @@ def parseDropoutSchoolData(year="2014"):
     rows = []
 
     """ Convert to true xls file """    
-    convertToXLS(fileName, schoolDataLocation, skiprows=1, header=0)        
+    convertToXLS(fileName, SCHOOL_DATA, skiprows=1, header=0)
 
-    ws = pd.read_excel(os.path.join(schoolDataLocation, fileName), 0)
+    ws = pd.read_excel(os.path.join(SCHOOL_DATA, fileName), 0)
      
     for row in range(len(ws)):        
         """ Skip Charter schools """
@@ -489,9 +489,9 @@ def parseHigherEdDistrictData(year="2013"):
     rows = []
 
     """ Convert to true xls """    
-    convertToXLS(fileName, schoolDataLocation, header=0)        
+    convertToXLS(fileName, SCHOOL_DATA, header=0)
 
-    ws = pd.read_excel(os.path.join(schoolDataLocation, fileName), 0)
+    ws = pd.read_excel(os.path.join(SCHOOL_DATA, fileName), 0)
      
     for row in range(len(ws)):
         """ Skip Charter schools """
@@ -525,9 +525,9 @@ def parseHigherEdSchoolData(year="2013"):
     rows = []
 
     """ Convert to true xls file """    
-    convertToXLS(fileName, schoolDataLocation, header=0)        
+    convertToXLS(fileName, SCHOOL_DATA, header=0)
 
-    ws = pd.read_excel(os.path.join(schoolDataLocation, fileName), 0)
+    ws = pd.read_excel(os.path.join(SCHOOL_DATA, fileName), 0)
      
     for row in range(len(ws)):        
         """ Skip Charter schools """
@@ -567,9 +567,9 @@ def parseGraduationRateDistrictData(year="2014"):
     rows = []
 
     """ Convert to true xls """    
-    convertToXLS(fileName, schoolDataLocation, header=0)        
+    convertToXLS(fileName, SCHOOL_DATA, header=0)
 
-    ws = pd.read_excel(os.path.join(schoolDataLocation, fileName), 0)
+    ws = pd.read_excel(os.path.join(SCHOOL_DATA, fileName), 0)
      
     for row in range(len(ws)):
         """ Skip Charter schools """
@@ -600,9 +600,9 @@ def parseGraduationRateSchoolData(year="2014"):
     rows = []
 
     """ Convert to true xls file """    
-    convertToXLS(fileName, schoolDataLocation, header=0)        
+    convertToXLS(fileName, SCHOOL_DATA, header=0)
 
-    ws = pd.read_excel(os.path.join(schoolDataLocation, fileName), 0)
+    ws = pd.read_excel(os.path.join(SCHOOL_DATA, fileName), 0)
      
     for row in range(len(ws)):        
         """ Skip Charter schools """
@@ -639,9 +639,9 @@ def parseMCASDistrictData(year="2015"):
     rows = []
 
     """ Convert to true xls """    
-    convertToXLS(fileName, schoolDataLocation, header=0)        
+    convertToXLS(fileName, SCHOOL_DATA, header=0)
 
-    ws = pd.read_excel(os.path.join(schoolDataLocation, fileName), 0)
+    ws = pd.read_excel(os.path.join(SCHOOL_DATA, fileName), 0)
      
     for row in range(len(ws)):
         """ Skip Charter schools """
@@ -680,9 +680,9 @@ def parseMCASSchoolData(year="2015"):
     rows = []
 
     """ Convert to true xls file """    
-    convertToXLS(fileName, schoolDataLocation, header=0)        
+    convertToXLS(fileName, SCHOOL_DATA, header=0)
 
-    ws = pd.read_excel(os.path.join(schoolDataLocation, fileName), 0)
+    ws = pd.read_excel(os.path.join(SCHOOL_DATA, fileName), 0)
      
     for row in range(len(ws)):        
         """ Skip Charter schools """
@@ -730,9 +730,9 @@ def parseSATDistrictData(year="2015"):
     rows = []
 
     """ Convert to true xls """    
-    convertToXLS(fileName, schoolDataLocation, header=0)        
+    convertToXLS(fileName, SCHOOL_DATA, header=0)
 
-    ws = pd.read_excel(os.path.join(schoolDataLocation, fileName), 0)
+    ws = pd.read_excel(os.path.join(SCHOOL_DATA, fileName), 0)
      
     for row in range(len(ws)):
         """ Skip Charter schools """
@@ -760,9 +760,9 @@ def parseSATSchoolData(year="2015"):
     rows = []
 
     """ Convert to true xls file """    
-    convertToXLS(fileName, schoolDataLocation, header=0)        
+    convertToXLS(fileName, SCHOOL_DATA, header=0)
 
-    ws = pd.read_excel(os.path.join(schoolDataLocation, fileName), 0)
+    ws = pd.read_excel(os.path.join(SCHOOL_DATA, fileName), 0)
      
     for row in range(len(ws)):        
         """ Skip Charter schools """
@@ -804,9 +804,9 @@ def parseSPEDPerfData(year="2014"):
     rows = []
 
     """ Convert to true xls """    
-    convertToXLS(fileName, schoolDataLocation, skiprows=2)        
+    convertToXLS(fileName, SCHOOL_DATA, skiprows=2)
 
-    ws = pd.read_excel(os.path.join(schoolDataLocation, fileName), 0)
+    ws = pd.read_excel(os.path.join(SCHOOL_DATA, fileName), 0)
      
     for row in range(len(ws)):
         """ Skip Charter schools """
@@ -854,9 +854,9 @@ def parseSPEDComplianceData(year="2014"):
     rows = []
 
     """ Convert to true xls """    
-    convertToXLS(fileName, schoolDataLocation, skiprows=2)        
+    convertToXLS(fileName, SCHOOL_DATA, skiprows=2)
 
-    ws = pd.read_excel(os.path.join(schoolDataLocation, fileName), 0)
+    ws = pd.read_excel(os.path.join(SCHOOL_DATA, fileName), 0)
      
     for row in range(len(ws)):
         """ Skip Charter schools """
@@ -901,9 +901,9 @@ def parseTeacherSalaryData(year="2013"):
     rows = []
 
     """ Convert to true xls """    
-    convertToXLS(fileName, schoolDataLocation, header=0)        
+    convertToXLS(fileName, SCHOOL_DATA, header=0)
 
-    ws = pd.read_excel(os.path.join(schoolDataLocation, fileName), 0)
+    ws = pd.read_excel(os.path.join(SCHOOL_DATA, fileName), 0)
      
     for row in range(len(ws)):
         """ Skip Charter schools """
@@ -939,7 +939,7 @@ def prepSchoolTownRankData():
     currDistrict = ''
     fileName = 'Master-School_Data-2015'
     
-    schoolData = pd.read_excel(os.path.join(schoolDataLocation, fileName+EXT), sheetname='Admin-School', header=0)
+    schoolData = pd.read_excel(os.path.join(SCHOOL_DATA, fileName + EXT), sheetname='Admin-School', header=0)
     schoolData.sort_values(by=['District', 'Town'], inplace=True)
     
     for each in range(len(schoolData)):
@@ -968,7 +968,7 @@ def prepSchoolDistrictRankData():
     currDistrict = ''
     fileName = 'Master-School_Data-2015'
     
-    schoolData = pd.read_excel(os.path.join(schoolDataLocation, fileName+EXT), sheetname='Admin-School', header=0)
+    schoolData = pd.read_excel(os.path.join(SCHOOL_DATA, fileName + EXT), sheetname='Admin-School', header=0)
     schoolData.sort_values(by=['District', 'Town'], inplace=True)
     
     for each in range(len(schoolData)):
@@ -993,7 +993,7 @@ def parseSchoolDistrictRankData():
     columns = ['District', 'School Type', 'Rank', 'Grade']
     rows = []
     
-    ws = pd.read_excel(os.path.join(schoolDataLocation, fileName+EXT), 0)
+    ws = pd.read_excel(os.path.join(SCHOOL_DATA, fileName + EXT), 0)
      
     for row in range(len(ws)):
         """ Skip Charter schools """

@@ -2,19 +2,12 @@
 Created on Nov 4, 2015
 
 @author: AD23883
-@todo: 
+
 '''
 import os.path
 import urllib
 from constants import *
-
 import pandas as pd
-
-dataLocation = os.path.join('..', 'data')
-houseDataLocation = os.path.join('..', 'data', 'house')
-schoolDataLocation = os.path.join('..', 'data', 'school')
-commuteDataLocation = os.path.join('..', 'data', 'commute')
-townDataLocation = os.path.join('..', 'data', 'town')
 
 proxy_on = False
 
@@ -95,4 +88,20 @@ def normalizeScore(score):
     elif score < MIN_SCORE:
         score = MIN_SCORE
     return score
-        
+
+
+'''
+Parses out and returns zip codes from data/town_zips.xlsx
+'''
+def getMAZips():
+    fileName = 'town_zips'
+    zips = []
+
+    data = pd.read_excel(os.path.join(HOUSE_DATA, fileName + EXT),
+                         header=0)
+
+    for zipCode in data.Zip:
+        # Leading zero is stripped so need to re-add
+        zips.append('0' + str(zipCode))
+
+    return zips

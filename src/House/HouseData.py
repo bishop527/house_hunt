@@ -31,20 +31,6 @@ def getMATowns():
     return towns
 
 '''
-Parses out and returns zip codes from town_zips.xlsx
-'''
-def getMAZips():
-    fileName = 'town_zips'
-    zips = []
-
-    data = pd.read_excel(os.path.join(houseDataLocation, fileName+EXT), header=0)
-    
-    for zipCode in data.Zip:
-        # Leading zero is stripped so need to re-add
-        zips.append('0'+str(zipCode))
-        
-    return zips
-'''
 This method looks for the passed zip in the Town_Admin sheet. 
 If it exists then return the associated town name. If not return None
 '''
@@ -52,7 +38,7 @@ def zipLookup(zip):
     town = None
     fileName = 'Town_Admin-2015'
     
-    townData = pd.read_excel(os.path.join(houseDataLocation, fileName+EXT))
+    townData = pd.read_excel(os.path.join(HOUSE_DATA, fileName + EXT))
     
     for row in range(len(townData)):
         zips = (townData.iloc[row][1].split(','))
@@ -74,7 +60,7 @@ def townExists(town):
 def taxRateLookup(town):
     taxRate = None
     fileName = 'TownTaxRates-2015'
-    taxData = pd.read_excel(os.path.join(houseDataLocation, fileName+EXT))
+    taxData = pd.read_excel(os.path.join(HOUSE_DATA, fileName + EXT))
     
     for row in range(len(taxData)):
         if taxData.iloc[row][1] == town:
@@ -86,7 +72,7 @@ def countyLookup(zip):
     county = None
     fileName = 'Town_Admin-2015'
     
-    townData = pd.read_excel(os.path.join(houseDataLocation, fileName+EXT))
+    townData = pd.read_excel(os.path.join(HOUSE_DATA, fileName + EXT))
     
     for row in range(len(townData)):
         zips = (townData.iloc[row][1].split(','))

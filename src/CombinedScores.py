@@ -32,7 +32,7 @@ def calculateWeightedScore(value):
     return score
 
 def calculateCombinedScores(fileName):
-    masterFile = os.path.join(dataLocation, fileName)
+    masterFile = os.path.join(DATA, fileName)
     data = {}
     columns = ['District', 'Distance', 'Duration', 'Avg House Cost', 'Tax Rate', 'Commute Score', 'House Score', 'School Score', 'Combined Score']
     
@@ -41,7 +41,7 @@ def calculateCombinedScores(fileName):
     commuteScores = pd.read_excel(masterFile+EXT, sheetname='Commute-Scores', header=0)
     schoolScores = pd.read_excel(masterFile+EXT, sheetname='School-Scores', header=0)
     houseScores = pd.read_excel(masterFile+EXT, sheetname='Housing-Scores', header=0)
-    schoolData = pd.read_excel(os.path.join(schoolDataLocation, 'Master-School_Data-2015'+EXT), sheetname='Admin-School', header=0)
+    schoolData = pd.read_excel(os.path.join(SCHOOL_DATA, 'Master-School_Data-2015' + EXT), sheetname='Admin-School', header=0)
 
     # Parse Commute Scores, get town name and weighted score
     for row in range(len(commuteScores)):

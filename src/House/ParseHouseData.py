@@ -24,7 +24,7 @@ def parseTownAdminData():
     columns = ['Town', 'Zip Codes', 'County', 'Tax Rate']
     
     fileName = 'town_zips'
-    ws = pd.ExcelFile(os.path.join(houseDataLocation, fileName+EXT)).parse('Sheet1')
+    ws = pd.ExcelFile(os.path.join(HOUSE_DATA, fileName + EXT)).parse('Sheet1')
     ws.sort_values(by="Town", inplace=True)
 
     for row in range(len(ws)):
@@ -60,7 +60,7 @@ def parseTownAdminData():
                 data.append([town, zips, county, taxRate])
     
     df = pd.DataFrame(data, columns=columns)
-    writer = pd.ExcelWriter(os.path.join(houseDataLocation, 'Town_Admin-2015'+EXT), engine="openpyxl")
+    writer = pd.ExcelWriter(os.path.join(HOUSE_DATA, 'Town_Admin-2015' + EXT), engine="openpyxl")
     df.to_excel(writer,"Sheet1")
     writer.save()
     
@@ -77,7 +77,7 @@ def parseMLSHouseData(MLS_DATA_FILE):
     columns = ['Town', 'Tax Rate', 'Median Sales Price', 'Tax Cost']
     data = []
     
-    houseData = pd.read_excel(os.path.join(houseDataLocation, fileName+EXT), header=0)
+    houseData = pd.read_excel(os.path.join(HOUSE_DATA, fileName + EXT), header=0)
     houseData.sort_values(by='Town', inplace=True)
     
     for row in range(len(houseData)):

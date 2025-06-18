@@ -7,7 +7,6 @@ Created on Nov 10, 2015
 from utils import *
 from constants import *
 from House.ParseHouseData import parseTownAdminData, parseMLSHouseData
-from House.HouseData import getMAZips
 from collections import OrderedDict
 import os
 
@@ -20,7 +19,7 @@ def processHouseData(MLS_DATA_FILE):
     entries['Town-Admin'] = parseTownAdminData()
     entries['House-Data'] =  parseMLSHouseData(MLS_DATA_FILE)
 
-    populateMaster(os.path.join(houseDataLocation, fileName+EXT), entries)
+    populateMaster(os.path.join(HOUSE_DATA, fileName + EXT), entries)
     
     print ("    Done Processing House Data\n")
     

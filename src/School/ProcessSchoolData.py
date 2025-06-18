@@ -10,7 +10,7 @@ from SchoolSiteData import downloadSchoolData
 from utils import *
 from constants import *
 from collections import OrderedDict
-from ParseSchoolData import prepSchoolDistrictRankData, prepSchoolTownRankData
+
 
 def processSchoolData():
     print("  Started Processing School Data")
@@ -21,7 +21,7 @@ def processSchoolData():
     downloadSchoolData()
        
     entries['Admin-School'] = parse.parseSchoolAdminData()
-    populateMaster(os.path.join(schoolDataLocation, fileName+EXT), entries)
+    populateMaster(os.path.join(SCHOOL_DATA, fileName + EXT), entries)
        
     entries['Accountability-District'] = parse.parseAccountDistrictData()
     entries['Accountability-School'] = parse.parseAccountSchoolData()   
@@ -44,6 +44,6 @@ def processSchoolData():
     #entries['Rank-School'] = prepSchoolTownRankData()
     #entries['Rank-District'] = prepSchoolDistrictRankData()     
     entries['Rank-District'] = parse.parseSchoolDistrictRankData()
-    populateMaster(os.path.join(schoolDataLocation, fileName+EXT), entries)
+    populateMaster(os.path.join(SCHOOL_DATA, fileName + EXT), entries)
     
     print("    Done Processing School Data\n")

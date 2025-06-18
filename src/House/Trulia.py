@@ -4,9 +4,7 @@ Created on Nov 12, 2015
 @author: ad23883
 @todo: 
 '''
-import urllib
 from bs4 import BeautifulSoup
-import pandas as pd
 import numpy as np
 import time
 from House.HouseData import countyLookup, taxRateLookup, zipLookup, townExists
@@ -78,7 +76,7 @@ def getCombinedTruliaZipCodeStats(startDate, endDate):
         
     url_base = 'http://api.trulia.com/webservices.php?library=TruliaStats&function=getZipCodeStats&'
 
-    townData = pd.read_excel(os.path.join(townDataLocation, 'Town_Admin-2015'+EXT), header=0)
+    townData = pd.read_excel(os.path.join(TOWN_DATA, 'Town_Admin-2015' + EXT), header=0)
     for row in range(len(townData)):
         count = 0
         finalAverageListPrice = 0
