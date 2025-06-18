@@ -4,12 +4,13 @@ Created on Nov 4, 2015
 @author: AD23883
 @todo: 
 '''
-import pandas as pd
-#import platform
-#import pwd
-import urllib2
-import openpyxl as pyxl
 import os.path
+# import platform
+# import pwd
+import urllib
+
+import openpyxl
+import pandas as pd
 
 MAX_SCORE = 10
 MIN_SCORE = -10
@@ -35,17 +36,15 @@ AVOID_TOLLS = ''
 Appends the given DataFrame with the master workbook and names the worksheet the given sheetName 
 """
 def populateMaster(fileName, df):
-    for sheetName, data in df.iteritems():
-        print "            Adding", sheetName, "to", fileName
+    for sheetName, data in df.items():
+        print("            Adding", sheetName, "to", fileName)
         if os.path.isfile(fileName):
-            book = pyxl.load_workbook(fileName)
-            writer = pd.ExcelWriter(fileName, engine='openpyxl')
-            writer.book = book
-            writer.sheets = dict((ws.title, ws) for ws in book.worksheets)
+            with pd.ExcelWriter(fileName, engine='openpyxl', mode="a", if_sheet_exists="replace") as writer:
+                data.to_excel(writer, sheet_name=sheetName, index=True)
         else:
-            writer = pd.ExcelWriter(fileName, engine='openpyxl')    
-        data.to_excel(writer, sheetName)
-        writer.save()
+            writer = pd.ExcelWriter(fileName, engine='odf')
+            data.to_excel(writer, sheet_name=sheetName, index=False)
+            writer.save()
 
 """
 Utility function to convert string of hours and minutes into minutes.
@@ -84,11 +83,11 @@ def convertToXLS(fileName, fileLocation, index = None, header = None, skiprows =
     writer.save()
     
 def setProxy(type='http'):
-    print "Turning on", type, "proxy"
+    print("Turning on", type, "proxy")
     proxy_on = True
-    proxy = urllib2.ProxyHandler({type : 'localhost:8080'})
-    opener = urllib2.build_opener(proxy)
-    urllib2.install_opener(opener)
+    proxy = urllib.ProxyHandler({type : 'localhost:8080'})
+    opener = urllib.build_opener(proxy)
+    urllib.install_opener(opener)
         
 # def setCurrDir():
 #     user = pwd.getpwuid(os.getuid())[0]

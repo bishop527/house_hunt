@@ -4,8 +4,9 @@ Created on Nov 17, 2015
 @author: ad23883
 @todo: 
 '''
-import pandas as pd
+import os
 from utils import *
+import pandas as pd
 
 fileName = 'Master-Commute_Data-2015'
 
@@ -81,7 +82,7 @@ def calculateCommuteDurationScore(duratoin):
     return score
 
 def calculateCommuteScores():
-    print 'Calculating Commute Scores'
+    print('Calculating Commute Scores')
 
     data = {}
     columns = ['Distance', 'Duration', 'Distance Score', 'Duration Score', 'Weighted Score']

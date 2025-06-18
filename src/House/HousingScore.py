@@ -79,7 +79,7 @@ def calculateHousePriceScore(houseCost):
     return score
 
 def calculateHouseScores():
-    print 'Calculating House Scores'
+    print('Calculating House Scores')
     fileName = 'Master-House_Data-2015'
     data = {}
     
@@ -117,7 +117,7 @@ Housing scores will use the median list price for 3 bedroom properties.
 If there is not data for 3 bedroom properties then th median list price for All properties will be used.
 '''
 def calculateTruliaScores():
-    print 'Calculating Housing Scores'
+    print('Calculating Housing Scores')
     fileName = 'Master-Town_Data-2015.xlsx'
     score = 0
     data = {}

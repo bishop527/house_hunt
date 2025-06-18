@@ -4,7 +4,6 @@ Created on Nov 23, 2015
 @author: ad23883
 '''
 
-import pandas as pd
 from School.ParseSchoolData import districtLookup
 from utils import *
 
@@ -67,7 +66,7 @@ def calculateCombinedScores(fileName):
             data[town][6] = houseScore
 
         else:
-            print 'Skipping town', town
+            print('Skipping town', town)
             del data[town]
             continue
         
@@ -87,8 +86,8 @@ def calculateCombinedScores(fileName):
                     data[town][0] = district
                     data[town][7] = schoolScores['Weighted Score'][district]
                 else:
-                    print 'Unable to find', town, 'in School Scores, School Data, or District Lookup'
-                    print 'Skipping town', town
+                    print('Unable to find', town, 'in School Scores, School Data, or District Lookup')
+                    print('Skipping town', town)
                     del data[town]
         
         if town in data:   

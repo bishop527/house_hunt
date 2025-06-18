@@ -4,11 +4,11 @@ Created on Nov 16, 2015
 @author: ad23883
 @todo: 
 '''
-from utils import *
 import googlemaps
+from utils import *
 
 def getCommuteData(origins, departure_time = DEPARTURE_TIME, destination = DESTINATION):    
-    print '        Downloading Commute Data'
+    print('        Downloading Commute Data')
     googleAPIkey = 'AIzaSyDtNP2h8YzQzUdWJ_2JvspP4nAJhg7m9LQ'
     if proxy_on:
         gmaps = googlemaps.Client(key=googleAPIkey, requests_kwargs={'proxies':{'https':'http://localhost:8080'}})

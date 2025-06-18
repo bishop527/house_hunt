@@ -4,11 +4,11 @@ Created on Nov 16, 2015
 @author: ad23883
 @todo: 
 '''
-from utils import *
 import pandas as pd
+from utils import *
 
 def parseCommuteData(data):
-    print '            Parsing Commute Data'
+    print('            Parsing Commute Data')
     columns = ['Town', 'Distance to Work', 'Min to Work', TRAFFIC_MODEL+' traffic']
     rows = []
     

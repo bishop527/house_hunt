@@ -191,7 +191,7 @@ def calculateRankScore(value):
     return score
 
 def calculateSchoolScores():
-    print 'Calculating School Scores'
+    print('Calculating School Scores')
     
     data = {}
     columns = ['Accnt Level ', 'Class Size', 'Parent Involve', 'SPED %', 'Dropout %', 'Grad %', 'Higher Ed', 'MCAS', 'SAT', 'School Rank', 'Weighted Score']
@@ -223,7 +223,7 @@ def calculateSchoolScores():
         classSizeScore = calculateClassSizeScore(classSize)
         
         if not district in data:
-            print 'ClassSize: Skipping ',district
+            print('ClassSize: Skipping ',district)
             continue
             
         data[district][1] = classSizeScore
@@ -240,7 +240,7 @@ def calculateSchoolScores():
         spedPercScore = calculateSPEDPercScore(spedPerc)
         
         if not district in data:
-            print 'SPED %: Skipping ',district
+            print('SPED %: Skipping ',district)
             continue
 
         data[district][3] = spedPercScore
@@ -263,7 +263,7 @@ def calculateSchoolScores():
             parentScore = -10
             
         if not district in data:
-            print 'Parent: Skipping ',district
+            print('Parent: Skipping ',district)
             continue
 
         data[district][2] = parentScore
@@ -303,7 +303,7 @@ def calculateSchoolScores():
             gradScore = 0
             
         if not district in data:
-            print 'Grad: Skipping ',district
+            print('Grad: Skipping ',district)
             continue
         
         data[district][5] = gradScore
@@ -323,7 +323,7 @@ def calculateSchoolScores():
             higherEdScore = 0
             
         if not district in data:
-            print 'HigherEd: Skipping ',district
+            print('HigherEd: Skipping ',district)
             continue
                     
         data[district][6] = higherEdScore
@@ -411,7 +411,7 @@ def calculateSchoolScores():
                 currScore += calculateWeightedScore(['MCAS', mcasScore])
                 data[district][-1] = round(currScore, 2)
             else:
-                print 'MCAS: Skipping ',district
+                print('MCAS: Skipping ',district)
                 continue
             
             totalELA = 0
@@ -430,7 +430,7 @@ def calculateSchoolScores():
                 currScore += calculateWeightedScore(['MCAS', mcasScore])
                 data[district][-1] = round(currScore, 2)
             else:
-                print 'MCAS: Skipping ',district
+                print('MCAS: Skipping ',district)
                 continue
 
     # SAT Score
@@ -448,7 +448,7 @@ def calculateSchoolScores():
             satScore = calculateSATScore(reading+writing+math)
         
         if not district in data:
-            print 'SAT: Skipping ',district
+            print('SAT: Skipping ',district)
             continue
             
         data[district][8] = satScore
@@ -491,7 +491,7 @@ def calculateSchoolScores():
             rankScore = calculateRankScore(rank)
           
         if not district in data:
-            print 'Rank: Skipping ',district
+            print('Rank: Skipping ',district)
             continue
             
         data[district][9] = rankScore

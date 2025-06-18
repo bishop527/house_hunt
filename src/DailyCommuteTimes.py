@@ -11,18 +11,19 @@ destination during a given time range.
 4. If current system time is within the time range calculate commute time of origin and destination
 
 '''
-from utils import *
-import os.path
 import datetime
+import os.path
 import time
-from Commute.CommuteData import getCommuteData
-from Commute.ParseCommuteData import parseCommuteData
 from collections import OrderedDict
+from Commute.CommuteData import getCommuteData
+from utils import *
 
 frames = []
 entries = OrderedDict()
 data = OrderedDict()
 
+# Note: Pull in list of all towns
+# Note: Add check that file exists and if not create it
 towns = 'Somerset, MA| Franklin, MA| Medway, MA'
 work = '244 Wood St. Lexington, MA'
 fileName = "Daily-Commute-Times"
@@ -30,7 +31,11 @@ fileName = "Daily-Commute-Times"
 columns = ['Date', 'Day', 'Time', ]
 weekDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
 
-morningTimes = ['6:30', '6:45', '7:00', '7:15', '7:30']
+# Note: Expand Morning Times to start at 6:00
+
+# morningTimes = ['18:45']
+# afternoonTimes = ['18:46']
+morningTimes =   [ '6:00',  '6:15',  '6:30',  '6:45',  '7:00',  '7:15',  '7:30']
 afternoonTimes = ['16:30', '16:45', '17:00', '17:15', '17:30', '17:45', '18:00']
 
 total = 0
@@ -52,7 +57,7 @@ for each in towns.split('|'):
 # Mon = 0, Sun = 6
 currDay = datetime.datetime.today().weekday()  
 
-print 'Started Processing Daily Commute'
+print('Started Processing Daily Commute')
 while True:
     # Check if today is between Monday and Friday
     if currDay < 5:
@@ -77,7 +82,7 @@ while True:
         currTime = currHour+':'+currMin
         
         if currTime in morningTimes or currTime in afternoonTimes: 
-            print 'Processing for time ', currTime
+            print('Processing for time ', currTime)
             date = str(datetime.datetime.now().date())
             if currTime in morningTimes:
                 commuteData = getCommuteData(towns, 'now', work)
@@ -124,7 +129,7 @@ while True:
                 writeData = [[]]
                 for town in data:
                     writeData[0] = [date, weekDay]
-                    currDf = pd.read_excel(os.path.join(commuteDataLocation, fileName+ext), index_col=0, sheetname=town, engine='xlrd')
+                    currDf = pd.read_excel(os.path.join(commuteDataLocation, fileName+ext), index_col=[0], sheet_name=town, engine='openpyxl')
                     col = currDf.columns
                     for t in data[town]['times']:
                         writeData[0].append(data[town]['times'][t]['dist'])
@@ -137,21 +142,21 @@ while True:
                     newDf = pd.DataFrame(writeData, columns=col)
                     frames.append(currDf)
                     frames.append(newDf)
-                    entries[town] = pd.concat(frames)
+                    entries[town] = pd.concat([currDf, newDf], ignore_index=True)
                     frames = []
                     count = 0
                     total = 0
     
                 populateMaster(os.path.join(commuteDataLocation, fileName+ext), entries)
-                print 'Wrote data for the day to file'
+                print('Wrote data for the day to file')
                 time.sleep(3600)
                 
-            print 'Done processing for time ', currTime
+            print('Done processing for time ', currTime)
             time.sleep(60)
         else:
             time.sleep(60)
     else:
-        print 'Today is not a weekday'
+        print('Today is not a weekday')
         time.sleep(3600)
 
 

@@ -5,14 +5,14 @@ Created on Nov 16, 2015
 @todo: 
 '''
 
-import School.ParseSchoolData as parse
-from School.SchoolSiteData import downloadSchoolData
+import ParseSchoolData as parse
+from SchoolSiteData import downloadSchoolData
 from utils import *
 from collections import OrderedDict
-from School.ParseSchoolData import prepSchoolDistrictRankData, prepSchoolTownRankData
+from ParseSchoolData import prepSchoolDistrictRankData, prepSchoolTownRankData
 
 def processSchoolData():
-    print "  Started Processing School Data"
+    print("  Started Processing School Data")
     
     fileName = "Master-School_Data-2015"
     entries = OrderedDict()
@@ -45,4 +45,4 @@ def processSchoolData():
     entries['Rank-District'] = parse.parseSchoolDistrictRankData()
     populateMaster(os.path.join(schoolDataLocation, fileName+ext), entries)
     
-    print "    Done Processing School Data\n"
+    print("    Done Processing School Data\n")

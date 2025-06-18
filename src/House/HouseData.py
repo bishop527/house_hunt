@@ -4,7 +4,6 @@ Created on Nov 9, 2015
 @author: ad23883
 @todo: 
 '''
-import pandas as pd
 import os
 from utils import *
 

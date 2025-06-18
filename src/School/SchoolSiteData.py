@@ -10,7 +10,7 @@ availYears - list of other years available for download
 @author: AD23883
 @todo: 
 '''
-import urllib2
+import urllib
 from utils import *
  
 dataLocation = os.path.join('..', 'data', 'school')
@@ -55,7 +55,7 @@ Current available options are:
     account-School
 """
 def downloadSchoolData(data = 'current'):
-    print "    Started Downloading School Data"
+    print("    Started Downloading School Data")
     sites = []      
               
     sites.append(SchoolSiteData('admin-district', 
@@ -123,5 +123,5 @@ def downloadSchoolData(data = 'current'):
             currYear = site.getCurrYear()
             
             with open(os.path.join(schoolDataLocation, name+'-'+currYear+ext), 'w') as f:
-                f.write(urllib2.urlopen(url).read())
+                f.write(urllib.urlopen(url).read())
                 f.close()

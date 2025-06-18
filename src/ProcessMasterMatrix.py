@@ -5,27 +5,28 @@ Created on Nov 16, 2015
 @todo: 
 '''
 
-from utils import *
 import os
 from collections import OrderedDict
-from Commute.ProcessCommuteData import processCommuteData
+from utils import *
+from CombinedScores import calculateCombinedScores
 from Commute.CommuteScore import calculateCommuteScores
+from Commute.ProcessCommuteData import processCommuteData
+from House.HousingScore import calculateHouseScores
+from House.ProcessHouseData import processHouseData
 from School.ProcessSchoolData import processSchoolData
 from School.SchoolScore import calculateSchoolScores
-from House.ProcessHouseData import processHouseData
-from House.HousingScore import calculateHouseScores
-from CombinedScores import calculateCombinedScores
+from School.SchoolSiteData import dataLocation
 
 #masterFile = os.path.join(dataLocation, MASTER_FILE_NAME)
 traffic = 'bg'
 mls = 'Aug-2015'
 tolls = 'noTolls'
 
-print 'Choose an MLS data file'
-print '  1 = August 2015'
-print '  2 = October 2015'
-print '  3 = December 2015'
-uMLSData = int(raw_input('mls data: '))
+print('Choose an MLS data file')
+print('  1 = August 2015')
+print('  2 = October 2015')
+print('  3 = December 2015')
+uMLSData = int(input('mls data: '))
 if uMLSData == 1: 
     MLS_DATA_FILE = 'mls_house_data-Aug_2015'
     mls = 'Aug-2015'
@@ -36,11 +37,11 @@ elif uMLSData == 3:
     MLS_DATA_FILE = 'mls_house_data-Dec_2015'
     mls = 'Dec-2015'
 
-if raw_input('Set traffic model? [y/n]') == 'y':
-    print '  1 = best_guess'
-    print '  2 = optimistic'
-    print '  3 = pessimistic '
-    uTrafficModel = int(raw_input('model: '))
+if input('Set traffic model? [y/n]') == 'y':
+    print('  1 = best_guess')
+    print('  2 = optimistic')
+    print('  3 = pessimistic')
+    uTrafficModel = int(input('model: '))
     if uTrafficModel == 1: 
         TRAFFIC_MODEL = 'best_guess'
         traffic = 'best'
@@ -51,18 +52,18 @@ if raw_input('Set traffic model? [y/n]') == 'y':
         TRAFFIC_MODEL = 'pessimistic'
         traffic = 'pess'
         
-if raw_input('Avoid Tolls? (y/n)') == 'y':
+if input('Avoid Tolls? (y/n)') == 'y':
     AVOID_TOLLS = 'tolls'
     tolls = 'tolls' 
         
 masterFileName = os.path.join(dataLocation, 'Master_Scores-'+mls+'-'+traffic+'-'+tolls)
     
-uProxy = raw_input('Behind a proxy? [y/N]')
-uHouseData = raw_input('Do you want to update house data? [Y/n] ')
-uCommuteData = raw_input('Do you want to update commute data? [Y/n] ')
-uSchoolData = raw_input('Do you want to update school data? [Y/n] ')
+uProxy = input('Behind a proxy? [y/N]')
+uHouseData = input('Do you want to update house data? [Y/n] ')
+uCommuteData = input('Do you want to update commute data? [Y/n] ')
+uSchoolData = input('Do you want to update school data? [Y/n] ')
 
-print 'Started Processing Master Matrix'
+print('Started Processing Master Matrix')
 
 if uSchoolData != 'n':
     processSchoolData()
@@ -80,4 +81,4 @@ populateMaster(masterFileName+ext, scoreEntries)
 scoreEntries['Combined-Scores'] = calculateCombinedScores(masterFileName)
 populateMaster(masterFileName+ext, scoreEntries)
 
-print 'Done Processing Master Matrix'
+print('Done Processing Master Matrix')

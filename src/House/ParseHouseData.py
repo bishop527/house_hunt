@@ -15,7 +15,7 @@ Looks up tax rate by town name.
 Saves House, zips, county, and tax rate to the town_admin_data-2015.xlsx file 
 '''
 def parseTownAdminData():
-    print '        Parsing House Admin Data'
+    print('        Parsing House Admin Data')
     currTown = ''
     zips = ''
     data = []
@@ -35,7 +35,7 @@ def parseTownAdminData():
         town = ws.iloc[row, 1]
         
         if not townExists(town):
-            print town, ' is not in the list'
+            print(town, ' is not in the list')
             
         taxRate = taxRateLookup(town)
         # check for multiple zips per town
@@ -89,7 +89,7 @@ def parseMLSHouseData(MLS_DATA_FILE):
         
         #In for debugging, can be removed
         if not townExists(town):
-            print 'MLS Town', town, 'not in Town List'
+            print('MLS Town', town, 'not in Town List')
         
     df = pd.DataFrame(data, columns=columns)
     

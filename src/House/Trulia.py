@@ -4,7 +4,7 @@ Created on Nov 12, 2015
 @author: ad23883
 @todo: 
 '''
-import urllib2
+import urllib
 from bs4 import BeautifulSoup
 import pandas as pd
 import numpy as np
@@ -16,14 +16,14 @@ import os
 truliaKey = '9z8g9yszfkukswpj5q3ry5a4'
 
 def getTruliaCities(state='MA'):
-    print "        Downloading Trulia data for cities in", state
+    print("        Downloading Trulia data for cities in", state)
 
     data = []
     
     url_base = 'http://api.trulia.com/webservices.php?library=LocationInfo&function=getCitiesInState&'
     url = url_base+'state='+state+'&apikey='+truliaKey
 
-    e = BeautifulSoup(urllib2.urlopen(url).read(), 'lxml')
+    e = BeautifulSoup(urllib.urlopen(url).read(), 'lxml')
 
     for each in e.findAll('city'):
         data.append(each.find('name').text)
@@ -35,9 +35,9 @@ def getTruliaNeighborhoods(city, state='MA'):
     
     url_base = 'http://api.trulia.com/webservices.php?library=LocationInfo&function=getNeighborhoodsInCity&'
     url = url_base+'state='+state+'&city='+city+'&apikey='+truliaKey
-    print url
+    print(url)
 
-    e = BeautifulSoup(urllib2.urlopen(url).read(), 'lxml')
+    e = BeautifulSoup(urllib.urlopen(url).read(), 'lxml')
 
     for each in e.findAll('neighborhood'):
         data.append(each)
@@ -45,13 +45,13 @@ def getTruliaNeighborhoods(city, state='MA'):
     return data
 
 def getTruliaZipCodesInState(state='MA'):
-    print "        Downloading Trulia zip codes for", state
+    print("        Downloading Trulia zip codes for", state)
     data = []
     
     url_base = 'http://api.trulia.com/webservices.php?library=LocationInfo&function=getZipCodesInState&'
     url = url_base+'state='+state+'&apikey='+truliaKey
 
-    e = BeautifulSoup(urllib2.urlopen(url).read(), 'lxml')
+    e = BeautifulSoup(urllib.urlopen(url).read(), 'lxml')
 
     for each in e.findAll('zipcode'):
         data.append(each.find('name').text)
@@ -67,7 +67,7 @@ Decided to move away from collecting data in this way. Keeping the method here f
 purposes.
 '''
 def getCombinedTruliaZipCodeStats(startDate, endDate):
-    print "        Downloading Trulia Housing Data"
+    print("        Downloading Trulia Housing Data")
     data = []
     retry = []
     finalAverageListPrice = 0
@@ -101,7 +101,7 @@ def getCombinedTruliaZipCodeStats(startDate, endDate):
             url = url_base+'zipCode='+zipCode+'&startDate='+startDate+'&endDate='+endDate+'&apikey='+truliaKey
             try:
                 time.sleep(1)
-                e = BeautifulSoup(urllib2.urlopen(url).read(), 'lxml')
+                e = BeautifulSoup(urllib.urlopen(url).read(), 'lxml')
                 
                 for each in e.findAll('subcategory'):
                     averageListPrice = int(each.averagelistingprice.text)
@@ -131,8 +131,8 @@ def getCombinedTruliaZipCodeStats(startDate, endDate):
                         finalMedianListPrice = totalMedianListPrice
                         finalMedianTaxCost = totalMedianTaxCost    
                         
-            except urllib2.HTTPError as e:
-                print "HTTP Error, skipping zip ", zipCode
+            except urllib.HTTPError as e:
+                print("HTTP Error, skipping zip ", zipCode)
                 retry.append(zipCode)
         
         if count > 0:
@@ -147,7 +147,7 @@ def getCombinedTruliaZipCodeStats(startDate, endDate):
     return df
 
 def getTruliaZipCodeStats(zips, startDate, endDate):
-    print "        Downloading Trulia Housing Data"
+    print("        Downloading Trulia Housing Data")
     fileName = 'House_Data-2015'+ext
     data = []
     retry = []
@@ -171,7 +171,7 @@ def getTruliaZipCodeStats(zips, startDate, endDate):
         town = zipLookup(zipCode)
         
         if not townExists(town):
-            print town, ' is not in the list'
+            print(town, ' is not in the list')
             
         taxRate = float(taxRateLookup(town))
         county = countyLookup(zipCode)
@@ -181,7 +181,7 @@ def getTruliaZipCodeStats(zips, startDate, endDate):
         
         url = url_base+'zipCode='+zipCode+'&startDate='+startDate+'&endDate='+endDate+'&apikey='+truliaKey
         try:
-            e = BeautifulSoup(urllib2.urlopen(url).read(), 'lxml')
+            e = BeautifulSoup(urllib.urlopen(url).read(), 'lxml')
             
             for each in e.findAll('subcategory'):
                 avgListPrice = float(each.averagelistingprice.text)
@@ -205,11 +205,11 @@ def getTruliaZipCodeStats(zips, startDate, endDate):
                     data[row][14] = medianListPrice
                     data[row][15] = medianTaxCost
             
-        except urllib2.HTTPError as e:
-            print "HTTP Error, skipping zip ", zipCode
+        except urllib.HTTPError as e:
+            print("HTTP Error, skipping zip ", zipCode)
             retry.append(zipCode)
             
-    print "            Skipped ", len(retry), "zip codes"
+    print("            Skipped ", len(retry), "zip codes")
     df = pd.DataFrame(data, columns=columns)
     
 #     writer = pd.ExcelWriter(dataLocation+fileName, engine="openpyxl")

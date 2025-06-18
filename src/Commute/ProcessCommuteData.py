@@ -4,22 +4,23 @@ Created on Nov 16, 2015
 @author: ad23883
 @todo: 
 '''
-from Commute.ParseCommuteData import parseCommuteData
-from Commute.CommuteData import getCommuteData
-from utils import *
 from collections import OrderedDict
+from utils import *
+import pandas as pd
+from CommuteData import getCommuteData
+from ParseCommuteData import parseCommuteData
 from House.HouseData import getMATowns
 
 def processCommuteData():
     frames = []
-    print '    Started Processing Commute Data'
+    print('    Started Processing Commute Data')
     
-    fileName = "Master-Commute_Data-2015"
+    fileName = "Master-Commute_Data-2025"
     entries = OrderedDict()
     
     towns = getMATowns()
         
-    """ Need to seperate list of towns into chunks of 100 """
+    """ Need to separate list of towns into chunks of 100 """
     while len(towns) > 0:
         origins = ''
         for each in towns[:100]:
@@ -36,4 +37,4 @@ def processCommuteData():
     
     populateMaster(os.path.join(commuteDataLocation, fileName+ext), entries)
     
-    print '    Done Processing Commute Data\n'
+    print('    Done Processing Commute Data\n')
