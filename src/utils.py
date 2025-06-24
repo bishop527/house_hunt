@@ -122,7 +122,10 @@ def get_csv_data():
 
 
 '''
-Extract relevant data from CSV data
+Extract relevant data zip code database CSV file and return town_data dataframe
+Rename primary_city field to town
+
+town_data fields:
 - zip
 - type
 - primary_city
@@ -130,8 +133,10 @@ Extract relevant data from CSV data
 - latitude
 - longitude
 '''
-def get_town_data():
+def get_zip_data():
+
     csv_data_file = os.path.join(DATA, 'zip_code_database.csv')
+    print("Parsing {} file".format(csv_data_file))
     csv_data = pd.read_csv(csv_data_file, header=0,
                             usecols=['zip', 'type', 'primary_city', 'state', 'latitude', 'longitude'],
                             dtype={'zip': str, 'type': str, 'primary_city': str, 'state': str,
@@ -152,7 +157,66 @@ def get_town_data():
 
     return town_data
 
-def get_towns_within_range(town_data, departure_time, destination, max_range):
+'''
+Parse given CSV or Excel file and return a dataframe
+
+Input files need to have the following fields
+- zip
+- type
+- town
+- state
+- latitude
+- longitude
+'''
+def get_town_data(file_name):
+
+    print("Parsing {} file".format(file_name))
+    try:
+        town_data = pd.read_csv(file_name, header=0,
+                                usecols=['zip','type','town','state','latitude','longitude'],
+                                dtype={'zip':str, 'type':str, 'town':str, 'state':str, 'latitude':str, 'longitude':str})
+        print("File Type: CSV")
+    except pd.errors.ParserError:
+        # This error typically occurs when a non-CSV file is attempted to be read as CSV
+        pass
+    except FileNotFoundError:
+        return 'File not found'
+    except Exception as e: # Catching a broader exception for other issues like FileNotFoundError
+        print("  File not a CSV")
+    
+    try:
+        town_data = pd.read_excel(file_name, header=0,
+                                    usecols=['zip', 'type', 'town', 'state', 'latitude', 'longitude'],
+                                    dtype={'zip': str, 'type': str, 'town': str, 'state': str, 'latitude': str, 'longitude': str})
+        print("File Type: Excel")
+    except pd.errors.ParserError:
+        # This error typically occurs when a non-CSV file is attempted to be read as CSV
+        pass
+    except FileNotFoundError:
+        return 'File not found'
+    except Exception as e: # Catching a broader exception for other issues like FileNotFoundError
+        print("  File Error: {}".format(e))
+        return
+
+    # Filter for only states = MA, RI, and NH
+    town_data = town_data[(town_data['state'] == 'MA') | 
+                          (town_data['state'] == 'RI') | 
+                          (town_data['state'] == 'NH')]
+    
+    # Filter for only type = STANDARD
+    # UNIQUE is usually associated with organization
+    # PO BOX is usually undeliverable regions
+    town_data = town_data[town_data['type'] == "STANDARD"]
+
+    return town_data
+
+'''
+Interrogate Google Maps API to return list of towns within a given range from a given destination
+'''
+def get_towns_within_range(departure_time, destination, max_range):
+
+    town_data = get_town_data(os.path.join(DATA, 'zip_code_database.csv'))
+
     print('Downloading data for towns within {} miles of {}'.format(max_range, destination))
     googleAPIkey = get_google_api_key()
 
