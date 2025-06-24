@@ -167,7 +167,7 @@ def get_towns_within_range(town_data, departure_time, destination, max_range):
     units = 'imperial'
     batch_limit = 25
     batch = list()
-    towns_in_range = list()
+    towns_in_range = pd.DataFrame()
 
     addresses = list()
     for row in town_data.itertuples():
@@ -201,17 +201,17 @@ def get_towns_within_range(town_data, departure_time, destination, max_range):
                 town = ' '.join(town)
                 distance = float(each.rows['elements'][0]['distance']['text'].split(" ")[0])
                 if distance < max_range:
-                    towns_in_range.append({'Town': town, 'Distance': distance})
+                    # Add distance value to existing town data
+                    zip_code = town.split(" ")[-1]
+                    new_df = town_data[town_data["zip"] == zip_code]
+                    new_df = new_df.assign(distance = distance)
+                    towns_in_range = pd.concat([towns_in_range,new_df])
+
             else:
                 print("  ERROR with {}".format(addresses[count]))
 
-    file_headers = ["Town", "Distance"]    
     file_name = os.path.join(DATA, "town_data_"+str(max_range)+"mi.xlsx")
-
-    with open(file_name, mode='w', newline='') as file:
-        writer = csv.DictWriter(file, fieldnames=file_headers)
-        writer.writeheader()
-        writer.writerows(towns_in_range)
+    towns_in_range.to_excel(file_name, index=False)
     
     print("Saved results to {}".format(file_name))
 
