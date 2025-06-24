@@ -6,10 +6,19 @@ Created on Nov 4, 2015
 '''
 import os.path
 import urllib
+import googlemaps
+import numpy as np
+import csv
+
 from constants import *
 import pandas as pd
 
 proxy_on = False
+
+def get_google_api_key(key_loc=KEY_LOC, key_file=KEY_FILE):
+    file = open(os.path.join(key_loc, key_file))
+
+    return file.read().replace("\n", "")
 
 """ 
 Appends the given DataFrame with the master workbook and names the worksheet the given sheetName 
@@ -89,19 +98,121 @@ def normalizeScore(score):
         score = MIN_SCORE
     return score
 
+'''
+Parse the Zip Code Database csv file
+CSV file format
+- zip                   (USPS zip code)
+- type                  (USPS Military, PO Box, Standard, or Unique)
+- decommissioned        (0 or 1, whether or not USPS has decommissioned the zip)
+- primary_city          (USPS listed primary city)
+- acceptable_cities     (USPS alternate cities for zip codes used by multiple cities)
+- unacceptable_citiies  (Alternate names that are not officially recognized by USPS)
+- state                 (2 letter state abbreviation)
+- county                (county with the largest percentage of the zip code population)
+- timezone
+- area_codes
+- lattitude
+- longitude
+'''
+def get_csv_data():
+    csv_data_file = os.path.join(DATA, 'zip_code_database.csv')
+    csv_data = pd.read_csv(csv_data_file)
+
+    return csv_data
+
 
 '''
-Parses out and returns zip codes from data/town_zips.xlsx
+Extract relevant data from CSV data
+- zip
+- type
+- primary_city
+- state
+- latitude
+- longitude
 '''
-def getMAZips():
-    fileName = 'town_zips'
-    zips = []
+def get_town_data():
+    csv_data_file = os.path.join(DATA, 'zip_code_database.csv')
+    csv_data = pd.read_csv(csv_data_file, header=0,
+                            usecols=['zip', 'type', 'primary_city', 'state', 'latitude', 'longitude'],
+                            dtype={'zip': str, 'type': str, 'primary_city': str, 'state': str,
+                            'latitude': str, 'longitude': str})
 
-    data = pd.read_excel(os.path.join(HOUSE_DATA, fileName + EXT),
-                         header=0)
+    # Rename primary_city to town
+    csv_data = csv_data.rename(columns={'primary_city': 'town'})
 
-    for zipCode in data.Zip:
-        # Leading zero is stripped so need to re-add
-        zips.append('0' + str(zipCode))
+    # Filter for only states = MA, RI, and NH
+    town_data = csv_data[(csv_data['state'] == 'MA') | 
+                         (csv_data['state'] == 'RI') | 
+                         (csv_data['state'] == 'NH')]
+    
+    # Filter for only type = STANDARD
+    # UNIQUE is usually associated with organization
+    # PO BOX is usually undeliverable regions
+    town_data = town_data[town_data['type'] == "STANDARD"]
 
-    return zips
+    return town_data
+
+def get_towns_within_range(town_data, departure_time, destination, max_range):
+    print('Downloading data for towns within {} miles of {}'.format(max_range, destination))
+    googleAPIkey = get_google_api_key()
+
+    if proxy_on:
+        gmaps = googlemaps.Client(key=googleAPIkey, requests_kwargs={
+            'proxies': {'https': 'http://localhost:8080'}})
+    else:
+        gmaps = googlemaps.Client(key=googleAPIkey)
+
+    mode = 'driving'
+    language = 'en'
+    units = 'imperial'
+    batch_limit = 25
+    batch = list()
+    towns_in_range = list()
+
+    addresses = list()
+    for row in town_data.itertuples():
+        addresses.append(row.town + " " + row.state + ", " +  row.zip)
+
+    lat_longs = list()
+    for row in town_data.itertuples():
+        lat_longs.append(row.latitude + "," + row.longitude)
+
+    for x in range(0, len(lat_longs), batch_limit):
+        batch.append(gmaps.distance_matrix(lat_longs[x:x + batch_limit], destination, mode=mode,
+                                            departure_time=departure_time,
+                                            language=language, units=units,
+                                            traffic_model=TRAFFIC_MODEL))
+    x = 0
+
+    # Only care about origin_addresses and rows
+    # disrgard destination_addresses and status
+    selected_keys = ['origin_addresses', 'rows']
+    filtered_batch = list()
+    for each in batch:
+        filtered_batch.append({key: each[key] for key in selected_keys if key in each})
+    
+    count = -1   # used to map back to addresses in the case of an error with API results
+    for row in filtered_batch:
+        row = pd.DataFrame.from_dict(row)
+        for each in row.itertuples():
+            count += 1
+            if each.rows['elements'][0]['status'] != "ZERO_RESULTS":
+                town = each.origin_addresses.split(', ')[1:-1]
+                town = ' '.join(town)
+                distance = float(each.rows['elements'][0]['distance']['text'].split(" ")[0])
+                if distance < max_range:
+                    towns_in_range.append({'Town': town, 'Distance': distance})
+            else:
+                print("  ERROR with {}".format(addresses[count]))
+
+    file_headers = ["Town", "Distance"]    
+    file_name = os.path.join(DATA, "town_data_"+str(max_range)+"mi.xlsx")
+
+    with open(file_name, mode='w', newline='') as file:
+        writer = csv.DictWriter(file, fieldnames=file_headers)
+        writer.writeheader()
+        writer.writerows(towns_in_range)
+    
+    print("Saved results to {}".format(file_name))
+
+    return towns_in_range
