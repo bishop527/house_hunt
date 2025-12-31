@@ -115,7 +115,7 @@ CSV file format
 - longitude
 '''
 def get_csv_data():
-    csv_data_file = os.path.join(DATA, 'zip_code_database.csv')
+    csv_data_file = os.path.join(DATA_DIR, 'zip_code_database.csv')
     csv_data = pd.read_csv(csv_data_file)
 
     return csv_data
@@ -135,7 +135,7 @@ town_data fields:
 '''
 def get_zip_data():
 
-    csv_data_file = os.path.join(DATA, 'zip_code_database.csv')
+    csv_data_file = os.path.join(DATA_DIR, 'zip_code_database.csv')
     print("Parsing {} file".format(csv_data_file))
     csv_data = pd.read_csv(csv_data_file, header=0,
                             usecols=['zip', 'type', 'primary_city', 'state', 'latitude', 'longitude'],
@@ -143,12 +143,16 @@ def get_zip_data():
                             'latitude': str, 'longitude': str})
 
     # Rename primary_city to town
-    csv_data = csv_data.rename(columns={'primary_city': 'town'})
+    csv_data = csv_data.rename(columns={'primary_city': 'Town'})
+    csv_data = csv_data.rename(columns={'zip': 'Zip'})
+    csv_data = csv_data.rename(columns={'state': 'State'})
+    csv_data = csv_data.rename(columns={'latitude': 'Lat'})
+    csv_data = csv_data.rename(columns={'longitude': 'Long'})
 
     # Filter for only states = MA, RI, and NH
-    town_data = csv_data[(csv_data['state'] == 'MA') | 
-                         (csv_data['state'] == 'RI') | 
-                         (csv_data['state'] == 'NH')]
+    town_data = csv_data[(csv_data['State'] == 'MA') |
+                         (csv_data['State'] == 'RI') |
+                         (csv_data['State'] == 'NH')]
     
     # Filter for only type = STANDARD
     # UNIQUE is usually associated with organization
@@ -215,7 +219,7 @@ Interrogate Google Maps API to return list of towns within a given range from a 
 '''
 def get_towns_within_range(departure_time, destination, max_range):
 
-    town_data = get_town_data(os.path.join(DATA, 'zip_code_database.csv'))
+    town_data = get_town_data(os.path.join(DATA_DIR, 'zip_code_database.csv'))
 
     print('Downloading data for towns within {} miles of {}'.format(max_range, destination))
     googleAPIkey = get_google_api_key()
@@ -274,7 +278,7 @@ def get_towns_within_range(departure_time, destination, max_range):
             else:
                 print("  ERROR with {}".format(addresses[count]))
 
-    file_name = os.path.join(DATA, "town_data_"+str(max_range)+"mi.xlsx")
+    file_name = os.path.join(DATA_DIR, "town_data_" + str(max_range) + "mi.xlsx")
     towns_in_range.to_excel(file_name, index=False)
     
     print("Saved results to {}".format(file_name))

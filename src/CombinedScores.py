@@ -32,7 +32,7 @@ def calculateWeightedScore(value):
     return score
 
 def calculateCombinedScores(fileName):
-    masterFile = os.path.join(DATA, fileName)
+    masterFile = os.path.join(DATA_DIR, fileName)
     data = {}
     columns = ['District', 'Distance', 'Duration', 'Avg House Cost', 'Tax Rate', 'Commute Score', 'House Score', 'School Score', 'Combined Score']
     

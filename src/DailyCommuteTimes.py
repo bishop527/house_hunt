@@ -25,9 +25,10 @@ Convert to a format suitable for API Distance Matrix
 Get commute times
 Combine town data and commute times
 '''
+
 def get_daily_commute_time(town_data):
 
-    fileName = "Daily-Commute-Times.xlsx"
+    file_name = "Daily-Commute-Times.xlsx"
     entries = OrderedDict()
 
     # Mon = 0, Sun = 6
@@ -45,7 +46,7 @@ def get_daily_commute_time(town_data):
     count = 0
 
     addresses = list()
-    for row in town_data:
+    for index, row in town_data.iterrows():
         town = row["Town"]
         state = row["State"]
         zip_code = row["Zip"]
@@ -124,7 +125,7 @@ def get_daily_commute_time(town_data):
                 writeData = [[]]
                 for town in data:
                     writeData[0] = [date, week_day]
-                    currDf = pd.read_excel(os.path.join(COMMUTE_DATA, fileName + EXT), index_col=[0], sheet_name=town, engine='openpyxl')
+                    currDf = pd.read_excel(os.path.join(COMMUTE_DATA_DIR, file_name + EXT), index_col=[0], sheet_name=town, engine='openpyxl')
                     col = currDf.columns
                     for t in data[state][town][zip_code]['times']:
                         writeData[0].append(data[state][town][zip_code]['times'][t]['dist'])
@@ -142,7 +143,7 @@ def get_daily_commute_time(town_data):
                     count = 0
                     total = 0
     
-                populateMaster(os.path.join(COMMUTE_DATA, fileName + EXT), entries)
+                populateMaster(os.path.join(COMMUTE_DATA_DIR, file_name + EXT), entries)
                 print('Wrote data for the day to file')
                 time.sleep(3600)
             else:
@@ -276,8 +277,8 @@ def get_daily_commute_time(town_data):
 
 if __name__ == "__main__":
 
-    town_data = get_town_data()
-    # get_daily_commute_time(town_data)
-    get_towns_within_range(town_data, 'now', WORK_ADDR, 65)
+    town_data = get_zip_data()
+    get_daily_commute_time(town_data)
+    # get_towns_within_range(town_data, 'now', WORK_ADDR, 65)
 
 
