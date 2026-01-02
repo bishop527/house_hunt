@@ -12,9 +12,7 @@ from datetime import datetime
 
 def get_commute_data(origins, departure_time, destination):
     # Get Google API Key
-    api_key = os.path.join(DATA_DIR, API_KEY_FILE)
-    with open(API_KEY_FILE, 'r') as file:
-        api_key = file.readline().strip()
+    api_key = get_google_api_key()
 
     print('        Downloading Commute Data')
     if proxy_on:
@@ -27,12 +25,11 @@ def get_commute_data(origins, departure_time, destination):
     units = 'imperial'
 
     commute_data = []
-    chunk_size = 25
 
     # Loop through the list 25 items at a time
-    for i in range(0, len(destination), chunk_size):
+    for i in range(0, len(destination), CHUNK_SIZE):
         # Create the chunk
-        chunk = destination[i: i + chunk_size]
+        chunk = destination[i: i + CHUNK_SIZE]
 
         print(f"Requesting chunk: {i} to {i + len(chunk)} of {len(destination)}")
 

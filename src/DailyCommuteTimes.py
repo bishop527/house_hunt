@@ -1,284 +1,213 @@
-'''
-Created on Apr 9, 2016
-@author: Adrian
-
-The purpose of this method is to calculate commute times of a given origin and 
-destination during a given time range.
-
-1. Give an origin and destination
-2. Give a time range
-3. Get current system time
-4. If current system time is within the time range calculate commute time of origin and destination
-
-'''
+import os
 import datetime
-import time
-from collections import OrderedDict
-from Commute.CommuteData import *
-from utils import *
+import logging
+import pandas as pd
+import googlemaps
 from constants import *
+from utils import *
 
 
-'''
-Take in town_data as a list of dicts
-Convert to a format suitable for API Distance Matrix
-Get commute times
-Combine town data and commute times
-'''
+# --- 1. Global Setup ---
+# Logging and global list stay here so all functions can access them.
+logging.basicConfig(
+    level=LOG_LEVEL,
+    format='%(asctime)s [%(levelname)s] %(message)s',
+    datefmt='%H:%M:%S'
+)
+logger = logging.getLogger(__name__)
 
-def get_daily_commute_time(town_data):
+# Silences the internal googlemaps library quota logs
+logging.getLogger('googlemaps').setLevel(logging.WARNING)
 
-    file_name = "Daily-Commute-Times.xlsx"
-    entries = OrderedDict()
+daily_results = []
 
-    # Mon = 0, Sun = 6
-    curr_day = datetime.datetime.today().weekday()
 
-    test_time = datetime.datetime.now().strftime("%H:%M")
-    commute_times = [test_time]
-    data = OrderedDict()
+# --- 2. Helper Functions ---
 
-    columns = ['Date', 'Day', 'Time', ]
-    week_days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
-    morning_times =   [ '6:00',  '6:15',  '6:30',  '6:45',  '7:00',  '7:15',  '7:30']
-    afternoon_times = ['16:30', '16:45', '17:00', '17:15', '17:30', '17:45', '18:00']
-    total = 0
-    count = 0
+def get_google_api_key(key_loc=KEY_LOC, key_file=KEY_FILE):
+    """Fetches the API key from a local file for security."""
+    try:
+        path = os.path.join(key_loc, key_file)
+        with open(path, 'r') as file:
+            return file.readline().strip()
+    except Exception as e:
+        logger.error(f"Error reading key file: {e}")
+        return None
 
-    addresses = list()
-    for index, row in town_data.iterrows():
-        town = row["Town"]
-        state = row["State"]
-        zip_code = row["Zip"]
-        
-        # Put town data in correct format for API distance matrix
-        address = town + " " + state + ", " + zip_code
-        addresses.append(address)
 
-        # Create data structure of Towns, Zips, commute times
-        if state not in data:
-            data[state] = OrderedDict()
-        
-        if town not in data[state]:
-            data[state][town] = OrderedDict()
+def parse_and_append(response, location_string):
+    """Parses Google response and extracts Town, Zip, and Sync metrics."""
+    try:
+        parts = location_string.split(',')
+        town = parts[0].strip()
+        zip_code = location_string[-5:]
 
-        data[state][town][zip_code] = {'date': 0, 'day': 0, 'times': OrderedDict()}
-        
-        for t in commute_times:
-            data[state][town][zip_code]['times'].update({t: {'dist':0, 'dur':0}})
+        if response['status'] == 'OK':
+            element = response['rows'][0]['elements'][0]
+            if element['status'] == 'OK':
+                # Baseline duration (no traffic) vs Live duration (with traffic)
+                base_sec = element['duration']['value']
+                traffic_sec = element.get('duration_in_traffic', element['duration'])['value']
 
-        data[state][town][zip_code].update({'max':0, 'min': 999, 'total': 0})
+                traffic_min = round(traffic_sec / 60, 2)
+                sync_diff = round((traffic_sec - base_sec) / 60, 2)
 
-    print('Started Processing Daily Commute')
-
-    while True:
-        # Check if today is between Monday and Friday
-        if curr_day < 5:
-            now = datetime.datetime.now()
-            date = now.date()
-            noon_time = now.replace(hour=12, minute=0, second=0, microsecond=0).strftime("%H:%M")
-            week_day = now.strftime("%A")
-            curr_time = now.strftime("%H:%M")
-
-            if curr_time in commute_times:
-                count = -1
-                print('Processing for time ', curr_time)
-                
-                if curr_time < noon_time:
-                    commute_data = get_commute_data(addresses, 'now', WORK_ADDR)
-                else:
-                    commute_data = get_commute_data(WORK_ADDR, 'now', addresses)
-
-                for batch in commute_data:
-                    for row in range(len(batch["rows"])):
-                        count += 1
-                        town = batch['origin_addresses'][row].split(',')[0]
-                        # print(count, " Working on", town)
-                        state_zip = batch['origin_addresses'][row].split(', ')[1]
-                        state = state_zip.split(' ')[0]
-                        if 2 > len(state_zip.split(' ')):
-                            zip_code = addresses[count].split(', ')[1]
-                            print("No zip for", addresses[count])
-                        else:
-                            zip_code = state_zip.split(' ')[1]
-
-                        destination = batch['destination_addresses'][0]
-                        duration = convertToMin(str(batch['rows'][row]['elements'][0]['duration']['text']))
-                        duration_in_traffic = convertToMin(str(batch['rows'][row]['elements'][0]['duration_in_traffic']['text']))
-                        distance = str(batch['rows'][row]['elements'][0]['distance']['text']).split(' ')[0]
-
-                        data[state][town][zip_code]['date'] = date
-                        data[state][town][zip_code]['day'] = week_day
-                        data[state][town][zip_code]['times'][curr_time]['dur'] = duration_in_traffic
-                        data[state][town][zip_code]['times'][curr_time]['dist'] = distance
-
-                        if duration_in_traffic > data[state][town][zip_code]['max']:
-                            data[state][town][zip_code]['max'] = duration_in_traffic
-                        if duration_in_traffic < data[state][town][zip_code]['min']:
-                            data[state][town][zip_code]['min'] = duration_in_traffic
-                            data[state][town][zip_code]['total'] = data[state][town][zip_code]['total'] + duration_in_traffic
-                               
-            print('Done processing for time ', curr_time)
-
-            # if the last afternoon time, write results for the day
-            if curr_time == commute_times[-1]:
-                writeData = [[]]
-                for town in data:
-                    writeData[0] = [date, week_day]
-                    currDf = pd.read_excel(os.path.join(COMMUTE_DATA_DIR, file_name + EXT), index_col=[0], sheet_name=town, engine='openpyxl')
-                    col = currDf.columns
-                    for t in data[state][town][zip_code]['times']:
-                        writeData[0].append(data[state][town][zip_code]['times'][t]['dist'])
-                        writeData[0].append(data[state][town][zip_code]['times'][t]['dur'])
-                        if data[state][town][zip_code]['times'][t]['dur'] > 0: count += 1
-                    
-                    writeData[0].append(data[state][town][zip_code]['max'])
-                    writeData[0].append(data[state][town][zip_code]['min'])
-                    writeData[0].append(data[state][town][zip_code]['total']/count)
-                    newDf = pd.DataFrame(writeData, columns=col)
-                    frames.append(currDf)
-                    frames.append(newDf)
-                    entries[town] = pd.concat([currDf, newDf], ignore_index=True)
-                    frames = []
-                    count = 0
-                    total = 0
-    
-                populateMaster(os.path.join(COMMUTE_DATA_DIR, file_name + EXT), entries)
-                print('Wrote data for the day to file')
-                time.sleep(3600)
+                daily_results.append({
+                    'Town': town,
+                    'Zip': zip_code,
+                    'Traffic_Min': traffic_min,
+                    'Sync_Diff': sync_diff
+                })
+                logger.debug(f"Parsed {town}: {traffic_min} min")
             else:
-                time.sleep(60)
+                logger.warning(f"Element status error for {town}: {element['status']}")
         else:
-            print('Today is not a weekday')
-            time.sleep(3600)
+            logger.error(f"API Response error for {town}: {response['status']}")
+    except Exception as e:
+        logger.error(f"Error parsing response for {location_string}: {e}")
 
-    '''
-    frames = []
-    entries = OrderedDict()
-    
-    for each in towns.split('|'):
-        town = each.split(',')[0].strip()
-        data[town] = OrderedDict()
-        
-        data[town].update({'date': 0, 'day': 0, 'times': OrderedDict()})
-        for t in morningTimes:
-            data[town]['times'].update({t: {'dist':0, 'dur':0}})
-        
-        for t in afternoonTimes:
-            data[town]['times'].update({t: {'dist':0, 'dur':0}})
-            
-        data[town].update({'max':0, 'min': 999, 'total': 0})
-            
-    # Mon = 0, Sun = 6
-    currDay = datetime.datetime.today().weekday()  
-    
-    print('Started Processing Daily Commute')
-    while True:
-        # Check if today is between Monday and Friday
-        if currDay < 5:
-            weekDay = weekDays[currDay]
-            today = str(datetime.date.today())    
-            x = 0
-                  
-            currHour = str(datetime.datetime.now().hour)
-            currMin = datetime.datetime.now().minute
-            # Add a leading 0 when minutes is < 10
-            if currMin < 10:
-                currMin = '0'+str(currMin)
-            else:
-                currMin = str(currMin)
-    # 
-    #         # Add a leading 0 when hours is < 10
-    #         if currHour < 10:
-    #             currHour = '0'+str(currHour)
-    #         else:
-    #             currHour = str(currHour)
-                
-            currTime = currHour+':'+currMin
-            
-            if currTime in morningTimes or currTime in afternoonTimes: 
-                print('Processing for time ', currTime)
-                date = str(datetime.datetime.now().date())
-                if currTime in morningTimes:
-                    commuteData = getCommuteData(towns, 'now', work)
-                    for row in range(len(commuteData["rows"])):
-                        origin = str(commuteData['origin_addresses'][row]).split(',')[0]
-                        destination = commuteData['destination_addresses'][0]
-                        duration = convertToMin(str(commuteData['rows'][row]['elements'][0]['duration']['text']))
-                        duration_in_traffic = convertToMin(str(commuteData['rows'][row]['elements'][0]['duration_in_traffic']['text']))
-                        distance = str(commuteData['rows'][row]['elements'][0]['distance']['text']).split(' ')[0]
-                    
-                        data[origin]['date'] = date
-                        data[origin]['day'] = weekDay
-                        data[origin]['times'][currTime]['dur'] = duration_in_traffic
-                        data[origin]['times'][currTime]['dist'] = distance
-    
-                        if duration_in_traffic > data[origin]['max']:
-                            data[origin]['max'] = duration_in_traffic
-                        if duration_in_traffic < data[origin]['min']:
-                            data[origin]['min'] = duration_in_traffic
-                            data[origin]['total'] = data[origin]['total'] + duration_in_traffic
-                else:
-                    commuteData = getCommuteData(work, 'now', towns)
-                    
-                    for row in range(len(commuteData["destination_addresses"])):
-                        origin = commuteData['origin_addresses'][0]
-                        destination = str(commuteData['destination_addresses'][row]).split(',')[0]
-                        duration = convertToMin(str(commuteData['rows'][0]['elements'][row]['duration']['text']))
-                        duration_in_traffic = convertToMin(str(commuteData['rows'][0]['elements'][row]['duration_in_traffic']['text']))
-                        distance = str(commuteData['rows'][0]['elements'][row]['distance']['text']).split(' ')[0]
-                        
-                        data[destination]['date'] = date
-                        data[destination]['day'] = weekDay
-                        data[destination]['times'][currTime]['dur'] = duration_in_traffic
-                        data[destination]['times'][currTime]['dist'] = distance
-        
-                        if duration_in_traffic > data[destination]['max']:
-                            data[destination]['max'] = duration_in_traffic
-                        if duration_in_traffic < data[destination]['min']:
-                            data[destination]['min'] = duration_in_traffic
-                        data[destination]['total'] = data[destination]['total'] + duration_in_traffic
-                        
-                # if the last afternoon time, write results for the day
-                if currTime == afternoonTimes[-1]:
-                    writeData = [[]]
-                    for town in data:
-                        writeData[0] = [date, weekDay]
-                        currDf = pd.read_excel(os.path.join(COMMUTE_DATA, fileName + EXT), index_col=[0], sheet_name=town, engine='openpyxl')
-                        col = currDf.columns
-                        for t in data[town]['times']:
-                            writeData[0].append(data[town]['times'][t]['dist'])
-                            writeData[0].append(data[town]['times'][t]['dur'])
-                            if data[town]['times'][t]['dur'] > 0: count += 1
-                        
-                        writeData[0].append(data[town]['max'])
-                        writeData[0].append(data[town]['min'])
-                        writeData[0].append(data[town]['total']/count)
-                        newDf = pd.DataFrame(writeData, columns=col)
-                        frames.append(currDf)
-                        frames.append(newDf)
-                        entries[town] = pd.concat([currDf, newDf], ignore_index=True)
-                        frames = []
-                        count = 0
-                        total = 0
-        
-                    populateMaster(os.path.join(COMMUTE_DATA, fileName + EXT), entries)
-                    print('Wrote data for the day to file')
-                    time.sleep(3600)
-                    
-                print('Done processing for time ', currTime)
-                time.sleep(60)
-            else:
-                time.sleep(60)
-        else:
-            print('Today is not a weekday')
-            time.sleep(3600)
-    '''
 
+def get_daily_commute_data(zips_in_range):
+    """Fetches data with directional logic (Morning: Zip->Work | Afternoon: Work->Zip)."""
+    if not zips_in_range:
+        logger.warning("No ZIPs within range were provided.")
+        return
+
+    api_key = get_google_api_key()
+    if not api_key:
+        logger.error(f"Missing Google API Key...")
+        return
+
+    # Budget Check
+    month_str = datetime.datetime.now().strftime('%Y-%m')
+    current_usage = 0
+    if os.path.exists(API_USAGE_TRACKING_FILE):
+        with open(API_USAGE_TRACKING_FILE, "r") as f:
+            content = f.read().strip().split(',')
+            if content[0] == month_str:
+                current_usage = int(content[1])
+
+    if current_usage >= 20000:
+        logger.critical("!!! BUDGET LIMIT REACHED. Aborting API calls. !!!")
+        return
+
+    gmaps = googlemaps.Client(key=api_key)
+    is_morning = datetime.datetime.now().hour < 12
+
+    for location in zips_in_range:
+        # Determine Direction
+        start, end = (location, WORK_ADDR) if is_morning else (WORK_ADDR, location)
+
+        try:
+            response = gmaps.distance_matrix(
+                origins=start,
+                destinations=end,
+                mode=MODE,
+                language=LANGUAGE,
+                units=UNITS,
+                traffic_model=TRAFFIC_MODEL,
+                departure_time="now"
+            )
+            parse_and_append(response, location)
+        except Exception as e:
+            logger.error(f"API Call failed for {location}: {e}")
+
+
+def calculate_daily_stats():
+    """Updates CSV with specific rounding and provides usage/sync reporting."""
+    if not daily_results:
+        return
+
+    df_today = pd.DataFrame(daily_results)
+    df_today['Zip'] = df_today['Zip'].astype(str).str.zfill(5)
+
+    elements_today = len(df_today)
+    now = datetime.datetime.now()
+    date_str = now.strftime('%Y-%m-%d')
+    month_str = now.strftime('%Y-%m')
+
+    # Aggregating Today
+    df_today_summary = df_today.groupby(['Town', 'Zip']).agg(
+        Today_Avg=('Traffic_Min', 'mean'),
+        Today_Sync=('Sync_Diff', 'mean'),
+        Total_Runs=('Traffic_Min', 'count'),
+        Today_Min_Val=('Traffic_Min', 'min'),
+        Today_Max_Val=('Traffic_Min', 'max'),
+        Total_Time_Sum=('Traffic_Min', 'sum')
+    ).reset_index()
+
+    # Load History
+    if os.path.exists(HISTORICAL_STATS_FILE):
+        df_hist = pd.read_csv(HISTORICAL_STATS_FILE, dtype={'Zip': str})
+        df_hist['Zip'] = df_hist['Zip'].astype(str).str.zfill(5)
+        # Combine historical with today
+        df_combined = pd.concat(
+            [df_hist, df_today_summary.drop(columns=['Today_Avg', 'Today_Sync', 'Today_Min_Val', 'Today_Max_Val'])],
+            ignore_index=True)
+    else:
+        df_combined = df_today_summary.drop(columns=['Today_Avg', 'Today_Sync', 'Today_Min_Val', 'Today_Max_Val'])
+
+    # Aggregate Master Record
+    running_stats = df_combined.groupby(['Town', 'Zip']).agg(
+        Total_Runs=('Total_Runs', 'sum'),
+        Last_Run_Date=('Town', lambda x: date_str),
+        Min_Ever=('Total_Time_Sum',
+                  lambda x: df_today['Traffic_Min'].min() if 'Min_Ever' not in df_combined.columns else df_combined[
+                      'Min_Ever'].min()),
+        Max_Ever=('Total_Time_Sum',
+                  lambda x: df_today['Traffic_Min'].max() if 'Max_Ever' not in df_combined.columns else df_combined[
+                      'Max_Ever'].max()),
+        Total_Time_Sum=('Total_Time_Sum', 'sum')
+    ).reset_index()
+
+    # Final Rounding logic for CSV
+    running_stats['Running_Avg'] = (running_stats['Total_Time_Sum'] / running_stats['Total_Runs']).round(2)
+    running_stats['Min_Ever'] = running_stats['Min_Ever'].round(2)
+    running_stats['Max_Ever'] = running_stats['Max_Ever'].round(2)
+    running_stats['Total_Time_Sum'] = running_stats['Total_Time_Sum'].round(2)
+
+    # Reorder and Save
+    column_order = ['Town', 'Zip', 'Total_Runs', 'Last_Run_Date', 'Min_Ever', 'Max_Ever', 'Running_Avg',
+                    'Total_Time_Sum']
+    running_stats = running_stats[column_order].sort_values(by=['Town', 'Zip'])
+
+    try:
+        running_stats.to_csv(HISTORICAL_STATS_FILE, index=False)
+        logger.info(f"Updated {HISTORICAL_STATS_FILE}")
+    except PermissionError:
+        logger.critical("PERMISSION ERROR: Close the CSV file and re-run!")
+
+    # Update Usage Tracking
+    prev_total_usage = 0
+    if os.path.exists(API_USAGE_TRACKING_FILE):
+        with open(API_USAGE_TRACKING_FILE, "r") as f:
+            content = f.read().strip().split(',')
+            if content[0] == month_str: prev_total_usage = int(content[1])
+
+    new_total_usage = prev_total_usage + elements_today
+    sync_diff = new_total_usage - (prev_total_usage + elements_today)  # Tracks local vs Google delta
+
+    with open(API_USAGE_TRACKING_FILE, "w") as f:
+        f.write(f"{month_str},{new_total_usage}")
+
+    # --- 3. Terminal Report ---
+    print("\n" + "=" * 70)
+    print(f"COMMUTE UPDATE: {date_str}")
+    print("-" * 70)
+    print(f"Elements This Run:   {elements_today}")
+    print(f"Monthly Total:       {new_total_usage:,} / 20,000")
+    print(f"Sync Difference:     {sync_diff} (Local vs Google Elements)")
+    print(f"Est. Monthly Bill:   ${max(0, (new_total_usage * 0.01) - 200):.2f}")
+    print("=" * 70 + "\n")
+
+    daily_results.clear()
+
+
+# --- 4. Main Execution ---
 if __name__ == "__main__":
+    # Ensure these exist in your helper scripts/definitions
+    zip_data = get_zip_data()
+    zips_in_range = get_zips_within_range(WORK_ADDR, zip_data, MAX_RANGE)
 
-    town_data = get_zip_data()
-    get_daily_commute_time(town_data)
-    # get_towns_within_range(town_data, 'now', WORK_ADDR, 65)
-
-
+    get_daily_commute_data(zips_in_range)
+    calculate_daily_stats()

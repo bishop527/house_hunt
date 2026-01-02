@@ -4,9 +4,11 @@ Created on Nov 4, 2015
 @author: AD23883
 
 '''
+import sys
 import os.path
 import urllib
 import googlemaps
+from datetime import datetime, timedelta
 import numpy as np
 import csv
 
@@ -18,7 +20,7 @@ proxy_on = False
 def get_google_api_key(key_loc=KEY_LOC, key_file=KEY_FILE):
     file = open(os.path.join(key_loc, key_file))
 
-    return file.read().replace("\n", "")
+    return file.readline().strip()
 
 """ 
 Appends the given DataFrame with the master workbook and names the worksheet the given sheetName 
@@ -98,6 +100,19 @@ def normalizeScore(score):
         score = MIN_SCORE
     return score
 
+
+def get_hours_until_first_time_check():
+    """Calculates time until first morning time slot on Monday"""
+    now = datetime.now()
+    days_ahead = (0 - now.weekday() + 7) % 7
+    target = now + timedelta(days=days_ahead)
+    first_hour, first_min = map(int, MORNING_TIMES[0].split(':'))
+    target = target.replace(hour=first_hour, minute=first_min, second=0, microsecond=0)
+    if target <= now:
+        target += timedelta(days=7)
+    return (target - now).total_seconds() / 3600
+
+
 '''
 Parse the Zip Code Database csv file
 CSV file format
@@ -120,46 +135,6 @@ def get_csv_data():
 
     return csv_data
 
-
-'''
-Extract relevant data zip code database CSV file and return town_data dataframe
-Rename primary_city field to town
-
-town_data fields:
-- zip
-- type
-- primary_city
-- state
-- latitude
-- longitude
-'''
-def get_zip_data():
-
-    csv_data_file = os.path.join(DATA_DIR, 'zip_code_database.csv')
-    print("Parsing {} file".format(csv_data_file))
-    csv_data = pd.read_csv(csv_data_file, header=0,
-                            usecols=['zip', 'type', 'primary_city', 'state', 'latitude', 'longitude'],
-                            dtype={'zip': str, 'type': str, 'primary_city': str, 'state': str,
-                            'latitude': str, 'longitude': str})
-
-    # Rename primary_city to town
-    csv_data = csv_data.rename(columns={'primary_city': 'Town'})
-    csv_data = csv_data.rename(columns={'zip': 'Zip'})
-    csv_data = csv_data.rename(columns={'state': 'State'})
-    csv_data = csv_data.rename(columns={'latitude': 'Lat'})
-    csv_data = csv_data.rename(columns={'longitude': 'Long'})
-
-    # Filter for only states = MA, RI, and NH
-    town_data = csv_data[(csv_data['State'] == 'MA') |
-                         (csv_data['State'] == 'RI') |
-                         (csv_data['State'] == 'NH')]
-    
-    # Filter for only type = STANDARD
-    # UNIQUE is usually associated with organization
-    # PO BOX is usually undeliverable regions
-    town_data = town_data[town_data['type'] == "STANDARD"]
-
-    return town_data
 
 '''
 Parse given CSV or Excel file and return a dataframe
@@ -214,10 +189,12 @@ def get_town_data(file_name):
 
     return town_data
 
+
+
 '''
 Interrogate Google Maps API to return list of towns within a given range from a given destination
 '''
-def get_towns_within_range(departure_time, destination, max_range):
+def get_towns_within_range(destination, max_range):
 
     town_data = get_town_data(os.path.join(DATA_DIR, 'zip_code_database.csv'))
 
@@ -246,8 +223,7 @@ def get_towns_within_range(departure_time, destination, max_range):
         lat_longs.append(row.latitude + "," + row.longitude)
 
     for x in range(0, len(lat_longs), batch_limit):
-        batch.append(gmaps.distance_matrix(lat_longs[x:x + batch_limit], destination, mode=mode,
-                                            departure_time=departure_time,
+        batch.append(gmaps.distance_matrix(lat_longs[x:x + batch_limit], destination, ode=mode,
                                             language=language, units=units,
                                             traffic_model=TRAFFIC_MODEL))
     x = 0
@@ -284,3 +260,94 @@ def get_towns_within_range(departure_time, destination, max_range):
     print("Saved results to {}".format(file_name))
 
     return towns_in_range
+
+
+'''
+Extract relevant data zip code database CSV file and return zip_data dataframe
+Rename primary_city field to town
+
+zip_data fields:
+- zip
+- type
+- primary_city
+- state
+- latitude
+- longitude
+'''
+def get_zip_data():
+    """Reads CSV and filters for Standard zips in MA, RI, and NH with error handling"""
+    csv_data_file = os.path.join(DATA_DIR, DATA_FILE)
+
+    # Error Handling: Check if file exists
+    if not os.path.exists(csv_data_file):
+        print(f"CRITICAL ERROR: The file '{csv_data_file}' was not found.")
+        print(f"    Ensure '{DATA_FILE}' exists in '{DATA_DIR}'.")
+        sys.exit(1)
+
+    print(f"Parsing {csv_data_file} file...")
+
+    try:
+        csv_data = pd.read_csv(csv_data_file, header=0,
+                               usecols=['zip', 'type', 'primary_city', 'state', 'latitude', 'longitude'],
+                               dtype={'zip': str, 'type': str, 'primary_city': str, 'state': str,
+                                      'latitude': str, 'longitude': str})
+
+        # Renaming to match internal logic
+        csv_data = csv_data.rename(columns={
+            'primary_city': 'Town',
+            'zip': 'Zip',
+            'state': 'State',
+            'latitude': 'Lat',
+            'longitude': 'Long'
+        })
+
+        # Filter logic
+        zip_data = csv_data[csv_data['State'].isin(['MA', 'RI', 'NH'])]
+        zip_data = zip_data[zip_data['type'] == "STANDARD"]
+
+        if zip_data.empty:
+            print("WARNING: Zip data is empty after filtering for MA, RI, NH and 'STANDARD' type.")
+
+        return zip_data
+
+    except Exception as e:
+        print(f"CRITICAL ERROR while reading CSV: {e}")
+        sys.exit(1)
+
+'''
+Interrogate Google Maps API to return list of zip codes within a given range from origin to destination
+max_range in miles
+Orgins in the Street, Town, Zip format
+zip_data fields:
+- zip
+- type
+- town
+- state
+'''
+def get_zips_within_range(origins, zip_data, max_range):
+    """Uses Distance Matrix to find which zips are within the mile radius"""
+    addresses = []
+    zips_in_range = []
+    API_KEY = get_google_api_key()
+
+    for index, row in zip_data.iterrows():
+        address = f"{row['Town']}, {row['State']} {row['Zip']}"
+        addresses.append(address)
+
+    gmaps = googlemaps.Client(key=API_KEY)
+    print(f'Checking range for {len(addresses)} locations...')
+
+    for i in range(0, len(addresses), CHUNK_SIZE):
+        chunk = addresses[i: i + CHUNK_SIZE]
+        try:
+            response = gmaps.distance_matrix(origins=origins, destinations=chunk, mode=MODE)
+            elements = response['rows'][0]['elements']
+
+            for index, element in enumerate(elements):
+                if element['status'] == 'OK':
+                    if (element['distance']['value'] / 1609.34) <= max_range:
+                        zips_in_range.append(chunk[index])
+        except Exception as e:
+            print(f"Error at range check chunk {i}: {e}")
+
+    return zips_in_range
