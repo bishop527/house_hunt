@@ -1,0 +1,11 @@
+﻿zip,type,decommissioned,primary_city,acceptable_cities,unacceptable_cities,state,county,timezone,area_codes,latitude,longitude
+02726,STANDARD,0,Somerset,,,MA,Bristol County,America/New_York,"508, 774",41.73,-71.15
+02909,STANDARD,0,Providence,,,RI,Providence County,America/New_York,401,41.82,-71.45
+03060,STANDARD,0,Nashua,,,NH,Hillsborough County,America/New_York,"351, 603, 978",42.74,-71.46
+03110,STANDARD,0,Bedford,,,NH,Hillsborough County,America/New_York,603,42.95,-71.5
+02184,STANDARD,0,Braintree,,"Braintree Highlands, Braintree Hld, E Braintree, East Braintree",MA,Norfolk County,America/New_York,"339, 617, 781, 857",42.2,-71
+02445,STANDARD,0,Brookline,,,MA,Norfolk County,America/New_York,"617, 857",42.32,-71.14
+02138,STANDARD,0,Cambridge,,,MA,Middlesex County,America/New_York,"617, 857",42.38,-71.14
+02038,STANDARD,0,Franklin,,,MA,Norfolk County,America/New_York,"508, 774",42.08,-71.38
+01731,STANDARD,0,Hanscom AFB,Bedford,,MA,Middlesex County,America/New_York,"339, 351, 781, 978",42.46,-71.28
+02420,STANDARD,0,Lexington,,,MA,Middlesex County,America/New_York,"339, 781",42.46,-71.22

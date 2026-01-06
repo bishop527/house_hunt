@@ -45,7 +45,7 @@ def parseTownAdminData():
                 if town != ws.iloc[row+1, 1]:
                     data.append([town, zips, county, taxRate])
                     zips = ''
-            # last row, append the data
+            # last row, append the Data
             else:
                 data.append([town, zips, county, taxRate])
         else:
@@ -55,7 +55,7 @@ def parseTownAdminData():
                 if town != ws.iloc[row+1, 1]:
                     data.append([town, zips, county, taxRate])
                     zips = ''
-            # last row, append the data
+            # last row, append the Data
             else:
                 data.append([town, zips, county, taxRate])
     
@@ -67,9 +67,9 @@ def parseTownAdminData():
     return df
 
 '''
-This method parses the data in the MLS spreadsheet.
+This method parses the Data in the MLS spreadsheet.
 Currently the only way of obtaining this spreadsheet is from the realtor as a word doc.
-The word doc is manually converted to a spreadsheet. The current version of the data
+The word doc is manually converted to a spreadsheet. The current version of the Data
 is from August 2015.
 '''
 def parseMLSHouseData(MLS_DATA_FILE):

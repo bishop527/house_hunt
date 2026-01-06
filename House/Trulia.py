@@ -15,7 +15,7 @@ import os
 truliaKey = '9z8g9yszfkukswpj5q3ry5a4'
 
 def getTruliaCities(state='MA'):
-    print("        Downloading Trulia data for cities in", state)
+    print("        Downloading Trulia Data for cities in", state)
 
     data = []
     
@@ -58,11 +58,11 @@ def getTruliaZipCodesInState(state='MA'):
     return data
 
 '''
-This method pulls data from Trulia.com using their API. 
+This method pulls Data from Trulia.com using their API. 
 The API can only do lookups by zip code, not by town name. This causes problems especially for 
-towns with multiple zip codes and the data received does not match with the data shown on the
+towns with multiple zip codes and the Data received does not match with the Data shown on the
 main Trulia.com website in an immediately obvious way. 
-Decided to move away from collecting data in this way. Keeping the method here for historical
+Decided to move away from collecting Data in this way. Keeping the method here for historical
 purposes.
 '''
 def getCombinedTruliaZipCodeStats(startDate, endDate):
@@ -175,7 +175,7 @@ def getTruliaZipCodeStats(zips, startDate, endDate):
         taxRate = float(taxRateLookup(town))
         county = countyLookup(zipCode)
         
-        # Need to initialize data array for 15 positions because not all city entries contain data for all 15 values
+        # Need to initialize Data array for 15 positions because not all city entries contain Data for all 15 values
         data.append([zipCode, town, county, taxRate, 'NA','NA','NA','NA','NA','NA','NA','NA','NA','NA','NA','NA'])
         
         url = url_base+'zipCode='+zipCode+'&startDate='+startDate+'&endDate='+endDate+'&apikey='+truliaKey

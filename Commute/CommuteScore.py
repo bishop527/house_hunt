@@ -89,7 +89,7 @@ def calculateCommuteScores():
     columns = ['Distance', 'Duration', 'Distance Score', 'Duration Score', 'Weighted Score']
     calculatePriorityWeights()
     
-    commuteData = pd.read_excel(os.path.join(COMMUTE_DATA, fileName + EXT), header=0)
+    commuteData = pd.read_excel(os.path.join(COMMUTE_DATA_DIR, fileName + EXT), header=0)
     
     for row in range(len(commuteData)):
         distanceScore = 0

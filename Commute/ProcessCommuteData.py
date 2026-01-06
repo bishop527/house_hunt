@@ -8,7 +8,7 @@ from collections import OrderedDict
 from utils import *
 from constants import *
 import pandas as pd
-from CommuteData import getCommuteData
+from CommuteData import get_commute_data
 from ParseCommuteData import parseCommuteData
 from House.HouseData import getMATowns
 
@@ -28,7 +28,7 @@ def processCommuteData():
             origins += each+', MA|'
         origins = origins[:-1]
         
-        commuteData = getCommuteData(origins)
+        commuteData = get_commute_data(origins)
         df = parseCommuteData(commuteData)
         frames.append(df)
         
@@ -36,6 +36,6 @@ def processCommuteData():
         
     entries['Commute-Data'] = pd.concat(frames, ignore_index=True)
     
-    populateMaster(os.path.join(COMMUTE_DATA, fileName + EXT), entries)
+    populateMaster(os.path.join(COMMUTE_DATA_DIR, fileName + EXT), entries)
     
     print('    Done Processing Commute Data\n')

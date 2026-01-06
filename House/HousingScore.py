@@ -112,10 +112,10 @@ def calculateHouseScores():
     return df
 
 '''
-@deprecated: No longer use Trulia API methods. Use MLS data instead
-Read in data from the Master-Town_Data file and calculate tax and housing scores for each entry.
+@deprecated: No longer use Trulia API methods. Use MLS Data instead
+Read in Data from the Master-Town_Data file and calculate tax and housing scores for each entry.
 Housing scores will use the median list price for 3 bedroom properties. 
-If there is not data for 3 bedroom properties then th median list price for All properties will be used.
+If there is not Data for 3 bedroom properties then th median list price for All properties will be used.
 '''
 def calculateTruliaScores():
     print('Calculating Housing Scores')

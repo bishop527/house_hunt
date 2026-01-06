@@ -1,0 +1,40 @@
+18:08:15 [INFO] Parsing ZIP database: /home/ad23883/workspace/house_hunt/Data/Raw/test-zip_code_database.csv
+18:08:15 [INFO] Loaded 10 active standard ZIPs for MA, RI, NH
+18:08:18 [DEBUG] API Key successfully loaded from /home/ad23883/workspace/house_hunt/Data/google_api_key
+18:08:22 [INFO] Current monthly usage: 1,674
+18:08:22 [INFO] Checking range for 10 locations against 123 Main St. Anytown, MA 00000 (Max: 50 miles)
+18:08:22 [DEBUG] Starting new HTTPS connection (1): maps.googleapis.com:443
+18:08:22 [DEBUG] https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?destinations=244+Wood+St.+Lexington%2C+MA+02421&mode=driving&origins=Somerset%2C+MA+02726%7CProvidence%2C+RI+02909%7CNashua%2C+NH+03060%7CBedford%2C+NH+03110%7CBraintree%2C+MA+02184%7CBrookline%2C+MA+02445%7CCambridge%2C+MA+02138%7CFranklin%2C+MA+02038%7CHanscom+AFB%2C+MA+01731%7CLexington%2C+MA+02420&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+18:08:26 [INFO] API usage summary - Requests made: 1, Elements processed: 10, Monthly total: 1,684 / 20,000
+18:08:26 [INFO] Range check complete. Saved 8 locations to /home/ad23883/workspace/house_hunt/Data/Processed/towns_within_50mi.csv
+18:08:26 [INFO] Returning 8 addresses within range
+18:12:16 [INFO] Parsing ZIP database: /home/ad23883/workspace/house_hunt/Data/Raw/test-zip_code_database.csv
+18:12:16 [INFO] Loaded 10 active standard ZIPs for MA, RI, NH
+18:12:18 [DEBUG] API Key successfully loaded from /home/ad23883/workspace/house_hunt/Data/google_api_key
+18:12:18 [INFO] Current monthly usage: 1,684
+18:12:18 [INFO] Checking range for 10 locations against 123 Main St. Anytown, MA 00000 (Max: 50 miles)
+18:12:18 [DEBUG] Starting new HTTPS connection (1): maps.googleapis.com:443
+18:12:18 [DEBUG] https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?destinations=244+Wood+St.+Lexington%2C+MA+02421&mode=driving&origins=Somerset%2C+MA+02726%7CProvidence%2C+RI+02909%7CNashua%2C+NH+03060%7CBedford%2C+NH+03110%7CBraintree%2C+MA+02184%7CBrookline%2C+MA+02445%7CCambridge%2C+MA+02138%7CFranklin%2C+MA+02038%7CHanscom+AFB%2C+MA+01731%7CLexington%2C+MA+02420&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+18:12:18 [INFO] API usage summary - Requests made: 1, Elements processed: 10, Monthly total: 1,694 / 20,000
+18:12:18 [INFO] Range check complete. Saved 8 locations to /home/ad23883/workspace/house_hunt/Data/Processed/towns_within_50mi.csv
+18:12:18 [INFO] Returning 8 addresses within range
+18:25:33 [INFO] Parsing ZIP database: /home/ad23883/workspace/house_hunt/Data/Raw/test-zip_code_database.csv
+18:25:33 [INFO] Loaded 10 active standard ZIPs for MA, RI, NH
+18:25:40 [DEBUG] API Key successfully loaded from /home/ad23883/workspace/house_hunt/Data/google_api_key
+18:25:40 [INFO] Current monthly usage: 1,694
+18:25:40 [INFO] Checking range for 10 locations against 123 Main St. Anytown, MA 00000 (Max: 50 miles)
+18:25:40 [DEBUG] Starting new HTTPS connection (1): maps.googleapis.com:443
+18:25:41 [DEBUG] https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?destinations=244+Wood+St.+Lexington%2C+MA+02421&mode=driving&origins=Somerset%2C+MA+02726%7CProvidence%2C+RI+02909%7CNashua%2C+NH+03060%7CBedford%2C+NH+03110%7CBraintree%2C+MA+02184%7CBrookline%2C+MA+02445%7CCambridge%2C+MA+02138%7CFranklin%2C+MA+02038%7CHanscom+AFB%2C+MA+01731%7CLexington%2C+MA+02420&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+18:25:41 [INFO] API usage summary - Requests made: 1, Elements processed: 10, Monthly total: 1,704 / 20,000
+18:25:41 [INFO] Range check complete. Saved 8 locations to /home/ad23883/workspace/house_hunt/Data/Processed/towns_within_50mi.csv
+18:25:41 [INFO] Returning 8 addresses within range
+18:26:09 [INFO] Parsing ZIP database: /home/ad23883/workspace/house_hunt/Data/Raw/test-zip_code_database.csv
+18:26:09 [INFO] Loaded 10 active standard ZIPs for MA, RI, NH
+18:26:13 [DEBUG] API Key successfully loaded from /home/ad23883/workspace/house_hunt/Data/google_api_key
+18:26:20 [INFO] Current monthly usage: 1,704
+18:26:37 [INFO] Checking range for 10 locations against 123 Main St. Anytown, MA 00000 (Max: 50 miles)
+18:26:52 [DEBUG] Starting new HTTPS connection (1): maps.googleapis.com:443
+18:26:52 [DEBUG] https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?destinations=244+Wood+St.+Lexington%2C+MA+02421&mode=driving&origins=Somerset%2C+MA+02726%7CProvidence%2C+RI+02909%7CNashua%2C+NH+03060%7CBedford%2C+NH+03110%7CBraintree%2C+MA+02184%7CBrookline%2C+MA+02445%7CCambridge%2C+MA+02138%7CFranklin%2C+MA+02038%7CHanscom+AFB%2C+MA+01731%7CLexington%2C+MA+02420&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+18:27:50 [INFO] API usage summary - Requests made: 1, Elements processed: 10, Monthly total: 1,714 / 20,000
+18:28:00 [INFO] Range check complete. Saved 8 locations to /home/ad23883/workspace/house_hunt/Data/Processed/towns_within_50mi.csv
+18:28:03 [INFO] Returning 8 addresses within range
