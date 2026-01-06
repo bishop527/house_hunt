@@ -10,11 +10,12 @@ import googlemaps
 import pandas as pd
 import logging
 from datetime import datetime, timedelta
+import time
+from tqdm import tqdm  # for progress bar
 from constants import *
 
 # Initialize Logger using constants
 logger = logging.getLogger(__name__)
-
 
 def get_google_api_key(key_loc=KEY_LOC, key_file=KEY_FILE):
     """Fetches the API key from the Data root."""
@@ -27,7 +28,6 @@ def get_google_api_key(key_loc=KEY_LOC, key_file=KEY_FILE):
     except Exception as e:
         logger.error(f"Failed to read API key file: {e}")
         return None
-
 
 
 def get_hours_until_first_time_check():
@@ -351,7 +351,8 @@ def get_zips_within_range(destination, zip_data, max_range):
 
     Args:
         destination (str): Destination address
-        zip_data (pd.DataFrame): DataFrame with Zip, Town, State, Lat, Long cols
+        zip_data (pd.DataFrame): DataFrame with Zip, Town, State,
+                                 Lat, Long columns
         max_range (float): Maximum distance in miles
 
     Returns:
@@ -360,7 +361,6 @@ def get_zips_within_range(destination, zip_data, max_range):
     Raises:
         SystemExit: If API key missing or monthly budget exceeded
     """
-
     # Validate API key before proceeding
     api_key = get_google_api_key()
     if not api_key:
@@ -422,15 +422,20 @@ def get_zips_within_range(destination, zip_data, max_range):
     zips_in_range = []
     results_list = []
     elements_processed = 0  # Tracks billable elements (origins × destinations)
-    requests_made = 0       # Tracks number of API requests made
+    requests_made = 0  # Tracks number of API requests made
 
     logger.info(
         f"Checking range for {len(addresses)} locations against "
         f"{destination} (Max: {max_range} miles)"
     )
 
-    # Process in chunks
-    for i in range(0, len(addresses), CHUNK_SIZE):
+    # Process in chunks with progress bar
+    chunk_indices = list(range(0, len(addresses), CHUNK_SIZE))
+
+    for i in tqdm(chunk_indices,
+                  desc="Processing locations",
+                  unit="chunk",
+                  ncols=80):
         chunk = addresses[i: i + CHUNK_SIZE]
 
         try:
@@ -444,10 +449,48 @@ def get_zips_within_range(destination, zip_data, max_range):
             requests_made += 1
 
             # Validate top-level response status
-            if response.get('status') != 'OK':
+            response_status = response.get('status')
+
+            if response_status == 'OVER_QUERY_LIMIT':
+                logger.warning(
+                    f"Rate limit hit. "
+                    f"Waiting {RATE_LIMIT_WAIT_SECONDS} seconds..."
+                )
+                time.sleep(RATE_LIMIT_WAIT_SECONDS)
+
+                # Retry this chunk once
+                logger.info("Retrying after rate limit...")
+                try:
+                    response = gmaps.distance_matrix(
+                        origins=chunk,
+                        destinations=destination,
+                        mode=MODE,
+                        units=UNITS
+                    )
+                    requests_made += 1
+                    response_status = response.get('status')
+
+                    if response_status != 'OK':
+                        logger.error(
+                            f"Retry failed: {response_status}"
+                        )
+                        elements_processed += len(chunk)
+                        continue
+                except Exception as e:
+                    logger.error(f"Retry failed: {e}")
+                    continue
+
+            elif response_status == 'OVER_DAILY_LIMIT':
+                logger.critical(
+                    f"!!! DAILY API LIMIT EXCEEDED !!!\n"
+                    f"Cannot continue processing. Try again tomorrow."
+                )
+                # Still update usage counter with what we've processed
+                break
+
+            elif response_status != 'OK':
                 logger.error(
-                    f"Google API response error for chunk starting at "
-                    f"index {i}: {response.get('status')}"
+                    f"Google API response error: {response_status}"
                 )
                 # Log the error message if available
                 if 'error_message' in response:
@@ -467,7 +510,9 @@ def get_zips_within_range(destination, zip_data, max_range):
                 if status == 'OK':
                     # Convert meters to miles and round to 2 decimal places
                     dist_miles = round(
-                        element['elements'][0]['distance']['value'] / 1609.34, 2
+                        element['elements'][0]['distance']['value'] /
+                        METERS_PER_MILE,
+                        2
                     )
 
                     if dist_miles <= max_range:
@@ -492,34 +537,25 @@ def get_zips_within_range(destination, zip_data, max_range):
 
         # Specific exception handling
         except googlemaps.exceptions.ApiError as e:
-            logger.error(
-                f"Google API error for chunk starting at index {i}: {e}"
-            )
+            logger.error(f"Google API error: {e}")
             # Count elements even if failed (may still be billed)
             elements_processed += len(chunk)
             continue  # Skip this chunk
         except googlemaps.exceptions.TransportError as e:
-            logger.error(
-                f"Network/transport error for chunk starting at "
-                f"index {i}: {e}"
-            )
+            logger.error(f"Network/transport error: {e}")
             continue  # Skip this chunk, don't count elements
         except googlemaps.exceptions.Timeout as e:
-            logger.error(
-                f"Timeout error for chunk starting at index {i}: {e}"
-            )
+            logger.error(f"Timeout error: {e}")
             continue  # Skip this chunk, don't count elements
         except KeyError as e:
             logger.error(
-                f"Unexpected response structure for chunk starting at "
-                f"index {i}: Missing key {e}"
+                f"Unexpected response structure: Missing key {e}"
             )
             elements_processed += len(chunk)
             continue  # Skip this chunk
         except Exception as e:
             logger.error(
-                f"Unexpected error processing chunk starting at index {i}: "
-                f"{type(e).__name__}: {e}"
+                f"Unexpected error: {type(e).__name__}: {e}"
             )
             continue  # Skip this chunk, don't count elements
 
@@ -562,6 +598,7 @@ def get_zips_within_range(destination, zip_data, max_range):
         f"Returning {len(zips_in_range)} addresses within range"
     )
     return zips_in_range
+
 
 # ------------ Old Functions
 
