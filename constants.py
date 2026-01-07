@@ -29,7 +29,10 @@ for folder in [RAW_DIR, PROCESSED_DIR, RESULTS_DIR]:
 LOG_LEVEL = logging.DEBUG
 US_HOLIDAYS = holidays.country_holidays('US')
 PROXY_ON = False
+<<<<<<< HEAD
 PROXY = 'http://localhost:8080'
+=======
+>>>>>>> 89f1c701811729e9c89c5f336ee5bd383d91d7db
 
 # 5. Data File Paths (Source of Truth)
 ZIP_DATA_FILE = os.path.join(RAW_DIR, 'test-zip_code_database.csv')
@@ -41,6 +44,7 @@ GCP_PROJECT_ID = "house-hunt-project"
 GCP_MONITOR_KEY = os.path.join(DATA_DIR, "monitor-key.json")
 CHUNK_SIZE = 25
 
+<<<<<<< HEAD
 # API Rate Limiting
 RATE_LIMIT_WAIT_SECONDS = 2  # Wait time when hitting rate limits
 MAX_API_RETRIES = 3           # Maximum retry attempts for failed requests
@@ -51,6 +55,10 @@ METERS_PER_MILE = 1609.34     # Conversion factor for distance calculations
 # 7. Commute Specific Values
 WORK_ADDR = "123 Main St. Anytown, MA 00000"
 TARGET_STATES = ['MA', 'RI', 'NH']  # Add this line
+=======
+# 7. Commute Specific Values
+WORK_ADDR = "123 Main St. Anytown, MA 00000"
+>>>>>>> 89f1c701811729e9c89c5f336ee5bd383d91d7db
 MORNING_TIMES = ['07:00']
 AFTERNOON_TIMES = ['17:00']
 TRAFFIC_MODEL = 'best_guess'
@@ -64,7 +72,11 @@ MAX_RANGE = 50
 # 8. Processed & Results Paths
 HOUSING_LOOKUP_FILE = os.path.join(PROCESSED_DIR, "housing_lookup.csv")
 HISTORICAL_STATS_FILE = os.path.join(RESULTS_DIR, "historical_commute_stats.csv")
+<<<<<<< HEAD
 # API_USAGE_TRACKING_FILE = os.path.join(RESULTS_DIR, "usage_tracking.log")
+=======
+API_USAGE_TRACKING_FILE = os.path.join(RESULTS_DIR, "usage_tracking.log")
+>>>>>>> 89f1c701811729e9c89c5f336ee5bd383d91d7db
 API_MONTHLY_COUNTER = os.path.join(RESULTS_DIR, "monthly_API_usage_counter.txt")
 APP_LOG_FILE = os.path.join(RESULTS_DIR, "app.log")
 

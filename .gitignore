@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /house_hunting-2015.xlsx
 /.DS_Store
 /.project
@@ -12,3 +13,20 @@
 /.vscode
 /*.pyc
 __pycache__
+=======
+/house_hunting-2015.xlsx
+/.DS_Store
+/.project
+/.pydevproject
+/house_hunting-School_Data-2015.xlsx
+/house_hunting-Town_Data-2015.xlsx
+/Master-Commute_Data-2015.xlsx
+/Master-School_Data-2015.xlsx
+/Master-Town_Data-2015.xlsx
+/Master_Scores-2015.xlsx
+/.idea
+/.vscode
+activate
+.vscode
+*.pyc
+>>>>>>> 89f1c701811729e9c89c5f336ee5bd383d91d7db
