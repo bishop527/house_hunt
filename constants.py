@@ -32,7 +32,7 @@ PROXY_ON = False
 PROXY = 'http://localhost:8080'
 
 # 5. Data File Paths (Source of Truth)
-ZIP_DATA_FILE = os.path.join(RAW_DIR, 'test-zip_code_database.csv')
+ZIP_DATA_FILE = os.path.join(RAW_DIR, 'sample-zip_code_database.csv')
 
 # 6. Google API Values
 KEY_LOC = DATA_DIR
@@ -42,18 +42,19 @@ GCP_MONITOR_KEY = os.path.join(DATA_DIR, "monitor-key.json")
 CHUNK_SIZE = 25
 
 # API Rate Limiting
-RATE_LIMIT_WAIT_SECONDS = 2  # Wait time when hitting rate limits
-MAX_API_RETRIES = 3           # Maximum retry attempts for failed requests
+RATE_LIMIT_WAIT_SECONDS = 2     # Wait time when hitting rate limits
+MAX_API_RETRIES = 3             # Maximum retry attempts for failed requests
+API_MONTHLY_LIMIT = 20000       # Free tier monthly limit
 
 # Unit Conversions
-METERS_PER_MILE = 1609.34     # Conversion factor for distance calculations
+METERS_PER_MILE = 1609.34
 
 # 7. Commute Specific Values
 WORK_ADDR = "123 Main St. Anytown, MA 00000"
-TARGET_STATES = ['MA', 'RI', 'NH']  # Add this line
+TARGET_STATES = ['MA', 'RI', 'NH']
 
 MORNING_TIMES = ['07:00']
-AFTERNOON_TIMES = ['17:00']
+AFTERNOON_TIMES = ['18:36']
 TRAFFIC_MODEL = 'best_guess'
 AVOID_TOLLS = ''
 MODE = 'driving'
@@ -64,19 +65,12 @@ MAX_RANGE = 50
 
 # 8. Processed & Results Paths
 HOUSING_LOOKUP_FILE = os.path.join(PROCESSED_DIR, "housing_lookup.csv")
-HISTORICAL_STATS_FILE = os.path.join(RESULTS_DIR, "historical_commute_stats.csv")
-# API_USAGE_TRACKING_FILE = os.path.join(RESULTS_DIR, "usage_tracking.log")
+COMMUTE_STATS_FILE = os.path.join(RESULTS_DIR, "commute_stats.csv")
 API_MONTHLY_COUNTER = os.path.join(RESULTS_DIR, "monthly_API_usage_counter.txt")
 APP_LOG_FILE = os.path.join(RESULTS_DIR, "app.log")
 
 # ---- Older constants ----
 
-# Location of different Data directories
-# BASE_DIR = os.path.join(os.sep, "Users", "aedwa", "workspace", "house_hunt")
-# HOUSE_DATA = os.path.join(BASE_DIR, DATA_DIR, 'House')
-# SCHOOL_DATA = os.path.join(BASE_DIR, DATA_DIR, 'School')
-# COMMUTE_DATA_DIR = os.path.join(BASE_DIR, DATA_DIR, 'Commute')
-# TOWN_DATA = os.path.join(BASE_DIR, DATA_DIR, 'town')
 
 # MAX_SCORE = 10
 # MIN_SCORE = -10
