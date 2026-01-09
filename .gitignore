@@ -13,7 +13,6 @@
 /.vscode
 /*.pyc
 __pycache__
-=======
 /house_hunting-2015.xlsx
 /.DS_Store
 /.project
@@ -29,4 +28,4 @@ __pycache__
 activate
 .vscode
 *.pyc
->>>>>>> 89f1c701811729e9c89c5f336ee5bd383d91d7db
+/Results
