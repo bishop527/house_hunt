@@ -1,0 +1,20 @@
+# Testing dependencies for House Hunt project
+
+# Core testing framework
+pytest>=7.4.0
+pytest-cov>=4.1.0        # Coverage reporting
+pytest-mock>=3.11.1      # Extended mocking support
+
+# Project dependencies (for testing)
+googlemaps>=4.10.0
+pandas>=2.0.0
+tqdm>=4.65.0
+
+# Code quality tools
+flake8>=6.0.0           # Linting
+black>=23.3.0           # Code formatting
+mypy>=1.4.0             # Type checking
+
+# Optional: for CI/CD integration
+pytest-xdist>=3.3.0     # Parallel test execution
+pytest-timeout>=2.1.0   # Test timeout handling
