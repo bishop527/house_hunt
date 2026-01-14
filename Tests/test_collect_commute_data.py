@@ -2,7 +2,7 @@
 Unit tests for collect_commute_data.py
 
 Tests commute data collection logic with mocked API calls.
-Run with: python -m pytest test_collect_commute_data.py -v
+Run with: python -m pytest Tests/Commute/test_collect_commute_data.py -v
 """
 import os
 import sys
@@ -11,10 +11,18 @@ import pandas as pd
 from unittest.mock import Mock, patch, MagicMock
 from datetime import datetime
 
-# Add parent directory to path
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# Ensure project root is in path
+# This file is at: house_hunt/Tests/Commute/test_collect_commute_data.py
+# Project root is: house_hunt/
+current_file = os.path.abspath(__file__)
+tests_commute_dir = os.path.dirname(current_file)
+tests_dir = os.path.dirname(tests_commute_dir)
+project_root = os.path.dirname(tests_dir)
 
-from Commute.collect_commute_data import (
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
+
+from collect_commute_data import (
     determine_direction,
     fetch_commute_times,
     process_element,
@@ -46,7 +54,7 @@ def mock_api_response_morning():
                     {
                         'status': 'OK',
                         'distance': {'value': 8046},  # meters
-                        'duration': {'value': 600},  # seconds
+                        'duration': {'value': 600},   # seconds
                         'duration_in_traffic': {'value': 780}  # 13 min
                     }
                 ]
@@ -316,7 +324,7 @@ def test_load_historical_data_success(tmp_path, mock_historical_csv,
     stats_file.write_text(mock_historical_csv)
 
     monkeypatch.setattr('collect_commute_data.COMMUTE_STATS_FILE',
-                        str(stats_file))
+                       str(stats_file))
 
     with patch('collect_commute_data.load_csv_with_zip') as mock_load:
         mock_load.return_value = pd.read_csv(stats_file, dtype={'Zip': str})
@@ -329,7 +337,7 @@ def test_load_historical_data_success(tmp_path, mock_historical_csv,
 def test_load_historical_data_missing_file(tmp_path, monkeypatch):
     """Test handling of missing historical data file"""
     monkeypatch.setattr('collect_commute_data.COMMUTE_STATS_FILE',
-                        str(tmp_path / "nonexistent.csv"))
+                       str(tmp_path / "nonexistent.csv"))
 
     with patch('collect_commute_data.load_csv_with_zip') as mock_load:
         mock_load.return_value = pd.DataFrame()
@@ -345,7 +353,7 @@ def test_update_statistics_new_location(tmp_path, monkeypatch):
     stats_file = tmp_path / "commute_stats.csv"
 
     monkeypatch.setattr('collect_commute_data.COMMUTE_STATS_FILE',
-                        str(stats_file))
+                       str(stats_file))
 
     results = [
         {
@@ -380,7 +388,7 @@ def test_update_statistics_existing_location(tmp_path, mock_historical_csv,
     stats_file.write_text(mock_historical_csv)
 
     monkeypatch.setattr('collect_commute_data.COMMUTE_STATS_FILE',
-                        str(stats_file))
+                       str(stats_file))
 
     results = [
         {
@@ -417,7 +425,7 @@ def test_update_statistics_failed_results(tmp_path, monkeypatch):
     stats_file = tmp_path / "commute_stats.csv"
 
     monkeypatch.setattr('collect_commute_data.COMMUTE_STATS_FILE',
-                        str(stats_file))
+                       str(stats_file))
 
     results = [
         {
@@ -450,7 +458,7 @@ def test_update_statistics_address_parsing(tmp_path, monkeypatch):
     stats_file = tmp_path / "commute_stats.csv"
 
     monkeypatch.setattr('collect_commute_data.COMMUTE_STATS_FILE',
-                        str(stats_file))
+                       str(stats_file))
 
     results = [
         {
@@ -481,7 +489,7 @@ def test_update_statistics_permission_error(tmp_path, monkeypatch):
     stats_file.chmod(0o444)  # Read-only
 
     monkeypatch.setattr('collect_commute_data.COMMUTE_STATS_FILE',
-                        str(stats_file))
+                       str(stats_file))
 
     results = [
         {

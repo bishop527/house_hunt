@@ -2,7 +2,7 @@
 Unit tests for utils.py
 
 Tests core utility functions with mocked API calls to avoid costs.
-Run with: python -m pytest test_utils.py -v
+Run with: python -m pytest Tests/test_utils.py -v
 """
 import os
 import sys
@@ -11,9 +11,6 @@ import pandas as pd
 from unittest.mock import Mock, patch, mock_open, MagicMock
 from datetime import datetime, timedelta
 import googlemaps.exceptions
-
-# Add parent directory to path for imports
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from utils import (
     get_google_api_key,
@@ -171,8 +168,7 @@ def test_get_zip_data_success(mock_zip_csv, tmp_path, monkeypatch):
 
 def test_get_zip_data_missing_file(tmp_path, monkeypatch):
     """Test handling of missing ZIP database file"""
-    monkeypatch.setattr('utils.ZIP_DATA_FILE',
-                        str(tmp_path / "nonexistent.csv"))
+    monkeypatch.setattr('utils.ZIP_DATA_FILE', str(tmp_path / "nonexistent.csv"))
 
     with pytest.raises(SystemExit) as exc_info:
         get_zip_data()
@@ -180,8 +176,7 @@ def test_get_zip_data_missing_file(tmp_path, monkeypatch):
     assert exc_info.value.code == 1
 
 
-def test_get_zip_data_filters_decommissioned(mock_zip_csv, tmp_path,
-                                             monkeypatch):
+def test_get_zip_data_filters_decommissioned(mock_zip_csv, tmp_path, monkeypatch):
     """Test that decommissioned ZIPs are filtered out"""
     csv_file = tmp_path / "test_zip.csv"
     csv_file.write_text(mock_zip_csv)
@@ -257,7 +252,7 @@ def test_check_api_budget_at_limit(tmp_path, monkeypatch):
 def test_check_api_budget_missing_file(tmp_path, monkeypatch):
     """Test budget check with no existing usage file"""
     monkeypatch.setattr('utils.API_MONTHLY_COUNTER',
-                        str(tmp_path / "nonexistent.txt"))
+                       str(tmp_path / "nonexistent.txt"))
     monkeypatch.setattr('utils.API_MONTHLY_LIMIT', 20000)
 
     with patch('utils.datetime') as mock_dt:
@@ -387,7 +382,7 @@ def test_get_zips_within_range_success(mock_client, tmp_path, monkeypatch,
 
 @patch('utils.googlemaps.Client')
 def test_get_zips_within_range_filters_no_coords(mock_client, tmp_path,
-                                                 monkeypatch):
+                                                  monkeypatch):
     """Test that ZIPs without coordinates are excluded"""
     counter_file = tmp_path / "usage_counter.txt"
     counter_file.write_text("2026-01,0")

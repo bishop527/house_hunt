@@ -17,15 +17,20 @@ pip install -r requirements-test.txt
 pytest -v --cov=. --cov-report=html
 
 # Run specific test file
-pytest test_utils.py -v
+pytest tests/test_utils.py -v
 ```
 
 ## Test Structure
 
 ```
 house_hunt/
-├── test_utils.py                    # Tests for utils.py
-├── test_collect_commute_data.py     # Tests for collect_commute_data.py
+├── tests/
+│   ├── __init__.py                  # Makes tests a package
+│   ├── test_utils.py                # Tests for utils.py
+│   └── test_collect_commute_data.py # Tests for collect_commute_data.py
+├── utils.py
+├── collect_commute_data.py
+├── constants.py
 ├── pytest.ini                       # Pytest configuration
 ├── requirements-test.txt            # Test dependencies
 └── run_tests.sh                     # Test runner script
@@ -33,8 +38,8 @@ house_hunt/
 
 ## Test Files
 
-### `test_utils.py`
-Tests core utility functions:
+### `Tests/test_utils.py`
+Tests for core utility functions in utils.py
 - ✅ **API Key Management** - File reading, error handling
 - ✅ **Time Calculations** - Schedule timing logic
 - ✅ **ZIP Data Loading** - CSV parsing, filtering, validation
@@ -45,8 +50,8 @@ Tests core utility functions:
 **Test Count:** 20+ tests  
 **Coverage Target:** 85%+
 
-### `test_collect_commute_data.py`
-Tests commute data collection:
+### `Tests/Commute/test_collect_commute_data.py`
+Tests for commute data collection in collect_commute_data.py
 - ✅ **Direction Logic** - Morning/afternoon detection
 - ✅ **API Fetching** - Chunking, error handling, retries
 - ✅ **Result Processing** - Status handling, data extraction
@@ -82,10 +87,10 @@ pytest -m "not slow"
 ### Individual Test Files
 ```bash
 # Test utils only
-pytest test_utils.py -v
+pytest tests/test_utils.py -v
 
 # Test commute collection only
-pytest test_collect_commute_data.py -v
+pytest tests/test_collect_commute_data.py -v
 ```
 
 ### With Test Runner Script
