@@ -15,4 +15,4 @@ Run with coverage:
 """
 
 __version__ = "1.0.0"
-__all__ = ["test_utils", "Commute"]
+__all__ = ["test_utils", "test_collect_commute_data"]

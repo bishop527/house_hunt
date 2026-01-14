@@ -11,18 +11,7 @@ import pandas as pd
 from unittest.mock import Mock, patch, MagicMock
 from datetime import datetime
 
-# Ensure project root is in path
-# This file is at: house_hunt/Tests/Commute/test_collect_commute_data.py
-# Project root is: house_hunt/
-current_file = os.path.abspath(__file__)
-tests_commute_dir = os.path.dirname(current_file)
-tests_dir = os.path.dirname(tests_commute_dir)
-project_root = os.path.dirname(tests_dir)
-
-if project_root not in sys.path:
-    sys.path.insert(0, project_root)
-
-from collect_commute_data import (
+from Commute.collect_commute_data import (
     determine_direction,
     fetch_commute_times,
     process_element,
@@ -90,7 +79,7 @@ Bedford,MA,01730,10.0,5,2026-01-09,18.0,25.0,21.0"""
 
 # --- Test determine_direction ---
 
-@patch('collect_commute_data.datetime')
+@patch('Commute.collect_commute_data.datetime')
 def test_determine_direction_morning(mock_datetime):
     """Test morning direction detection (before noon)"""
     mock_datetime.now.return_value = datetime(2026, 1, 12, 8, 30, 0)
@@ -100,7 +89,7 @@ def test_determine_direction_morning(mock_datetime):
     assert direction == 'morning'
 
 
-@patch('collect_commute_data.datetime')
+@patch('Commute.collect_commute_data.datetime')
 def test_determine_direction_afternoon(mock_datetime):
     """Test afternoon direction detection (after noon)"""
     mock_datetime.now.return_value = datetime(2026, 1, 12, 17, 30, 0)
@@ -110,7 +99,7 @@ def test_determine_direction_afternoon(mock_datetime):
     assert direction == 'afternoon'
 
 
-@patch('collect_commute_data.datetime')
+@patch('Commute.collect_commute_data.datetime')
 def test_determine_direction_exactly_noon(mock_datetime):
     """Test direction at exactly noon"""
     mock_datetime.now.return_value = datetime(2026, 1, 12, 12, 0, 0)
@@ -208,7 +197,7 @@ def test_process_element_no_traffic_data():
 
 # --- Test fetch_commute_times ---
 
-@patch('collect_commute_data.googlemaps.Client')
+@patch('Commute.collect_commute_data.googlemaps.Client')
 def test_fetch_commute_times_morning(mock_client, mock_addresses,
                                      mock_api_response_morning, monkeypatch):
     """Test fetching morning commute times"""
@@ -217,10 +206,10 @@ def test_fetch_commute_times_morning(mock_client, mock_addresses,
     mock_instance.distance_matrix.return_value = mock_api_response_morning
     mock_client.return_value = mock_instance
 
-    monkeypatch.setattr('collect_commute_data.CHUNK_SIZE', 25)
-    monkeypatch.setattr('collect_commute_data.PROXY_ON', False)
+    monkeypatch.setattr('Commute.collect_commute_data.CHUNK_SIZE', 25)
+    monkeypatch.setattr('Commute.collect_commute_data.PROXY_ON', False)
 
-    with patch('collect_commute_data.get_google_api_key',
+    with patch('Commute.collect_commute_data.get_google_api_key',
                return_value='test_key'):
         results, elements = fetch_commute_times(mock_addresses, 'morning')
 
@@ -237,7 +226,7 @@ def test_fetch_commute_times_morning(mock_client, mock_addresses,
     assert 'Wood St' in call_args[1]['destinations']
 
 
-@patch('collect_commute_data.googlemaps.Client')
+@patch('Commute.collect_commute_data.googlemaps.Client')
 def test_fetch_commute_times_afternoon(mock_client, mock_addresses,
                                        mock_api_response_morning, monkeypatch):
     """Test fetching afternoon commute times"""
@@ -245,10 +234,10 @@ def test_fetch_commute_times_afternoon(mock_client, mock_addresses,
     mock_instance.distance_matrix.return_value = mock_api_response_morning
     mock_client.return_value = mock_instance
 
-    monkeypatch.setattr('collect_commute_data.CHUNK_SIZE', 25)
-    monkeypatch.setattr('collect_commute_data.PROXY_ON', False)
+    monkeypatch.setattr('Commute.collect_commute_data.CHUNK_SIZE', 25)
+    monkeypatch.setattr('Commute.collect_commute_data.PROXY_ON', False)
 
-    with patch('collect_commute_data.get_google_api_key',
+    with patch('Commute.collect_commute_data.get_google_api_key',
                return_value='test_key'):
         results, elements = fetch_commute_times(mock_addresses, 'afternoon')
 
@@ -258,7 +247,7 @@ def test_fetch_commute_times_afternoon(mock_client, mock_addresses,
     assert call_args[1]['destinations'] == mock_addresses
 
 
-@patch('collect_commute_data.googlemaps.Client')
+@patch('Commute.collect_commute_data.googlemaps.Client')
 def test_fetch_commute_times_api_error(mock_client, mock_addresses,
                                        monkeypatch):
     """Test handling of API errors during fetch"""
@@ -269,10 +258,10 @@ def test_fetch_commute_times_api_error(mock_client, mock_addresses,
         googlemaps.exceptions.ApiError("Test error")
     mock_client.return_value = mock_instance
 
-    monkeypatch.setattr('collect_commute_data.CHUNK_SIZE', 25)
-    monkeypatch.setattr('collect_commute_data.PROXY_ON', False)
+    monkeypatch.setattr('Commute.collect_commute_data.CHUNK_SIZE', 25)
+    monkeypatch.setattr('Commute.collect_commute_data.PROXY_ON', False)
 
-    with patch('collect_commute_data.get_google_api_key',
+    with patch('Commute.collect_commute_data.get_google_api_key',
                return_value='test_key'):
         results, elements = fetch_commute_times(mock_addresses, 'morning')
 
@@ -281,7 +270,7 @@ def test_fetch_commute_times_api_error(mock_client, mock_addresses,
     assert len(results) == 0
 
 
-@patch('collect_commute_data.googlemaps.Client')
+@patch('Commute.collect_commute_data.googlemaps.Client')
 def test_fetch_commute_times_chunking(mock_client, monkeypatch):
     """Test that large address lists are chunked properly"""
     # Create 30 addresses (should be split into 2 chunks of 25 and 5)
@@ -297,10 +286,10 @@ def test_fetch_commute_times_chunking(mock_client, monkeypatch):
     }
     mock_client.return_value = mock_instance
 
-    monkeypatch.setattr('collect_commute_data.CHUNK_SIZE', 25)
-    monkeypatch.setattr('collect_commute_data.PROXY_ON', False)
+    monkeypatch.setattr('Commute.collect_commute_data.CHUNK_SIZE', 25)
+    monkeypatch.setattr('Commute.collect_commute_data.PROXY_ON', False)
 
-    with patch('collect_commute_data.get_google_api_key',
+    with patch('Commute.collect_commute_data.get_google_api_key',
                return_value='test_key'):
         results, elements = fetch_commute_times(addresses, 'morning')
 
@@ -310,7 +299,7 @@ def test_fetch_commute_times_chunking(mock_client, monkeypatch):
 
 def test_fetch_commute_times_no_api_key():
     """Test handling of missing API key"""
-    with patch('collect_commute_data.get_google_api_key', return_value=None):
+    with patch('Commute.collect_commute_data.get_google_api_key', return_value=None):
         with pytest.raises(SystemExit):
             fetch_commute_times(["Lexington, MA 02421"], 'morning')
 
@@ -323,10 +312,10 @@ def test_load_historical_data_success(tmp_path, mock_historical_csv,
     stats_file = tmp_path / "commute_stats.csv"
     stats_file.write_text(mock_historical_csv)
 
-    monkeypatch.setattr('collect_commute_data.COMMUTE_STATS_FILE',
+    monkeypatch.setattr('Commute.collect_commute_data.COMMUTE_STATS_FILE',
                        str(stats_file))
 
-    with patch('collect_commute_data.load_csv_with_zip') as mock_load:
+    with patch('Commute.collect_commute_data.load_csv_with_zip') as mock_load:
         mock_load.return_value = pd.read_csv(stats_file, dtype={'Zip': str})
         df = load_historical_data()
 
@@ -336,10 +325,10 @@ def test_load_historical_data_success(tmp_path, mock_historical_csv,
 
 def test_load_historical_data_missing_file(tmp_path, monkeypatch):
     """Test handling of missing historical data file"""
-    monkeypatch.setattr('collect_commute_data.COMMUTE_STATS_FILE',
+    monkeypatch.setattr('Commute.collect_commute_data.COMMUTE_STATS_FILE',
                        str(tmp_path / "nonexistent.csv"))
 
-    with patch('collect_commute_data.load_csv_with_zip') as mock_load:
+    with patch('Commute.collect_commute_data.load_csv_with_zip') as mock_load:
         mock_load.return_value = pd.DataFrame()
         df = load_historical_data()
 
@@ -352,7 +341,7 @@ def test_update_statistics_new_location(tmp_path, monkeypatch):
     """Test updating statistics with new location"""
     stats_file = tmp_path / "commute_stats.csv"
 
-    monkeypatch.setattr('collect_commute_data.COMMUTE_STATS_FILE',
+    monkeypatch.setattr('Commute.collect_commute_data.COMMUTE_STATS_FILE',
                        str(stats_file))
 
     results = [
@@ -364,10 +353,10 @@ def test_update_statistics_new_location(tmp_path, monkeypatch):
         }
     ]
 
-    with patch('collect_commute_data.load_historical_data') as mock_load:
+    with patch('Commute.collect_commute_data.load_historical_data') as mock_load:
         mock_load.return_value = pd.DataFrame()
 
-        with patch('collect_commute_data.datetime') as mock_dt:
+        with patch('Commute.collect_commute_data.datetime') as mock_dt:
             mock_dt.now.return_value = datetime(2026, 1, 12)
             update_statistics(results)
 
@@ -387,7 +376,7 @@ def test_update_statistics_existing_location(tmp_path, mock_historical_csv,
     stats_file = tmp_path / "commute_stats.csv"
     stats_file.write_text(mock_historical_csv)
 
-    monkeypatch.setattr('collect_commute_data.COMMUTE_STATS_FILE',
+    monkeypatch.setattr('Commute.collect_commute_data.COMMUTE_STATS_FILE',
                        str(stats_file))
 
     results = [
@@ -399,11 +388,11 @@ def test_update_statistics_existing_location(tmp_path, mock_historical_csv,
         }
     ]
 
-    with patch('collect_commute_data.load_historical_data') as mock_load:
+    with patch('Commute.collect_commute_data.load_historical_data') as mock_load:
         hist_df = pd.read_csv(stats_file, dtype={'Zip': str})
         mock_load.return_value = hist_df
 
-        with patch('collect_commute_data.datetime') as mock_dt:
+        with patch('Commute.collect_commute_data.datetime') as mock_dt:
             mock_dt.now.return_value = datetime(2026, 1, 12)
             update_statistics(results)
 
@@ -424,7 +413,7 @@ def test_update_statistics_failed_results(tmp_path, monkeypatch):
     """Test that failed API results are not processed"""
     stats_file = tmp_path / "commute_stats.csv"
 
-    monkeypatch.setattr('collect_commute_data.COMMUTE_STATS_FILE',
+    monkeypatch.setattr('Commute.collect_commute_data.COMMUTE_STATS_FILE',
                        str(stats_file))
 
     results = [
@@ -436,10 +425,10 @@ def test_update_statistics_failed_results(tmp_path, monkeypatch):
         }
     ]
 
-    with patch('collect_commute_data.load_historical_data') as mock_load:
+    with patch('Commute.collect_commute_data.load_historical_data') as mock_load:
         mock_load.return_value = pd.DataFrame()
 
-        with patch('collect_commute_data.datetime') as mock_dt:
+        with patch('Commute.collect_commute_data.datetime') as mock_dt:
             mock_dt.now.return_value = datetime(2026, 1, 12)
             update_statistics(results)
 
@@ -457,7 +446,7 @@ def test_update_statistics_address_parsing(tmp_path, monkeypatch):
     """Test proper parsing of address components"""
     stats_file = tmp_path / "commute_stats.csv"
 
-    monkeypatch.setattr('collect_commute_data.COMMUTE_STATS_FILE',
+    monkeypatch.setattr('Commute.collect_commute_data.COMMUTE_STATS_FILE',
                        str(stats_file))
 
     results = [
@@ -469,10 +458,10 @@ def test_update_statistics_address_parsing(tmp_path, monkeypatch):
         }
     ]
 
-    with patch('collect_commute_data.load_historical_data') as mock_load:
+    with patch('Commute.collect_commute_data.load_historical_data') as mock_load:
         mock_load.return_value = pd.DataFrame()
 
-        with patch('collect_commute_data.datetime') as mock_dt:
+        with patch('Commute.collect_commute_data.datetime') as mock_dt:
             mock_dt.now.return_value = datetime(2026, 1, 12)
             update_statistics(results)
 
@@ -488,7 +477,7 @@ def test_update_statistics_permission_error(tmp_path, monkeypatch):
     stats_file.write_text("dummy")
     stats_file.chmod(0o444)  # Read-only
 
-    monkeypatch.setattr('collect_commute_data.COMMUTE_STATS_FILE',
+    monkeypatch.setattr('Commute.collect_commute_data.COMMUTE_STATS_FILE',
                        str(stats_file))
 
     results = [
@@ -500,10 +489,10 @@ def test_update_statistics_permission_error(tmp_path, monkeypatch):
         }
     ]
 
-    with patch('collect_commute_data.load_historical_data') as mock_load:
+    with patch('Commute.collect_commute_data.load_historical_data') as mock_load:
         mock_load.return_value = pd.DataFrame()
 
-        with patch('collect_commute_data.datetime') as mock_dt:
+        with patch('Commute.collect_commute_data.datetime') as mock_dt:
             mock_dt.now.return_value = datetime(2026, 1, 12)
 
             with pytest.raises(PermissionError):
