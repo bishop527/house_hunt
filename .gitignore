@@ -1,13 +1,40 @@
-__pycache__
-*.xlsx
-.project
-.pydevproject
-.idea
-.vscode
-activate
-*.pyc
-Archive/
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Testing & Coverage
 .coverage
 .coverage.*
 htmlcov/
 .pytest_cache/
+*.cover
+.hypothesis/
+
+# Virtual Environments
+venv/
+env/
+ENV/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Data files (keep structure, ignore data)
+Data/Raw/*.csv
+Data/Processed/*.csv
+Data/Results/*.csv
+Data/Results/*.log
+Data/Results/*.txt
+!Data/Raw/sample-zip_code_database.csv
+
+# API Keys
+google_api_key
+monitor-key.json
+
+activate
+Archive/
