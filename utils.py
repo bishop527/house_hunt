@@ -312,16 +312,21 @@ def get_zip_data(states=None, include_county=False):
     return zip_data.reset_index(drop=True)
 
 
-def get_zips_within_range(destination, zip_data, max_range):
+def get_zips_within_range(destination, zip_data, max_range,
+                          force_refresh=False):
     """
     Interrogates Google Maps API and returns list of zip codes within
     specified range of destination.
+
+    Results are cached to avoid repeated API calls. Delete the cache file
+    or use force_refresh=True to regenerate.
 
     Args:
         destination (str): Destination address
         zip_data (pd.DataFrame): DataFrame with Zip, Town, State,
                                  Lat, Long columns
         max_range (float): Maximum distance in miles
+        force_refresh (bool): If True, ignore cache and fetch fresh data
 
     Returns:
         list: List of full addresses (Town, State Zip) within range
@@ -329,6 +334,26 @@ def get_zips_within_range(destination, zip_data, max_range):
     Raises:
         SystemExit: If API key missing or monthly budget exceeded
     """
+    # Cache file path
+    cache_file = os.path.join(
+        PROCESSED_DIR,
+        f"towns_within_{max_range}mi.csv"
+    )
+
+    # Check for cached results
+    if os.path.exists(cache_file) and not force_refresh:
+        logger.info(f"Loading cached results from {cache_file}")
+        try:
+            cached_df = pd.read_csv(cache_file)
+            cached_addresses = cached_df['Full_Address'].tolist()
+            logger.info(
+                f"Loaded {len(cached_addresses)} cached addresses "
+                f"(range: {max_range}mi)"
+            )
+            return cached_addresses
+        except Exception as e:
+            logger.warning(f"Failed to read cache file: {e}. Fetching fresh.")
+
     # Validate API key before proceeding
     api_key = get_google_api_key()
     if not api_key:
@@ -351,24 +376,13 @@ def get_zips_within_range(destination, zip_data, max_range):
     else:
         gmaps = googlemaps.Client(key=api_key)
 
-    # Filter out zip codes without valid coordinates
-    valid_zips = zip_data[
-        zip_data['Lat'].notna() & zip_data['Long'].notna()
-    ].copy()
-
-    excluded_count = len(zip_data) - len(valid_zips)
-    if excluded_count > 0:
-        logger.info(
-            f"Excluded {excluded_count} zip codes without valid coordinates"
-        )
-
     addresses = [
-        f"{r.Town}, {r.State} {r.Zip}" for r in valid_zips.itertuples()
+        f"{r.Town}, {r.State} {r.Zip}" for r in zip_data.itertuples()
     ]
     zips_in_range = []
     results_list = []
-    elements_processed = 0  # Tracks billable elements (origins × destinations)
-    requests_made = 0       # Tracks number of API requests made
+    elements_processed = 0
+    requests_made = 0
 
     logger.info(
         f"Checking range for {len(addresses)} locations against "
@@ -431,21 +445,18 @@ def get_zips_within_range(destination, zip_data, max_range):
                     f"!!! DAILY API LIMIT EXCEEDED !!!\n"
                     f"Cannot continue processing. Try again tomorrow."
                 )
-                # Still update usage counter with what we've processed
                 break
 
             elif response_status != 'OK':
                 logger.error(
                     f"Google API response error: {response_status}"
                 )
-                # Log the error message if available
                 if 'error_message' in response:
                     logger.error(
                         f"Error message: {response['error_message']}"
                     )
-                # Count elements even if request failed (still billed)
                 elements_processed += len(chunk)
-                continue  # Skip this chunk but continue with others
+                continue
 
             elements_processed += len(chunk)
 
@@ -454,7 +465,6 @@ def get_zips_within_range(destination, zip_data, max_range):
                 status = element['elements'][0]['status']
 
                 if status == 'OK':
-                    # Convert meters to miles and round to 2 decimal places
                     dist_miles = round(
                         element['elements'][0]['distance']['value'] /
                         METERS_PER_MILE,
@@ -481,46 +491,50 @@ def get_zips_within_range(destination, zip_data, max_range):
                         f"{status}"
                     )
 
-        # Specific exception handling
         except googlemaps.exceptions.ApiError as e:
             logger.error(f"Google API error: {e}")
-            # Count elements even if failed (may still be billed)
             elements_processed += len(chunk)
-            continue  # Skip this chunk
+            continue
         except googlemaps.exceptions.TransportError as e:
             logger.error(f"Network/transport error: {e}")
-            continue  # Skip this chunk, don't count elements
+            continue
         except googlemaps.exceptions.Timeout as e:
             logger.error(f"Timeout error: {e}")
-            continue  # Skip this chunk, don't count elements
+            continue
         except KeyError as e:
             logger.error(
                 f"Unexpected response structure: Missing key {e}"
             )
             elements_processed += len(chunk)
-            continue  # Skip this chunk
+            continue
         except Exception as e:
             logger.error(
                 f"Unexpected error: {type(e).__name__}: {e}"
             )
-            continue  # Skip this chunk, don't count elements
+            continue
 
-    # Update usage tracking with actual elements processed
-    new_total_usage = update_api_usage(elements_processed)
+    # Update usage tracking
+    new_total_usage = current_usage + elements_processed
+    try:
+        month_str = datetime.now().strftime('%Y-%m')
+        with open(API_MONTHLY_COUNTER, "w") as f:
+            f.write(f"{month_str},{new_total_usage}")
+        logger.info(
+            f"API usage summary - Requests made: {requests_made}, "
+            f"Elements processed: {elements_processed}, "
+            f"Monthly total: {new_total_usage:,} / 20,000"
+        )
+    except IOError as e:
+        logger.error(f"Failed to update usage tracking file: {e}")
 
-    # Save results if any were found
+    # Save results CSV (serves as cache)
     if results_list:
         output_df = pd.DataFrame(results_list)
-        output_path = os.path.join(
-            PROCESSED_DIR,
-            f"towns_within_{max_range}mi.csv"
-        )
 
         try:
-            output_df.to_csv(output_path, index=False)
+            output_df.to_csv(cache_file, index=False)
             logger.info(
-                f"Range check complete. Saved {len(results_list)} "
-                f"locations to {output_path}"
+                f"Saved {len(results_list)} locations to {cache_file}"
             )
         except IOError as e:
             logger.error(f"Failed to save results to CSV: {e}")
@@ -529,7 +543,6 @@ def get_zips_within_range(destination, zip_data, max_range):
             f"No locations found within {max_range} miles of {destination}"
         )
 
-    # Return list of addresses within range
     logger.info(
         f"Returning {len(zips_in_range)} addresses within range"
     )
