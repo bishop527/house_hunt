@@ -33,6 +33,7 @@ PROXY = 'http://localhost:8080'
 
 # 5. Data File Paths (Source of Truth)
 ZIP_DATA_FILE = os.path.join(RAW_DIR, 'zip_code_database.csv')
+# ZIP_DATA_FILE = os.path.join(RAW_DIR, 'sample-zip_code_database.csv')
 
 # 6. Google API Values
 KEY_LOC = DATA_DIR
