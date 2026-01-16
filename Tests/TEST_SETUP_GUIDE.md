@@ -22,6 +22,8 @@ Your structure should look like:
 ```
 house_hunt/
 ├── Tests/                      # Test directory
+│   ├── .coverage              # Coverage data (generated)
+│   ├── htmlcov/               # Coverage HTML report (generated)
 │   ├── __init__.py
 │   ├── conftest.py            # Root test configuration
 │   ├── test_utils.py          # Tests for utils.py
@@ -39,8 +41,12 @@ house_hunt/
 ├── utils.py
 ├── constants.py
 ├── pytest.ini                  # Pytest configuration
+├── .coveragerc                 # Coverage configuration
 └── .gitignore                 # Git ignore file
 ```
+
+**Note:** Coverage artifacts (`.coverage`, `htmlcov/`) are now stored in `Tests/` 
+directory to keep the project root clean.
 
 ## 2. Install Test Dependencies
 
@@ -85,7 +91,7 @@ touch Tests/Commute/__init__.py
 
 ```ini
 [tool:pytest]
-addopts = --cov=. --cov-report=html --cov-report=term -v --tb=short
+addopts = --cov=. --cov-report=html:Tests/htmlcov --cov-report=term -v --tb=short --cov-config=.coveragerc
 fail_under = 55
 testpaths = Tests
 python_files = test_*.py
@@ -97,7 +103,30 @@ python_functions = test_*
 - `fail_under = 55` - Tests fail if coverage drops below 55%
 - `testpaths = Tests` - Only look for tests in Tests/ directory
 - `--cov=.` - Measure coverage for all project files
+- `--cov-report=html:Tests/htmlcov` - HTML report in Tests/htmlcov/
+- `--cov-config=.coveragerc` - Use .coveragerc for coverage settings
 - `-v` - Verbose output (show each test name)
+
+### **.coveragerc** - Place in project root
+
+```ini
+[run]
+data_file = Tests/.coverage
+source = .
+omit = Tests/*
+
+[report]
+precision = 2
+
+[html]
+directory = Tests/htmlcov
+```
+
+**Key settings:**
+- `data_file = Tests/.coverage` - Coverage data stored in Tests/
+- `source = .` - Measure coverage for current directory
+- `omit = Tests/*` - Exclude test files from coverage measurement
+- `directory = Tests/htmlcov` - HTML report directory
 
 ### **Tests/conftest.py** - Root test configuration
 
@@ -150,10 +179,11 @@ __pycache__/
 *.so
 .Python
 
-# Testing & Coverage
-.coverage
-.coverage.*
-htmlcov/
+# Testing & Coverage (artifacts stored in Tests/ directory)
+Tests/.coverage
+Tests/.coverage.*
+Tests/htmlcov/
+Tests/.pytest_cache/
 .pytest_cache/
 *.cover
 .hypothesis/
@@ -254,6 +284,9 @@ chmod +x run_tests.sh
 ./run_tests.sh
 ```
 
+**Note:** The `run_tests.sh` script automatically sets the `COVERAGE_FILE` environment 
+variable to ensure `.coverage` is stored in `Tests/` directory.
+
 ## 7. Verify Everything Works
 
 ### Run Full Test Suite
@@ -285,17 +318,19 @@ constants.py                         25      0   100%
 utils.py                            120     50    58%
 -----------------------------------------------------
 TOTAL                               295    115    55%
+
+Coverage HTML report generated in: Tests/htmlcov/index.html
 ```
 
 ### Check Coverage Report
 ```bash
-# Generate HTML coverage report
+# Generate HTML coverage report (stored in Tests/htmlcov/)
 pytest --cov=. --cov-report=html
 
 # Open in browser
-open htmlcov/index.html        # Mac
-xdg-open htmlcov/index.html    # Linux
-start htmlcov/index.html       # Windows
+open Tests/htmlcov/index.html        # Mac
+xdg-open Tests/htmlcov/index.html    # Linux
+start Tests/htmlcov/index.html       # Windows
 ```
 
 ## 8. Common Issues & Solutions
@@ -393,14 +428,51 @@ chmod +x run_tests.sh
 
 **Solution:**
 ```bash
-# Delete old coverage data
+# Delete old coverage data (now in Tests/ directory)
 coverage erase
 
 # Or delete the file directly
-rm .coverage
+rm Tests/.coverage
 
 # Run tests fresh
 pytest --cov=.
+
+# Or use the clean option in run_tests.sh
+./run_tests.sh --clean
+```
+
+### Issue: `.coverage` appears in project root instead of Tests/
+
+**Cause:** Coverage environment variable not set or .coveragerc not being used
+
+**Solution 1:** Use run_tests.sh (recommended)
+```bash
+./run_tests.sh
+# The script sets COVERAGE_FILE=Tests/.coverage automatically
+```
+
+**Solution 2:** Set environment variable manually
+```bash
+COVERAGE_FILE=Tests/.coverage pytest
+```
+
+**Solution 3:** Verify .coveragerc exists
+```bash
+# Check .coveragerc file exists in project root
+cat .coveragerc | grep data_file
+# Should show: data_file = Tests/.coverage
+```
+
+### Issue: Can't find coverage report
+
+**Solution:**
+```bash
+# Coverage artifacts are now in Tests/ directory
+ls Tests/.coverage        # Coverage data file
+ls Tests/htmlcov/         # HTML coverage report
+
+# Open report from correct location
+open Tests/htmlcov/index.html
 ```
 
 ## 9. Daily Workflow
@@ -412,6 +484,9 @@ pytest -v
 
 # Ensure all tests pass
 # Check coverage is above threshold (55%)
+
+# View detailed coverage
+open Tests/htmlcov/index.html
 ```
 
 ### After Changing Source Code
@@ -440,6 +515,7 @@ pytest Tests/ -v
 
 # 5. Check coverage increased
 pytest --cov=. --cov-report=term
+open Tests/htmlcov/index.html
 ```
 
 ## 10. Test Commands Cheat Sheet
@@ -458,7 +534,7 @@ pytest Tests/test_utils.py::test_get_api_key_success  # One test
 
 # With coverage
 pytest --cov=.                  # Coverage report
-pytest --cov=. --cov-report=html  # HTML coverage
+pytest --cov=. --cov-report=html  # HTML in Tests/htmlcov/
 pytest --cov=. --cov-report=term-missing  # Show missing lines
 
 # Without coverage
@@ -469,9 +545,10 @@ pytest -s                       # Show print() output
 pytest --pdb                    # Drop into debugger on failure
 pytest -l                       # Show local variables on failure
 
-# Clean coverage data
-coverage erase                  # Delete old coverage data
-rm .coverage                    # Or delete directly
+# Clean coverage data (from Tests/ directory)
+coverage erase                  # Delete Tests/.coverage
+rm Tests/.coverage              # Or delete directly
+rm -rf Tests/htmlcov            # Delete HTML report
 ```
 
 ## 11. Understanding Test Output
@@ -492,16 +569,33 @@ utils.py                  100     30    70%
 collect_commute_data.py    80     40    50%
 -------------------------------------------
 TOTAL                     180     70    55%
+
+Coverage HTML report generated in: Tests/htmlcov/index.html
 ```
 
 - **Stmts**: Total executable statements in file
 - **Miss**: Statements not executed during tests
 - **Cover**: Percentage of statements covered
 
+### Coverage Artifacts Location
+
+All coverage-related files are stored in `Tests/` directory:
+
+```
+Tests/
+├── .coverage              # Binary coverage data
+├── htmlcov/               # HTML coverage report
+│   ├── index.html        # Main coverage page
+│   ├── utils_py.html     # Coverage for utils.py
+│   └── ...
+└── .pytest_cache/         # Pytest cache
+```
+
 ## 12. Next Steps
 
 ✅ Tests installed and working  
-✅ Coverage report generated  
+✅ Coverage report generated in Tests/htmlcov/
+✅ Coverage data stored in Tests/.coverage
 ✅ All imports working correctly
 ✅ Patch paths using full module names
 
@@ -519,13 +613,15 @@ TOTAL                     180     70    55%
 - [ ] `Commute/__init__.py` exists (makes it a package)
 - [ ] All test files have `__init__.py` (`Tests/`, `Tests/Commute/`)
 - [ ] `Tests/conftest.py` and `Tests/Commute/conftest.py` in place
-- [ ] `pytest.ini` in project root with `testpaths = Tests`
+- [ ] `pytest.ini` in project root with coverage configured
+- [ ] `pytest.ini` has `data_file = Tests/.coverage`
+- [ ] `pytest.ini` has `--cov-report=html:Tests/htmlcov`
 - [ ] `requirements-test.txt` installed
-- [ ] `.gitignore` includes `.coverage`, `htmlcov/`, `.pytest_cache/`
+- [ ] `.gitignore` includes `Tests/.coverage`, `Tests/htmlcov/`, `Tests/.pytest_cache/`
 - [ ] All `@patch` decorators use full paths (`Commute.collect_commute_data.XXX`)
 - [ ] `pytest` command works
 - [ ] All 43 tests pass
-- [ ] Coverage report generated
+- [ ] Coverage report generated in `Tests/htmlcov/`
 - [ ] Coverage at or above 55%
 
 If all checkboxes are checked, you're ready to go! 🎉
@@ -538,7 +634,8 @@ If all checkboxes are checked, you're ready to go! 🎉
 | Import error in tests | Check `Tests/conftest.py` adds project root to path |
 | Patch not working | Use full path: `Commute.collect_commute_data.XXX` |
 | Coverage too low | Lower `fail_under` in `pytest.ini` |
-| Old coverage data | Run `coverage erase` then `pytest` |
+| Old coverage data | Run `coverage erase` or `rm Tests/.coverage` |
+| Can't find coverage report | Check `Tests/htmlcov/index.html` |
 | Permission denied | Run `chmod +x run_tests.sh` |
 
 ## Getting Help

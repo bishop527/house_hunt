@@ -6,9 +6,9 @@ __pycache__/
 .Python
 
 # Testing & Coverage
-.coverage
-.coverage.*
-htmlcov/
+Tests/.coverage
+Tests/.coverage.*
+Tests/htmlcov/
 .pytest_cache/
 *.cover
 .hypothesis/

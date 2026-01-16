@@ -1,0 +1,10 @@
+[run]
+data_file = Tests/.coverage
+source = .
+omit = Tests/*
+
+[report]
+precision = 2
+
+[html]
+directory = Tests/htmlcov

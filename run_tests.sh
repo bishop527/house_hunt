@@ -1,65 +1,61 @@
 #!/bin/bash
+# run_tests.sh
 # Test runner script for House Hunt project
-# Usage: ./run_tests.sh [options]
+#
+# Usage:
+#   ./run_tests.sh              # Run all tests with coverage
+#   ./run_tests.sh --no-cov     # Run tests without coverage
+#   ./run_tests.sh --unit       # Run only unit tests
+#   ./run_tests.sh --fast       # Run tests, skip slow ones
+#   ./run_tests.sh --clean      # Clean coverage data before running
 
-set -e  # Exit on error
+set -e  # Exit on any error
 
 # Colors for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
-echo -e "${GREEN}========================================${NC}"
-echo -e "${GREEN}House Hunt Project - Test Suite${NC}"
-echo -e "${GREEN}========================================${NC}"
-echo ""
-
-# Check if pytest is installed
-if ! command -v pytest &> /dev/null; then
-    echo -e "${RED}Error: pytest not found${NC}"
-    echo "Install test dependencies with:"
-    echo "  pip install -r requirements-test.txt"
-    exit 1
-fi
+# Default options
+COVERAGE=true
+TEST_MARKER=""
+CLEAN=false
 
 # Parse command line arguments
-COVERAGE=true
-VERBOSE=true
-MARKERS=""
-
 while [[ $# -gt 0 ]]; do
     case $1 in
-        --no-coverage)
+        --no-cov|--no-coverage)
             COVERAGE=false
             shift
             ;;
-        --quiet)
-            VERBOSE=false
-            shift
-            ;;
         --unit)
-            MARKERS="-m unit"
-            shift
-            ;;
-        --integration)
-            MARKERS="-m integration"
+            TEST_MARKER="-m unit"
             shift
             ;;
         --fast)
-            MARKERS="-m 'not slow'"
+            TEST_MARKER="-m 'not slow'"
             shift
             ;;
-        --help)
-            echo "Usage: ./run_tests.sh [options]"
+        --clean)
+            CLEAN=true
+            shift
+            ;;
+        --help|-h)
+            echo "Usage: ./run_tests.sh [OPTIONS]"
             echo ""
             echo "Options:"
-            echo "  --no-coverage    Skip coverage reporting"
-            echo "  --quiet          Less verbose output"
-            echo "  --unit           Run only unit tests"
-            echo "  --integration    Run only integration tests"
-            echo "  --fast           Skip slow tests"
-            echo "  --help           Show this help message"
+            echo "  --no-cov        Run tests without coverage"
+            echo "  --unit          Run only unit tests"
+            echo "  --fast          Skip slow tests"
+            echo "  --clean         Clean coverage data before running"
+            echo "  --help, -h      Show this help message"
+            echo ""
+            echo "Examples:"
+            echo "  ./run_tests.sh              # Full test suite with coverage"
+            echo "  ./run_tests.sh --no-cov     # Tests only, no coverage"
+            echo "  ./run_tests.sh --clean      # Clean and run tests"
             exit 0
             ;;
         *)
@@ -70,44 +66,92 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
+# Header
+echo -e "${BLUE}========================================"
+echo "House Hunt Project - Test Suite"
+echo -e "========================================${NC}\n"
+
+# Clean coverage data if requested
+if [ "$CLEAN" = true ]; then
+    echo -e "${YELLOW}Cleaning old coverage data...${NC}"
+    if [ -f "Tests/.coverage" ]; then
+        rm Tests/.coverage
+        echo -e "${GREEN}✓ Removed Tests/.coverage${NC}"
+    fi
+    if [ -d "Tests/htmlcov" ]; then
+        rm -rf Tests/htmlcov
+        echo -e "${GREEN}✓ Removed Tests/htmlcov/${NC}"
+    fi
+    if [ -d "Tests/.pytest_cache" ]; then
+        rm -rf Tests/.pytest_cache
+        echo -e "${GREEN}✓ Removed Tests/.pytest_cache/${NC}"
+    fi
+    echo ""
+fi
+
+# Set coverage data file location
+export COVERAGE_FILE=Tests/.coverage
+
 # Build pytest command
-CMD="pytest"
-
-if [ "$VERBOSE" = true ]; then
-    CMD="$CMD -v"
-else
-    CMD="$CMD -q"
-fi
-
 if [ "$COVERAGE" = true ]; then
-    CMD="$CMD --cov=. --cov-report=term-missing --cov-report=html"
-fi
-
-if [ -n "$MARKERS" ]; then
-    CMD="$CMD $MARKERS"
+    PYTEST_CMD="pytest $TEST_MARKER --cov=. --cov-report=html:Tests/htmlcov --cov-report=term-missing -v"
+else
+    PYTEST_CMD="pytest $TEST_MARKER --no-cov -v"
 fi
 
 # Run tests
-echo -e "${YELLOW}Running tests...${NC}"
-echo "Command: $CMD"
+echo -e "${BLUE}Running tests...${NC}"
+echo "Command: $PYTEST_CMD"
+echo "Coverage data file: $COVERAGE_FILE"
 echo ""
 
-if $CMD; then
+if $PYTEST_CMD; then
+    # Tests passed
     echo ""
-    echo -e "${GREEN}========================================${NC}"
-    echo -e "${GREEN}All tests passed!${NC}"
-    echo -e "${GREEN}========================================${NC}"
+    echo -e "${GREEN}========================================"
+    echo "All tests passed!"
+    echo -e "========================================${NC}\n"
 
     if [ "$COVERAGE" = true ]; then
+        echo -e "${BLUE}Coverage report saved to: Tests/htmlcov/index.html${NC}"
         echo ""
-        echo -e "${YELLOW}Coverage report saved to: htmlcov/index.html${NC}"
+
+        # Offer to open coverage report
+        read -p "Open coverage report in browser? [y/N] " -n 1 -r
+        echo ""
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
+            if [ -f "Tests/htmlcov/index.html" ]; then
+                # Try different commands based on OS
+                if command -v open &> /dev/null; then
+                    # macOS
+                    open Tests/htmlcov/index.html
+                elif command -v xdg-open &> /dev/null; then
+                    # Linux
+                    xdg-open Tests/htmlcov/index.html
+                elif command -v start &> /dev/null; then
+                    # Windows (Git Bash)
+                    start Tests/htmlcov/index.html
+                else
+                    echo -e "${YELLOW}Could not open browser automatically.${NC}"
+                    echo "Please open: Tests/htmlcov/index.html"
+                fi
+            else
+                echo -e "${RED}Coverage report not found at Tests/htmlcov/index.html${NC}"
+            fi
+        fi
     fi
 
     exit 0
 else
+    # Tests failed
     echo ""
-    echo -e "${RED}========================================${NC}"
-    echo -e "${RED}Tests failed!${NC}"
-    echo -e "${RED}========================================${NC}"
+    echo -e "${RED}========================================"
+    echo "Tests failed!"
+    echo -e "========================================${NC}\n"
+
+    if [ "$COVERAGE" = true ]; then
+        echo -e "${YELLOW}Coverage report may still be available at: Tests/htmlcov/index.html${NC}"
+    fi
+
     exit 1
 fi
