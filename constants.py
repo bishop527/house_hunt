@@ -25,7 +25,7 @@ for folder in [RAW_DIR, PROCESSED_DIR, RESULTS_DIR]:
 
 # Data/Raw Files
 ZIP_DATA_FILE = os.path.join(RAW_DIR, 'zip_code_database.csv')
-# ZIP_DATA_FILE = os.path.join(RAW_DIR, 'sample-zip_code_database.csv')
+# ZIP_DATA_FILE = os.path.join(RAW_DIR, 'small-zip_code_database.csv')z
 
 # Data/Processed Files
 HOUSING_LOOKUP_FILE = os.path.join(PROCESSED_DIR, "housing_lookup.csv")
@@ -53,9 +53,10 @@ GCP_MONITOR_KEY = os.path.join(DATA_DIR, "monitor-key.json")
 CHUNK_SIZE = 25
 
 # API Rate Limiting
-RATE_LIMIT_WAIT_SECONDS = 2     # Wait time when hitting rate limits
-MAX_API_RETRIES = 3             # Maximum retry attempts for failed requests
-API_MONTHLY_LIMIT = 20000       # Free tier monthly limit
+RATE_LIMIT_WAIT_SECONDS = 2 # Wait time when hitting rate limits
+MAX_API_RETRIES = 3         # Maximum retry attempts for failed requests
+# API_MONTHLY_LIMIT = 5000    # Free tier monthly limit for Distance Matrix Advanced which is used to track live traffic
+API_MONTHLY_LIMIT = 12000
 
 # Unit Conversions
 METERS_PER_MILE = 1609.34
@@ -65,14 +66,21 @@ WORK_ADDR = "123 Main St. Anytown, MA 00000"
 TARGET_STATES = ['MA', 'RI', 'NH']
 
 MORNING_TIMES = ['07:00']
-AFTERNOON_TIMES = ['18:36']
-TRAFFIC_MODEL = 'best_guess'
-AVOID_TOLLS = ''
+AFTERNOON_TIMES = ['17:00']
+
+USE_TRAFFIC = False             # Set to True when you want traffic data
+TRAFFIC_MODEL = 'best_guess'    # use for advanced query that includes traffic
+
+# Can only use 1 avoid at a time due to bug in python library
+# AVOID = None
+AVOID = 'highways'
+# AVOID = 'tolls'
+
 MODE = 'driving'
 LANGUAGE = 'en'
 UNITS = 'imperial'
 
-MAX_RANGE = 50
+MAX_RANGE = 40
 
 # HOUSE MODULE CONSTANTS
 # ========================================

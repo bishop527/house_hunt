@@ -17,7 +17,8 @@ from utils import (
     get_zips_within_range,
     check_api_budget,
     update_api_usage,
-    load_csv_with_zip
+    load_csv_with_zip,
+    validate_local_tracking
 )
 
 
@@ -122,14 +123,26 @@ def fetch_commute_times(addresses, direction):
             chunk_destinations = addresses[i: i + CHUNK_SIZE]
 
         try:
-            response = gmaps.distance_matrix(
-                origins=chunk_origins,
-                destinations=chunk_destinations,
-                mode=MODE,
-                units=UNITS,
-                traffic_model=TRAFFIC_MODEL,
-                departure_time="now"
-            )
+            # Build request parameters
+            request_params = {
+                'origins': chunk_origins,
+                'destinations': chunk_destinations,
+                'mode': MODE,
+                'units': UNITS
+            }
+
+            if AVOID:
+                request_params['avoid'] = AVOID
+
+            # Add traffic only if enabled
+            if USE_TRAFFIC:
+                request_params['traffic_model'] = TRAFFIC_MODEL
+                request_params['departure_time'] = 'now'
+                logger.info("Using Advanced tier (with traffic)")
+            else:
+                logger.info("Using Basic tier (no traffic)")
+
+            response = gmaps.distance_matrix(**request_params)
 
             requests_made += 1
 
@@ -447,11 +460,12 @@ def collect_commute_data():
 
     This function:
     1. Determines commute direction based on time
-    2. Loads zip codes within range
-    3. Checks API budget
-    4. Fetches commute times from Google Maps
-    5. Updates historical statistics
-    6. Updates API usage counter
+    2. Validates local tracking against Google's actual usage
+    3. Loads zip codes within range
+    4. Checks API budget
+    5. Fetches commute times from Google Maps
+    6. Updates historical statistics
+    7. Updates API usage counter
     """
     logger.info("=" * 70)
     logger.info("Starting commute data collection")
@@ -461,8 +475,49 @@ def collect_commute_data():
     direction = determine_direction()
     logger.info(f"Direction: {direction} commute")
 
+    # VALIDATE CURRENT USAGE BEFORE MAKING NEW API CALLS
+    logger.info("Validating current API usage against Google...")
+    validation = validate_local_tracking()
+
+    # Display validation results
+    print("\n" + "=" * 70)
+    print("CURRENT API USAGE STATUS")
+    print("-" * 70)
+    print(f"Local tracking:        {validation['local']:,} elements")
+    print(f"Google reports:        {validation['google']:,} elements")
+    print(f"  - Basic tier:        {validation['basic']:,}")
+    print(f"  - Advanced tier:     {validation['advanced']:,}")
+    print(f"Free tier remaining:   {max(0, API_MONTHLY_LIMIT - validation['google']):,}")
+
+    if validation['discrepancy'] > 100:
+        print(f"⚠️  WARNING: Discrepancy of {validation['discrepancy']:,} "
+              f"elements detected!")
+        print(f"    Using Google's count ({validation['google']:,}) as "
+              f"source of truth.")
+        # Update local counter to match Google's count
+        month_str = datetime.now().strftime('%Y-%m')
+        with open(API_MONTHLY_COUNTER, "w") as f:
+            f.write(f"{month_str},{validation['google']}")
+        logger.info(
+            f"Local counter corrected to match Google: "
+            f"{validation['google']:,}"
+        )
+    print("=" * 70 + "\n")
+
+    # Check if we're too close to limit
+    if validation['google'] >= API_MONTHLY_LIMIT:
+        logger.critical(
+            f"!!! MONTHLY LIMIT REACHED !!!\n"
+            f"Google reports {validation['google']:,} elements used.\n"
+            f"Aborting to prevent overage charges."
+        )
+        print(f"\n❌ Monthly API limit reached. Aborting collection.\n")
+        return
+
     # Get zip codes within range
-    logger.info(f"Loading zip codes within {MAX_RANGE} miles of work...")
+    logger.info(
+        f"Loading zip codes within {MAX_RANGE} miles of work..."
+    )
     zip_data = get_zip_data()
     addresses = get_zips_within_range(WORK_ADDR, zip_data, MAX_RANGE)
 
@@ -472,8 +527,33 @@ def collect_commute_data():
 
     logger.info(f"Found {len(addresses)} addresses within range")
 
-    # Check API budget (budget check also done in get_zips_within_range)
-    can_proceed, current_usage = check_api_budget(len(addresses))
+    # Check if THIS RUN would exceed limit
+    estimated_elements = len(addresses)
+    projected_total = validation['google'] + estimated_elements
+
+    if projected_total > API_MONTHLY_LIMIT:
+        logger.warning(
+            f"!!! WARNING: This run would exceed monthly limit !!!\n"
+            f"Current usage (Google): {validation['google']:,}\n"
+            f"This run would add: {estimated_elements:,}\n"
+            f"Projected total: {projected_total:,} / "
+            f"{API_MONTHLY_LIMIT:,}"
+        )
+
+        print(f"\n⚠️  WARNING: This run would exceed your monthly limit!")
+        print(f"   Current: {validation['google']:,}")
+        print(f"   This run: +{estimated_elements:,}")
+        print(f"   Total: {projected_total:,} / {API_MONTHLY_LIMIT:,}\n")
+
+        # Ask user to confirm (or auto-abort in production)
+        response = input("Continue anyway? (yes/no): ").lower()
+        if response != 'yes':
+            logger.info("User aborted to prevent exceeding budget")
+            print("Aborted by user.\n")
+            return
+
+    # Original budget check (keeping for backwards compatibility)
+    can_proceed, current_usage = check_api_budget(estimated_elements)
 
     if not can_proceed:
         return
@@ -485,18 +565,40 @@ def collect_commute_data():
     if results:
         update_statistics(results)
 
-    # Update API usage
+    # Update local API usage counter
     new_total = update_api_usage(elements_used)
+
+    # Validate again after API calls to confirm accuracy
+    logger.info("Re-validating usage after API calls...")
+    final_validation = validate_local_tracking()
 
     # Print summary
     print("\n" + "=" * 70)
     print(f"COMMUTE DATA COLLECTION COMPLETE - {direction.upper()}")
     print("-" * 70)
     print(f"Addresses queried:     {len(addresses)}")
-    print(f"Successful results:    {len([r for r in results if r['status'] == 'OK'])}")
-    print(f"API elements used:     {elements_used}")
-    print(f"Monthly usage:         {new_total:,} / {API_MONTHLY_LIMIT:,}")
-    print(f"Estimated cost:        ${max(0, (new_total - 40000) * 0.005):.2f}")
+    print(f"Successful results:    "
+          f"{len([r for r in results if r['status'] == 'OK'])}")
+    print(f"Elements this run:     {elements_used}")
+    print(f"Local monthly total:   {new_total:,}")
+    print(f"Google monthly total:  {final_validation['google']:,}")
+
+    if final_validation['discrepancy'] > 10:
+        print(f"⚠️  Discrepancy:        "
+              f"{final_validation['discrepancy']:,} elements")
+
+    remaining = max(0, API_MONTHLY_LIMIT - final_validation['google'])
+    print(f"Free tier remaining:   {remaining:,}")
+
+    if final_validation['google'] > API_MONTHLY_LIMIT:
+        billable = final_validation['google'] - API_MONTHLY_LIMIT
+        # Assume all advanced tier (worst case)
+        cost = (billable / API_MONTHLY_LIMIT) * 10.00
+        print(f"Estimated cost:        ${cost:.2f}")
+    else:
+        percent_used = (final_validation['google'] / API_MONTHLY_LIMIT) * 100
+        print(f"Free tier status:      {percent_used:.1f}% used")
+
     print("=" * 70 + "\n")
 
     logger.info("Commute data collection completed successfully")

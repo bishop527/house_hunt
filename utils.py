@@ -399,12 +399,26 @@ def get_zips_within_range(destination, zip_data, max_range,
         chunk = addresses[i: i + CHUNK_SIZE]
 
         try:
-            response = gmaps.distance_matrix(
-                origins=chunk,
-                destinations=destination,
-                mode=MODE,
-                units=UNITS
-            )
+            # Build request parameters
+            request_params = {
+                'origins': chunk,
+                'destinations': destination,
+                'mode': MODE,
+                'units': UNITS
+            }
+
+            if AVOID:
+                request_params['avoid'] = AVOID
+
+            # Add traffic only if enabled
+            if USE_TRAFFIC:
+                request_params['traffic_model'] = TRAFFIC_MODEL
+                request_params['departure_time'] = 'now'
+                logger.info("Using Advanced tier (with traffic)")
+            else:
+                logger.info("Using Basic tier (no traffic)")
+
+            response = gmaps.distance_matrix(**request_params)
 
             requests_made += 1
 
@@ -421,12 +435,8 @@ def get_zips_within_range(destination, zip_data, max_range,
                 # Retry this chunk once
                 logger.info("Retrying after rate limit...")
                 try:
-                    response = gmaps.distance_matrix(
-                        origins=chunk,
-                        destinations=destination,
-                        mode=MODE,
-                        units=UNITS
-                    )
+                    response = gmaps.distance_matrix(**request_params)
+
                     requests_made += 1
                     response_status = response.get('status')
 
@@ -522,7 +532,7 @@ def get_zips_within_range(destination, zip_data, max_range,
         logger.info(
             f"API usage summary - Requests made: {requests_made}, "
             f"Elements processed: {elements_processed}, "
-            f"Monthly total: {new_total_usage:,} / 20,000"
+            f"Monthly total: {new_total_usage:,} / {API_MONTHLY_LIMIT}"
         )
     except IOError as e:
         logger.error(f"Failed to update usage tracking file: {e}")
@@ -547,3 +557,138 @@ def get_zips_within_range(destination, zip_data, max_range,
         f"Returning {len(zips_in_range)} addresses within range"
     )
     return zips_in_range
+
+
+def get_monthly_element_usage_from_google():
+    """
+    Query Google Cloud Monitoring for actual billable element usage.
+
+    Note: Cloud Monitoring doesn't distinguish Basic vs Advanced tiers.
+    That distinction only happens in billing. We determine the tier
+    based on whether traffic parameters are used in the code.
+
+    Returns:
+        tuple: (basic_elements, advanced_elements, total_elements)
+    """
+    try:
+        from google.cloud import monitoring_v3
+        from google.oauth2 import service_account
+        import datetime
+
+        credentials = service_account.Credentials.from_service_account_file(
+            GCP_MONITOR_KEY
+        )
+
+        client = monitoring_v3.MetricServiceClient(credentials=credentials)
+        project_name = f"projects/{GCP_PROJECT_ID}"
+
+        now = datetime.datetime.utcnow()
+        start_of_month = now.replace(
+            day=1, hour=0, minute=0, second=0, microsecond=0
+        )
+
+        interval = monitoring_v3.TimeInterval({
+            "end_time": {"seconds": int(now.timestamp())},
+            "start_time": {"seconds": int(start_of_month.timestamp())}
+        })
+
+        results = client.list_time_series(
+            request={
+                "name": project_name,
+                "filter": (
+                    'metric.type="serviceruntime.googleapis.com/quota/'
+                    'rate/net_usage" AND '
+                    'resource.labels.service='
+                    '"distance-matrix-backend.googleapis.com"'
+                ),
+                "interval": interval,
+                "view": monitoring_v3.ListTimeSeriesRequest.TimeSeriesView.FULL
+            }
+        )
+
+        # Sum all usage
+        total_elements = 0
+        for result in results:
+            for point in result.points:
+                total_elements += point.value.int64_value
+
+        # Determine tier based on configuration
+        # If TRAFFIC_MODEL is set, we're using Advanced tier
+        if TRAFFIC_MODEL is not None:
+            basic_elements = 0
+            advanced_elements = total_elements
+            tier_name = "Advanced"
+            free_tier = 5000
+        else:
+            basic_elements = total_elements
+            advanced_elements = 0
+            tier_name = "Basic"
+            free_tier = 10000
+
+        logger.info(
+            f"Google-reported usage: {total_elements:,} elements "
+            f"({tier_name} tier based on TRAFFIC_MODEL={TRAFFIC_MODEL})"
+        )
+        logger.info(
+            f"Free tier limit: {free_tier:,}, "
+            f"Remaining: {max(0, free_tier - total_elements):,}"
+        )
+
+        return basic_elements, advanced_elements, total_elements
+
+    except Exception as e:
+        logger.error(f"Failed to query Google Cloud Monitoring: {e}")
+        return 0, 0, 0
+
+
+def validate_local_tracking():
+    """
+    Compare local element tracking vs Google's actual count.
+    Helps identify discrepancies.
+    """
+    # Get local count from file
+    month_str = datetime.now().strftime('%Y-%m')
+    local_count = 0
+
+    if os.path.exists(API_MONTHLY_COUNTER):
+        try:
+            with open(API_MONTHLY_COUNTER, "r") as f:
+                content = f.read().strip().split(',')
+                if len(content) == 2 and content[0] == month_str:
+                    local_count = int(content[1])
+        except (ValueError, IndexError):
+            logger.warning("Error reading local counter")
+
+    # Get Google's count
+    basic, advanced, google_count = get_monthly_element_usage_from_google()
+
+    # Determine which tier we're using
+    tier_name = "Advanced" if TRAFFIC_MODEL is not None else "Basic"
+    free_tier = 5000 if TRAFFIC_MODEL is not None else 10000
+
+    # Compare
+    discrepancy = abs(local_count - google_count)
+
+    logger.info(f"=== Usage Validation ===")
+    logger.info(f"Tier:            {tier_name}")
+    logger.info(f"Local tracking:  {local_count:,} elements")
+    logger.info(f"Google reports:  {google_count:,} elements")
+    logger.info(f"Free tier:       {free_tier:,}")
+    logger.info(f"Remaining:       {max(0, free_tier - google_count):,}")
+    logger.info(f"Discrepancy:     {discrepancy:,} elements")
+
+    if discrepancy > 10:
+        logger.warning(
+            f"⚠️  Significant discrepancy detected! "
+            f"Consider using Google's count as source of truth."
+        )
+
+    return {
+        'local': local_count,
+        'google': google_count,
+        'basic': basic,
+        'advanced': advanced,
+        'discrepancy': discrepancy,
+        'tier': tier_name,
+        'free_tier': free_tier
+    }
