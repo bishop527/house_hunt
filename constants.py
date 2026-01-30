@@ -18,14 +18,15 @@ DATA_DIR = os.path.join(BASE_DIR, 'Data')
 RAW_DIR = os.path.join(DATA_DIR, 'Raw')
 PROCESSED_DIR = os.path.join(DATA_DIR, 'Processed')
 RESULTS_DIR = os.path.join(DATA_DIR, 'Results')
+LOGS_DIR = os.path.join(DATA_DIR, 'Logs')
 
 # Automatic Data Folder Creation
-for folder in [RAW_DIR, PROCESSED_DIR, RESULTS_DIR]:
+for folder in [RAW_DIR, PROCESSED_DIR, RESULTS_DIR, LOGS_DIR]:
     os.makedirs(folder, exist_ok=True)
 
 # Data/Raw Files
 ZIP_DATA_FILE = os.path.join(RAW_DIR, 'zip_code_database.csv')
-# ZIP_DATA_FILE = os.path.join(RAW_DIR, 'small-zip_code_database.csv')z
+# ZIP_DATA_FILE = os.path.join(RAW_DIR, 'small-zip_code_database.csv')
 
 # Data/Processed Files
 HOUSING_LOOKUP_FILE = os.path.join(PROCESSED_DIR, "housing_lookup.csv")
@@ -33,18 +34,20 @@ HOUSING_LOOKUP_FILE = os.path.join(PROCESSED_DIR, "housing_lookup.csv")
 # Data/Results Files
 COMMUTE_STATS_FILE = os.path.join(RESULTS_DIR, "commute_stats.csv")
 API_MONTHLY_COUNTER = os.path.join(RESULTS_DIR, "monthly_API_usage_counter.txt")
-APP_LOG_FILE = os.path.join(RESULTS_DIR, "app.log")
+
+# Data/Logs Files
+APP_LOG_FILE = os.path.join(LOGS_DIR, "app.log")
 
 # Global Configurations
 LOG_LEVEL = logging.DEBUG
 US_HOLIDAYS = holidays.country_holidays('US')
 PROXY_ON = False
 PROXY = 'http://localhost:8080'
+METERS_PER_MILE = 1609.34
 
 
 # COMMUTE MODULE CONSTANTS
 # ========================================
-
 # Google API Values
 KEY_LOC = DATA_DIR
 KEY_FILE = "google_api_key"
@@ -56,10 +59,8 @@ CHUNK_SIZE = 25
 RATE_LIMIT_WAIT_SECONDS = 2 # Wait time when hitting rate limits
 MAX_API_RETRIES = 3         # Maximum retry attempts for failed requests
 # API_MONTHLY_LIMIT = 5000    # Free tier monthly limit for Distance Matrix Advanced which is used to track live traffic
-API_MONTHLY_LIMIT = 12000
+API_MONTHLY_LIMIT = 13000
 
-# Unit Conversions
-METERS_PER_MILE = 1609.34
 
 # Commute Specific Values
 WORK_ADDR = "123 Main St. Anytown, MA 00000"
@@ -81,6 +82,10 @@ LANGUAGE = 'en'
 UNITS = 'imperial'
 
 MAX_RANGE = 40
+
+# Group location data either by zip code or town name
+# LOCATION_GROUPING = 'zip'
+LOCATION_GROUPING = 'town'
 
 # HOUSE MODULE CONSTANTS
 # ========================================

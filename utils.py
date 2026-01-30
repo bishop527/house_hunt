@@ -337,7 +337,7 @@ def get_zips_within_range(destination, zip_data, max_range,
     # Cache file path
     cache_file = os.path.join(
         PROCESSED_DIR,
-        f"towns_within_{max_range}mi.csv"
+        f"zips_within_{max_range}mi.csv"
     )
 
     # Check for cached results
@@ -558,6 +558,302 @@ def get_zips_within_range(destination, zip_data, max_range,
     )
     return zips_in_range
 
+
+def get_towns_within_range(destination, zip_data, max_range,
+                           force_refresh=False):
+    """
+    Interrogates Google Maps API and returns list of towns within
+    specified range of destination.
+
+    Unlike get_zips_within_range which returns one entry per zip code,
+    this returns one entry per town (combining multiple zips in same town).
+
+    Results are cached to avoid repeated API calls. Delete the cache file
+    or use force_refresh=True to regenerate.
+
+    Args:
+        destination (str): Destination address
+        zip_data (pd.DataFrame): DataFrame with Zip, Town, State,
+                                 Lat, Long columns
+        max_range (float): Maximum distance in miles
+        force_refresh (bool): If True, ignore cache and fetch fresh data
+
+    Returns:
+        list: List of town addresses in "Town, State Zip" format within range
+
+    Raises:
+        SystemExit: If API key missing or monthly budget exceeded
+    """
+    # Cache file path
+    cache_file = os.path.join(
+        PROCESSED_DIR,
+        f"towns_within_{max_range}mi.csv"
+    )
+
+    # Check for cached results
+    if os.path.exists(cache_file) and not force_refresh:
+        logger.info(f"Loading cached town results from {cache_file}")
+        try:
+            cached_df = pd.read_csv(cache_file)
+            cached_towns = cached_df['Full_Address'].tolist()
+            logger.info(
+                f"Loaded {len(cached_towns)} cached towns "
+                f"(range: {max_range}mi)"
+            )
+            return cached_towns
+        except Exception as e:
+            logger.warning(f"Failed to read cache file: {e}. Fetching fresh.")
+
+    # Validate API key before proceeding
+    api_key = get_google_api_key()
+    if not api_key:
+        logger.critical("Google API key not found. Cannot proceed.")
+        sys.exit(1)
+
+    # Group by town to get one representative zip per town
+    # Use the first zip code alphabetically for each town
+    town_groups = zip_data.groupby(['Town', 'State']).first().reset_index()
+
+    # Check API budget before making calls
+    estimated_elements = len(town_groups)
+    can_proceed, current_usage = check_api_budget(estimated_elements)
+
+    # Initialize Google Maps client
+    if PROXY_ON:
+        logger.info("Initializing Google Maps client with Proxy settings.")
+        gmaps = googlemaps.Client(
+            key=api_key,
+            requests_kwargs={
+                'proxies': {'https': PROXY}
+            }
+        )
+    else:
+        gmaps = googlemaps.Client(key=api_key)
+
+    # Build town-based addresses (use representative zip for each town)
+    addresses = [
+        f"{r.Town}, {r.State} {r.Zip}" for r in town_groups.itertuples()
+    ]
+    towns_in_range = []
+    results_list = []
+    elements_processed = 0
+    requests_made = 0
+
+    logger.info(
+        f"Checking range for {len(addresses)} towns against "
+        f"{destination} (Max: {max_range} miles)"
+    )
+
+    # Process in chunks with progress bar
+    chunk_indices = list(range(0, len(addresses), CHUNK_SIZE))
+
+    for i in tqdm(chunk_indices,
+                  desc="Processing towns",
+                  unit="chunk",
+                  ncols=80):
+        chunk = addresses[i: i + CHUNK_SIZE]
+        chunk_towns = town_groups.iloc[i: i + CHUNK_SIZE]
+
+        try:
+            # Build request parameters
+            request_params = {
+                'origins': chunk,
+                'destinations': destination,
+                'mode': MODE,
+                'units': UNITS
+            }
+
+            if AVOID:
+                request_params['avoid'] = AVOID
+
+            # Add traffic only if enabled
+            if USE_TRAFFIC:
+                request_params['traffic_model'] = TRAFFIC_MODEL
+                request_params['departure_time'] = 'now'
+                logger.info("Using Advanced tier (with traffic)")
+            else:
+                logger.info("Using Basic tier (no traffic)")
+
+            response = gmaps.distance_matrix(**request_params)
+
+            requests_made += 1
+
+            # Validate top-level response status
+            response_status = response.get('status')
+
+            if response_status == 'OVER_QUERY_LIMIT':
+                logger.warning(
+                    f"Rate limit hit. "
+                    f"Waiting {RATE_LIMIT_WAIT_SECONDS} seconds..."
+                )
+                time.sleep(RATE_LIMIT_WAIT_SECONDS)
+
+                # Retry this chunk once
+                logger.info("Retrying after rate limit...")
+                try:
+                    response = gmaps.distance_matrix(**request_params)
+
+                    requests_made += 1
+                    response_status = response.get('status')
+
+                    if response_status != 'OK':
+                        logger.error(
+                            f"Retry failed: {response_status}"
+                        )
+                        elements_processed += len(chunk)
+                        continue
+                except Exception as e:
+                    logger.error(f"Retry failed: {e}")
+                    continue
+
+            elif response_status == 'OVER_DAILY_LIMIT':
+                logger.critical(
+                    f"!!! DAILY API LIMIT EXCEEDED !!!\n"
+                    f"Cannot continue processing. Try again tomorrow."
+                )
+                break
+
+            elif response_status != 'OK':
+                logger.error(
+                    f"Google API response error: {response_status}"
+                )
+                if 'error_message' in response:
+                    logger.error(
+                        f"Error message: {response['error_message']}"
+                    )
+                elements_processed += len(chunk)
+                continue
+
+            elements_processed += len(chunk)
+
+            # Process each row in the response
+            for idx, element in enumerate(response['rows']):
+                status = element['elements'][0]['status']
+
+                if status == 'OK':
+                    dist_miles = round(
+                        element['elements'][0]['distance']['value'] /
+                        METERS_PER_MILE,
+                        2
+                    )
+
+                    if dist_miles <= max_range:
+                        town_row = chunk_towns.iloc[idx]
+                        # Include zip in format: "Town, State Zip"
+                        full_address = (
+                            f"{town_row['Town']}, "
+                            f"{town_row['State']} "
+                            f"{town_row['Zip']}"
+                        )
+
+                        towns_in_range.append(full_address)
+                        results_list.append({
+                            'Full_Address': full_address,
+                            'Distance_Miles': dist_miles
+                        })
+                elif status == 'NOT_FOUND':
+                    logger.warning(
+                        f"Address not found by Google: {chunk[idx]}"
+                    )
+                elif status == 'ZERO_RESULTS':
+                    logger.debug(
+                        f"No route found for {chunk[idx]} to {destination}"
+                    )
+                else:
+                    logger.warning(
+                        f"Google API element error for {chunk[idx]}: "
+                        f"{status}"
+                    )
+
+        except googlemaps.exceptions.ApiError as e:
+            logger.error(f"Google API error: {e}")
+            elements_processed += len(chunk)
+            continue
+        except googlemaps.exceptions.TransportError as e:
+            logger.error(f"Network/transport error: {e}")
+            continue
+        except googlemaps.exceptions.Timeout as e:
+            logger.error(f"Timeout error: {e}")
+            continue
+        except KeyError as e:
+            logger.error(
+                f"Unexpected response structure: Missing key {e}"
+            )
+            elements_processed += len(chunk)
+            continue
+        except Exception as e:
+            logger.error(
+                f"Unexpected error: {type(e).__name__}: {e}"
+            )
+            continue
+
+    # Update usage tracking
+    new_total_usage = current_usage + elements_processed
+    try:
+        month_str = datetime.now().strftime('%Y-%m')
+        with open(API_MONTHLY_COUNTER, "w") as f:
+            f.write(f"{month_str},{new_total_usage}")
+        logger.info(
+            f"API usage summary - Requests made: {requests_made}, "
+            f"Elements processed: {elements_processed}, "
+            f"Monthly total: {new_total_usage:,} / 20,000"
+        )
+    except IOError as e:
+        logger.error(f"Failed to update usage tracking file: {e}")
+
+    # Save results CSV (serves as cache)
+    if results_list:
+        output_df = pd.DataFrame(results_list)
+
+        try:
+            output_df.to_csv(cache_file, index=False)
+            logger.info(
+                f"Saved {len(results_list)} towns to {cache_file}"
+            )
+        except IOError as e:
+            logger.error(f"Failed to save results to CSV: {e}")
+    else:
+        logger.warning(
+            f"No towns found within {max_range} miles of {destination}"
+        )
+
+    logger.info(
+        f"Returning {len(towns_in_range)} towns within range"
+    )
+    return towns_in_range
+
+
+def get_locations_within_range(destination, zip_data, max_range,
+                               group_by='zip', force_refresh=False):
+    """
+    Dispatcher function to get zips or towns within range.
+
+    Args:
+        destination (str): Destination address
+        zip_data (pd.DataFrame): DataFrame with Zip, Town, State,
+                                 Lat, Long columns
+        max_range (float): Maximum distance in miles
+        group_by (str): 'zip' for individual zips, 'town' for unique towns
+        force_refresh (bool): If True, ignore cache and fetch fresh data
+
+    Returns:
+        list: Addresses within range
+              'zip': ["Lexington, MA 02421", ...]
+              'town': ["Lexington, MA", ...]
+
+    Raises:
+        ValueError: If group_by is not 'zip' or 'town'
+    """
+    if group_by == 'zip':
+        return get_zips_within_range(destination, zip_data, max_range,
+                                     force_refresh)
+    elif group_by == 'town':
+        return get_towns_within_range(destination, zip_data, max_range,
+                                      force_refresh)
+    else:
+        raise ValueError(
+            f"group_by must be 'zip' or 'town', got '{group_by}'"
+        )
 
 def get_monthly_element_usage_from_google():
     """

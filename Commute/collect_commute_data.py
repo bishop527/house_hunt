@@ -14,13 +14,12 @@ from constants import *
 from utils import (
     get_google_api_key,
     get_zip_data,
-    get_zips_within_range,
+    get_locations_within_range,
     check_api_budget,
     update_api_usage,
     load_csv_with_zip,
     validate_local_tracking
 )
-
 
 # Configure logging
 logging.basicConfig(
@@ -33,7 +32,6 @@ logger = logging.getLogger(__name__)
 
 # Silence googlemaps internal logging
 logging.getLogger('googlemaps').setLevel(logging.WARNING)
-
 
 def determine_direction():
     """
@@ -53,7 +51,6 @@ def determine_direction():
     else:
         logger.info("After noon - collecting afternoon commute data")
         return 'afternoon'
-
 
 def fetch_commute_times(addresses, direction):
     """
@@ -222,7 +219,6 @@ def fetch_commute_times(addresses, direction):
 
     return results, elements_processed
 
-
 def process_element(address, element, results):
     """
     Process a single API response element.
@@ -264,7 +260,6 @@ def process_element(address, element, results):
             'status': status
         })
 
-
 def load_historical_data():
     """
     Load historical commute statistics from CSV.
@@ -281,7 +276,6 @@ def load_historical_data():
     else:
         logger.info("No historical data file found. Starting fresh.")
     return df
-
 
 def update_statistics(results):
     """
@@ -453,7 +447,6 @@ def update_statistics(results):
         logger.error(f"Failed to save statistics: {e}")
         raise
 
-
 def collect_commute_data():
     """
     Main function to collect and store commute data.
@@ -519,7 +512,7 @@ def collect_commute_data():
         f"Loading zip codes within {MAX_RANGE} miles of work..."
     )
     zip_data = get_zip_data()
-    addresses = get_zips_within_range(WORK_ADDR, zip_data, MAX_RANGE)
+    addresses = get_locations_within_range(WORK_ADDR, zip_data, MAX_RANGE, group_by=LOCATION_GROUPING)
 
     if not addresses:
         logger.error("No addresses found within range. Aborting.")
