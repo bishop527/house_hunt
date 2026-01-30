@@ -30,7 +30,7 @@ Data/Processed/*.csv
 Data/Results/*.csv
 Data/Results/*.log
 Data/Results/*.txt
-!Data/Raw/small-zip_code_database.csv
+Data/Logs/*
 
 # API Keys
 google_api_key
