@@ -31,10 +31,10 @@ EXIT_CODE=$?
 # Log completion status to cron-specific log
 if [ $EXIT_CODE -eq 0 ]; then
     echo "$(date): Commute collection completed successfully" >> \
-        Data/Results/cron.log
+        Data/Logs/cron.log
 else
     echo "$(date): Commute collection FAILED (exit code: $EXIT_CODE)" \
-        >> Data/Results/cron.log
+        >> Data/Logs/cron.log
 fi
 
 exit $EXIT_CODE
