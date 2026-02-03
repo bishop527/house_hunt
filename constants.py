@@ -1,16 +1,19 @@
 """
-Created on 18 June 2025
-Updated 2 Jan 2026
+Configuration constants for House Hunt project.
+
+Created: 18 June 2025
+Updated: 30 Jan 2026
 
 @author: AD23883
-@todo:
-
 """
 import os
 import logging
 import holidays
 
-# Use location of this file to determine root directory of the Project
+# ========================================
+# PATHS AND DIRECTORIES
+# ========================================
+# Use location of this file to determine root directory
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # Main Data Directory and Subdirectories
@@ -24,98 +27,134 @@ LOGS_DIR = os.path.join(DATA_DIR, 'Logs')
 for folder in [RAW_DIR, PROCESSED_DIR, RESULTS_DIR, LOGS_DIR]:
     os.makedirs(folder, exist_ok=True)
 
-# Data/Raw Files
-ZIP_DATA_FILE = os.path.join(RAW_DIR, 'zip_code_database.csv')
+# ========================================
+# DATA FILES - RAW
+# ========================================
 # ZIP_DATA_FILE = os.path.join(RAW_DIR, 'small-zip_code_database.csv')
+ZIP_DATA_FILE = os.path.join(RAW_DIR, 'zip_code_database.csv')
+REDFIN_DATA_FILE = os.path.join(RAW_DIR, 'reduced-redfin_market_data.csv')
 
-# Data/Processed Files
+# ========================================
+# DATA FILES - PROCESSED
+# ========================================
 HOUSING_LOOKUP_FILE = os.path.join(PROCESSED_DIR, "housing_lookup.csv")
 
-# Data/Results Files
+# ========================================
+# DATA FILES - RESULTS
+# ========================================
 COMMUTE_STATS_FILE = os.path.join(RESULTS_DIR, "commute_stats.csv")
-API_MONTHLY_COUNTER = os.path.join(RESULTS_DIR, "monthly_API_usage_counter.txt")
+HOUSING_STATS_FILE = os.path.join(RESULTS_DIR, "historical_housing_stats.csv")
+API_MONTHLY_COUNTER_FILE = os.path.join(RESULTS_DIR, "monthly_API_usage_counter.txt")
 
-# Data/Logs Files
+# ========================================
+# DATA FILES - LOGS
+# ========================================
 APP_LOG_FILE = os.path.join(LOGS_DIR, "app.log")
 
-# Global Configurations
+# ========================================
+# LOGGING CONFIGURATION
+# ========================================
 LOG_LEVEL = logging.DEBUG
+
+# ========================================
+# GENERAL CONFIGURATION
+# ========================================
 US_HOLIDAYS = holidays.country_holidays('US')
 PROXY_ON = False
 PROXY = 'http://localhost:8080'
-METERS_PER_MILE = 1609.34
 
-
-# COMMUTE MODULE CONSTANTS
 # ========================================
-# Google API Values
+# UNIT CONVERSIONS
+# ========================================
+METERS_PER_MILE = 1609.34
+SECONDS_PER_MINUTE = 60
+MINUTES_PER_HOUR = 60
+HOURS_PER_DAY = 24
+DAYS_PER_WEEK = 7
+
+# ========================================
+# GOOGLE MAPS API CONFIGURATION
+# ========================================
+# API Key Location
 KEY_LOC = DATA_DIR
 KEY_FILE = "google_api_key"
+
+# GCP Monitoring
 GCP_PROJECT_ID = "house-hunt-project"
 GCP_MONITOR_KEY = os.path.join(DATA_DIR, "monitor-key.json")
-CHUNK_SIZE = 25
 
-# API Rate Limiting
-RATE_LIMIT_WAIT_SECONDS = 2 # Wait time when hitting rate limits
-MAX_API_RETRIES = 3         # Maximum retry attempts for failed requests
-# API_MONTHLY_LIMIT = 5000    # Free tier monthly limit for Distance Matrix Advanced which is used to track live traffic
-API_MONTHLY_LIMIT = 13000
-
-
-# Commute Specific Values
-WORK_ADDR = "123 Main St. Anytown, MA 00000"
-TARGET_STATES = ['MA', 'RI', 'NH']
-
-MORNING_TIMES = ['07:00']
-AFTERNOON_TIMES = ['17:00']
-
-USE_TRAFFIC = False             # Set to True when you want traffic data
-TRAFFIC_MODEL = 'best_guess'    # use for advanced query that includes traffic
-
-# Can only use 1 avoid at a time due to bug in python library
-# AVOID = None
-AVOID = 'highways'
-# AVOID = 'tolls'
-
+# Request Parameters
+CHUNK_SIZE = 25  # Addresses per API request
 MODE = 'driving'
 LANGUAGE = 'en'
 UNITS = 'imperial'
 
-MAX_RANGE = 40
+# Route Preferences (can only use 1 at a time due to library bug)
+AVOID = 'highways'  # Options: None, 'highways', 'tolls'
 
-# Group location data either by zip code or town name
+# Traffic Configuration
+USE_TRAFFIC = False  # Set to True for Advanced tier (with traffic data)
+TRAFFIC_MODEL = 'best_guess'  # Used when USE_TRAFFIC=True
+
+# ========================================
+# API RATE LIMITING & BUDGET
+# ========================================
+# Monthly Limits (free tier)
+API_MONTHLY_LIMIT_BASIC = 10000  # Basic tier (no traffic)
+API_MONTHLY_LIMIT_ADVANCED = 5000  # Advanced tier (with traffic)
+API_MONTHLY_LIMIT = 13000  # Current project limit
+
+# Rate Limiting
+RATE_LIMIT_WAIT_SECONDS = 2  # Wait time when hitting rate limits
+MAX_API_RETRIES = 3  # Maximum retry attempts for failed requests
+
+# Usage Validation
+MAX_ACCEPTABLE_DISCREPANCY = 100  # Elements between local/Google count
+
+# ========================================
+# COMMUTE COLLECTION PARAMETERS
+# ========================================
+# Work Location
+WORK_ADDR = "123 Main St. Anytown, MA 00000"
+
+# Geographic Scope
+TARGET_STATES = ['MA', 'RI', 'NH']
+MAX_RANGE = 40  # Maximum distance in miles from work
+
+# Collection Schedule
+MORNING_TIMES = ['07:00']  # Morning collection times
+AFTERNOON_TIMES = ['17:00']  # Afternoon collection times
+NOON_HOUR = 12
+
+# Data Grouping
 # LOCATION_GROUPING = 'zip'
 LOCATION_GROUPING = 'town'
 
-# HOUSE MODULE CONSTANTS
 # ========================================
-
-# Housing Data Sources
+# HOUSING DATA PARAMETERS
+# ========================================
+# Data Sources
 HOUSING_DATA_SOURCE = 'redfin'  # Primary: 'redfin', Fallback: 'hud'
 
-# Redfin Data Files (download from https://www.redfin.com/news/data-center/)
-# REDFIN_DATA_FILE = os.path.join(RAW_DIR, 'redfin_market_data.csv')
-REDFIN_DATA_FILE = os.path.join(RAW_DIR, 'reduced-redfin_market_data.csv')
-REDFIN_DOWNLOAD_URL = 'https://redfin-public-data.s3.us-west-2.amazonaws.com/redfin_market_tracker/zip_code_market_tracker.tsv000.gz'
+# Redfin Configuration
+REDFIN_DOWNLOAD_URL = (
+    'https://redfin-public-data.s3.us-west-2.amazonaws.com/'
+    'redfin_market_tracker/zip_code_market_tracker.tsv000.gz'
+)
+REDFIN_DATA_MAX_AGE_DAYS = 30  # Refresh if older than this
 
 # HUD Fair Market Rent API (backup/supplementary)
 HUD_FMR_API_URL = 'https://www.huduser.gov/hudapi/public/fmr/listcounties'
 HUD_FMR_YEAR = '2024'  # Update annually
 
-# Housing Results Files
-HOUSING_STATS_FILE = os.path.join(RESULTS_DIR, "historical_housing_stats.csv")
-HOUSING_LOOKUP_FILE = os.path.join(PROCESSED_DIR, "housing_lookup.csv")
-
-# Housing Query Parameters
-PROPERTY_TYPES = ['Single Family', 'Condo', 'Townhouse']  # Filter types
+# Data Quality Thresholds
 MIN_SAMPLE_SIZE = 5  # Minimum homes sold to consider data reliable
 
-# ---- Older constants ----
+# Property Type Filters
+PROPERTY_TYPES = ['Single Family', 'Condo', 'Townhouse']
 
-# MAX_SCORE = 10
-# MIN_SCORE = -10
-# MEDIAN_SCORE = 0
-
-# # seconds from 1 Jan 1970 to 2 May 2016 07:00 EST
-# EPOCH = datetime.datetime(1970,1,1,0,0,0)
-# DEPARTURE_TIME = 1462186800
+# ========================================
+# BACKWARD COMPATIBILITY
+# ========================================
+# Alias for old constant name
+API_MONTHLY_COUNTER = API_MONTHLY_COUNTER_FILE
