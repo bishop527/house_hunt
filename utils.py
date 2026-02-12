@@ -189,19 +189,25 @@ def load_csv_with_zip(filepath):
 # API BUDGET MANAGEMENT
 # ========================================
 
-def check_api_budget(estimated_elements, limit=API_MONTHLY_LIMIT):
-    """Check if API budget allows for requested elements."""
-    month_str = datetime.now().strftime('%Y-%m')
-    current_usage = 0
+def check_api_budget(estimated_elements, limit=None):
+    """
+    Check if API budget allows for requested elements.
 
-    if os.path.exists(API_MONTHLY_COUNTER_FILE):
-        try:
-            with open(API_MONTHLY_COUNTER_FILE, "r") as f:
-                content = f.read().strip().split(',')
-                if len(content) == 2 and content[0] == month_str:
-                    current_usage = int(content[1])
-        except (ValueError, IndexError) as e:
-            logger.warning(f"Error reading usage file: {e}")
+    Args:
+        estimated_elements (int): Number of elements this request will use
+        limit (int): Monthly limit (if None, uses tier-appropriate limit)
+
+    Returns:
+        tuple: (can_proceed: bool, current_usage: int)
+    """
+    # Get current usage from tier tracking
+    tier_usage = get_current_usage_by_tier()
+    current_usage = tier_usage['total']
+
+    # Determine limit based on current tier if not specified
+    if limit is None:
+        limit = (API_MONTHLY_LIMIT_ADVANCED if USE_TRAFFIC
+                 else API_MONTHLY_LIMIT_BASIC)
 
     logger.info(
         f"Current monthly API usage: {current_usage:,} / {limit:,}"
@@ -227,39 +233,146 @@ def check_api_budget(estimated_elements, limit=API_MONTHLY_LIMIT):
     return True, current_usage
 
 
-def update_api_usage(elements_used):
-    """Update the monthly API usage counter."""
+def update_api_usage_by_tier(elements_used, use_traffic=None):
+    """
+    Track API usage separately by tier (Basic vs Advanced).
+
+    Args:
+        elements_used (int): Number of elements used this run
+        use_traffic (bool): If None, uses USE_TRAFFIC constant
+
+    Returns:
+        tuple: (basic_count, advanced_count, tier_used)
+    """
+    # Determine tier - if not specified, use constant
+    if use_traffic is None:
+        use_traffic = USE_TRAFFIC
+
+    tier = 'advanced' if use_traffic else 'basic'
+
     month_str = datetime.now().strftime('%Y-%m')
-    current_usage = 0
 
-    if os.path.exists(API_MONTHLY_COUNTER_FILE):
+    # Load existing counts - INITIALIZE TO ZERO FIRST
+    basic_count = 0
+    advanced_count = 0
+
+    if os.path.exists(API_TIER_TRACKING_FILE):
         try:
-            with open(API_MONTHLY_COUNTER_FILE, "r") as f:
-                content = f.read().strip().split(',')
-                if len(content) == 2 and content[0] == month_str:
-                    current_usage = int(content[1])
-        except (ValueError, IndexError):
-            pass
+            with open(API_TIER_TRACKING_FILE, "r") as f:
+                for line in f:
+                    parts = line.strip().split(',')
+                    if len(parts) == 3 and parts[0] == month_str:
+                        # Read the tier-specific count
+                        if parts[1] == 'basic':
+                            basic_count = int(parts[2])
+                        elif parts[1] == 'advanced':
+                            advanced_count = int(parts[2])
+        except (ValueError, IndexError) as e:
+            logger.warning(f"Error reading tier tracking file: {e}")
+            # Reset to zero on error
+            basic_count = 0
+            advanced_count = 0
 
-    new_total = current_usage + elements_used
+    # Update ONLY the appropriate tier
+    if tier == 'basic':
+        basic_count += elements_used
+    else:  # tier == 'advanced'
+        advanced_count += elements_used
 
+    # Save updated counts (both tiers)
     try:
-        with open(API_MONTHLY_COUNTER_FILE, "w") as f:
-            f.write(f"{month_str},{new_total}")
+        with open(API_TIER_TRACKING_FILE, "w") as f:
+            f.write(f"{month_str},basic,{basic_count}\n")
+            f.write(f"{month_str},advanced,{advanced_count}\n")
+
         logger.info(
-            f"Updated API usage: {elements_used} this run, "
-            f"{new_total:,} / {API_MONTHLY_LIMIT:,} monthly"
+            f"Updated tier tracking - This run: {elements_used} "
+            f"({tier}), Monthly: Basic={basic_count:,}, "
+            f"Advanced={advanced_count:,}"
         )
-        log_api_usage(logger, "update_counter", elements_used)
+        log_api_usage(logger, f"update_tier_{tier}", elements_used)
+
     except IOError as e:
-        logger.error(f"Failed to update usage counter: {e}")
+        logger.error(f"Failed to update tier tracking: {e}")
+        raise
 
-    return new_total
+    return basic_count, advanced_count, tier
+
+def get_current_usage_by_tier():
+    """
+    Get current month's usage breakdown by tier from local tracking.
+
+    Returns:
+        dict: {
+            'basic': int,
+            'advanced': int,
+            'basic_remaining': int,
+            'advanced_remaining': int,
+            'total': int
+        }
+    """
+    month_str = datetime.now().strftime('%Y-%m')
+    basic_count = 0
+    advanced_count = 0
+
+    if os.path.exists(API_TIER_TRACKING_FILE):
+        try:
+            with open(API_TIER_TRACKING_FILE, "r") as f:
+                for line in f:
+                    parts = line.strip().split(',')
+                    if len(parts) == 3 and parts[0] == month_str:
+                        if parts[1] == 'basic':
+                            basic_count = int(parts[2])
+                        elif parts[1] == 'advanced':
+                            advanced_count = int(parts[2])
+        except Exception as e:
+            logger.warning(f"Error reading tier usage: {e}")
+
+    return {
+        'basic': basic_count,
+        'advanced': advanced_count,
+        'basic_remaining': max(0, API_MONTHLY_LIMIT_BASIC - basic_count),
+        'advanced_remaining': max(0,
+                                  API_MONTHLY_LIMIT_ADVANCED - advanced_count),
+        'total': basic_count + advanced_count
+    }
 
 
-# ========================================
-# GOOGLE MAPS API - CORE LOGIC (EXTRACTED)
-# ========================================
+def calculate_tier_costs(basic_count, advanced_count):
+    """
+    Calculate costs for each tier based on usage.
+
+    Args:
+        basic_count (int): Basic tier elements used
+        advanced_count (int): Advanced tier elements used
+
+    Returns:
+        dict: {
+            'basic_cost': float,
+            'advanced_cost': float,
+            'total_cost': float
+        }
+    """
+    # Basic tier: first 10k free, then $5/1000
+    if basic_count <= API_MONTHLY_LIMIT_BASIC:
+        basic_cost = 0.0
+    else:
+        billable_basic = basic_count - API_MONTHLY_LIMIT_BASIC
+        basic_cost = (billable_basic / 1000) * 5.00
+
+    # Advanced tier: first 5k free, then $10/1000
+    if advanced_count <= API_MONTHLY_LIMIT_ADVANCED:
+        advanced_cost = 0.0
+    else:
+        billable_advanced = advanced_count - API_MONTHLY_LIMIT_ADVANCED
+        advanced_cost = (billable_advanced / 1000) * 10.00
+
+    return {
+        'basic_cost': basic_cost,
+        'advanced_cost': advanced_cost,
+        'total_cost': basic_cost + advanced_cost
+    }
+
 
 def _fetch_distances_from_google(addresses, destination, current_usage):
     """
@@ -446,14 +559,23 @@ def get_zips_within_range(destination, zip_data_df, max_range,
         except Exception as e:
             logger.warning(f"Failed to read cache: {e}. Fetching fresh.")
 
-    # Build address list
+    valid_coords_df = zip_data_df.dropna(subset=['Lat', 'Long'])
+
+    if len(valid_coords_df) < len(zip_data_df):
+        missing_count = len(zip_data_df) - len(valid_coords_df)
+        logger.warning(
+            f"Filtered out {missing_count} ZIP codes with missing "
+            f"coordinates"
+        )
+
+    # Build address list from valid coordinates only
     addresses = [
         f"{r.Town}, {r.State} {r.Zip}"
-        for r in zip_data_df.itertuples()
+        for r in valid_coords_df.itertuples()
     ]
 
     # Check budget
-    estimated_elements = len(zip_data_df)
+    estimated_elements = len(addresses)
     can_proceed, current_usage = check_api_budget(estimated_elements)
 
     # Fetch distances
@@ -471,19 +593,19 @@ def get_zips_within_range(destination, zip_data_df, max_range,
                 'Distance_Miles': result['distance_miles']
             })
 
-    # Update usage
-    new_total = current_usage + elements_processed
-    try:
-        month_str = datetime.now().strftime('%Y-%m')
-        with open(API_MONTHLY_COUNTER_FILE, "w") as f:
-            f.write(f"{month_str},{new_total}")
-        logger.info(
-            f"API usage: {requests_made} requests, "
-            f"{elements_processed} elements, "
-            f"Monthly total: {new_total:,} / {API_MONTHLY_LIMIT:,}"
-        )
-    except IOError as e:
-        logger.error(f"Failed to update usage tracking: {e}")
+    # Update tier-based usage tracking
+    update_api_usage_by_tier(elements_processed)
+
+    # Log usage info
+    tier_usage = get_current_usage_by_tier()
+    logger.info(
+        f"API usage: {requests_made} requests, "
+        f"{elements_processed} elements processed"
+    )
+    logger.info(
+        f"Monthly totals - Basic: {tier_usage['basic']:,}, "
+        f"Advanced: {tier_usage['advanced']:,}"
+    )
 
     # Save cache
     if filtered_results:
@@ -539,19 +661,28 @@ def get_towns_within_range(destination, zip_data_df, max_range,
         except Exception as e:
             logger.warning(f"Failed to read cache: {e}. Fetching fresh.")
 
+    valid_coords_df = zip_data_df.dropna(subset=['Lat', 'Long'])
+
+    if len(valid_coords_df) < len(zip_data_df):
+        missing_count = len(zip_data_df) - len(valid_coords_df)
+        logger.warning(
+            f"Filtered out {missing_count} ZIP codes with missing "
+            f"coordinates"
+        )
+
     # Group by town (one representative zip per town)
-    town_groups_df = zip_data_df.groupby(
+    town_groups_df = valid_coords_df.groupby(
         ['Town', 'State']
     ).first().reset_index()
 
-    # Build address list
+    # Build addresses
     addresses = [
         f"{r.Town}, {r.State} {r.Zip}"
         for r in town_groups_df.itertuples()
     ]
 
     # Check budget
-    estimated_elements = len(town_groups_df)
+    estimated_elements = len(addresses)
     can_proceed, current_usage = check_api_budget(estimated_elements)
 
     # Fetch distances
@@ -569,19 +700,19 @@ def get_towns_within_range(destination, zip_data_df, max_range,
                 'Distance_Miles': result['distance_miles']
             })
 
-    # Update usage
-    new_total = current_usage + elements_processed
-    try:
-        month_str = datetime.now().strftime('%Y-%m')
-        with open(API_MONTHLY_COUNTER_FILE, "w") as f:
-            f.write(f"{month_str},{new_total}")
-        logger.info(
-            f"API usage: {requests_made} requests, "
-            f"{elements_processed} elements, "
-            f"Monthly total: {new_total:,} / {API_MONTHLY_LIMIT:,}"
-        )
-    except IOError as e:
-        logger.error(f"Failed to update usage tracking: {e}")
+    # Update tier-based usage tracking
+    update_api_usage_by_tier(elements_processed)
+
+    # Log usage info
+    tier_usage = get_current_usage_by_tier()
+    logger.info(
+        f"API usage: {requests_made} requests, "
+        f"{elements_processed} elements processed"
+    )
+    logger.info(
+        f"Monthly totals - Basic: {tier_usage['basic']:,}, "
+        f"Advanced: {tier_usage['advanced']:,}"
+    )
 
     # Save cache
     if filtered_results:
@@ -674,7 +805,7 @@ def get_monthly_element_usage_from_google():
             for point in result.points:
                 total_elements += point.value.int64_value
 
-        if TRAFFIC_MODEL is not None:
+        if USE_TRAFFIC:
             basic_elements = 0
             advanced_elements = total_elements
             tier_name = "Advanced"
@@ -702,46 +833,56 @@ def get_monthly_element_usage_from_google():
 
 
 def validate_local_tracking():
-    """Compare local tracking vs Google's actual count."""
-    month_str = datetime.now().strftime('%Y-%m')
-    local_count = 0
+    """
+    Compare local element tracking vs Google's actual count.
+    Shows both overall and tier-specific breakdowns.
+    """
+    # Get local tier-specific counts
+    tier_usage = get_current_usage_by_tier()
 
-    if os.path.exists(API_MONTHLY_COUNTER_FILE):
-        try:
-            with open(API_MONTHLY_COUNTER_FILE, "r") as f:
-                content = f.read().strip().split(',')
-                if len(content) == 2 and content[0] == month_str:
-                    local_count = int(content[1])
-        except (ValueError, IndexError):
-            logger.warning("Error reading local counter")
+    # Get Google's count
+    basic_google, advanced_google, google_count = \
+        get_monthly_element_usage_from_google()
 
-    basic, advanced, google_count = get_monthly_element_usage_from_google()
+    # Calculate costs
+    costs = calculate_tier_costs(
+        tier_usage['basic'],
+        tier_usage['advanced']
+    )
 
-    tier_name = "Advanced" if TRAFFIC_MODEL is not None else "Basic"
-    free_tier = 5000 if TRAFFIC_MODEL is not None else 10000
+    # Compare
+    local_total = tier_usage['total']
+    discrepancy = abs(local_total - google_count)
 
-    discrepancy = abs(local_count - google_count)
+    # Determine current tier for logging
+    current_tier = "Advanced" if USE_TRAFFIC else "Basic"
 
     logger.info(f"=== Usage Validation ===")
-    logger.info(f"Tier:            {tier_name}")
-    logger.info(f"Local tracking:  {local_count:,} elements")
-    logger.info(f"Google reports:  {google_count:,} elements")
-    logger.info(f"Free tier:       {free_tier:,}")
-    logger.info(f"Remaining:       {max(0, free_tier - google_count):,}")
-    logger.info(f"Discrepancy:     {discrepancy:,} elements")
+    logger.info(f"Current tier: {current_tier}")
+    logger.info(f"Local tier tracking:")
+    logger.info(f"  Basic:     {tier_usage['basic']:,} / "
+                f"{API_MONTHLY_LIMIT_BASIC:,} "
+                f"(${costs['basic_cost']:.2f})")
+    logger.info(f"  Advanced:  {tier_usage['advanced']:,} / "
+                f"{API_MONTHLY_LIMIT_ADVANCED:,} "
+                f"(${costs['advanced_cost']:.2f})")
+    logger.info(f"  Total:     {local_total:,}")
+    logger.info(f"Google reports: {google_count:,}")
+    logger.info(f"Discrepancy:    {discrepancy:,} elements")
+    logger.info(f"Estimated cost: ${costs['total_cost']:.2f}")
 
     if discrepancy > MAX_ACCEPTABLE_DISCREPANCY:
         logger.warning(
             f"⚠️  Significant discrepancy detected! "
-            f"Consider using Google's count as source of truth."
+            f"Consider checking billing reports."
         )
 
     return {
-        'local': local_count,
+        'local_basic': tier_usage['basic'],
+        'local_advanced': tier_usage['advanced'],
+        'local_total': local_total,
         'google': google_count,
-        'basic': basic,
-        'advanced': advanced,
         'discrepancy': discrepancy,
-        'tier': tier_name,
-        'free_tier': free_tier
+        'costs': costs,
+        'tier_usage': tier_usage
     }

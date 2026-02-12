@@ -44,7 +44,7 @@ HOUSING_LOOKUP_FILE = os.path.join(PROCESSED_DIR, "housing_lookup.csv")
 # ========================================
 COMMUTE_STATS_FILE = os.path.join(RESULTS_DIR, "commute_stats.csv")
 HOUSING_STATS_FILE = os.path.join(RESULTS_DIR, "historical_housing_stats.csv")
-API_MONTHLY_COUNTER_FILE = os.path.join(RESULTS_DIR, "monthly_API_usage_counter.txt")
+API_TIER_TRACKING_FILE = os.path.join(RESULTS_DIR, "monthly_API_usage_by_tier.txt")
 
 # ========================================
 # DATA FILES - LOGS
@@ -102,7 +102,7 @@ TRAFFIC_MODEL = 'best_guess'  # Used when USE_TRAFFIC=True
 # Monthly Limits (free tier)
 API_MONTHLY_LIMIT_BASIC = 10000  # Basic tier (no traffic)
 API_MONTHLY_LIMIT_ADVANCED = 5000  # Advanced tier (with traffic)
-API_MONTHLY_LIMIT = 13000  # Current project limit
+API_MONTHLY_LIMIT = API_MONTHLY_LIMIT_BASIC  # Current project limit
 
 # Rate Limiting
 RATE_LIMIT_WAIT_SECONDS = 2  # Wait time when hitting rate limits
@@ -152,9 +152,3 @@ MIN_SAMPLE_SIZE = 5  # Minimum homes sold to consider data reliable
 
 # Property Type Filters
 PROPERTY_TYPES = ['Single Family', 'Condo', 'Townhouse']
-
-# ========================================
-# BACKWARD COMPATIBILITY
-# ========================================
-# Alias for old constant name
-API_MONTHLY_COUNTER = API_MONTHLY_COUNTER_FILE

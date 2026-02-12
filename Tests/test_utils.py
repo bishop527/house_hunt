@@ -18,8 +18,11 @@ from utils import (
     get_zip_data,
     get_zips_within_range,
     check_api_budget,
-    update_api_usage,
-    load_csv_with_zip
+    load_csv_with_zip,
+    update_api_usage_by_tier,
+    get_current_usage_by_tier,
+    calculate_tier_costs,
+    validate_local_tracking
 )
 
 
@@ -215,18 +218,25 @@ def test_get_zip_data_zero_padding(mock_zip_csv, tmp_path, monkeypatch):
     assert all(df['Zip'].str.len() == 5)
 
 
-# --- Test check_api_budget ---
-
 def test_check_api_budget_under_limit(tmp_path, monkeypatch):
     """Test budget check when under monthly limit"""
-    counter_file = tmp_path / "usage_counter.txt"
-    counter_file.write_text("2026-01,5000")
+    tier_file = tmp_path / "usage_by_tier.txt"
 
-    monkeypatch.setattr('utils.API_MONTHLY_COUNTER', str(counter_file))
-    monkeypatch.setattr('utils.API_MONTHLY_LIMIT', 20000)
+    # Setup tier tracking file with current month
+    monkeypatch.setattr('utils.API_TIER_TRACKING_FILE', str(tier_file))
+    monkeypatch.setattr('utils.USE_TRAFFIC', False)  # Basic tier
 
+    # Patch datetime BEFORE writing file so month_str matches
     with patch('utils.datetime') as mock_dt:
         mock_dt.now.return_value = datetime(2026, 1, 15)
+        mock_dt.strftime = datetime.strftime  # Keep strftime working
+
+        # Write file using the same mocked datetime
+        month_str = mock_dt.now.return_value.strftime('%Y-%m')
+        tier_file.write_text(
+            f"{month_str},basic,5000\n{month_str},advanced,0\n"
+        )
+
         can_proceed, current = check_api_budget(100)
 
     assert can_proceed is True
@@ -235,14 +245,21 @@ def test_check_api_budget_under_limit(tmp_path, monkeypatch):
 
 def test_check_api_budget_at_limit(tmp_path, monkeypatch):
     """Test budget check when at monthly limit"""
-    counter_file = tmp_path / "usage_counter.txt"
-    counter_file.write_text("2026-01,20000")
+    tier_file = tmp_path / "usage_by_tier.txt"
 
-    monkeypatch.setattr('utils.API_MONTHLY_COUNTER', str(counter_file))
-    monkeypatch.setattr('utils.API_MONTHLY_LIMIT', 20000)
+    monkeypatch.setattr('utils.API_TIER_TRACKING_FILE', str(tier_file))
+    monkeypatch.setattr('utils.USE_TRAFFIC', False)  # Basic tier
+    monkeypatch.setattr('utils.API_MONTHLY_LIMIT_BASIC', 10000)
 
     with patch('utils.datetime') as mock_dt:
         mock_dt.now.return_value = datetime(2026, 1, 15)
+        mock_dt.strftime = datetime.strftime
+
+        month_str = mock_dt.now.return_value.strftime('%Y-%m')
+        tier_file.write_text(
+            f"{month_str},basic,10000\n{month_str},advanced,0\n"
+        )
+
         with pytest.raises(SystemExit) as exc_info:
             check_api_budget(100)
 
@@ -251,9 +268,10 @@ def test_check_api_budget_at_limit(tmp_path, monkeypatch):
 
 def test_check_api_budget_missing_file(tmp_path, monkeypatch):
     """Test budget check with no existing usage file"""
-    monkeypatch.setattr('utils.API_MONTHLY_COUNTER',
+    monkeypatch.setattr('utils.API_TIER_TRACKING_FILE',
                        str(tmp_path / "nonexistent.txt"))
-    monkeypatch.setattr('utils.API_MONTHLY_LIMIT', 20000)
+    monkeypatch.setattr('utils.API_MONTHLY_LIMIT_BASIC', 20000)
+    monkeypatch.setattr('utils.USE_TRAFFIC', False)
 
     with patch('utils.datetime') as mock_dt:
         mock_dt.now.return_value = datetime(2026, 1, 15)
@@ -265,11 +283,11 @@ def test_check_api_budget_missing_file(tmp_path, monkeypatch):
 
 def test_check_api_budget_new_month(tmp_path, monkeypatch):
     """Test budget resets for new month"""
-    counter_file = tmp_path / "usage_counter.txt"
-    counter_file.write_text("2025-12,19000")  # Previous month
+    tier_file = tmp_path / "usage_by_tier.txt"
+    tier_file.write_text("2025-12,basic,9000\n2025-12,advanced,0\n")
 
-    monkeypatch.setattr('utils.API_MONTHLY_COUNTER', str(counter_file))
-    monkeypatch.setattr('utils.API_MONTHLY_LIMIT', 20000)
+    monkeypatch.setattr('utils.API_TIER_TRACKING_FILE', str(tier_file))
+    monkeypatch.setattr('utils.USE_TRAFFIC', False)
 
     with patch('utils.datetime') as mock_dt:
         mock_dt.now.return_value = datetime(2026, 1, 15)
@@ -277,39 +295,6 @@ def test_check_api_budget_new_month(tmp_path, monkeypatch):
 
     assert can_proceed is True
     assert current == 0  # Reset for new month
-
-
-# --- Test update_api_usage ---
-
-def test_update_api_usage_new_file(tmp_path, monkeypatch):
-    """Test creating new usage counter file"""
-    counter_file = tmp_path / "usage_counter.txt"
-
-    monkeypatch.setattr('utils.API_MONTHLY_COUNTER', str(counter_file))
-    monkeypatch.setattr('utils.API_MONTHLY_LIMIT', 20000)
-
-    with patch('utils.datetime') as mock_dt:
-        mock_dt.now.return_value = datetime(2026, 1, 15)
-        new_total = update_api_usage(150)
-
-    assert new_total == 150
-    assert counter_file.read_text() == "2026-01,150"
-
-
-def test_update_api_usage_existing_file(tmp_path, monkeypatch):
-    """Test updating existing usage counter"""
-    counter_file = tmp_path / "usage_counter.txt"
-    counter_file.write_text("2026-01,5000")
-
-    monkeypatch.setattr('utils.API_MONTHLY_COUNTER', str(counter_file))
-    monkeypatch.setattr('utils.API_MONTHLY_LIMIT', 20000)
-
-    with patch('utils.datetime') as mock_dt:
-        mock_dt.now.return_value = datetime(2026, 1, 15)
-        new_total = update_api_usage(150)
-
-    assert new_total == 5150
-    assert counter_file.read_text() == "2026-01,5150"
 
 
 # --- Test load_csv_with_zip ---
@@ -339,14 +324,17 @@ def test_load_csv_with_zip_missing_file(tmp_path):
 def test_get_zips_within_range_success(mock_client, tmp_path, monkeypatch,
                                        mock_distance_matrix_response):
     """Test successful range check with mocked API"""
-    # Setup
-    counter_file = tmp_path / "usage_counter.txt"
-    counter_file.write_text("2026-01,0")
+    # Setup tier tracking file
+    tier_file = tmp_path / "usage_by_tier.txt"
+    month_str = datetime.now().strftime('%Y-%m')
+    tier_file.write_text(f"{month_str},basic,0\n{month_str},advanced,0\n")
+
     processed_dir = tmp_path / "Processed"
     processed_dir.mkdir()
 
-    monkeypatch.setattr('utils.API_MONTHLY_COUNTER', str(counter_file))
-    monkeypatch.setattr('utils.API_MONTHLY_LIMIT', 20000)
+    monkeypatch.setattr('utils.API_TIER_TRACKING_FILE', str(tier_file))
+    monkeypatch.setattr('utils.API_MONTHLY_LIMIT_BASIC', 20000)
+    monkeypatch.setattr('utils.USE_TRAFFIC', False)
     monkeypatch.setattr('utils.PROCESSED_DIR', str(processed_dir))
     monkeypatch.setattr('utils.CHUNK_SIZE', 3)
     monkeypatch.setattr('utils.PROXY_ON', False)
@@ -382,15 +370,18 @@ def test_get_zips_within_range_success(mock_client, tmp_path, monkeypatch,
 
 @patch('utils.googlemaps.Client')
 def test_get_zips_within_range_filters_no_coords(mock_client, tmp_path,
-                                                  monkeypatch):
+                                                 monkeypatch):
     """Test that ZIPs without coordinates are excluded"""
-    counter_file = tmp_path / "usage_counter.txt"
-    counter_file.write_text("2026-01,0")
+    tier_file = tmp_path / "usage_by_tier.txt"
+    month_str = datetime.now().strftime('%Y-%m')
+    tier_file.write_text(f"{month_str},basic,0\n{month_str},advanced,0\n")
+
     processed_dir = tmp_path / "Processed"
     processed_dir.mkdir()
 
-    monkeypatch.setattr('utils.API_MONTHLY_COUNTER', str(counter_file))
-    monkeypatch.setattr('utils.API_MONTHLY_LIMIT', 20000)
+    monkeypatch.setattr('utils.API_TIER_TRACKING_FILE', str(tier_file))
+    monkeypatch.setattr('utils.API_MONTHLY_LIMIT_BASIC', 20000)
+    monkeypatch.setattr('utils.USE_TRAFFIC', False)
     monkeypatch.setattr('utils.PROCESSED_DIR', str(processed_dir))
     monkeypatch.setattr('utils.PROXY_ON', False)
 
@@ -426,13 +417,16 @@ def test_get_zips_within_range_filters_no_coords(mock_client, tmp_path,
 @patch('utils.googlemaps.Client')
 def test_get_zips_within_range_api_error(mock_client, tmp_path, monkeypatch):
     """Test handling of API errors"""
-    counter_file = tmp_path / "usage_counter.txt"
-    counter_file.write_text("2026-01,0")
+    tier_file = tmp_path / "usage_by_tier.txt"
+    month_str = datetime.now().strftime('%Y-%m')
+    tier_file.write_text(f"{month_str},basic,0\n{month_str},advanced,0\n")
+
     processed_dir = tmp_path / "Processed"
     processed_dir.mkdir()
 
-    monkeypatch.setattr('utils.API_MONTHLY_COUNTER', str(counter_file))
-    monkeypatch.setattr('utils.API_MONTHLY_LIMIT', 20000)
+    monkeypatch.setattr('utils.API_TIER_TRACKING_FILE', str(tier_file))
+    monkeypatch.setattr('utils.API_MONTHLY_LIMIT_BASIC', 20000)
+    monkeypatch.setattr('utils.USE_TRAFFIC', False)
     monkeypatch.setattr('utils.PROCESSED_DIR', str(processed_dir))
     monkeypatch.setattr('utils.PROXY_ON', False)
 
@@ -466,11 +460,13 @@ def test_get_zips_within_range_api_error(mock_client, tmp_path, monkeypatch):
 
 def test_get_zips_within_range_no_api_key(tmp_path, monkeypatch):
     """Test handling of missing API key"""
-    counter_file = tmp_path / "usage_counter.txt"
-    counter_file.write_text("2026-01,0")
+    tier_file = tmp_path / "usage_by_tier.txt"
+    month_str = datetime.now().strftime('%Y-%m')
+    tier_file.write_text(f"{month_str},basic,0\n{month_str},advanced,0\n")
 
-    monkeypatch.setattr('utils.API_MONTHLY_COUNTER', str(counter_file))
-    monkeypatch.setattr('utils.API_MONTHLY_LIMIT', 20000)
+    monkeypatch.setattr('utils.API_TIER_TRACKING_FILE', str(tier_file))
+    monkeypatch.setattr('utils.API_MONTHLY_LIMIT_BASIC', 20000)
+    monkeypatch.setattr('utils.USE_TRAFFIC', False)
 
     zip_data = pd.DataFrame({
         'Zip': ['02421'],
@@ -490,6 +486,251 @@ def test_get_zips_within_range_no_api_key(tmp_path, monkeypatch):
 
     assert exc_info.value.code == 1
 
+
+# --- Test Tier-Specific Tracking ---
+
+def test_update_api_usage_by_tier_basic(tmp_path, monkeypatch):
+    """Test updating basic tier usage"""
+    tier_file = tmp_path / "usage_by_tier.txt"
+
+    monkeypatch.setattr('utils.API_TIER_TRACKING_FILE', str(tier_file))
+    monkeypatch.setattr('utils.USE_TRAFFIC', None)  # Basic tier
+
+    with patch('utils.datetime') as mock_dt:
+        mock_dt.now.return_value = datetime(2026, 1, 15)
+
+        basic, advanced, tier = update_api_usage_by_tier(100)
+
+    assert tier == 'basic'
+    assert basic == 100
+    assert advanced == 0
+    assert tier_file.exists()
+
+    # Verify file contents
+    content = tier_file.read_text()
+    assert '2026-01,basic,100' in content
+    assert '2026-01,advanced,0' in content
+
+
+def test_update_api_usage_by_tier_advanced(tmp_path, monkeypatch):
+    """Test updating advanced tier usage"""
+    tier_file = tmp_path / "usage_by_tier.txt"
+
+    monkeypatch.setattr('utils.API_TIER_TRACKING_FILE', str(tier_file))
+    monkeypatch.setattr('utils.USE_TRAFFIC', True)
+
+    with patch('utils.datetime') as mock_dt:
+        mock_dt.now.return_value = datetime(2026, 1, 15)
+
+        basic, advanced, tier = update_api_usage_by_tier(50)
+
+    assert tier == 'advanced'
+    assert basic == 0
+    assert advanced == 50
+
+
+def test_update_api_usage_by_tier_accumulates(tmp_path, monkeypatch):
+    """Test that tier usage accumulates across multiple calls"""
+    tier_file = tmp_path / "usage_by_tier.txt"
+
+    monkeypatch.setattr('utils.API_TIER_TRACKING_FILE', str(tier_file))
+    monkeypatch.setattr('utils.USE_TRAFFIC', None)
+
+    with patch('utils.datetime') as mock_dt:
+        mock_dt.now.return_value = datetime(2026, 1, 15)
+
+        # First call
+        basic1, advanced1, _ = update_api_usage_by_tier(100)
+        assert basic1 == 100
+
+        # Second call
+        basic2, advanced2, _ = update_api_usage_by_tier(50)
+        assert basic2 == 150  # Should accumulate
+        assert advanced2 == 0
+
+
+def test_update_api_usage_by_tier_mixed(tmp_path, monkeypatch):
+    """Test updating both basic and advanced in same month"""
+    tier_file = tmp_path / "usage_by_tier.txt"
+
+    monkeypatch.setattr('utils.API_TIER_TRACKING_FILE', str(tier_file))
+    monkeypatch.setattr('utils.USE_TRAFFIC', False)
+
+    with patch('utils.datetime') as mock_dt:
+        mock_dt.now.return_value = datetime(2026, 1, 15)
+
+        # Basic tier call
+        basic1, advanced1, _ = update_api_usage_by_tier(
+            100,
+            use_traffic=False
+        )
+        assert basic1 == 100
+        assert advanced1 == 0
+
+        # Advanced tier call
+        basic2, advanced2, _ = update_api_usage_by_tier(
+            50,
+            use_traffic=True
+        )
+        assert basic2 == 100  # Unchanged
+        assert advanced2 == 50
+
+
+def test_update_api_usage_by_tier_new_month(tmp_path, monkeypatch):
+    """Test that usage resets for new month"""
+    tier_file = tmp_path / "usage_by_tier.txt"
+    tier_file.write_text("2025-12,basic,5000\n2025-12,advanced,2000\n")
+
+    monkeypatch.setattr('utils.API_TIER_TRACKING_FILE', str(tier_file))
+    monkeypatch.setattr('utils.USE_TRAFFIC', False)
+
+    with patch('utils.datetime') as mock_dt:
+        mock_dt.now.return_value = datetime(2026, 1, 15)
+
+        basic, advanced, _ = update_api_usage_by_tier(100)
+
+    # Should reset for new month
+    assert basic == 100
+    assert advanced == 0
+
+
+def test_get_current_usage_by_tier_empty(tmp_path, monkeypatch):
+    """Test getting usage when no tracking file exists"""
+    monkeypatch.setattr('utils.API_TIER_TRACKING_FILE',
+                        str(tmp_path / "nonexistent.txt"))
+
+    usage = get_current_usage_by_tier()
+
+    assert usage['basic'] == 0
+    assert usage['advanced'] == 0
+    assert usage['basic_remaining'] == 10000
+    assert usage['advanced_remaining'] == 5000
+    assert usage['total'] == 0
+
+
+def test_get_current_usage_by_tier_with_data(tmp_path, monkeypatch):
+    """Test getting usage with existing data"""
+    tier_file = tmp_path / "usage_by_tier.txt"
+    month_str = datetime.now().strftime('%Y-%m')
+    tier_file.write_text(
+        f"{month_str},basic,3000\n{month_str},advanced,2000\n"
+    )
+
+    monkeypatch.setattr('utils.API_TIER_TRACKING_FILE', str(tier_file))
+
+    usage = get_current_usage_by_tier()
+
+    assert usage['basic'] == 3000
+    assert usage['advanced'] == 2000
+    assert usage['basic_remaining'] == 7000
+    assert usage['advanced_remaining'] == 3000
+    assert usage['total'] == 5000
+
+
+def test_calculate_tier_costs_all_free(tmp_path):
+    """Test cost calculation when under free tier"""
+    costs = calculate_tier_costs(basic_count=5000, advanced_count=3000)
+
+    assert costs['basic_cost'] == 0.0
+    assert costs['advanced_cost'] == 0.0
+    assert costs['total_cost'] == 0.0
+
+
+def test_calculate_tier_costs_basic_paid(tmp_path):
+    """Test cost calculation when basic exceeds free tier"""
+    # 12,000 basic = 2,000 billable @ $5/1000 = $10
+    costs = calculate_tier_costs(basic_count=12000, advanced_count=0)
+
+    assert costs['basic_cost'] == 10.0
+    assert costs['advanced_cost'] == 0.0
+    assert costs['total_cost'] == 10.0
+
+
+def test_calculate_tier_costs_advanced_paid(tmp_path):
+    """Test cost calculation when advanced exceeds free tier"""
+    # 7,000 advanced = 2,000 billable @ $10/1000 = $20
+    costs = calculate_tier_costs(basic_count=0, advanced_count=7000)
+
+    assert costs['basic_cost'] == 0.0
+    assert costs['advanced_cost'] == 20.0
+    assert costs['total_cost'] == 20.0
+
+
+def test_calculate_tier_costs_both_paid(tmp_path):
+    """Test cost calculation when both tiers exceed free tier"""
+    # 12,000 basic = 2,000 billable @ $5/1000 = $10
+    # 7,000 advanced = 2,000 billable @ $10/1000 = $20
+    # Total = $30
+    costs = calculate_tier_costs(basic_count=12000, advanced_count=7000)
+
+    assert costs['basic_cost'] == 10.0
+    assert costs['advanced_cost'] == 20.0
+    assert costs['total_cost'] == 30.0
+
+
+def test_validate_local_tracking_with_tiers(tmp_path, monkeypatch):
+    """Test validation includes tier breakdown"""
+    # Setup tier tracking file
+    tier_file = tmp_path / "usage_by_tier.txt"
+    month_str = datetime.now().strftime('%Y-%m')
+    tier_file.write_text(
+        f"{month_str},basic,3000\n{month_str},advanced,2000\n"
+    )
+
+    monkeypatch.setattr('utils.API_TIER_TRACKING_FILE', str(tier_file))
+
+    # Mock get_monthly_element_usage_from_google
+    with patch('utils.get_monthly_element_usage_from_google') as mock_google:
+        mock_google.return_value = (3000, 2000, 5000)  # basic, adv, total
+
+        validation = validate_local_tracking()
+
+    assert validation['local_basic'] == 3000
+    assert validation['local_advanced'] == 2000
+    assert validation['local_total'] == 5000
+    assert validation['google'] == 5000
+    assert validation['discrepancy'] == 0
+    assert 'costs' in validation
+    assert 'tier_usage' in validation
+
+
+def test_update_api_usage_by_tier_file_permission_error(
+        tmp_path, monkeypatch
+):
+    """Test handling of file permission errors"""
+    tier_file = tmp_path / "usage_by_tier.txt"
+    tier_file.write_text("dummy")
+    tier_file.chmod(0o444)  # Read-only
+
+    monkeypatch.setattr('utils.API_TIER_TRACKING_FILE', str(tier_file))
+    monkeypatch.setattr('utils.TRAFFIC_MODEL', None)
+
+    with patch('utils.datetime') as mock_dt:
+        mock_dt.now.return_value = datetime(2026, 1, 15)
+
+        with pytest.raises(IOError):
+            update_api_usage_by_tier(100)
+
+    # Cleanup
+    tier_file.chmod(0o644)
+
+
+def test_update_api_usage_by_tier_corrupted_file(tmp_path, monkeypatch):
+    """Test handling of corrupted tracking file"""
+    tier_file = tmp_path / "usage_by_tier.txt"
+    tier_file.write_text("corrupted,data,here,extra,fields\n")
+
+    monkeypatch.setattr('utils.API_TIER_TRACKING_FILE', str(tier_file))
+    monkeypatch.setattr('utils.TRAFFIC_MODEL', None)
+
+    with patch('utils.datetime') as mock_dt:
+        mock_dt.now.return_value = datetime(2026, 1, 15)
+
+        # Should handle corruption gracefully and start fresh
+        basic, advanced, tier = update_api_usage_by_tier(100)
+
+    assert basic == 100
+    assert advanced == 0
 
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])

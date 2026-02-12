@@ -23,8 +23,8 @@ from utils import (
     get_zip_data,
     get_locations_within_range,
     check_api_budget,
-    update_api_usage,
     load_csv_with_zip,
+    update_api_usage_by_tier,
     validate_local_tracking
 )
 from logging_config import setup_logger, silence_verbose_loggers
@@ -451,33 +451,40 @@ def _validate_and_display_usage():
     logger.info("Validating current API usage against Google...")
     validation = validate_local_tracking()
 
+    # Get tier usage and costs from validation
+    tier_usage = validation['tier_usage']
+    costs = validation['costs']
+
     # Display validation results
     print("\n" + "=" * 70)
     print("CURRENT API USAGE STATUS")
     print("-" * 70)
-    print(f"Local tracking:        {validation['local']:,} elements")
+    print("LOCAL TRACKING (by tier):")
+    print(f"  Basic:     {tier_usage['basic']:,} / "
+          f"{API_MONTHLY_LIMIT_BASIC:,} "
+          f"({tier_usage['basic_remaining']:,} remaining)")
+    print(f"  Advanced:  {tier_usage['advanced']:,} / "
+          f"{API_MONTHLY_LIMIT_ADVANCED:,} "
+          f"({tier_usage['advanced_remaining']:,} remaining)")
+    print(f"  Total:     {tier_usage['total']:,}")
+    print("-" * 70)
     print(f"Google reports:        {validation['google']:,} elements")
-    print(f"  - Basic tier:        {validation['basic']:,}")
-    print(f"  - Advanced tier:     {validation['advanced']:,}")
-    print(f"Free tier remaining:   "
-          f"{max(0, API_MONTHLY_LIMIT - validation['google']):,}")
 
     if validation['discrepancy'] > MAX_ACCEPTABLE_DISCREPANCY:
         print(f"⚠️  WARNING: Discrepancy of "
               f"{validation['discrepancy']:,} elements!")
-        print(f"    Using Google's count ({validation['google']:,}) "
-              f"as source of truth.")
-        # Update local counter to match Google
-        month_str = datetime.now().strftime('%Y-%m')
-        with open(API_MONTHLY_COUNTER_FILE, "w") as f:
-            f.write(f"{month_str},{validation['google']}")
-        logger.info(
-            f"Local counter corrected to: {validation['google']:,}"
-        )
+        print(f"    Using Google's count ({validation['google']:,}) as "
+              f"source of truth.")
+
+    print("-" * 70)
+    print(f"Estimated cost:        ${costs['total_cost']:.2f}")
+    if costs['basic_cost'] > 0:
+        print(f"  Basic tier:          ${costs['basic_cost']:.2f}")
+    if costs['advanced_cost'] > 0:
+        print(f"  Advanced tier:       ${costs['advanced_cost']:.2f}")
     print("=" * 70 + "\n")
 
     return validation
-
 
 def _load_addresses_within_range():
     """Load and return addresses within MAX_RANGE."""
@@ -503,7 +510,11 @@ def _check_budget_and_confirm(addresses, google_usage):
     estimated_elements = len(addresses)
     projected_total = google_usage + estimated_elements
 
-    if projected_total > API_MONTHLY_LIMIT:
+    # Should check against appropriate tier limit based on USE_TRAFFIC
+    current_limit = (API_MONTHLY_LIMIT_ADVANCED if USE_TRAFFIC
+                     else API_MONTHLY_LIMIT_BASIC)
+
+    if projected_total > current_limit:
         logger.warning(
             f"!!! WARNING: This run would exceed monthly limit !!!\n"
             f"Current usage (Google): {google_usage:,}\n"
@@ -528,7 +539,8 @@ def _check_budget_and_confirm(addresses, google_usage):
 
 def _finalize_and_report(results, elements_used, direction):
     """Update counters and display final report."""
-    new_total = update_api_usage(elements_used)
+    # Update tier-specific tracking (ONLY THIS - remove update_api_usage())
+    basic_count, advanced_count, tier = update_api_usage_by_tier(elements_used)
 
     # Validate again after API calls
     logger.info("Re-validating usage after API calls...")
@@ -542,7 +554,7 @@ def _finalize_and_report(results, elements_used, direction):
     print(f"Successful results:    "
           f"{len([r for r in results if r['status'] == 'OK'])}")
     print(f"Elements this run:     {elements_used}")
-    print(f"Local monthly total:   {new_total:,}")
+    # print(f"Local monthly total:   {new_total:,}")
     print(f"Google monthly total:  {final_validation['google']:,}")
 
     if final_validation['discrepancy'] > MAX_ACCEPTABLE_DISCREPANCY:
@@ -626,8 +638,49 @@ def collect_commute_data():
     if results:
         update_statistics(results)
 
-    # Finalize and report
-    _finalize_and_report(results, elements_used, direction)
+    # Update tier-specific tracking
+    basic_count, advanced_count, tier = update_api_usage_by_tier(elements_used)
+
+    # Validate again after API calls
+    logger.info("Re-validating usage after API calls...")
+    final_validation = validate_local_tracking()
+
+    # Calculate what we can still do this month
+    tier_usage = final_validation['tier_usage']
+    costs = final_validation['costs']
+
+    # Print detailed summary
+    print("\n" + "=" * 70)
+    print(f"COMMUTE DATA COLLECTION COMPLETE - {direction.upper()}")
+    print("=" * 70)
+    print(f"Addresses queried:     {len(addresses)}")
+    print(f"Successful results:    "
+          f"{len([r for r in results if r['status'] == 'OK'])}")
+    print(f"Elements this run:     {elements_used} ({tier} tier)")
+    print("-" * 70)
+    print("MONTHLY USAGE BY TIER:")
+    print(f"  Basic:     {tier_usage['basic']:,} / "
+          f"{API_MONTHLY_LIMIT_BASIC:,} "
+          f"({tier_usage['basic_remaining']:,} remaining)")
+    print(f"  Advanced:  {tier_usage['advanced']:,} / "
+          f"{API_MONTHLY_LIMIT_ADVANCED:,} "
+          f"({tier_usage['advanced_remaining']:,} remaining)")
+    print(f"  Total:     {tier_usage['total']:,}")
+    print("-" * 70)
+    print(f"Google reports:        {final_validation['google']:,}")
+
+    if final_validation['discrepancy'] > MAX_ACCEPTABLE_DISCREPANCY:
+        print(f"⚠️  Discrepancy:        "
+              f"{final_validation['discrepancy']:,} elements")
+
+    print(f"Estimated cost:        ${costs['total_cost']:.2f}")
+
+    if costs['basic_cost'] > 0:
+        print(f"  Basic cost:          ${costs['basic_cost']:.2f}")
+    if costs['advanced_cost'] > 0:
+        print(f"  Advanced cost:       ${costs['advanced_cost']:.2f}")
+
+    print("=" * 70 + "\n")
 
     logger.info("Commute data collection completed successfully")
 
