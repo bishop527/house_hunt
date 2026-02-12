@@ -1,0 +1,489 @@
+07:00:28 [INFO] House Hunt execution started at 2026-02-02 07:00:28.398248
+07:00:28 [INFO] ======================================================================
+07:00:28 [INFO] Starting Commute Data Collection
+07:00:28 [INFO] ======================================================================
+07:00:28 [INFO] ======================================================================
+07:00:28 [INFO] Starting commute data collection
+07:00:28 [INFO] ======================================================================
+07:00:28 [INFO] Before noon - collecting morning commute data
+07:00:28 [INFO] Direction: morning commute
+07:00:28 [INFO] Validating current API usage against Google...
+/home/ad23883/.local/lib/python3.10/site-packages/google/api_core/_python_version_support.py:266: FutureWarning: You are using a Python version (3.10.12) which Google will stop supporting in new releases of google.api_core once it reaches its end of life (2026-10-04). Please upgrade to the latest Python version, or at least Python 3.11, to continue receiving updates for google.api_core past that date.
+  warnings.warn(message, FutureWarning)
+07:00:30 [INFO] Google-reported usage: 0 elements (Advanced tier based on TRAFFIC_MODEL=best_guess)
+07:00:30 [INFO] Free tier limit: 5,000, Remaining: 5,000
+07:00:30 [INFO] === Usage Validation ===
+07:00:30 [INFO] Tier:            Advanced
+07:00:30 [INFO] Local tracking:  0 elements
+07:00:30 [INFO] Google reports:  0 elements
+07:00:30 [INFO] Free tier:       5,000
+07:00:30 [INFO] Remaining:       5,000
+07:00:30 [INFO] Discrepancy:     0 elements
+
+======================================================================
+CURRENT API USAGE STATUS
+----------------------------------------------------------------------
+Local tracking:        0 elements
+Google reports:        0 elements
+  - Basic tier:        0
+  - Advanced tier:     0
+Free tier remaining:   13,000
+======================================================================
+
+07:00:30 [INFO] Loading zip codes within 40 miles of work...
+07:00:30 [INFO] Parsing ZIP database: /home/ad23883/workspace/house_hunt/Data/Raw/zip_code_database.csv
+07:00:31 [INFO] Loaded 795 active standard ZIPs for MA, RI, NH
+07:00:31 [DEBUG] API Key successfully loaded from /home/ad23883/workspace/house_hunt/Data/google_api_key
+07:00:31 [INFO] Current monthly API usage: 0 / 13,000
+07:00:31 [INFO] Checking range for 698 towns against 123 Main St. Anytown, MA 00000 (Max: 40 miles)
+Processing towns:   0%|                               | 0/28 [00:00<?, ?chunk/s]07:00:31 [INFO] Using Basic tier (no traffic)
+07:00:31 [DEBUG] Starting new HTTPS connection (1): maps.googleapis.com:443
+07:00:31 [DEBUG] https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=244+Wood+St.+Lexington%2C+MA+02421&mode=driving&origins=Abington%2C+MA+02351%7CActon%2C+MA+01718%7CAcushnet%2C+MA+02743%7CAcworth%2C+NH+03601%7CAdams%2C+MA+01220%7CAgawam%2C+MA+01001%7CAllston%2C+MA+02134%7CAlstead%2C+NH+03602%7CAlton%2C+NH+03809%7CAlton+Bay%2C+NH+03810%7CAmesbury%2C+MA+01913%7CAmherst%2C+MA+01002%7CAmherst%2C+NH+03031%7CAndover%2C+MA+01810%7CAndover%2C+NH+03216%7CAntrim%2C+NH+03440%7CArlington%2C+MA+02474%7CAshaway%2C+RI+02804%7CAshburnham%2C+MA+01430%7CAshby%2C+MA+01431%7CAshfield%2C+MA+01330%7CAshland%2C+MA+01721%7CAshland%2C+NH+03217%7CAshley+Falls%2C+MA+01222%7CAshuelot%2C+NH+03441&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+Processing towns:   4%|▊                      | 1/28 [00:00<00:09,  2.98chunk/s]07:00:31 [INFO] Using Basic tier (no traffic)
+07:00:31 [DEBUG] https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=244+Wood+St.+Lexington%2C+MA+02421&mode=driving&origins=Assonet%2C+MA+02702%7CAthol%2C+MA+01331%7CAtkinson%2C+NH+03811%7CAttleboro%2C+MA+02703%7CAttleboro+Falls%2C+MA+02763%7CAuburn%2C+MA+01501%7CAuburn%2C+NH+03032%7CAuburndale%2C+MA+02466%7CAvon%2C+MA+02322%7CAyer%2C+MA+01432%7CBaldwinville%2C+MA+01436%7CBarnstable%2C+MA+02630%7CBarnstead%2C+NH+03218%7CBarre%2C+MA+01005%7CBarrington%2C+NH+03825%7CBarrington%2C+RI+02806%7CBartlett%2C+NH+03812%7CBath%2C+NH+03740%7CBecket%2C+MA+01223%7CBedford%2C+MA+01730%7CBedford%2C+NH+03110%7CBelchertown%2C+MA+01007%7CBellingham%2C+MA+02019%7CBelmont%2C+MA+02478%7CBelmont%2C+NH+03220&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+Processing towns:   7%|█▋                     | 2/28 [00:00<00:07,  3.49chunk/s]07:00:31 [INFO] Using Basic tier (no traffic)
+07:00:31 [DEBUG] https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=244+Wood+St.+Lexington%2C+MA+02421&mode=driving&origins=Bennington%2C+NH+03442%7CBerkley%2C+MA+02779%7CBerkshire%2C+MA+01224%7CBerlin%2C+MA+01503%7CBerlin%2C+NH+03570%7CBernardston%2C+MA+01337%7CBethlehem%2C+NH+03574%7CBeverly%2C+MA+01915%7CBillerica%2C+MA+01821%7CBlackstone%2C+MA+01504%7CBlandford%2C+MA+01008%7CBolton%2C+MA+01740%7CBoston%2C+MA+02108%7CBow%2C+NH+03304%7CBoxborough%2C+MA+01719%7CBoxford%2C+MA+01921%7CBoylston%2C+MA+01505%7CBradford%2C+NH+03221%7CBradford%2C+RI+02808%7CBraintree%2C+MA+02184%7CBrewster%2C+MA+02631%7CBridgewater%2C+MA+02324%7CBrighton%2C+MA+02135%7CBrimfield%2C+MA+01010%7CBristol%2C+NH+03222&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+Processing towns:  11%|██▍                    | 3/28 [00:00<00:06,  3.63chunk/s]07:00:31 [INFO] Using Basic tier (no traffic)
+07:00:32 [DEBUG] https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=244+Wood+St.+Lexington%2C+MA+02421&mode=driving&origins=Bristol%2C+RI+02809%7CBrockton%2C+MA+02301%7CBrookfield%2C+MA+01506%7CBrookline%2C+MA+02445%7CBrookline%2C+NH+03033%7CBuckland%2C+MA+01338%7CBurlington%2C+MA+01803%7CBuzzards+Bay%2C+MA+02532%7CByfield%2C+MA+01922%7CCambridge%2C+MA+02138%7CCampton%2C+NH+03223%7CCanaan%2C+NH+03741%7CCandia%2C+NH+03034%7CCanterbury%2C+NH+03224%7CCanton%2C+MA+02021%7CCarlisle%2C+MA+01741%7CCarolina%2C+RI+02812%7CCarver%2C+MA+02330%7CCenter+Barnstead%2C+NH+03225%7CCenter+Conway%2C+NH+03813%7CCenter+Harbor%2C+NH+03226%7CCenter+Ossipee%2C+NH+03814%7CCenter+Sandwich%2C+NH+03227%7CCenter+Tuftonboro%2C+NH+03816%7CCenterville%2C+MA+02632&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+Processing towns:  14%|███▎                   | 4/28 [00:01<00:06,  3.67chunk/s]07:00:32 [INFO] Using Basic tier (no traffic)
+07:00:32 [DEBUG] https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=244+Wood+St.+Lexington%2C+MA+02421&mode=driving&origins=Central+Falls%2C+RI+02863%7CCharlemont%2C+MA+01339%7CCharlestown%2C+MA+02129%7CCharlestown%2C+NH+03603%7CCharlestown%2C+RI+02813%7CCharlton%2C+MA+01507%7CChatham%2C+MA+02633%7CChelmsford%2C+MA+01824%7CChelsea%2C+MA+02150%7CChepachet%2C+RI+02814%7CCherry+Valley%2C+MA+01611%7CCheshire%2C+MA+01225%7CChester%2C+MA+01011%7CChester%2C+NH+03036%7CChesterfield%2C+MA+01012%7CChesterfield%2C+NH+03443%7CChestnut+Hill%2C+MA+02467%7CChichester%2C+NH+03258%7CChicopee%2C+MA+01013%7CChilmark%2C+MA+02535%7CChocorua%2C+NH+03817%7CClaremont%2C+NH+03743%7CClayville%2C+RI+02815%7CClinton%2C+MA+01510%7CCohasset%2C+MA+02025&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+Processing towns:  18%|████                   | 5/28 [00:01<00:05,  3.84chunk/s]07:00:32 [INFO] Using Basic tier (no traffic)
+07:00:32 [DEBUG] https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=244+Wood+St.+Lexington%2C+MA+02421&mode=driving&origins=Colebrook%2C+NH+03576%7CColrain%2C+MA+01340%7CConcord%2C+MA+01742%7CConcord%2C+NH+03301%7CContoocook%2C+NH+03229%7CConway%2C+MA+01341%7CConway%2C+NH+03818%7CCornish%2C+NH+03745%7CCotuit%2C+MA+02635%7CCoventry%2C+RI+02816%7CCranston%2C+RI+02910%7CCumberland%2C+RI+02864%7CCummington%2C+MA+01026%7CDalton%2C+MA+01226%7CDanbury%2C+NH+03230%7CDanvers%2C+MA+01923%7CDanville%2C+NH+03819%7CDedham%2C+MA+02026%7CDeerfield%2C+MA+01342%7CDeerfield%2C+NH+03037%7CDennis%2C+MA+02638%7CDennis+Port%2C+MA+02639%7CDerry%2C+NH+03038%7CDevens%2C+MA+01434%7CDighton%2C+MA+02715&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+Processing towns:  21%|████▉                  | 6/28 [00:01<00:05,  3.86chunk/s]07:00:32 [INFO] Using Basic tier (no traffic)
+07:00:33 [DEBUG] https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=244+Wood+St.+Lexington%2C+MA+02421&mode=driving&origins=Dorchester%2C+MA+02121%7CDorchester+Center%2C+MA+02124%7CDouglas%2C+MA+01516%7CDover%2C+MA+02030%7CDover%2C+NH+03820%7CDracut%2C+MA+01826%7CDrury%2C+MA+01343%7CDublin%2C+NH+03444%7CDudley%2C+MA+01571%7CDunbarton%2C+NH+03046%7CDunstable%2C+MA+01827%7CDurham%2C+NH+03824%7CDuxbury%2C+MA+02332%7CEast+Boston%2C+MA+02128%7CEast+Bridgewater%2C+MA+02333%7CEast+Brookfield%2C+MA+01515%7CEast+Falmouth%2C+MA+02536%7CEast+Freetown%2C+MA+02717%7CEast+Greenwich%2C+RI+02818%7CEast+Hampstead%2C+NH+03826%7CEast+Kingston%2C+NH+03827%7CEast+Longmeadow%2C+MA+01028%7CEast+Providence%2C+RI+02914%7CEast+Sandwich%2C+MA+02537%7CEast+Taunton%2C+MA+02718&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+Processing towns:  25%|█████▊                 | 7/28 [00:01<00:05,  3.83chunk/s]07:00:33 [INFO] Using Basic tier (no traffic)
+07:00:33 [DEBUG] https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=244+Wood+St.+Lexington%2C+MA+02421&mode=driving&origins=East+Wakefield%2C+NH+03830%7CEast+Walpole%2C+MA+02032%7CEast+Wareham%2C+MA+02538%7CEast+Weymouth%2C+MA+02189%7CEastham%2C+MA+02642%7CEasthampton%2C+MA+01027%7CEdgartown%2C+MA+02539%7CEffingham%2C+NH+03882%7CElkins%2C+NH+03233%7CEnfield%2C+NH+03748%7CEpping%2C+NH+03042%7CEpsom%2C+NH+03234%7CErrol%2C+NH+03579%7CErving%2C+MA+01344%7CEssex%2C+MA+01929%7CEtna%2C+NH+03750%7CEverett%2C+MA+02149%7CExeter%2C+NH+03833%7CExeter%2C+RI+02822%7CFairhaven%2C+MA+02719%7CFall+River%2C+MA+02720%7CFalmouth%2C+MA+02540%7CFarmington%2C+NH+03835%7CFayville%2C+MA+01745%7CFeeding+Hills%2C+MA+01030&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+Processing towns:  29%|██████▌                | 8/28 [00:02<00:05,  3.83chunk/s]07:00:33 [INFO] Using Basic tier (no traffic)
+07:00:33 [DEBUG] https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=244+Wood+St.+Lexington%2C+MA+02421&mode=driving&origins=Fiskdale%2C+MA+01518%7CFitchburg%2C+MA+01420%7CFitzwilliam%2C+NH+03447%7CFlorence%2C+MA+01062%7CForestdale%2C+MA+02644%7CFoster%2C+RI+02825%7CFoxboro%2C+MA+02035%7CFramingham%2C+MA+01701%7CFrancestown%2C+NH+03043%7CFranconia%2C+NH+03580%7CFranklin%2C+MA+02038%7CFranklin%2C+NH+03235%7CFreedom%2C+NH+03836%7CFremont%2C+NH+03044%7CGardner%2C+MA+01440%7CGeorgetown%2C+MA+01833%7CGilbertville%2C+MA+01031%7CGilford%2C+NH+03249%7CGill%2C+MA+01354%7CGilmanton%2C+NH+03237%7CGilmanton+Iron+Works%2C+NH+03837%7CGilsum%2C+NH+03448%7CGlen%2C+NH+03838%7CGloucester%2C+MA+01930%7CGoffstown%2C+NH+03045&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+Processing towns:  32%|███████▍               | 9/28 [00:02<00:05,  3.70chunk/s]07:00:33 [INFO] Using Basic tier (no traffic)
+07:00:33 [DEBUG] https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=244+Wood+St.+Lexington%2C+MA+02421&mode=driving&origins=Gorham%2C+NH+03581%7CGoshen%2C+MA+01032%7CGoshen%2C+NH+03752%7CGrafton%2C+MA+01519%7CGrafton%2C+NH+03240%7CGranby%2C+MA+01033%7CGrantham%2C+NH+03753%7CGranville%2C+MA+01034%7CGreat+Barrington%2C+MA+01230%7CGreene%2C+RI+02827%7CGreenfield%2C+MA+01301%7CGreenfield%2C+NH+03047%7CGreenland%2C+NH+03840%7CGreenville%2C+NH+03048%7CGreenville%2C+RI+02828%7CGroton%2C+MA+01450%7CGroveland%2C+MA+01834%7CGroveton%2C+NH+03582%7CHadley%2C+MA+01035%7CHalifax%2C+MA+02338%7CHampden%2C+MA+01036%7CHampstead%2C+NH+03841%7CHampton%2C+NH+03842%7CHampton+Falls%2C+NH+03844%7CHancock%2C+NH+03449&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+Processing towns:  36%|███████▊              | 10/28 [00:02<00:04,  3.91chunk/s]07:00:33 [INFO] Using Basic tier (no traffic)
+07:00:34 [DEBUG] https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=244+Wood+St.+Lexington%2C+MA+02421&mode=driving&origins=Hanover%2C+MA+02339%7CHanover%2C+NH+03755%7CHanscom+AFB%2C+MA+01731%7CHanson%2C+MA+02341%7CHarrisville%2C+NH+03450%7CHarrisville%2C+RI+02830%7CHarvard%2C+MA+01451%7CHarwich%2C+MA+02645%7CHarwich+Port%2C+MA+02646%7CHatfield%2C+MA+01038%7CHaverhill%2C+MA+01830%7CHaverhill%2C+NH+03765%7CHaydenville%2C+MA+01039%7CHeath%2C+MA+01346%7CHebron%2C+NH+03241%7CHenniker%2C+NH+03242%7CHill%2C+NH+03243%7CHillsborough%2C+NH+03244%7CHingham%2C+MA+02043%7CHinsdale%2C+MA+01235%7CHinsdale%2C+NH+03451%7CHolbrook%2C+MA+02343%7CHolden%2C+MA+01520%7CHolderness%2C+NH+03245%7CHolland%2C+MA+01521&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+Processing towns:  39%|████████▋             | 11/28 [00:02<00:04,  4.03chunk/s]07:00:34 [INFO] Using Basic tier (no traffic)
+07:00:34 [DEBUG] https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=244+Wood+St.+Lexington%2C+MA+02421&mode=driving&origins=Hollis%2C+NH+03049%7CHolliston%2C+MA+01746%7CHolyoke%2C+MA+01040%7CHooksett%2C+NH+03106%7CHope%2C+RI+02831%7CHope+Valley%2C+RI+02832%7CHopedale%2C+MA+01747%7CHopkinton%2C+MA+01748%7CHopkinton%2C+RI+02833%7CHousatonic%2C+MA+01236%7CHubbardston%2C+MA+01452%7CHudson%2C+MA+01749%7CHudson%2C+NH+03051%7CHull%2C+MA+02045%7CHuntington%2C+MA+01050%7CHyannis%2C+MA+02601%7CHyde+Park%2C+MA+02136%7CIndian+Orchard%2C+MA+01151%7CIntervale%2C+NH+03845%7CIpswich%2C+MA+01938%7CJackson%2C+NH+03846%7CJaffrey%2C+NH+03452%7CJamaica+Plain%2C+MA+02130%7CJamestown%2C+RI+02835%7CJefferson%2C+MA+01522&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+Processing towns:  43%|█████████▍            | 12/28 [00:03<00:03,  4.36chunk/s]07:00:34 [INFO] Using Basic tier (no traffic)
+07:00:34 [DEBUG] https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=244+Wood+St.+Lexington%2C+MA+02421&mode=driving&origins=Jefferson%2C+NH+03583%7CJohnston%2C+RI+02919%7CKeene%2C+NH+03431%7CKenyon%2C+RI+02836%7CKingston%2C+MA+02364%7CKingston%2C+NH+03848%7CKingston%2C+RI+02881%7CLaconia%2C+NH+03246%7CLakeville%2C+MA+02347%7CLancaster%2C+MA+01523%7CLancaster%2C+NH+03584%7CLanesborough%2C+MA+01237%7CLawrence%2C+MA+01840%7CLebanon%2C+NH+03756%7CLee%2C+MA+01238%7CLee%2C+NH+03861%7CLeeds%2C+MA+01053%7CLeicester%2C+MA+01524%7CLempster%2C+NH+03605%7CLenox%2C+MA+01240%7CLeominster%2C+MA+01453%7CLeverett%2C+MA+01054%7CLexington%2C+MA+02420%7CLincoln%2C+MA+01773%7CLincoln%2C+NH+03251&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+Processing towns:  46%|██████████▏           | 13/28 [00:03<00:03,  4.11chunk/s]07:00:34 [INFO] Using Basic tier (no traffic)
+07:00:34 [DEBUG] https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=244+Wood+St.+Lexington%2C+MA+02421&mode=driving&origins=Lincoln%2C+RI+02865%7CLisbon%2C+NH+03585%7CLitchfield%2C+NH+03052%7CLittle+Compton%2C+RI+02837%7CLittleton%2C+MA+01460%7CLittleton%2C+NH+03561%7CLondonderry%2C+NH+03053%7CLongmeadow%2C+MA+01106%7CLoudon%2C+NH+03307%7CLowell%2C+MA+01850%7CLudlow%2C+MA+01056%7CLunenburg%2C+MA+01462%7CLyme%2C+NH+03768%7CLyndeborough%2C+NH+03082%7CLynn%2C+MA+01901%7CLynnfield%2C+MA+01940%7CMadbury%2C+NH+03823%7CMadison%2C+NH+03849%7CMalden%2C+MA+02148%7CManchester%2C+MA+01944%7CManchester%2C+NH+03101%7CMansfield%2C+MA+02048%7CManville%2C+RI+02838%7CMapleville%2C+RI+02839%7CMarblehead%2C+MA+01945&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+Processing towns:  50%|███████████           | 14/28 [00:03<00:03,  3.97chunk/s]07:00:34 [INFO] Using Basic tier (no traffic)
+07:00:35 [DEBUG] https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=244+Wood+St.+Lexington%2C+MA+02421&mode=driving&origins=Marion%2C+MA+02738%7CMarlborough%2C+MA+01752%7CMarlborough%2C+NH+03455%7CMarlow%2C+NH+03456%7CMarshfield%2C+MA+02050%7CMarstons+Mills%2C+MA+02648%7CMashpee%2C+MA+02649%7CMattapan%2C+MA+02126%7CMattapoisett%2C+MA+02739%7CMaynard%2C+MA+01754%7CMedfield%2C+MA+02052%7CMedford%2C+MA+02155%7CMedway%2C+MA+02053%7CMelrose%2C+MA+02176%7CMendon%2C+MA+01756%7CMeredith%2C+NH+03253%7CMeriden%2C+NH+03770%7CMerrimac%2C+MA+01860%7CMerrimack%2C+NH+03054%7CMethuen%2C+MA+01844%7CMiddleboro%2C+MA+02346%7CMiddleton%2C+MA+01949%7CMiddletown%2C+RI+02842%7CMilan%2C+NH+03588%7CMilford%2C+MA+01757&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+Processing towns:  54%|███████████▊          | 15/28 [00:03<00:03,  3.91chunk/s]07:00:35 [INFO] Using Basic tier (no traffic)
+07:00:35 [DEBUG] https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=244+Wood+St.+Lexington%2C+MA+02421&mode=driving&origins=Milford%2C+NH+03055%7CMillbury%2C+MA+01527%7CMillers+Falls%2C+MA+01349%7CMillis%2C+MA+02054%7CMillville%2C+MA+01529%7CMilton%2C+MA+02186%7CMilton%2C+NH+03851%7CMilton+Mills%2C+NH+03852%7CMirror+Lake%2C+NH+03853%7CMonroe%2C+NH+03771%7CMonson%2C+MA+01057%7CMont+Vernon%2C+NH+03057%7CMontague%2C+MA+01351%7CMonterey%2C+MA+01245%7CMoultonborough%2C+NH+03254%7CNahant%2C+MA+01908%7CNantucket%2C+MA+02554%7CNarragansett%2C+RI+02882%7CNashua%2C+NH+03060%7CNatick%2C+MA+01760%7CNeedham%2C+MA+02492%7CNeedham+Heights%2C+MA+02494%7CNelson%2C+NH+03457%7CNew+Bedford%2C+MA+02740%7CNew+Boston%2C+NH+03070&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+Processing towns:  57%|████████████▌         | 16/28 [00:04<00:02,  4.18chunk/s]07:00:35 [INFO] Using Basic tier (no traffic)
+07:00:35 [DEBUG] https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=244+Wood+St.+Lexington%2C+MA+02421&mode=driving&origins=New+Braintree%2C+MA+01531%7CNew+Durham%2C+NH+03855%7CNew+Hampton%2C+NH+03256%7CNew+Ipswich%2C+NH+03071%7CNew+London%2C+NH+03257%7CNew+Salem%2C+MA+01355%7CNewbury%2C+MA+01951%7CNewbury%2C+NH+03255%7CNewburyport%2C+MA+01950%7CNewfields%2C+NH+03856%7CNewmarket%2C+NH+03857%7CNewport%2C+NH+03773%7CNewport%2C+RI+02840%7CNewton%2C+MA+02458%7CNewton%2C+NH+03858%7CNewton+Center%2C+MA+02459%7CNewton+Highlands%2C+MA+02461%7CNewton+Lower+Falls%2C+MA+02462%7CNewton+Upper+Falls%2C+MA+02464%7CNewtonville%2C+MA+02460%7CNorfolk%2C+MA+02056%7CNorth+Adams%2C+MA+01247%7CNorth+Andover%2C+MA+01845%7CNorth+Attleboro%2C+MA+02760%7CNorth+Billerica%2C+MA+01862&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+Processing towns:  61%|█████████████▎        | 17/28 [00:04<00:02,  4.31chunk/s]07:00:35 [INFO] Using Basic tier (no traffic)
+07:00:35 [DEBUG] https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=244+Wood+St.+Lexington%2C+MA+02421&mode=driving&origins=North+Brookfield%2C+MA+01535%7CNorth+Chatham%2C+MA+02650%7CNorth+Chelmsford%2C+MA+01863%7CNorth+Conway%2C+NH+03860%7CNorth+Dartmouth%2C+MA+02747%7CNorth+Dighton%2C+MA+02764%7CNorth+Easton%2C+MA+02356%7CNorth+Egremont%2C+MA+01252%7CNorth+Falmouth%2C+MA+02556%7CNorth+Grafton%2C+MA+01536%7CNorth+Hampton%2C+NH+03862%7CNorth+Haverhill%2C+NH+03774%7CNorth+Kingstown%2C+RI+02852%7CNorth+Oxford%2C+MA+01537%7CNorth+Providence%2C+RI+02911%7CNorth+Reading%2C+MA+01864%7CNorth+Sandwich%2C+NH+03259%7CNorth+Scituate%2C+RI+02857%7CNorth+Smithfield%2C+RI+02896%7CNorth+Stratford%2C+NH+03590%7CNorth+Walpole%2C+NH+03609%7CNorth+Weymouth%2C+MA+02191%7CNorth+Woodstock%2C+NH+03262%7CNorthampton%2C+MA+01060%7CNorthborough%2C+MA+01532&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+Processing towns:  64%|██████████████▏       | 18/28 [00:04<00:02,  4.26chunk/s]07:00:35 [INFO] Using Basic tier (no traffic)
+07:00:35 [DEBUG] https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=244+Wood+St.+Lexington%2C+MA+02421&mode=driving&origins=Northbridge%2C+MA+01534%7CNorthfield%2C+MA+01360%7CNorthwood%2C+NH+03261%7CNorton%2C+MA+02766%7CNorwell%2C+MA+02061%7CNorwood%2C+MA+02062%7CNottingham%2C+NH+03290%7COakham%2C+MA+01068%7COakland%2C+RI+02858%7COrange%2C+MA+01364%7COrford%2C+NH+03777%7COrleans%2C+MA+02653%7COssipee%2C+NH+03864%7COsterville%2C+MA+02655%7COtis%2C+MA+01253%7COxford%2C+MA+01540%7CPalmer%2C+MA+01069%7CPascoag%2C+RI+02859%7CPawtucket%2C+RI+02860%7CPaxton%2C+MA+01612%7CPeabody%2C+MA+01960%7CPelham%2C+NH+03076%7CPembroke%2C+MA+02359%7CPepperell%2C+MA+01463%7CPeterborough%2C+NH+03458&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+Processing towns:  68%|██████████████▉       | 19/28 [00:04<00:02,  4.45chunk/s]07:00:35 [INFO] Using Basic tier (no traffic)
+07:00:36 [DEBUG] https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=244+Wood+St.+Lexington%2C+MA+02421&mode=driving&origins=Petersham%2C+MA+01366%7CPiermont%2C+NH+03779%7CPike%2C+NH+03780%7CPittsburg%2C+NH+03592%7CPittsfield%2C+MA+01201%7CPittsfield%2C+NH+03263%7CPlainfield%2C+MA+01070%7CPlainfield%2C+NH+03781%7CPlainville%2C+MA+02762%7CPlaistow%2C+NH+03865%7CPlymouth%2C+MA+02360%7CPlymouth%2C+NH+03264%7CPlympton%2C+MA+02367%7CPocasset%2C+MA+02559%7CPortsmouth%2C+NH+03801%7CPortsmouth%2C+RI+02871%7CPrinceton%2C+MA+01541%7CProvidence%2C+RI+02903%7CProvincetown%2C+MA+02657%7CQuincy%2C+MA+02169%7CRandolph%2C+MA+02368%7CRandolph%2C+NH+03593%7CRaymond%2C+NH+03077%7CRaynham%2C+MA+02767%7CReading%2C+MA+01867&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+Processing towns:  71%|███████████████▋      | 20/28 [00:04<00:01,  4.45chunk/s]07:00:36 [INFO] Using Basic tier (no traffic)
+07:00:36 [DEBUG] https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=244+Wood+St.+Lexington%2C+MA+02421&mode=driving&origins=Rehoboth%2C+MA+02769%7CRevere%2C+MA+02151%7CRichmond%2C+MA+01254%7CRindge%2C+NH+03461%7CRiverside%2C+RI+02915%7CRochdale%2C+MA+01542%7CRochester%2C+MA+02770%7CRochester%2C+NH+03839%7CRockland%2C+MA+02370%7CRockport%2C+MA+01966%7CRollinsford%2C+NH+03869%7CRoslindale%2C+MA+02131%7CRowe%2C+MA+01367%7CRowley%2C+MA+01969%7CRoxbury%2C+MA+02119%7CRoxbury+Crossing%2C+MA+02120%7CRoyalston%2C+MA+01368%7CRumford%2C+RI+02916%7CRumney%2C+NH+03266%7CRussell%2C+MA+01071%7CRutland%2C+MA+01543%7CRye%2C+NH+03870%7CSagamore+Beach%2C+MA+02562%7CSalem%2C+MA+01970%7CSalem%2C+NH+03079&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+Processing towns:  75%|████████████████▌     | 21/28 [00:05<00:01,  4.49chunk/s]07:00:36 [INFO] Using Basic tier (no traffic)
+07:00:36 [DEBUG] https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=244+Wood+St.+Lexington%2C+MA+02421&mode=driving&origins=Salisbury%2C+MA+01952%7CSalisbury%2C+NH+03268%7CSanbornton%2C+NH+03269%7CSanbornville%2C+NH+03872%7CSandisfield%2C+MA+01255%7CSandown%2C+NH+03873%7CSandwich%2C+MA+02563%7CSaugus%2C+MA+01906%7CSaunderstown%2C+RI+02874%7CSavoy%2C+MA+01256%7CScituate%2C+MA+02066%7CSeabrook%2C+NH+03874%7CSeekonk%2C+MA+02771%7CShannock%2C+RI+02875%7CSharon%2C+MA+02067%7CSheffield%2C+MA+01257%7CShelburne+Falls%2C+MA+01370%7CSherborn%2C+MA+01770%7CShirley%2C+MA+01464%7CShrewsbury%2C+MA+01545%7CShutesbury%2C+MA+01072%7CSilver+Lake%2C+NH+03875%7CSlatersville%2C+RI+02876%7CSlocum%2C+RI+02877%7CSmithfield%2C+RI+02917&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+Processing towns:  79%|█████████████████▎    | 22/28 [00:05<00:01,  4.46chunk/s]07:00:36 [INFO] Using Basic tier (no traffic)
+07:00:36 [DEBUG] https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=244+Wood+St.+Lexington%2C+MA+02421&mode=driving&origins=Somerset%2C+MA+02725%7CSomersworth%2C+NH+03878%7CSomerville%2C+MA+02143%7CSouth+Acworth%2C+NH+03607%7CSouth+Boston%2C+MA+02127%7CSouth+Chatham%2C+MA+02659%7CSouth+Dartmouth%2C+MA+02748%7CSouth+Deerfield%2C+MA+01373%7CSouth+Dennis%2C+MA+02660%7CSouth+Easton%2C+MA+02375%7CSouth+Grafton%2C+MA+01560%7CSouth+Hadley%2C+MA+01075%7CSouth+Hamilton%2C+MA+01982%7CSouth+Tamworth%2C+NH+03883%7CSouth+Walpole%2C+MA+02071%7CSouth+Weymouth%2C+MA+02190%7CSouth+Yarmouth%2C+MA+02664%7CSouthampton%2C+MA+01073%7CSouthborough%2C+MA+01772%7CSouthbridge%2C+MA+01550%7CSouthfield%2C+MA+01259%7CSouthwick%2C+MA+01077%7CSpencer%2C+MA+01562%7CSpofford%2C+NH+03462%7CSpringfield%2C+MA+01103&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+Processing towns:  82%|██████████████████    | 23/28 [00:05<00:01,  4.28chunk/s]07:00:36 [INFO] Using Basic tier (no traffic)
+07:00:37 [DEBUG] https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=244+Wood+St.+Lexington%2C+MA+02421&mode=driving&origins=Springfield%2C+NH+03284%7CSterling%2C+MA+01564%7CStoddard%2C+NH+03464%7CStoneham%2C+MA+02180%7CStoughton%2C+MA+02072%7CStow%2C+MA+01775%7CStrafford%2C+NH+03884%7CStratham%2C+NH+03885%7CSturbridge%2C+MA+01566%7CSudbury%2C+MA+01776%7CSugar+Hill%2C+NH+03586%7CSullivan%2C+NH+03445%7CSunapee%2C+NH+03782%7CSuncook%2C+NH+03275%7CSunderland%2C+MA+01375%7CSutton%2C+MA+01590%7CSwampscott%2C+MA+01907%7CSwansea%2C+MA+02777%7CSwanzey%2C+NH+03446%7CTamworth%2C+NH+03886%7CTaunton%2C+MA+02780%7CTemple%2C+NH+03084%7CTempleton%2C+MA+01468%7CTewksbury%2C+MA+01876%7CThornton%2C+NH+03285&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+Processing towns:  86%|██████████████████▊   | 24/28 [00:05<00:00,  4.44chunk/s]07:00:37 [INFO] Using Basic tier (no traffic)
+07:00:37 [DEBUG] https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=244+Wood+St.+Lexington%2C+MA+02421&mode=driving&origins=Three+Rivers%2C+MA+01080%7CTilton%2C+NH+03276%7CTiverton%2C+RI+02878%7CTopsfield%2C+MA+01983%7CTownsend%2C+MA+01469%7CTroy%2C+NH+03465%7CTurners+Falls%2C+MA+01376%7CTyngsboro%2C+MA+01879%7CUnion%2C+NH+03887%7CUpton%2C+MA+01568%7CUxbridge%2C+MA+01569%7CVineyard+Haven%2C+MA+02568%7CWaban%2C+MA+02468%7CWakefield%2C+MA+01880%7CWakefield%2C+RI+02879%7CWales%2C+MA+01081%7CWalpole%2C+MA+02081%7CWalpole%2C+NH+03608%7CWaltham%2C+MA+02451%7CWare%2C+MA+01082%7CWareham%2C+MA+02571%7CWarner%2C+NH+03278%7CWarren%2C+NH+03279%7CWarren%2C+RI+02885%7CWarwick%2C+MA+01378&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+Processing towns:  89%|███████████████████▋  | 25/28 [00:06<00:00,  4.52chunk/s]07:00:37 [INFO] Using Basic tier (no traffic)
+07:00:37 [DEBUG] https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=244+Wood+St.+Lexington%2C+MA+02421&mode=driving&origins=Warwick%2C+RI+02886%7CWashington%2C+NH+03280%7CWatertown%2C+MA+02472%7CWayland%2C+MA+01778%7CWeare%2C+NH+03281%7CWebster%2C+MA+01570%7CWellesley%2C+MA+02482%7CWellesley+Hills%2C+MA+02481%7CWellfleet%2C+MA+02667%7CWendell%2C+MA+01379%7CWendell+Depot%2C+MA+01380%7CWenham%2C+MA+01984%7CWentworth%2C+NH+03282%7CWest+Barnstable%2C+MA+02668%7CWest+Boylston%2C+MA+01583%7CWest+Bridgewater%2C+MA+02379%7CWest+Brookfield%2C+MA+01585%7CWest+Chesterfield%2C+MA+01084%7CWest+Chesterfield%2C+NH+03466%7CWest+Dennis%2C+MA+02670%7CWest+Greenwich%2C+RI+02817%7CWest+Harwich%2C+MA+02671%7CWest+Hatfield%2C+MA+01088%7CWest+Kingston%2C+RI+02892%7CWest+Lebanon%2C+NH+03784&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+Processing towns:  93%|████████████████████▍ | 26/28 [00:06<00:00,  4.45chunk/s]07:00:37 [INFO] Using Basic tier (no traffic)
+07:00:37 [DEBUG] https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=244+Wood+St.+Lexington%2C+MA+02421&mode=driving&origins=West+Newbury%2C+MA+01985%7CWest+Newton%2C+MA+02465%7CWest+Nottingham%2C+NH+03291%7CWest+Ossipee%2C+NH+03890%7CWest+Roxbury%2C+MA+02132%7CWest+Springfield%2C+MA+01089%7CWest+Stockbridge%2C+MA+01266%7CWest+Townsend%2C+MA+01474%7CWest+Wareham%2C+MA+02576%7CWest+Warwick%2C+RI+02893%7CWest+Yarmouth%2C+MA+02673%7CWestborough%2C+MA+01581%7CWesterly%2C+RI+02891%7CWestfield%2C+MA+01085%7CWestford%2C+MA+01886%7CWestminster%2C+MA+01473%7CWestmoreland%2C+NH+03467%7CWeston%2C+MA+02493%7CWestport%2C+MA+02790%7CWestwood%2C+MA+02090%7CWeymouth%2C+MA+02188%7CWhitefield%2C+NH+03598%7CWhitinsville%2C+MA+01588%7CWhitman%2C+MA+02382%7CWilbraham%2C+MA+01095&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+Processing towns:  96%|█████████████████████▏| 27/28 [00:06<00:00,  4.52chunk/s]07:00:37 [INFO] Using Basic tier (no traffic)
+07:00:37 [DEBUG] https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=244+Wood+St.+Lexington%2C+MA+02421&mode=driving&origins=Williamsburg%2C+MA+01096%7CWilliamstown%2C+MA+01267%7CWilmington%2C+MA+01887%7CWilmot%2C+NH+03287%7CWilton%2C+NH+03086%7CWinchendon%2C+MA+01475%7CWinchester%2C+MA+01890%7CWinchester%2C+NH+03470%7CWindham%2C+NH+03087%7CWindsor%2C+MA+01270%7CWinthrop%2C+MA+02152%7CWoburn%2C+MA+01801%7CWolfeboro%2C+NH+03894%7CWonalancet%2C+NH+03897%7CWood+River+Junction%2C+RI+02894%7CWoods+Hole%2C+MA+02543%7CWoodsville%2C+NH+03785%7CWoonsocket%2C+RI+02895%7CWorcester%2C+MA+01602%7CWorthington%2C+MA+01098%7CWrentham%2C+MA+02093%7CWyoming%2C+RI+02898%7CYarmouth+Port%2C+MA+02675&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+Processing towns: 100%|██████████████████████| 28/28 [00:06<00:00,  4.49chunk/s]Processing towns: 100%|██████████████████████| 28/28 [00:06<00:00,  4.14chunk/s]
+07:00:37 [INFO] API usage summary - Requests made: 28, Elements processed: 698, Monthly total: 698 / 20,000
+07:00:37 [INFO] Saved 212 towns to /home/ad23883/workspace/house_hunt/Data/Processed/towns_within_40mi.csv
+07:00:37 [INFO] Returning 212 towns within range
+07:00:37 [INFO] Found 212 addresses within range
+07:00:37 [INFO] Current monthly API usage: 698 / 13,000
+07:00:37 [DEBUG] API Key successfully loaded from /home/ad23883/workspace/house_hunt/Data/google_api_key
+07:00:37 [INFO] Morning commute: 212 locations → 123 Main St. Anytown, MA 00000
+Fetching morning commute times:   0%|                  | 0/9 [00:00<?, ?chunk/s]07:00:37 [INFO] Using Basic tier (no traffic)
+07:00:37 [DEBUG] Starting new HTTPS connection (1): maps.googleapis.com:443
+07:00:38 [DEBUG] https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=244+Wood+St.+Lexington%2C+MA+02421&mode=driving&origins=Abington%2C+MA+02351%7CActon%2C+MA+01718%7CAllston%2C+MA+02134%7CAmesbury%2C+MA+01913%7CAmherst%2C+NH+03031%7CAndover%2C+MA+01810%7CArlington%2C+MA+02474%7CAshby%2C+MA+01431%7CAshland%2C+MA+01721%7CAtkinson%2C+NH+03811%7CAuburndale%2C+MA+02466%7CAvon%2C+MA+02322%7CAyer%2C+MA+01432%7CBedford%2C+MA+01730%7CBellingham%2C+MA+02019%7CBelmont%2C+MA+02478%7CBerlin%2C+MA+01503%7CBeverly%2C+MA+01915%7CBillerica%2C+MA+01821%7CBlackstone%2C+MA+01504%7CBolton%2C+MA+01740%7CBoston%2C+MA+02108%7CBoxborough%2C+MA+01719%7CBoxford%2C+MA+01921%7CBoylston%2C+MA+01505&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+07:00:38 [DEBUG] Processing 25 rows from API response
+Fetching morning commute times:  11%|█         | 1/9 [00:00<00:01,  7.70chunk/s]07:00:38 [INFO] Using Basic tier (no traffic)
+07:00:38 [DEBUG] https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=244+Wood+St.+Lexington%2C+MA+02421&mode=driving&origins=Braintree%2C+MA+02184%7CBrighton%2C+MA+02135%7CBrockton%2C+MA+02301%7CBrookline%2C+MA+02445%7CBrookline%2C+NH+03033%7CBurlington%2C+MA+01803%7CByfield%2C+MA+01922%7CCambridge%2C+MA+02138%7CCanton%2C+MA+02021%7CCarlisle%2C+MA+01741%7CCharlestown%2C+MA+02129%7CChelmsford%2C+MA+01824%7CChelsea%2C+MA+02150%7CChestnut+Hill%2C+MA+02467%7CClinton%2C+MA+01510%7CCohasset%2C+MA+02025%7CConcord%2C+MA+01742%7CDanvers%2C+MA+01923%7CDedham%2C+MA+02026%7CDerry%2C+NH+03038%7CDevens%2C+MA+01434%7CDorchester%2C+MA+02121%7CDorchester+Center%2C+MA+02124%7CDover%2C+MA+02030%7CDracut%2C+MA+01826&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+07:00:38 [DEBUG] Processing 25 rows from API response
+07:00:38 [INFO] Using Basic tier (no traffic)
+07:00:38 [DEBUG] https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=244+Wood+St.+Lexington%2C+MA+02421&mode=driving&origins=Dunstable%2C+MA+01827%7CEast+Boston%2C+MA+02128%7CEast+Hampstead%2C+NH+03826%7CEast+Walpole%2C+MA+02032%7CEast+Weymouth%2C+MA+02189%7CEssex%2C+MA+01929%7CEverett%2C+MA+02149%7CFayville%2C+MA+01745%7CFitchburg%2C+MA+01420%7CFoxboro%2C+MA+02035%7CFramingham%2C+MA+01701%7CFranklin%2C+MA+02038%7CGeorgetown%2C+MA+01833%7CGrafton%2C+MA+01519%7CGreenville%2C+NH+03048%7CGroton%2C+MA+01450%7CGroveland%2C+MA+01834%7CHampstead%2C+NH+03841%7CHanscom+AFB%2C+MA+01731%7CHarvard%2C+MA+01451%7CHaverhill%2C+MA+01830%7CHingham%2C+MA+02043%7CHolbrook%2C+MA+02343%7CHolden%2C+MA+01520%7CHollis%2C+NH+03049&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+07:00:38 [DEBUG] Processing 25 rows from API response
+Fetching morning commute times:  33%|███▎      | 3/9 [00:00<00:00, 12.39chunk/s]07:00:38 [INFO] Using Basic tier (no traffic)
+07:00:38 [DEBUG] https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=244+Wood+St.+Lexington%2C+MA+02421&mode=driving&origins=Holliston%2C+MA+01746%7CHopedale%2C+MA+01747%7CHopkinton%2C+MA+01748%7CHudson%2C+MA+01749%7CHudson%2C+NH+03051%7CHull%2C+MA+02045%7CHyde+Park%2C+MA+02136%7CIpswich%2C+MA+01938%7CJamaica+Plain%2C+MA+02130%7CJefferson%2C+MA+01522%7CLancaster%2C+MA+01523%7CLawrence%2C+MA+01840%7CLeominster%2C+MA+01453%7CLexington%2C+MA+02420%7CLincoln%2C+MA+01773%7CLitchfield%2C+NH+03052%7CLittleton%2C+MA+01460%7CLondonderry%2C+NH+03053%7CLowell%2C+MA+01850%7CLunenburg%2C+MA+01462%7CLynn%2C+MA+01901%7CLynnfield%2C+MA+01940%7CMalden%2C+MA+02148%7CManchester%2C+MA+01944%7CMarblehead%2C+MA+01945&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+07:00:38 [DEBUG] Processing 25 rows from API response
+07:00:38 [INFO] Using Basic tier (no traffic)
+07:00:38 [DEBUG] https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=244+Wood+St.+Lexington%2C+MA+02421&mode=driving&origins=Marlborough%2C+MA+01752%7CMattapan%2C+MA+02126%7CMaynard%2C+MA+01754%7CMedfield%2C+MA+02052%7CMedford%2C+MA+02155%7CMedway%2C+MA+02053%7CMelrose%2C+MA+02176%7CMendon%2C+MA+01756%7CMerrimac%2C+MA+01860%7CMerrimack%2C+NH+03054%7CMethuen%2C+MA+01844%7CMiddleton%2C+MA+01949%7CMilford%2C+MA+01757%7CMillis%2C+MA+02054%7CMilton%2C+MA+02186%7CNahant%2C+MA+01908%7CNashua%2C+NH+03060%7CNatick%2C+MA+01760%7CNeedham%2C+MA+02492%7CNeedham+Heights%2C+MA+02494%7CNewbury%2C+MA+01951%7CNewburyport%2C+MA+01950%7CNewton%2C+MA+02458%7CNewton%2C+NH+03858%7CNewton+Center%2C+MA+02459&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+07:00:38 [DEBUG] Processing 25 rows from API response
+Fetching morning commute times:  56%|█████▌    | 5/9 [00:00<00:00, 14.83chunk/s]07:00:38 [INFO] Using Basic tier (no traffic)
+07:00:38 [DEBUG] https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=244+Wood+St.+Lexington%2C+MA+02421&mode=driving&origins=Newton+Highlands%2C+MA+02461%7CNewton+Lower+Falls%2C+MA+02462%7CNewton+Upper+Falls%2C+MA+02464%7CNewtonville%2C+MA+02460%7CNorfolk%2C+MA+02056%7CNorth+Andover%2C+MA+01845%7CNorth+Billerica%2C+MA+01862%7CNorth+Chelmsford%2C+MA+01863%7CNorth+Easton%2C+MA+02356%7CNorth+Grafton%2C+MA+01536%7CNorth+Reading%2C+MA+01864%7CNorth+Weymouth%2C+MA+02191%7CNorthborough%2C+MA+01532%7CNorthbridge%2C+MA+01534%7CNorwell%2C+MA+02061%7CNorwood%2C+MA+02062%7CPeabody%2C+MA+01960%7CPelham%2C+NH+03076%7CPepperell%2C+MA+01463%7CPlainville%2C+MA+02762%7CPlaistow%2C+NH+03865%7CPrinceton%2C+MA+01541%7CQuincy%2C+MA+02169%7CRandolph%2C+MA+02368%7CReading%2C+MA+01867&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+07:00:38 [DEBUG] Processing 25 rows from API response
+07:00:38 [INFO] Using Basic tier (no traffic)
+07:00:38 [DEBUG] https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=244+Wood+St.+Lexington%2C+MA+02421&mode=driving&origins=Revere%2C+MA+02151%7CRockland%2C+MA+02370%7CRoslindale%2C+MA+02131%7CRowley%2C+MA+01969%7CRoxbury%2C+MA+02119%7CRoxbury+Crossing%2C+MA+02120%7CSalem%2C+MA+01970%7CSalem%2C+NH+03079%7CSandown%2C+NH+03873%7CSaugus%2C+MA+01906%7CScituate%2C+MA+02066%7CSharon%2C+MA+02067%7CSherborn%2C+MA+01770%7CShirley%2C+MA+01464%7CShrewsbury%2C+MA+01545%7CSomerville%2C+MA+02143%7CSouth+Boston%2C+MA+02127%7CSouth+Easton%2C+MA+02375%7CSouth+Grafton%2C+MA+01560%7CSouth+Hamilton%2C+MA+01982%7CSouth+Walpole%2C+MA+02071%7CSouth+Weymouth%2C+MA+02190%7CSouthborough%2C+MA+01772%7CSterling%2C+MA+01564%7CStoneham%2C+MA+02180&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+07:00:38 [DEBUG] Processing 25 rows from API response
+Fetching morning commute times:  78%|███████▊  | 7/9 [00:00<00:00, 16.52chunk/s]07:00:38 [INFO] Using Basic tier (no traffic)
+07:00:38 [DEBUG] https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=244+Wood+St.+Lexington%2C+MA+02421&mode=driving&origins=Stoughton%2C+MA+02072%7CStow%2C+MA+01775%7CSudbury%2C+MA+01776%7CSwampscott%2C+MA+01907%7CTewksbury%2C+MA+01876%7CTopsfield%2C+MA+01983%7CTownsend%2C+MA+01469%7CTyngsboro%2C+MA+01879%7CUpton%2C+MA+01568%7CWaban%2C+MA+02468%7CWakefield%2C+MA+01880%7CWalpole%2C+MA+02081%7CWaltham%2C+MA+02451%7CWatertown%2C+MA+02472%7CWayland%2C+MA+01778%7CWellesley%2C+MA+02482%7CWellesley+Hills%2C+MA+02481%7CWenham%2C+MA+01984%7CWest+Boylston%2C+MA+01583%7CWest+Bridgewater%2C+MA+02379%7CWest+Newbury%2C+MA+01985%7CWest+Newton%2C+MA+02465%7CWest+Roxbury%2C+MA+02132%7CWest+Townsend%2C+MA+01474%7CWestborough%2C+MA+01581&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+07:00:38 [DEBUG] Processing 25 rows from API response
+07:00:38 [INFO] Using Basic tier (no traffic)
+07:00:38 [DEBUG] https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=244+Wood+St.+Lexington%2C+MA+02421&mode=driving&origins=Westford%2C+MA+01886%7CWeston%2C+MA+02493%7CWestwood%2C+MA+02090%7CWeymouth%2C+MA+02188%7CWhitinsville%2C+MA+01588%7CWhitman%2C+MA+02382%7CWilmington%2C+MA+01887%7CWinchester%2C+MA+01890%7CWindham%2C+NH+03087%7CWinthrop%2C+MA+02152%7CWoburn%2C+MA+01801%7CWrentham%2C+MA+02093&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+07:00:38 [DEBUG] Processing 12 rows from API response
+Fetching morning commute times: 100%|██████████| 9/9 [00:00<00:00, 16.65chunk/s]Fetching morning commute times: 100%|██████████| 9/9 [00:00<00:00, 15.32chunk/s]
+07:00:38 [INFO] Completed 9 requests, processed 212 elements, collected 212 valid results
+07:00:38 [INFO] Loaded 15 records from /home/ad23883/workspace/house_hunt/Data/Results/commute_stats.csv
+07:00:38 [INFO] Loaded 15 records from /home/ad23883/workspace/house_hunt/Data/Results/commute_stats.csv
+07:00:38 [INFO] Successfully updated /home/ad23883/workspace/house_hunt/Data/Results/commute_stats.csv with 212 records
+07:00:38 [INFO] Updated API usage: 212 elements this run, 910 / 13,000 monthly total
+07:00:38 [INFO] Re-validating usage after API calls...
+07:00:39 [INFO] Google-reported usage: 0 elements (Advanced tier based on TRAFFIC_MODEL=best_guess)
+07:00:39 [INFO] Free tier limit: 5,000, Remaining: 5,000
+07:00:39 [INFO] === Usage Validation ===
+07:00:39 [INFO] Tier:            Advanced
+07:00:39 [INFO] Local tracking:  910 elements
+07:00:39 [INFO] Google reports:  0 elements
+07:00:39 [INFO] Free tier:       5,000
+07:00:39 [INFO] Remaining:       5,000
+07:00:39 [INFO] Discrepancy:     910 elements
+07:00:39 [WARNING] ⚠️  Significant discrepancy detected! Consider using Google's count as source of truth.
+
+======================================================================
+COMMUTE DATA COLLECTION COMPLETE - MORNING
+----------------------------------------------------------------------
+Addresses queried:     212
+Successful results:    212
+Elements this run:     212
+Local monthly total:   910
+Google monthly total:  0
+⚠️  Discrepancy:        910 elements
+Free tier remaining:   13,000
+Free tier status:      0.0% used
+======================================================================
+
+07:00:39 [INFO] Commute data collection completed successfully
+07:00:39 [INFO] Commute collection completed successfully
+07:00:39 [INFO] ======================================================================
+07:00:39 [INFO] EXECUTION SUMMARY
+07:00:39 [INFO] ----------------------------------------------------------------------
+07:00:39 [INFO] COMMUTE: ✓ SUCCESS
+07:00:39 [INFO] ----------------------------------------------------------------------
+07:00:39 [INFO] Completed 1/1 modules successfully
+07:00:39 [INFO] ======================================================================
+17:00:03 [INFO] House Hunt execution started at 2026-02-02 17:00:03.623898
+17:00:03 [INFO] ======================================================================
+17:00:03 [INFO] Starting Commute Data Collection
+17:00:03 [INFO] ======================================================================
+17:00:03 [INFO] ======================================================================
+17:00:03 [INFO] Starting commute data collection
+17:00:03 [INFO] ======================================================================
+17:00:03 [INFO] After noon - collecting afternoon commute data
+17:00:03 [INFO] Direction: afternoon commute
+17:00:03 [INFO] Validating current API usage against Google...
+/home/ad23883/.local/lib/python3.10/site-packages/google/api_core/_python_version_support.py:266: FutureWarning: You are using a Python version (3.10.12) which Google will stop supporting in new releases of google.api_core once it reaches its end of life (2026-10-04). Please upgrade to the latest Python version, or at least Python 3.11, to continue receiving updates for google.api_core past that date.
+  warnings.warn(message, FutureWarning)
+17:00:05 [INFO] Google-reported usage: 910 elements (Advanced tier based on TRAFFIC_MODEL=best_guess)
+17:00:05 [INFO] Free tier limit: 5,000, Remaining: 4,090
+17:00:05 [INFO] === Usage Validation ===
+17:00:05 [INFO] Tier:            Advanced
+17:00:05 [INFO] Local tracking:  910 elements
+17:00:05 [INFO] Google reports:  910 elements
+17:00:05 [INFO] Free tier:       5,000
+17:00:05 [INFO] Remaining:       4,090
+17:00:05 [INFO] Discrepancy:     0 elements
+
+======================================================================
+CURRENT API USAGE STATUS
+----------------------------------------------------------------------
+Local tracking:        910 elements
+Google reports:        910 elements
+  - Basic tier:        0
+  - Advanced tier:     910
+Free tier remaining:   9,090
+======================================================================
+
+17:00:05 [INFO] Loading zip codes within 40 miles of work...
+17:00:05 [INFO] Parsing ZIP database: /home/ad23883/workspace/house_hunt/Data/Raw/zip_code_database.csv
+17:00:06 [INFO] Loaded 795 active standard ZIPs for MA, RI, NH
+17:00:06 [INFO] Loading cached town results from /home/ad23883/workspace/house_hunt/Data/Processed/towns_within_40mi.csv
+17:00:06 [INFO] Loaded 181 cached towns (range: 40mi)
+17:00:06 [INFO] Found 181 addresses within range
+17:00:06 [INFO] Current monthly API usage: 910 / 10,000
+17:00:06 [DEBUG] API Key successfully loaded from /home/ad23883/workspace/house_hunt/Data/google_api_key
+17:00:06 [INFO] Afternoon commute: 123 Main St. Anytown, MA 00000 → 181 locations
+Fetching afternoon commute times:   0%|                | 0/8 [00:00<?, ?chunk/s]17:00:06 [INFO] Using Basic tier (no traffic)
+17:00:06 [DEBUG] Starting new HTTPS connection (1): maps.googleapis.com:443
+17:00:06 [DEBUG] https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=Abington%2C+MA+02351%7CActon%2C+MA+01718%7CAllston%2C+MA+02134%7CAmesbury%2C+MA+01913%7CAmherst%2C+NH+03031%7CNorth+Andover%2C+MA+01845%7CArlington%2C+MA+02474%7CAshby%2C+MA+01431%7CAshland%2C+MA+01721%7CAtkinson%2C+NH+03811%7CAuburndale%2C+MA+02466%7CAvon%2C+MA+02322%7CAyer%2C+MA+01432%7CBedford%2C+MA+01730%7CBellingham%2C+MA+02019%7CBelmont%2C+MA+02478%7CBerlin%2C+MA+01503%7CBeverly%2C+MA+01915%7CBillerica%2C+MA+01821%7CBlackstone%2C+MA+01504%7CBolton%2C+MA+01740%7CBoston%2C+MA+02108%7CBoxborough%2C+MA+01719%7CBoxford%2C+MA+01921%7CBoylston%2C+MA+01505&mode=driving&origins=244+Wood+St.+Lexington%2C+MA+02421&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+17:00:06 [DEBUG] Processing 25 elements from API response
+Fetching afternoon commute times:  12%|█       | 1/8 [00:00<00:02,  2.61chunk/s]17:00:06 [INFO] Using Basic tier (no traffic)
+17:00:06 [DEBUG] https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=Braintree%2C+MA+02184%7CWest+Bridgewater%2C+MA+02379%7CBrighton%2C+MA+02135%7CBrockton%2C+MA+02301%7CBrookline%2C+MA+02445%7CBrookline%2C+NH+03033%7CBurlington%2C+MA+01803%7CByfield%2C+MA+01922%7CCambridge%2C+MA+02138%7CCanton%2C+MA+02021%7CCarlisle%2C+MA+01741%7CCharlestown%2C+MA+02129%7CChelmsford%2C+MA+01824%7CChelsea%2C+MA+02150%7CChestnut+Hill%2C+MA+02467%7CClinton%2C+MA+01510%7CCohasset%2C+MA+02025%7CConcord%2C+MA+01742%7CDanvers%2C+MA+01923%7CDedham%2C+MA+02026%7CDerry%2C+NH+03038%7CDevens%2C+MA+01434%7CDorchester%2C+MA+02121%7CDover%2C+MA+02030%7CDracut%2C+MA+01826&mode=driving&origins=244+Wood+St.+Lexington%2C+MA+02421&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+17:00:06 [DEBUG] Processing 25 elements from API response
+Fetching afternoon commute times:  25%|██      | 2/8 [00:00<00:01,  3.32chunk/s]17:00:06 [INFO] Using Basic tier (no traffic)
+17:00:07 [DEBUG] https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=Dunstable%2C+MA+01827%7CNorth+Easton%2C+MA+02356%7CEssex%2C+MA+01929%7CEverett%2C+MA+02149%7CFayville%2C+MA+01745%7CFitchburg%2C+MA+01420%7CFoxboro%2C+MA+02035%7CFramingham%2C+MA+01701%7CFranklin%2C+MA+02038%7CGeorgetown%2C+MA+01833%7CGrafton%2C+MA+01519%7CGreenville%2C+NH+03048%7CGroton%2C+MA+01450%7CGroveland%2C+MA+01834%7CSouth+Hamilton%2C+MA+01982%7CHampstead%2C+NH+03841%7CHarvard%2C+MA+01451%7CHaverhill%2C+MA+01830%7CHingham%2C+MA+02043%7CHolbrook%2C+MA+02343%7CHolden%2C+MA+01520%7CHollis%2C+NH+03049%7CHolliston%2C+MA+01746%7CHopedale%2C+MA+01747%7CHopkinton%2C+MA+01748&mode=driving&origins=244+Wood+St.+Lexington%2C+MA+02421&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+17:00:07 [DEBUG] Processing 25 elements from API response
+Fetching afternoon commute times:  38%|███     | 3/8 [00:00<00:01,  3.66chunk/s]17:00:07 [INFO] Using Basic tier (no traffic)
+17:00:07 [DEBUG] https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=Hudson%2C+MA+01749%7CHudson%2C+NH+03051%7CHull%2C+MA+02045%7CHyde+Park%2C+MA+02136%7CIpswich%2C+MA+01938%7CJamaica+Plain%2C+MA+02130%7CJefferson%2C+MA+01522%7CLancaster%2C+MA+01523%7CLawrence%2C+MA+01840%7CLeominster%2C+MA+01453%7CLexington%2C+MA+02420%7CLincoln%2C+MA+01773%7CLitchfield%2C+NH+03052%7CLittleton%2C+MA+01460%7CLondonderry%2C+NH+03053%7CLowell%2C+MA+01850%7CLunenburg%2C+MA+01462%7CLynn%2C+MA+01901%7CLynnfield%2C+MA+01940%7CMalden%2C+MA+02148%7CManchester%2C+MA+01944%7CMarblehead%2C+MA+01945%7CMarlborough%2C+MA+01752%7CMattapan%2C+MA+02126%7CMaynard%2C+MA+01754&mode=driving&origins=244+Wood+St.+Lexington%2C+MA+02421&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+17:00:07 [DEBUG] Processing 25 elements from API response
+Fetching afternoon commute times:  50%|████    | 4/8 [00:01<00:01,  3.88chunk/s]17:00:07 [INFO] Using Basic tier (no traffic)
+17:00:07 [DEBUG] https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=Medfield%2C+MA+02052%7CMedford%2C+MA+02155%7CMedway%2C+MA+02053%7CMelrose%2C+MA+02176%7CMendon%2C+MA+01756%7CMerrimac%2C+MA+01860%7CMerrimack%2C+NH+03054%7CMethuen%2C+MA+01844%7CMiddleton%2C+MA+01949%7CMilford%2C+MA+01757%7CMillis%2C+MA+02054%7CMilton%2C+MA+02186%7CNahant%2C+MA+01908%7CNashua%2C+NH+03060%7CNatick%2C+MA+01760%7CNeedham%2C+MA+02492%7CNewbury%2C+MA+01951%7CNewton%2C+MA+02458%7CNewton%2C+NH+03858%7CNorfolk%2C+MA+02056%7CNorthborough%2C+MA+01532%7CNorthbridge%2C+MA+01534%7CNorwell%2C+MA+02061%7CNorwood%2C+MA+02062%7CPeabody%2C+MA+01960&mode=driving&origins=244+Wood+St.+Lexington%2C+MA+02421&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+17:00:07 [DEBUG] Processing 25 elements from API response
+Fetching afternoon commute times:  62%|█████   | 5/8 [00:01<00:00,  3.92chunk/s]17:00:07 [INFO] Using Basic tier (no traffic)
+17:00:07 [DEBUG] https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=Pelham%2C+NH+03076%7CPepperell%2C+MA+01463%7CPlainville%2C+MA+02762%7CPlaistow%2C+NH+03865%7CPrinceton%2C+MA+01541%7CQuincy%2C+MA+02169%7CRandolph%2C+MA+02368%7CReading%2C+MA+01867%7CRevere%2C+MA+02151%7CRockland%2C+MA+02370%7CRoslindale%2C+MA+02131%7CRowley%2C+MA+01969%7CRoxbury%2C+MA+02119%7CSalem%2C+MA+01970%7CSalem%2C+NH+03079%7CSandown%2C+NH+03873%7CSaugus%2C+MA+01906%7CScituate%2C+MA+02066%7CSharon%2C+MA+02067%7CSherborn%2C+MA+01770%7CShirley%2C+MA+01464%7CShrewsbury%2C+MA+01545%7CSomerville%2C+MA+02143%7CSouthborough%2C+MA+01772%7CSterling%2C+MA+01564&mode=driving&origins=244+Wood+St.+Lexington%2C+MA+02421&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+17:00:07 [DEBUG] Processing 25 elements from API response
+Fetching afternoon commute times:  75%|██████  | 6/8 [00:01<00:00,  3.94chunk/s]17:00:07 [INFO] Using Basic tier (no traffic)
+17:00:08 [DEBUG] https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=Stoneham%2C+MA+02180%7CStoughton%2C+MA+02072%7CStow%2C+MA+01775%7CSudbury%2C+MA+01776%7CSwampscott%2C+MA+01907%7CTewksbury%2C+MA+01876%7CTopsfield%2C+MA+01983%7CTownsend%2C+MA+01469%7CTyngsboro%2C+MA+01879%7CUpton%2C+MA+01568%7CWaban%2C+MA+02468%7CWakefield%2C+MA+01880%7CWalpole%2C+MA+02081%7CWaltham%2C+MA+02451%7CWatertown%2C+MA+02472%7CWayland%2C+MA+01778%7CWellesley%2C+MA+02482%7CWenham%2C+MA+01984%7CWestborough%2C+MA+01581%7CWestford%2C+MA+01886%7CWeston%2C+MA+02493%7CWestwood%2C+MA+02090%7CWeymouth%2C+MA+02188%7CWhitinsville%2C+MA+01588%7CWhitman%2C+MA+02382&mode=driving&origins=244+Wood+St.+Lexington%2C+MA+02421&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+17:00:08 [DEBUG] Processing 25 elements from API response
+Fetching afternoon commute times:  88%|███████ | 7/8 [00:01<00:00,  3.97chunk/s]17:00:08 [INFO] Using Basic tier (no traffic)
+17:00:08 [DEBUG] https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=Wilmington%2C+MA+01887%7CWinchester%2C+MA+01890%7CWindham%2C+NH+03087%7CWinthrop%2C+MA+02152%7CWoburn%2C+MA+01801%7CWrentham%2C+MA+02093&mode=driving&origins=244+Wood+St.+Lexington%2C+MA+02421&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+17:00:08 [DEBUG] Processing 6 elements from API response
+Fetching afternoon commute times: 100%|████████| 8/8 [00:02<00:00,  4.19chunk/s]Fetching afternoon commute times: 100%|████████| 8/8 [00:02<00:00,  3.88chunk/s]
+17:00:08 [INFO] Completed 8 requests, processed 181 elements, collected 181 valid results
+17:00:08 [INFO] File not found: /home/ad23883/workspace/house_hunt/Data/Results/commute_stats.csv
+17:00:08 [INFO] No historical data file found. Starting fresh.
+17:00:08 [INFO] Successfully updated /home/ad23883/workspace/house_hunt/Data/Results/commute_stats.csv with 181 records
+17:00:08 [INFO] Updated API usage: 181 elements this run, 1,091 / 10,000 monthly total
+17:00:08 [INFO] Re-validating usage after API calls...
+17:00:09 [INFO] Google-reported usage: 910 elements (Advanced tier based on TRAFFIC_MODEL=best_guess)
+17:00:09 [INFO] Free tier limit: 5,000, Remaining: 4,090
+17:00:09 [INFO] === Usage Validation ===
+17:00:09 [INFO] Tier:            Advanced
+17:00:09 [INFO] Local tracking:  1,091 elements
+17:00:09 [INFO] Google reports:  910 elements
+17:00:09 [INFO] Free tier:       5,000
+17:00:09 [INFO] Remaining:       4,090
+17:00:09 [INFO] Discrepancy:     181 elements
+17:00:09 [WARNING] ⚠️  Significant discrepancy detected! Consider using Google's count as source of truth.
+
+======================================================================
+COMMUTE DATA COLLECTION COMPLETE - AFTERNOON
+----------------------------------------------------------------------
+Addresses queried:     181
+Successful results:    181
+Elements this run:     181
+Local monthly total:   1,091
+Google monthly total:  910
+⚠️  Discrepancy:        181 elements
+Free tier remaining:   9,090
+Free tier status:      9.1% used
+======================================================================
+
+17:00:09 [INFO] Commute data collection completed successfully
+17:00:09 [INFO] Commute collection completed successfully
+17:00:09 [INFO] ======================================================================
+17:00:09 [INFO] EXECUTION SUMMARY
+17:00:09 [INFO] ----------------------------------------------------------------------
+17:00:09 [INFO] COMMUTE: ✓ SUCCESS
+17:00:09 [INFO] ----------------------------------------------------------------------
+17:00:09 [INFO] Completed 1/1 modules successfully
+17:00:09 [INFO] ======================================================================
+07:00:03 [INFO] House Hunt execution started at 2026-02-05 07:00:03.453221
+07:00:03 [INFO] ======================================================================
+07:00:03 [INFO] Starting Commute Data Collection
+07:00:03 [INFO] ======================================================================
+07:00:03 [INFO] ======================================================================
+07:00:03 [INFO] Starting commute data collection
+07:00:03 [INFO] ======================================================================
+07:00:03 [INFO] Before noon - collecting morning commute data
+07:00:03 [INFO] Direction: morning commute
+07:00:03 [INFO] Validating current API usage against Google...
+/home/ad23883/.local/lib/python3.10/site-packages/google/api_core/_python_version_support.py:266: FutureWarning: You are using a Python version (3.10.12) which Google will stop supporting in new releases of google.api_core once it reaches its end of life (2026-10-04). Please upgrade to the latest Python version, or at least Python 3.11, to continue receiving updates for google.api_core past that date.
+  warnings.warn(message, FutureWarning)
+07:00:05 [INFO] Google-reported usage: 2,883 elements (Advanced tier based on TRAFFIC_MODEL=best_guess)
+07:00:05 [INFO] Free tier limit: 5,000, Remaining: 2,117
+07:00:05 [INFO] === Usage Validation ===
+07:00:05 [INFO] Tier:            Advanced
+07:00:05 [INFO] Local tracking:  2,883 elements
+07:00:05 [INFO] Google reports:  2,883 elements
+07:00:05 [INFO] Free tier:       5,000
+07:00:05 [INFO] Remaining:       2,117
+07:00:05 [INFO] Discrepancy:     0 elements
+
+======================================================================
+CURRENT API USAGE STATUS
+----------------------------------------------------------------------
+Local tracking:        2,883 elements
+Google reports:        2,883 elements
+  - Basic tier:        0
+  - Advanced tier:     2,883
+Free tier remaining:   7,117
+======================================================================
+
+07:00:05 [INFO] Loading zip codes within 40 miles of work...
+07:00:05 [INFO] Parsing ZIP database: /home/ad23883/production/house_hunt/Data/Raw/zip_code_database.csv
+07:00:06 [INFO] Loaded 795 active standard ZIPs for MA, RI, NH
+07:00:06 [INFO] Loading cached town results from /home/ad23883/production/house_hunt/Data/Processed/towns_within_40mi.csv
+07:00:06 [INFO] Loaded 182 cached towns (range: 40mi)
+07:00:06 [INFO] Found 182 addresses within range
+07:00:06 [INFO] Current monthly API usage: 2,883 / 10,000
+07:00:06 [DEBUG] API Key successfully loaded from /home/ad23883/production/house_hunt/Data/google_api_key
+07:00:06 [INFO] Morning commute: 182 locations → 123 Main St. Anytown, MA 00000
+Fetching morning commute times:   0%|                  | 0/8 [00:00<?, ?chunk/s]07:00:06 [INFO] Using Basic tier (no traffic)
+07:00:06 [DEBUG] Starting new HTTPS connection (1): maps.googleapis.com:443
+07:00:07 [DEBUG] https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=244+Wood+St.+Lexington%2C+MA+02421&mode=driving&origins=Abington%2C+MA+02351%7CActon%2C+MA+01718%7CAllston%2C+MA+02134%7CAmesbury%2C+MA+01913%7CAmherst%2C+NH+03031%7CArlington%2C+MA+02474%7CAshby%2C+MA+01431%7CAshland%2C+MA+01721%7CAtkinson%2C+NH+03811%7CAuburndale%2C+MA+02466%7CAvon%2C+MA+02322%7CAyer%2C+MA+01432%7CBedford%2C+MA+01730%7CBellingham%2C+MA+02019%7CBelmont%2C+MA+02478%7CBerlin%2C+MA+01503%7CBeverly%2C+MA+01915%7CBillerica%2C+MA+01821%7CBlackstone%2C+MA+01504%7CBolton%2C+MA+01740%7CBoston%2C+MA+02108%7CBoxborough%2C+MA+01719%7CBoxford%2C+MA+01921%7CBoylston%2C+MA+01505%7CBraintree%2C+MA+02184&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+07:00:07 [DEBUG] Processing 25 rows from API response
+Fetching morning commute times:  12%|█▎        | 1/8 [00:00<00:02,  2.88chunk/s]07:00:07 [INFO] Using Basic tier (no traffic)
+07:00:07 [DEBUG] https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=244+Wood+St.+Lexington%2C+MA+02421&mode=driving&origins=Brighton%2C+MA+02135%7CBrockton%2C+MA+02301%7CBrookline%2C+MA+02445%7CBrookline%2C+NH+03033%7CBurlington%2C+MA+01803%7CByfield%2C+MA+01922%7CCambridge%2C+MA+02138%7CCanton%2C+MA+02021%7CCarlisle%2C+MA+01741%7CCharlestown%2C+MA+02129%7CChelmsford%2C+MA+01824%7CChelsea%2C+MA+02150%7CChestnut+Hill%2C+MA+02467%7CClinton%2C+MA+01510%7CCohasset%2C+MA+02025%7CConcord%2C+MA+01742%7CDanvers%2C+MA+01923%7CDedham%2C+MA+02026%7CDerry%2C+NH+03038%7CDevens%2C+MA+01434%7CDorchester%2C+MA+02121%7CDover%2C+MA+02030%7CDracut%2C+MA+01826%7CDunstable%2C+MA+01827%7CEssex%2C+MA+01929&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+07:00:07 [DEBUG] Processing 25 rows from API response
+Fetching morning commute times:  25%|██▌       | 2/8 [00:00<00:01,  3.39chunk/s]07:00:07 [INFO] Using Basic tier (no traffic)
+07:00:07 [DEBUG] https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=244+Wood+St.+Lexington%2C+MA+02421&mode=driving&origins=Everett%2C+MA+02149%7CFayville%2C+MA+01745%7CFitchburg%2C+MA+01420%7CFoxboro%2C+MA+02035%7CFramingham%2C+MA+01701%7CFranklin%2C+MA+02038%7CGeorgetown%2C+MA+01833%7CGrafton%2C+MA+01519%7CGreenville%2C+NH+03048%7CGroton%2C+MA+01450%7CGroveland%2C+MA+01834%7CHampstead%2C+NH+03841%7CHarvard%2C+MA+01451%7CHaverhill%2C+MA+01830%7CHingham%2C+MA+02043%7CHolbrook%2C+MA+02343%7CHolden%2C+MA+01520%7CHollis%2C+NH+03049%7CHolliston%2C+MA+01746%7CHopedale%2C+MA+01747%7CHopkinton%2C+MA+01748%7CHudson%2C+MA+01749%7CHudson%2C+NH+03051%7CHull%2C+MA+02045%7CHyde+Park%2C+MA+02136&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+07:00:07 [DEBUG] Processing 25 rows from API response
+Fetching morning commute times:  38%|███▊      | 3/8 [00:00<00:01,  3.56chunk/s]07:00:07 [INFO] Using Basic tier (no traffic)
+07:00:07 [DEBUG] https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=244+Wood+St.+Lexington%2C+MA+02421&mode=driving&origins=Ipswich%2C+MA+01938%7CJamaica+Plain%2C+MA+02130%7CJefferson%2C+MA+01522%7CLancaster%2C+MA+01523%7CLawrence%2C+MA+01840%7CLeominster%2C+MA+01453%7CLexington%2C+MA+02420%7CLincoln%2C+MA+01773%7CLitchfield%2C+NH+03052%7CLittleton%2C+MA+01460%7CLondonderry%2C+NH+03053%7CLowell%2C+MA+01850%7CLunenburg%2C+MA+01462%7CLynn%2C+MA+01901%7CLynnfield%2C+MA+01940%7CMalden%2C+MA+02148%7CManchester%2C+MA+01944%7CMarblehead%2C+MA+01945%7CMarlborough%2C+MA+01752%7CMattapan%2C+MA+02126%7CMaynard%2C+MA+01754%7CMedfield%2C+MA+02052%7CMedford%2C+MA+02155%7CMedway%2C+MA+02053%7CMelrose%2C+MA+02176&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+07:00:07 [DEBUG] Processing 25 rows from API response
+Fetching morning commute times:  50%|█████     | 4/8 [00:01<00:01,  3.81chunk/s]07:00:07 [INFO] Using Basic tier (no traffic)
+07:00:08 [DEBUG] https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=244+Wood+St.+Lexington%2C+MA+02421&mode=driving&origins=Mendon%2C+MA+01756%7CMerrimac%2C+MA+01860%7CMerrimack%2C+NH+03054%7CMethuen%2C+MA+01844%7CMiddleton%2C+MA+01949%7CMilford%2C+MA+01757%7CMillis%2C+MA+02054%7CMilton%2C+MA+02186%7CNahant%2C+MA+01908%7CNashua%2C+NH+03060%7CNatick%2C+MA+01760%7CNeedham%2C+MA+02492%7CNewbury%2C+MA+01951%7CNewton%2C+MA+02458%7CNewton%2C+NH+03858%7CNorfolk%2C+MA+02056%7CNorth+Andover%2C+MA+01845%7CNorth+Easton%2C+MA+02356%7CNorthborough%2C+MA+01532%7CNorthbridge%2C+MA+01534%7CNorwell%2C+MA+02061%7CNorwood%2C+MA+02062%7CPeabody%2C+MA+01960%7CPelham%2C+NH+03076%7CPepperell%2C+MA+01463&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+07:00:08 [DEBUG] Processing 25 rows from API response
+Fetching morning commute times:  62%|██████▎   | 5/8 [00:01<00:00,  3.92chunk/s]07:00:08 [INFO] Using Basic tier (no traffic)
+07:00:08 [DEBUG] https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=244+Wood+St.+Lexington%2C+MA+02421&mode=driving&origins=Plainville%2C+MA+02762%7CPlaistow%2C+NH+03865%7CPrinceton%2C+MA+01541%7CQuincy%2C+MA+02169%7CRandolph%2C+MA+02368%7CReading%2C+MA+01867%7CRevere%2C+MA+02151%7CRockland%2C+MA+02370%7CRoslindale%2C+MA+02131%7CRowley%2C+MA+01969%7CRoxbury%2C+MA+02119%7CSalem%2C+MA+01970%7CSalem%2C+NH+03079%7CSandown%2C+NH+03873%7CSaugus%2C+MA+01906%7CScituate%2C+MA+02066%7CSharon%2C+MA+02067%7CSherborn%2C+MA+01770%7CShirley%2C+MA+01464%7CShrewsbury%2C+MA+01545%7CSomerville%2C+MA+02143%7CSouth+Hamilton%2C+MA+01982%7CSouthborough%2C+MA+01772%7CSterling%2C+MA+01564%7CStoneham%2C+MA+02180&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+07:00:08 [DEBUG] Processing 25 rows from API response
+Fetching morning commute times:  75%|███████▌  | 6/8 [00:01<00:00,  3.50chunk/s]07:00:08 [INFO] Using Basic tier (no traffic)
+07:00:08 [DEBUG] https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=244+Wood+St.+Lexington%2C+MA+02421&mode=driving&origins=Stoughton%2C+MA+02072%7CStow%2C+MA+01775%7CSudbury%2C+MA+01776%7CSwampscott%2C+MA+01907%7CTewksbury%2C+MA+01876%7CTopsfield%2C+MA+01983%7CTownsend%2C+MA+01469%7CTyngsboro%2C+MA+01879%7CUpton%2C+MA+01568%7CWaban%2C+MA+02468%7CWakefield%2C+MA+01880%7CWalpole%2C+MA+02081%7CWaltham%2C+MA+02451%7CWatertown%2C+MA+02472%7CWayland%2C+MA+01778%7CWellesley%2C+MA+02482%7CWenham%2C+MA+01984%7CWest+Bridgewater%2C+MA+02379%7CWestborough%2C+MA+01581%7CWestford%2C+MA+01886%7CWeston%2C+MA+02493%7CWestwood%2C+MA+02090%7CWeymouth%2C+MA+02188%7CWhitinsville%2C+MA+01588%7CWhitman%2C+MA+02382&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+07:00:08 [DEBUG] Processing 25 rows from API response
+Fetching morning commute times:  88%|████████▊ | 7/8 [00:01<00:00,  3.78chunk/s]07:00:08 [INFO] Using Basic tier (no traffic)
+07:00:09 [DEBUG] https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=244+Wood+St.+Lexington%2C+MA+02421&mode=driving&origins=Wilmington%2C+MA+01887%7CWinchester%2C+MA+01890%7CWindham%2C+NH+03087%7CWinthrop%2C+MA+02152%7CWoburn%2C+MA+01801%7CWrentham%2C+MA+02093%7CSomerset%2C+MA+02726&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+07:00:09 [DEBUG] Processing 7 rows from API response
+Fetching morning commute times: 100%|██████████| 8/8 [00:02<00:00,  3.15chunk/s]Fetching morning commute times: 100%|██████████| 8/8 [00:02<00:00,  3.41chunk/s]
+07:00:09 [INFO] Completed 8 requests, processed 182 elements, collected 182 valid results
+07:00:09 [INFO] Loaded 181 records from /home/ad23883/production/house_hunt/Data/Results/commute_stats.csv
+07:00:09 [INFO] Loaded 181 records from /home/ad23883/production/house_hunt/Data/Results/commute_stats.csv
+07:00:09 [INFO] Successfully updated /home/ad23883/production/house_hunt/Data/Results/commute_stats.csv with 182 records
+07:00:09 [INFO] Updated API usage: 182 elements this run, 3,065 / 10,000 monthly total
+07:00:09 [INFO] Re-validating usage after API calls...
+07:00:10 [INFO] Google-reported usage: 2,883 elements (Advanced tier based on TRAFFIC_MODEL=best_guess)
+07:00:10 [INFO] Free tier limit: 5,000, Remaining: 2,117
+07:00:10 [INFO] === Usage Validation ===
+07:00:10 [INFO] Tier:            Advanced
+07:00:10 [INFO] Local tracking:  3,065 elements
+07:00:10 [INFO] Google reports:  2,883 elements
+07:00:10 [INFO] Free tier:       5,000
+07:00:10 [INFO] Remaining:       2,117
+07:00:10 [INFO] Discrepancy:     182 elements
+07:00:10 [WARNING] ⚠️  Significant discrepancy detected! Consider using Google's count as source of truth.
+
+======================================================================
+COMMUTE DATA COLLECTION COMPLETE - MORNING
+----------------------------------------------------------------------
+Addresses queried:     182
+Successful results:    182
+Elements this run:     182
+Local monthly total:   3,065
+Google monthly total:  2,883
+⚠️  Discrepancy:        182 elements
+Free tier remaining:   7,117
+Free tier status:      28.8% used
+======================================================================
+
+07:00:10 [INFO] Commute data collection completed successfully
+07:00:10 [INFO] Commute collection completed successfully
+07:00:10 [INFO] ======================================================================
+07:00:10 [INFO] EXECUTION SUMMARY
+07:00:10 [INFO] ----------------------------------------------------------------------
+07:00:10 [INFO] COMMUTE: ✓ SUCCESS
+07:00:10 [INFO] ----------------------------------------------------------------------
+07:00:10 [INFO] Completed 1/1 modules successfully
+07:00:10 [INFO] ======================================================================
+17:00:05 [INFO] House Hunt execution started at 2026-02-05 17:00:05.606889
+17:00:05 [INFO] ======================================================================
+17:00:05 [INFO] Starting Commute Data Collection
+17:00:05 [INFO] ======================================================================
+17:00:05 [INFO] ======================================================================
+17:00:05 [INFO] Starting commute data collection
+17:00:05 [INFO] ======================================================================
+17:00:05 [INFO] After noon - collecting afternoon commute data
+17:00:05 [INFO] Direction: afternoon commute
+17:00:05 [INFO] Validating current API usage against Google...
+/home/ad23883/.local/lib/python3.10/site-packages/google/api_core/_python_version_support.py:266: FutureWarning: You are using a Python version (3.10.12) which Google will stop supporting in new releases of google.api_core once it reaches its end of life (2026-10-04). Please upgrade to the latest Python version, or at least Python 3.11, to continue receiving updates for google.api_core past that date.
+  warnings.warn(message, FutureWarning)
+17:00:07 [INFO] Google-reported usage: 3,065 elements (Advanced tier based on TRAFFIC_MODEL=best_guess)
+17:00:07 [INFO] Free tier limit: 5,000, Remaining: 1,935
+17:00:07 [INFO] === Usage Validation ===
+17:00:07 [INFO] Tier:            Advanced
+17:00:07 [INFO] Local tracking:  3,065 elements
+17:00:07 [INFO] Google reports:  3,065 elements
+17:00:07 [INFO] Free tier:       5,000
+17:00:07 [INFO] Remaining:       1,935
+17:00:07 [INFO] Discrepancy:     0 elements
+
+======================================================================
+CURRENT API USAGE STATUS
+----------------------------------------------------------------------
+Local tracking:        3,065 elements
+Google reports:        3,065 elements
+  - Basic tier:        0
+  - Advanced tier:     3,065
+Free tier remaining:   6,935
+======================================================================
+
+17:00:07 [INFO] Loading zip codes within 40 miles of work...
+17:00:07 [INFO] Parsing ZIP database: /home/ad23883/production/house_hunt/Data/Raw/zip_code_database.csv
+17:00:08 [INFO] Loaded 795 active standard ZIPs for MA, RI, NH
+17:00:08 [INFO] Loading cached town results from /home/ad23883/production/house_hunt/Data/Processed/towns_within_40mi.csv
+17:00:08 [INFO] Loaded 182 cached towns (range: 40mi)
+17:00:08 [INFO] Found 182 addresses within range
+17:00:08 [INFO] Current monthly API usage: 3,065 / 10,000
+17:00:08 [DEBUG] API Key successfully loaded from /home/ad23883/production/house_hunt/Data/google_api_key
+17:00:08 [INFO] Afternoon commute: 123 Main St. Anytown, MA 00000 → 182 locations
+Fetching afternoon commute times:   0%|                | 0/8 [00:00<?, ?chunk/s]17:00:08 [INFO] Using Basic tier (no traffic)
+17:00:08 [DEBUG] Starting new HTTPS connection (1): maps.googleapis.com:443
+17:00:09 [DEBUG] https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=Abington%2C+MA+02351%7CActon%2C+MA+01718%7CAllston%2C+MA+02134%7CAmesbury%2C+MA+01913%7CAmherst%2C+NH+03031%7CArlington%2C+MA+02474%7CAshby%2C+MA+01431%7CAshland%2C+MA+01721%7CAtkinson%2C+NH+03811%7CAuburndale%2C+MA+02466%7CAvon%2C+MA+02322%7CAyer%2C+MA+01432%7CBedford%2C+MA+01730%7CBellingham%2C+MA+02019%7CBelmont%2C+MA+02478%7CBerlin%2C+MA+01503%7CBeverly%2C+MA+01915%7CBillerica%2C+MA+01821%7CBlackstone%2C+MA+01504%7CBolton%2C+MA+01740%7CBoston%2C+MA+02108%7CBoxborough%2C+MA+01719%7CBoxford%2C+MA+01921%7CBoylston%2C+MA+01505%7CBraintree%2C+MA+02184&mode=driving&origins=244+Wood+St.+Lexington%2C+MA+02421&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+17:00:09 [DEBUG] Processing 25 elements from API response
+Fetching afternoon commute times:  12%|█       | 1/8 [00:00<00:02,  3.36chunk/s]17:00:09 [INFO] Using Basic tier (no traffic)
+17:00:09 [DEBUG] https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=Brighton%2C+MA+02135%7CBrockton%2C+MA+02301%7CBrookline%2C+MA+02445%7CBrookline%2C+NH+03033%7CBurlington%2C+MA+01803%7CByfield%2C+MA+01922%7CCambridge%2C+MA+02138%7CCanton%2C+MA+02021%7CCarlisle%2C+MA+01741%7CCharlestown%2C+MA+02129%7CChelmsford%2C+MA+01824%7CChelsea%2C+MA+02150%7CChestnut+Hill%2C+MA+02467%7CClinton%2C+MA+01510%7CCohasset%2C+MA+02025%7CConcord%2C+MA+01742%7CDanvers%2C+MA+01923%7CDedham%2C+MA+02026%7CDerry%2C+NH+03038%7CDevens%2C+MA+01434%7CDorchester%2C+MA+02121%7CDover%2C+MA+02030%7CDracut%2C+MA+01826%7CDunstable%2C+MA+01827%7CEssex%2C+MA+01929&mode=driving&origins=244+Wood+St.+Lexington%2C+MA+02421&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+17:00:09 [DEBUG] Processing 25 elements from API response
+Fetching afternoon commute times:  25%|██      | 2/8 [00:00<00:01,  4.02chunk/s]17:00:09 [INFO] Using Basic tier (no traffic)
+17:00:09 [DEBUG] https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=Everett%2C+MA+02149%7CFayville%2C+MA+01745%7CFitchburg%2C+MA+01420%7CFoxboro%2C+MA+02035%7CFramingham%2C+MA+01701%7CFranklin%2C+MA+02038%7CGeorgetown%2C+MA+01833%7CGrafton%2C+MA+01519%7CGreenville%2C+NH+03048%7CGroton%2C+MA+01450%7CGroveland%2C+MA+01834%7CHampstead%2C+NH+03841%7CHarvard%2C+MA+01451%7CHaverhill%2C+MA+01830%7CHingham%2C+MA+02043%7CHolbrook%2C+MA+02343%7CHolden%2C+MA+01520%7CHollis%2C+NH+03049%7CHolliston%2C+MA+01746%7CHopedale%2C+MA+01747%7CHopkinton%2C+MA+01748%7CHudson%2C+MA+01749%7CHudson%2C+NH+03051%7CHull%2C+MA+02045%7CHyde+Park%2C+MA+02136&mode=driving&origins=244+Wood+St.+Lexington%2C+MA+02421&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+17:00:09 [DEBUG] Processing 25 elements from API response
+Fetching afternoon commute times:  38%|███     | 3/8 [00:00<00:01,  4.15chunk/s]17:00:09 [INFO] Using Basic tier (no traffic)
+17:00:09 [DEBUG] https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=Ipswich%2C+MA+01938%7CJamaica+Plain%2C+MA+02130%7CJefferson%2C+MA+01522%7CLancaster%2C+MA+01523%7CLawrence%2C+MA+01840%7CLeominster%2C+MA+01453%7CLexington%2C+MA+02420%7CLincoln%2C+MA+01773%7CLitchfield%2C+NH+03052%7CLittleton%2C+MA+01460%7CLondonderry%2C+NH+03053%7CLowell%2C+MA+01850%7CLunenburg%2C+MA+01462%7CLynn%2C+MA+01901%7CLynnfield%2C+MA+01940%7CMalden%2C+MA+02148%7CManchester%2C+MA+01944%7CMarblehead%2C+MA+01945%7CMarlborough%2C+MA+01752%7CMattapan%2C+MA+02126%7CMaynard%2C+MA+01754%7CMedfield%2C+MA+02052%7CMedford%2C+MA+02155%7CMedway%2C+MA+02053%7CMelrose%2C+MA+02176&mode=driving&origins=244+Wood+St.+Lexington%2C+MA+02421&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+17:00:09 [DEBUG] Processing 25 elements from API response
+Fetching afternoon commute times:  50%|████    | 4/8 [00:00<00:00,  4.35chunk/s]17:00:09 [INFO] Using Basic tier (no traffic)
+17:00:10 [DEBUG] https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=Mendon%2C+MA+01756%7CMerrimac%2C+MA+01860%7CMerrimack%2C+NH+03054%7CMethuen%2C+MA+01844%7CMiddleton%2C+MA+01949%7CMilford%2C+MA+01757%7CMillis%2C+MA+02054%7CMilton%2C+MA+02186%7CNahant%2C+MA+01908%7CNashua%2C+NH+03060%7CNatick%2C+MA+01760%7CNeedham%2C+MA+02492%7CNewbury%2C+MA+01951%7CNewton%2C+MA+02458%7CNewton%2C+NH+03858%7CNorfolk%2C+MA+02056%7CNorth+Andover%2C+MA+01845%7CNorth+Easton%2C+MA+02356%7CNorthborough%2C+MA+01532%7CNorthbridge%2C+MA+01534%7CNorwell%2C+MA+02061%7CNorwood%2C+MA+02062%7CPeabody%2C+MA+01960%7CPelham%2C+NH+03076%7CPepperell%2C+MA+01463&mode=driving&origins=244+Wood+St.+Lexington%2C+MA+02421&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+17:00:10 [DEBUG] Processing 25 elements from API response
+Fetching afternoon commute times:  62%|█████   | 5/8 [00:01<00:00,  4.35chunk/s]17:00:10 [INFO] Using Basic tier (no traffic)
+17:00:10 [DEBUG] https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=Plainville%2C+MA+02762%7CPlaistow%2C+NH+03865%7CPrinceton%2C+MA+01541%7CQuincy%2C+MA+02169%7CRandolph%2C+MA+02368%7CReading%2C+MA+01867%7CRevere%2C+MA+02151%7CRockland%2C+MA+02370%7CRoslindale%2C+MA+02131%7CRowley%2C+MA+01969%7CRoxbury%2C+MA+02119%7CSalem%2C+MA+01970%7CSalem%2C+NH+03079%7CSandown%2C+NH+03873%7CSaugus%2C+MA+01906%7CScituate%2C+MA+02066%7CSharon%2C+MA+02067%7CSherborn%2C+MA+01770%7CShirley%2C+MA+01464%7CShrewsbury%2C+MA+01545%7CSomerville%2C+MA+02143%7CSouth+Hamilton%2C+MA+01982%7CSouthborough%2C+MA+01772%7CSterling%2C+MA+01564%7CStoneham%2C+MA+02180&mode=driving&origins=244+Wood+St.+Lexington%2C+MA+02421&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+17:00:10 [DEBUG] Processing 25 elements from API response
+Fetching afternoon commute times:  75%|██████  | 6/8 [00:01<00:00,  4.32chunk/s]17:00:10 [INFO] Using Basic tier (no traffic)
+17:00:10 [DEBUG] https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=Stoughton%2C+MA+02072%7CStow%2C+MA+01775%7CSudbury%2C+MA+01776%7CSwampscott%2C+MA+01907%7CTewksbury%2C+MA+01876%7CTopsfield%2C+MA+01983%7CTownsend%2C+MA+01469%7CTyngsboro%2C+MA+01879%7CUpton%2C+MA+01568%7CWaban%2C+MA+02468%7CWakefield%2C+MA+01880%7CWalpole%2C+MA+02081%7CWaltham%2C+MA+02451%7CWatertown%2C+MA+02472%7CWayland%2C+MA+01778%7CWellesley%2C+MA+02482%7CWenham%2C+MA+01984%7CWest+Bridgewater%2C+MA+02379%7CWestborough%2C+MA+01581%7CWestford%2C+MA+01886%7CWeston%2C+MA+02493%7CWestwood%2C+MA+02090%7CWeymouth%2C+MA+02188%7CWhitinsville%2C+MA+01588%7CWhitman%2C+MA+02382&mode=driving&origins=244+Wood+St.+Lexington%2C+MA+02421&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+17:00:10 [DEBUG] Processing 25 elements from API response
+Fetching afternoon commute times:  88%|███████ | 7/8 [00:01<00:00,  4.37chunk/s]17:00:10 [INFO] Using Basic tier (no traffic)
+17:00:10 [DEBUG] https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=Wilmington%2C+MA+01887%7CWinchester%2C+MA+01890%7CWindham%2C+NH+03087%7CWinthrop%2C+MA+02152%7CWoburn%2C+MA+01801%7CWrentham%2C+MA+02093%7CSomerset%2C+MA+02726&mode=driving&origins=244+Wood+St.+Lexington%2C+MA+02421&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+17:00:10 [DEBUG] Processing 7 elements from API response
+Fetching afternoon commute times: 100%|████████| 8/8 [00:01<00:00,  4.15chunk/s]Fetching afternoon commute times: 100%|████████| 8/8 [00:01<00:00,  4.18chunk/s]
+17:00:10 [INFO] Completed 8 requests, processed 182 elements, collected 182 valid results
+17:00:10 [INFO] Loaded 182 records from /home/ad23883/production/house_hunt/Data/Results/commute_stats.csv
+17:00:10 [INFO] Loaded 182 records from /home/ad23883/production/house_hunt/Data/Results/commute_stats.csv
+17:00:10 [INFO] Successfully updated /home/ad23883/production/house_hunt/Data/Results/commute_stats.csv with 182 records
+17:00:10 [INFO] Updated API usage: 182 elements this run, 3,247 / 10,000 monthly total
+17:00:10 [INFO] Re-validating usage after API calls...
+17:00:11 [INFO] Google-reported usage: 3,065 elements (Advanced tier based on TRAFFIC_MODEL=best_guess)
+17:00:11 [INFO] Free tier limit: 5,000, Remaining: 1,935
+17:00:11 [INFO] === Usage Validation ===
+17:00:11 [INFO] Tier:            Advanced
+17:00:11 [INFO] Local tracking:  3,247 elements
+17:00:11 [INFO] Google reports:  3,065 elements
+17:00:11 [INFO] Free tier:       5,000
+17:00:11 [INFO] Remaining:       1,935
+17:00:11 [INFO] Discrepancy:     182 elements
+17:00:11 [WARNING] ⚠️  Significant discrepancy detected! Consider using Google's count as source of truth.
+
+======================================================================
+COMMUTE DATA COLLECTION COMPLETE - AFTERNOON
+----------------------------------------------------------------------
+Addresses queried:     182
+Successful results:    182
+Elements this run:     182
+Local monthly total:   3,247
+Google monthly total:  3,065
+⚠️  Discrepancy:        182 elements
+Free tier remaining:   6,935
+Free tier status:      30.6% used
+======================================================================
+
+17:00:11 [INFO] Commute data collection completed successfully
+17:00:11 [INFO] Commute collection completed successfully
+17:00:11 [INFO] ======================================================================
+17:00:11 [INFO] EXECUTION SUMMARY
+17:00:11 [INFO] ----------------------------------------------------------------------
+17:00:11 [INFO] COMMUTE: ✓ SUCCESS
+17:00:11 [INFO] ----------------------------------------------------------------------
+17:00:11 [INFO] Completed 1/1 modules successfully
+17:00:11 [INFO] ======================================================================

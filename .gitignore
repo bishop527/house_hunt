@@ -26,11 +26,6 @@ ENV/
 
 # Data files (keep structure, ignore data)
 Data/Raw/*.csv
-Data/Processed/*.csv
-Data/Results/*.csv
-Data/Results/*.log
-Data/Results/*.txt
-Data/Logs/*
 
 # API Keys
 google_api_key

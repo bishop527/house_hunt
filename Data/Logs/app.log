@@ -1,0 +1,1681 @@
+2026-02-02 18:52:07 [INFO] __main__: ======================================================================
+2026-02-02 18:52:07 [INFO] __main__: Starting commute data collection
+2026-02-02 18:52:07 [INFO] __main__: ======================================================================
+2026-02-02 18:52:07 [INFO] __main__: After noon - collecting afternoon commute data
+2026-02-02 18:52:07 [INFO] __main__: Direction: afternoon commute
+2026-02-02 18:52:07 [INFO] __main__: Validating current API usage against Google...
+2026-02-02 18:52:09 [INFO] utils: Google-reported usage: 1,091 elements (Advanced tier)
+2026-02-02 18:52:09 [INFO] utils: Free tier limit: 5,000, Remaining: 3,909
+2026-02-02 18:52:09 [INFO] utils: === Usage Validation ===
+2026-02-02 18:52:09 [INFO] utils: Tier:            Advanced
+2026-02-02 18:52:09 [INFO] utils: Local tracking:  1,091 elements
+2026-02-02 18:52:09 [INFO] utils: Google reports:  1,091 elements
+2026-02-02 18:52:09 [INFO] utils: Free tier:       5,000
+2026-02-02 18:52:09 [INFO] utils: Remaining:       3,909
+2026-02-02 18:52:09 [INFO] utils: Discrepancy:     0 elements
+2026-02-02 18:52:09 [INFO] __main__: Loading zip codes within 40 miles of work...
+2026-02-02 18:52:09 [INFO] utils: Parsing ZIP database: /home/ad23883/workspace/house_hunt/Data/Raw/small-zip_code_database.csv
+2026-02-02 18:52:09 [WARNING] utils: Found 2 rows with missing data
+2026-02-02 18:52:09 [WARNING] utils:   Row 23: Zip=99999, Town=Test City
+2026-02-02 18:52:09 [WARNING] utils:   Row 24: Zip=88888, Town=nan
+2026-02-02 18:52:09 [WARNING] utils: Dropped 2 rows with missing data
+2026-02-02 18:52:09 [INFO] utils: Loaded 19 active standard ZIPs for MA, RI, NH
+2026-02-02 18:52:09 [INFO] utils: Current monthly API usage: 1,091 / 13,000
+2026-02-02 18:52:09 [DEBUG] utils: API Key loaded from /home/ad23883/workspace/house_hunt/Data/google_api_key
+2026-02-02 18:52:09 [INFO] utils: Checking range for 19 locations against 123 Main St. Anytown, MA 00000
+2026-02-02 18:52:09 [INFO] utils: API usage: 1 requests, 19 elements, Monthly total: 1,110 / 13,000
+2026-02-02 18:52:09 [INFO] utils: Saved 15 locations to /home/ad23883/workspace/house_hunt/Data/Processed/zips_within_40mi.csv
+2026-02-02 18:52:09 [INFO] utils: Returning 15 addresses within range
+2026-02-02 18:52:09 [INFO] __main__: Found 15 addresses within range
+2026-02-02 18:52:09 [INFO] utils: Current monthly API usage: 1,110 / 13,000
+2026-02-02 18:52:09 [DEBUG] utils: API Key loaded from /home/ad23883/workspace/house_hunt/Data/google_api_key
+2026-02-02 18:52:09 [INFO] __main__: Afternoon commute: 123 Main St. Anytown, MA 00000 → 15 locations
+2026-02-02 18:52:09 [DEBUG] __main__: Using Basic tier (no traffic)
+2026-02-02 18:52:09 [DEBUG] __main__: Processing 15 elements
+2026-02-02 18:52:09 [INFO] __main__: Completed 1 requests, processed 15 elements, collected 15 valid results
+2026-02-02 18:52:09 [INFO] utils: File not found: /home/ad23883/workspace/house_hunt/Data/Results/commute_stats.csv
+2026-02-02 18:52:09 [INFO] __main__: No historical data found. Starting fresh.
+2026-02-02 18:52:09 [INFO] __main__: Successfully updated /home/ad23883/workspace/house_hunt/Data/Results/commute_stats.csv with 15 records
+2026-02-02 18:52:09 [INFO] utils: Updated API usage: 15 this run, 1,125 / 13,000 monthly
+2026-02-02 18:52:09 [INFO] utils: API_USAGE | operation=update_counter | elements=15 | estimated_cost=$0.0000
+2026-02-02 18:52:09 [INFO] __main__: Re-validating usage after API calls...
+2026-02-02 18:52:10 [INFO] utils: Google-reported usage: 1,091 elements (Advanced tier)
+2026-02-02 18:52:10 [INFO] utils: Free tier limit: 5,000, Remaining: 3,909
+2026-02-02 18:52:10 [INFO] utils: === Usage Validation ===
+2026-02-02 18:52:10 [INFO] utils: Tier:            Advanced
+2026-02-02 18:52:10 [INFO] utils: Local tracking:  1,125 elements
+2026-02-02 18:52:10 [INFO] utils: Google reports:  1,091 elements
+2026-02-02 18:52:10 [INFO] utils: Free tier:       5,000
+2026-02-02 18:52:10 [INFO] utils: Remaining:       3,909
+2026-02-02 18:52:10 [INFO] utils: Discrepancy:     34 elements
+2026-02-02 18:52:10 [INFO] __main__: Commute data collection completed successfully
+2026-02-02 18:57:28 [INFO] __main__: ======================================================================
+2026-02-02 18:57:28 [INFO] __main__: Starting commute data collection
+2026-02-02 18:57:28 [INFO] __main__: ======================================================================
+2026-02-02 18:57:28 [INFO] __main__: After noon - collecting afternoon commute data
+2026-02-02 18:57:28 [INFO] __main__: Direction: afternoon commute
+2026-02-02 18:57:28 [INFO] __main__: Validating current API usage against Google...
+2026-02-02 18:57:30 [INFO] utils: Google-reported usage: 1,125 elements (Advanced tier)
+2026-02-02 18:57:30 [INFO] utils: Free tier limit: 5,000, Remaining: 3,875
+2026-02-02 18:57:30 [INFO] utils: === Usage Validation ===
+2026-02-02 18:57:30 [INFO] utils: Tier:            Advanced
+2026-02-02 18:57:30 [INFO] utils: Local tracking:  1,125 elements
+2026-02-02 18:57:30 [INFO] utils: Google reports:  1,125 elements
+2026-02-02 18:57:30 [INFO] utils: Free tier:       5,000
+2026-02-02 18:57:30 [INFO] utils: Remaining:       3,875
+2026-02-02 18:57:30 [INFO] utils: Discrepancy:     0 elements
+2026-02-02 18:57:30 [INFO] __main__: Loading zip codes within 40 miles of work...
+2026-02-02 18:57:30 [INFO] utils: Parsing ZIP database: /home/ad23883/workspace/house_hunt/Data/Raw/zip_code_database.csv
+2026-02-02 18:57:31 [INFO] utils: Loaded 795 active standard ZIPs for MA, RI, NH
+2026-02-02 18:57:31 [INFO] utils: Current monthly API usage: 1,125 / 13,000
+2026-02-02 18:57:31 [DEBUG] utils: API Key loaded from /home/ad23883/workspace/house_hunt/Data/google_api_key
+2026-02-02 18:57:31 [INFO] utils: Checking range for 698 locations against 123 Main St. Anytown, MA 00000
+2026-02-02 18:57:37 [INFO] utils: API usage: 28 requests, 698 elements, Monthly total: 1,823 / 13,000
+2026-02-02 18:57:37 [INFO] utils: Saved 212 towns
+2026-02-02 18:57:37 [INFO] utils: Returning 212 towns within range
+2026-02-02 18:57:37 [INFO] __main__: Found 212 addresses within range
+2026-02-02 18:57:37 [INFO] utils: Current monthly API usage: 1,823 / 13,000
+2026-02-02 18:57:37 [DEBUG] utils: API Key loaded from /home/ad23883/workspace/house_hunt/Data/google_api_key
+2026-02-02 18:57:37 [INFO] __main__: Afternoon commute: 123 Main St. Anytown, MA 00000 → 212 locations
+2026-02-02 18:57:37 [DEBUG] __main__: Using Basic tier (no traffic)
+2026-02-02 18:57:38 [DEBUG] __main__: Processing 25 elements
+2026-02-02 18:57:38 [DEBUG] __main__: Using Basic tier (no traffic)
+2026-02-02 18:57:38 [DEBUG] __main__: Processing 25 elements
+2026-02-02 18:57:38 [DEBUG] __main__: Using Basic tier (no traffic)
+2026-02-02 18:57:38 [DEBUG] __main__: Processing 25 elements
+2026-02-02 18:57:38 [DEBUG] __main__: Using Basic tier (no traffic)
+2026-02-02 18:57:38 [DEBUG] __main__: Processing 25 elements
+2026-02-02 18:57:38 [DEBUG] __main__: Using Basic tier (no traffic)
+2026-02-02 18:57:38 [DEBUG] __main__: Processing 25 elements
+2026-02-02 18:57:38 [DEBUG] __main__: Using Basic tier (no traffic)
+2026-02-02 18:57:38 [DEBUG] __main__: Processing 25 elements
+2026-02-02 18:57:38 [DEBUG] __main__: Using Basic tier (no traffic)
+2026-02-02 18:57:38 [DEBUG] __main__: Processing 25 elements
+2026-02-02 18:57:38 [DEBUG] __main__: Using Basic tier (no traffic)
+2026-02-02 18:57:38 [DEBUG] __main__: Processing 25 elements
+2026-02-02 18:57:38 [DEBUG] __main__: Using Basic tier (no traffic)
+2026-02-02 18:57:38 [DEBUG] __main__: Processing 12 elements
+2026-02-02 18:57:38 [INFO] __main__: Completed 9 requests, processed 212 elements, collected 212 valid results
+2026-02-02 18:57:38 [INFO] utils: Loaded 15 records from /home/ad23883/workspace/house_hunt/Data/Results/commute_stats.csv
+2026-02-02 18:57:38 [INFO] __main__: Loaded 15 records from /home/ad23883/workspace/house_hunt/Data/Results/commute_stats.csv
+2026-02-02 18:57:38 [INFO] __main__: Successfully updated /home/ad23883/workspace/house_hunt/Data/Results/commute_stats.csv with 212 records
+2026-02-02 18:57:38 [INFO] utils: Updated API usage: 212 this run, 2,035 / 13,000 monthly
+2026-02-02 18:57:38 [INFO] utils: API_USAGE | operation=update_counter | elements=212 | estimated_cost=$0.0000
+2026-02-02 18:57:38 [INFO] __main__: Re-validating usage after API calls...
+2026-02-02 18:57:39 [INFO] utils: Google-reported usage: 1,125 elements (Advanced tier)
+2026-02-02 18:57:39 [INFO] utils: Free tier limit: 5,000, Remaining: 3,875
+2026-02-02 18:57:39 [INFO] utils: === Usage Validation ===
+2026-02-02 18:57:39 [INFO] utils: Tier:            Advanced
+2026-02-02 18:57:39 [INFO] utils: Local tracking:  2,035 elements
+2026-02-02 18:57:39 [INFO] utils: Google reports:  1,125 elements
+2026-02-02 18:57:39 [INFO] utils: Free tier:       5,000
+2026-02-02 18:57:39 [INFO] utils: Remaining:       3,875
+2026-02-02 18:57:39 [INFO] utils: Discrepancy:     910 elements
+2026-02-02 18:57:39 [WARNING] utils: ⚠️  Significant discrepancy detected! Consider using Google's count as source of truth.
+2026-02-02 18:57:39 [INFO] __main__: Commute data collection completed successfully
+2026-02-03 07:00:03 [INFO] __main__: House Hunt execution started at 2026-02-03 07:00:03.876434
+2026-02-03 07:00:03 [INFO] __main__: ======================================================================
+2026-02-03 07:00:03 [INFO] __main__: Starting Commute Data Collection
+2026-02-03 07:00:03 [INFO] __main__: ======================================================================
+2026-02-03 07:00:03 [INFO] Commute.collect_commute_data: ======================================================================
+2026-02-03 07:00:03 [INFO] Commute.collect_commute_data: ======================================================================
+2026-02-03 07:00:03 [INFO] Commute.collect_commute_data: Starting commute data collection
+2026-02-03 07:00:03 [INFO] Commute.collect_commute_data: Starting commute data collection
+2026-02-03 07:00:03 [INFO] Commute.collect_commute_data: ======================================================================
+2026-02-03 07:00:03 [INFO] Commute.collect_commute_data: ======================================================================
+2026-02-03 07:00:03 [INFO] Commute.collect_commute_data: Before noon - collecting morning commute data
+2026-02-03 07:00:03 [INFO] Commute.collect_commute_data: Before noon - collecting morning commute data
+2026-02-03 07:00:03 [INFO] Commute.collect_commute_data: Direction: morning commute
+2026-02-03 07:00:03 [INFO] Commute.collect_commute_data: Direction: morning commute
+2026-02-03 07:00:03 [INFO] Commute.collect_commute_data: Validating current API usage against Google...
+2026-02-03 07:00:03 [INFO] Commute.collect_commute_data: Validating current API usage against Google...
+2026-02-03 07:00:16 [INFO] utils: Google-reported usage: 2,035 elements (Advanced tier)
+2026-02-03 07:00:16 [INFO] utils: Google-reported usage: 2,035 elements (Advanced tier)
+2026-02-03 07:00:16 [INFO] utils: Free tier limit: 5,000, Remaining: 2,965
+2026-02-03 07:00:16 [INFO] utils: Free tier limit: 5,000, Remaining: 2,965
+2026-02-03 07:00:16 [INFO] utils: === Usage Validation ===
+2026-02-03 07:00:16 [INFO] utils: === Usage Validation ===
+2026-02-03 07:00:16 [INFO] utils: Tier:            Advanced
+2026-02-03 07:00:16 [INFO] utils: Tier:            Advanced
+2026-02-03 07:00:16 [INFO] utils: Local tracking:  2,035 elements
+2026-02-03 07:00:16 [INFO] utils: Local tracking:  2,035 elements
+2026-02-03 07:00:16 [INFO] utils: Google reports:  2,035 elements
+2026-02-03 07:00:16 [INFO] utils: Google reports:  2,035 elements
+2026-02-03 07:00:16 [INFO] utils: Free tier:       5,000
+2026-02-03 07:00:16 [INFO] utils: Free tier:       5,000
+2026-02-03 07:00:16 [INFO] utils: Remaining:       2,965
+2026-02-03 07:00:16 [INFO] utils: Remaining:       2,965
+2026-02-03 07:00:16 [INFO] utils: Discrepancy:     0 elements
+2026-02-03 07:00:16 [INFO] utils: Discrepancy:     0 elements
+2026-02-03 07:00:16 [INFO] Commute.collect_commute_data: Loading zip codes within 40 miles of work...
+2026-02-03 07:00:16 [INFO] Commute.collect_commute_data: Loading zip codes within 40 miles of work...
+2026-02-03 07:00:16 [INFO] utils: Parsing ZIP database: /home/ad23883/workspace/house_hunt/Data/Raw/zip_code_database.csv
+2026-02-03 07:00:16 [INFO] utils: Parsing ZIP database: /home/ad23883/workspace/house_hunt/Data/Raw/zip_code_database.csv
+2026-02-03 07:00:19 [INFO] utils: Loaded 795 active standard ZIPs for MA, RI, NH
+2026-02-03 07:00:19 [INFO] utils: Loaded 795 active standard ZIPs for MA, RI, NH
+2026-02-03 07:00:19 [INFO] utils: Loading cached town results from /home/ad23883/workspace/house_hunt/Data/Processed/towns_within_40mi.csv
+2026-02-03 07:00:19 [INFO] utils: Loading cached town results from /home/ad23883/workspace/house_hunt/Data/Processed/towns_within_40mi.csv
+2026-02-03 07:00:19 [INFO] utils: Loaded 212 cached towns (range: 40mi)
+2026-02-03 07:00:19 [INFO] utils: Loaded 212 cached towns (range: 40mi)
+2026-02-03 07:00:19 [INFO] Commute.collect_commute_data: Found 212 addresses within range
+2026-02-03 07:00:19 [INFO] Commute.collect_commute_data: Found 212 addresses within range
+2026-02-03 07:00:19 [INFO] utils: Current monthly API usage: 2,035 / 13,000
+2026-02-03 07:00:19 [INFO] utils: Current monthly API usage: 2,035 / 13,000
+2026-02-03 07:00:19 [DEBUG] utils: API Key loaded from /home/ad23883/workspace/house_hunt/Data/google_api_key
+2026-02-03 07:00:19 [DEBUG] utils: API Key loaded from /home/ad23883/workspace/house_hunt/Data/google_api_key
+2026-02-03 07:00:19 [INFO] Commute.collect_commute_data: Morning commute: 212 locations → 123 Main St. Anytown, MA 00000
+2026-02-03 07:00:19 [INFO] Commute.collect_commute_data: Morning commute: 212 locations → 123 Main St. Anytown, MA 00000
+2026-02-03 07:00:19 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-03 07:00:19 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-03 07:00:20 [DEBUG] Commute.collect_commute_data: Processing 25 rows from API
+2026-02-03 07:00:20 [DEBUG] Commute.collect_commute_data: Processing 25 rows from API
+2026-02-03 07:00:20 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-03 07:00:20 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-03 07:00:20 [DEBUG] Commute.collect_commute_data: Processing 25 rows from API
+2026-02-03 07:00:20 [DEBUG] Commute.collect_commute_data: Processing 25 rows from API
+2026-02-03 07:00:20 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-03 07:00:20 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-03 07:00:21 [DEBUG] Commute.collect_commute_data: Processing 25 rows from API
+2026-02-03 07:00:21 [DEBUG] Commute.collect_commute_data: Processing 25 rows from API
+2026-02-03 07:00:21 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-03 07:00:21 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-03 07:00:21 [DEBUG] Commute.collect_commute_data: Processing 25 rows from API
+2026-02-03 07:00:21 [DEBUG] Commute.collect_commute_data: Processing 25 rows from API
+2026-02-03 07:00:21 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-03 07:00:21 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-03 07:00:21 [DEBUG] Commute.collect_commute_data: Processing 25 rows from API
+2026-02-03 07:00:21 [DEBUG] Commute.collect_commute_data: Processing 25 rows from API
+2026-02-03 07:00:21 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-03 07:00:21 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-03 07:00:22 [DEBUG] Commute.collect_commute_data: Processing 25 rows from API
+2026-02-03 07:00:22 [DEBUG] Commute.collect_commute_data: Processing 25 rows from API
+2026-02-03 07:00:22 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-03 07:00:22 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-03 07:00:22 [DEBUG] Commute.collect_commute_data: Processing 25 rows from API
+2026-02-03 07:00:22 [DEBUG] Commute.collect_commute_data: Processing 25 rows from API
+2026-02-03 07:00:22 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-03 07:00:22 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-03 07:00:22 [DEBUG] Commute.collect_commute_data: Processing 25 rows from API
+2026-02-03 07:00:22 [DEBUG] Commute.collect_commute_data: Processing 25 rows from API
+2026-02-03 07:00:22 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-03 07:00:22 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-03 07:00:22 [DEBUG] Commute.collect_commute_data: Processing 12 rows from API
+2026-02-03 07:00:22 [DEBUG] Commute.collect_commute_data: Processing 12 rows from API
+2026-02-03 07:00:22 [INFO] Commute.collect_commute_data: Completed 9 requests, processed 212 elements, collected 212 valid results
+2026-02-03 07:00:22 [INFO] Commute.collect_commute_data: Completed 9 requests, processed 212 elements, collected 212 valid results
+2026-02-03 07:00:22 [INFO] utils: Loaded 216 records from /home/ad23883/workspace/house_hunt/Data/Results/commute_stats.csv
+2026-02-03 07:00:22 [INFO] utils: Loaded 216 records from /home/ad23883/workspace/house_hunt/Data/Results/commute_stats.csv
+2026-02-03 07:00:22 [INFO] Commute.collect_commute_data: Loaded 216 records from /home/ad23883/workspace/house_hunt/Data/Results/commute_stats.csv
+2026-02-03 07:00:22 [INFO] Commute.collect_commute_data: Loaded 216 records from /home/ad23883/workspace/house_hunt/Data/Results/commute_stats.csv
+2026-02-03 07:00:23 [INFO] Commute.collect_commute_data: Successfully updated /home/ad23883/workspace/house_hunt/Data/Results/commute_stats.csv with 212 records
+2026-02-03 07:00:23 [INFO] Commute.collect_commute_data: Successfully updated /home/ad23883/workspace/house_hunt/Data/Results/commute_stats.csv with 212 records
+2026-02-03 07:00:23 [INFO] utils: Updated API usage: 212 this run, 2,247 / 13,000 monthly
+2026-02-03 07:00:23 [INFO] utils: Updated API usage: 212 this run, 2,247 / 13,000 monthly
+2026-02-03 07:00:23 [INFO] utils: API_USAGE | operation=update_counter | elements=212 | estimated_cost=$0.0000
+2026-02-03 07:00:23 [INFO] utils: API_USAGE | operation=update_counter | elements=212 | estimated_cost=$0.0000
+2026-02-03 07:00:23 [INFO] Commute.collect_commute_data: Re-validating usage after API calls...
+2026-02-03 07:00:23 [INFO] Commute.collect_commute_data: Re-validating usage after API calls...
+2026-02-03 07:00:24 [INFO] utils: Google-reported usage: 2,035 elements (Advanced tier)
+2026-02-03 07:00:24 [INFO] utils: Google-reported usage: 2,035 elements (Advanced tier)
+2026-02-03 07:00:24 [INFO] utils: Free tier limit: 5,000, Remaining: 2,965
+2026-02-03 07:00:24 [INFO] utils: Free tier limit: 5,000, Remaining: 2,965
+2026-02-03 07:00:24 [INFO] utils: === Usage Validation ===
+2026-02-03 07:00:24 [INFO] utils: === Usage Validation ===
+2026-02-03 07:00:24 [INFO] utils: Tier:            Advanced
+2026-02-03 07:00:24 [INFO] utils: Tier:            Advanced
+2026-02-03 07:00:24 [INFO] utils: Local tracking:  2,247 elements
+2026-02-03 07:00:24 [INFO] utils: Local tracking:  2,247 elements
+2026-02-03 07:00:24 [INFO] utils: Google reports:  2,035 elements
+2026-02-03 07:00:24 [INFO] utils: Google reports:  2,035 elements
+2026-02-03 07:00:24 [INFO] utils: Free tier:       5,000
+2026-02-03 07:00:24 [INFO] utils: Free tier:       5,000
+2026-02-03 07:00:24 [INFO] utils: Remaining:       2,965
+2026-02-03 07:00:24 [INFO] utils: Remaining:       2,965
+2026-02-03 07:00:24 [INFO] utils: Discrepancy:     212 elements
+2026-02-03 07:00:24 [INFO] utils: Discrepancy:     212 elements
+2026-02-03 07:00:24 [WARNING] utils: ⚠️  Significant discrepancy detected! Consider using Google's count as source of truth.
+2026-02-03 07:00:24 [WARNING] utils: ⚠️  Significant discrepancy detected! Consider using Google's count as source of truth.
+2026-02-03 07:00:24 [INFO] Commute.collect_commute_data: Commute data collection completed successfully
+2026-02-03 07:00:24 [INFO] Commute.collect_commute_data: Commute data collection completed successfully
+2026-02-03 07:00:24 [INFO] __main__: Commute collection completed successfully
+2026-02-03 07:00:24 [INFO] __main__: ======================================================================
+2026-02-03 07:00:24 [INFO] __main__: EXECUTION SUMMARY
+2026-02-03 07:00:24 [INFO] __main__: ----------------------------------------------------------------------
+2026-02-03 07:00:24 [INFO] __main__: COMMUTE: ✓ SUCCESS
+2026-02-03 07:00:24 [INFO] __main__: ----------------------------------------------------------------------
+2026-02-03 07:00:24 [INFO] __main__: Completed 1/1 modules successfully
+2026-02-03 07:00:24 [INFO] __main__: ======================================================================
+2026-02-03 17:00:03 [INFO] __main__: House Hunt execution started at 2026-02-03 17:00:03.780694
+2026-02-03 17:00:03 [INFO] __main__: ======================================================================
+2026-02-03 17:00:03 [INFO] __main__: Starting Commute Data Collection
+2026-02-03 17:00:03 [INFO] __main__: ======================================================================
+2026-02-03 17:00:03 [INFO] Commute.collect_commute_data: ======================================================================
+2026-02-03 17:00:03 [INFO] Commute.collect_commute_data: ======================================================================
+2026-02-03 17:00:03 [INFO] Commute.collect_commute_data: Starting commute data collection
+2026-02-03 17:00:03 [INFO] Commute.collect_commute_data: Starting commute data collection
+2026-02-03 17:00:03 [INFO] Commute.collect_commute_data: ======================================================================
+2026-02-03 17:00:03 [INFO] Commute.collect_commute_data: ======================================================================
+2026-02-03 17:00:03 [INFO] Commute.collect_commute_data: After noon - collecting afternoon commute data
+2026-02-03 17:00:03 [INFO] Commute.collect_commute_data: After noon - collecting afternoon commute data
+2026-02-03 17:00:03 [INFO] Commute.collect_commute_data: Direction: afternoon commute
+2026-02-03 17:00:03 [INFO] Commute.collect_commute_data: Direction: afternoon commute
+2026-02-03 17:00:03 [INFO] Commute.collect_commute_data: Validating current API usage against Google...
+2026-02-03 17:00:03 [INFO] Commute.collect_commute_data: Validating current API usage against Google...
+2026-02-03 17:00:05 [INFO] utils: Google-reported usage: 2,247 elements (Advanced tier)
+2026-02-03 17:00:05 [INFO] utils: Google-reported usage: 2,247 elements (Advanced tier)
+2026-02-03 17:00:05 [INFO] utils: Free tier limit: 5,000, Remaining: 2,753
+2026-02-03 17:00:05 [INFO] utils: Free tier limit: 5,000, Remaining: 2,753
+2026-02-03 17:00:05 [INFO] utils: === Usage Validation ===
+2026-02-03 17:00:05 [INFO] utils: === Usage Validation ===
+2026-02-03 17:00:05 [INFO] utils: Tier:            Advanced
+2026-02-03 17:00:05 [INFO] utils: Tier:            Advanced
+2026-02-03 17:00:05 [INFO] utils: Local tracking:  2,247 elements
+2026-02-03 17:00:05 [INFO] utils: Local tracking:  2,247 elements
+2026-02-03 17:00:05 [INFO] utils: Google reports:  2,247 elements
+2026-02-03 17:00:05 [INFO] utils: Google reports:  2,247 elements
+2026-02-03 17:00:05 [INFO] utils: Free tier:       5,000
+2026-02-03 17:00:05 [INFO] utils: Free tier:       5,000
+2026-02-03 17:00:05 [INFO] utils: Remaining:       2,753
+2026-02-03 17:00:05 [INFO] utils: Remaining:       2,753
+2026-02-03 17:00:05 [INFO] utils: Discrepancy:     0 elements
+2026-02-03 17:00:05 [INFO] utils: Discrepancy:     0 elements
+2026-02-03 17:00:05 [INFO] Commute.collect_commute_data: Loading zip codes within 40 miles of work...
+2026-02-03 17:00:05 [INFO] Commute.collect_commute_data: Loading zip codes within 40 miles of work...
+2026-02-03 17:00:05 [INFO] utils: Parsing ZIP database: /home/ad23883/workspace/house_hunt/Data/Raw/zip_code_database.csv
+2026-02-03 17:00:05 [INFO] utils: Parsing ZIP database: /home/ad23883/workspace/house_hunt/Data/Raw/zip_code_database.csv
+2026-02-03 17:00:06 [INFO] utils: Loaded 795 active standard ZIPs for MA, RI, NH
+2026-02-03 17:00:06 [INFO] utils: Loaded 795 active standard ZIPs for MA, RI, NH
+2026-02-03 17:00:06 [INFO] utils: Loading cached town results from /home/ad23883/workspace/house_hunt/Data/Processed/towns_within_40mi.csv
+2026-02-03 17:00:06 [INFO] utils: Loading cached town results from /home/ad23883/workspace/house_hunt/Data/Processed/towns_within_40mi.csv
+2026-02-03 17:00:06 [INFO] utils: Loaded 212 cached towns (range: 40mi)
+2026-02-03 17:00:06 [INFO] utils: Loaded 212 cached towns (range: 40mi)
+2026-02-03 17:00:06 [INFO] Commute.collect_commute_data: Found 212 addresses within range
+2026-02-03 17:00:06 [INFO] Commute.collect_commute_data: Found 212 addresses within range
+2026-02-03 17:00:06 [INFO] utils: Current monthly API usage: 2,247 / 13,000
+2026-02-03 17:00:06 [INFO] utils: Current monthly API usage: 2,247 / 13,000
+2026-02-03 17:00:06 [DEBUG] utils: API Key loaded from /home/ad23883/workspace/house_hunt/Data/google_api_key
+2026-02-03 17:00:06 [DEBUG] utils: API Key loaded from /home/ad23883/workspace/house_hunt/Data/google_api_key
+2026-02-03 17:00:06 [INFO] Commute.collect_commute_data: Afternoon commute: 123 Main St. Anytown, MA 00000 → 212 locations
+2026-02-03 17:00:06 [INFO] Commute.collect_commute_data: Afternoon commute: 123 Main St. Anytown, MA 00000 → 212 locations
+2026-02-03 17:00:06 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-03 17:00:06 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-03 17:00:06 [DEBUG] Commute.collect_commute_data: Processing 25 elements
+2026-02-03 17:00:06 [DEBUG] Commute.collect_commute_data: Processing 25 elements
+2026-02-03 17:00:06 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-03 17:00:06 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-03 17:00:07 [DEBUG] Commute.collect_commute_data: Processing 25 elements
+2026-02-03 17:00:07 [DEBUG] Commute.collect_commute_data: Processing 25 elements
+2026-02-03 17:00:07 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-03 17:00:07 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-03 17:00:07 [DEBUG] Commute.collect_commute_data: Processing 25 elements
+2026-02-03 17:00:07 [DEBUG] Commute.collect_commute_data: Processing 25 elements
+2026-02-03 17:00:07 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-03 17:00:07 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-03 17:00:07 [DEBUG] Commute.collect_commute_data: Processing 25 elements
+2026-02-03 17:00:07 [DEBUG] Commute.collect_commute_data: Processing 25 elements
+2026-02-03 17:00:07 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-03 17:00:07 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-03 17:00:07 [DEBUG] Commute.collect_commute_data: Processing 25 elements
+2026-02-03 17:00:07 [DEBUG] Commute.collect_commute_data: Processing 25 elements
+2026-02-03 17:00:07 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-03 17:00:07 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-03 17:00:08 [DEBUG] Commute.collect_commute_data: Processing 25 elements
+2026-02-03 17:00:08 [DEBUG] Commute.collect_commute_data: Processing 25 elements
+2026-02-03 17:00:08 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-03 17:00:08 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-03 17:00:08 [DEBUG] Commute.collect_commute_data: Processing 25 elements
+2026-02-03 17:00:08 [DEBUG] Commute.collect_commute_data: Processing 25 elements
+2026-02-03 17:00:08 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-03 17:00:08 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-03 17:00:08 [DEBUG] Commute.collect_commute_data: Processing 25 elements
+2026-02-03 17:00:08 [DEBUG] Commute.collect_commute_data: Processing 25 elements
+2026-02-03 17:00:08 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-03 17:00:08 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-03 17:00:08 [DEBUG] Commute.collect_commute_data: Processing 12 elements
+2026-02-03 17:00:08 [DEBUG] Commute.collect_commute_data: Processing 12 elements
+2026-02-03 17:00:08 [INFO] Commute.collect_commute_data: Completed 9 requests, processed 212 elements, collected 212 valid results
+2026-02-03 17:00:08 [INFO] Commute.collect_commute_data: Completed 9 requests, processed 212 elements, collected 212 valid results
+2026-02-03 17:00:08 [INFO] utils: Loaded 216 records from /home/ad23883/workspace/house_hunt/Data/Results/commute_stats.csv
+2026-02-03 17:00:08 [INFO] utils: Loaded 216 records from /home/ad23883/workspace/house_hunt/Data/Results/commute_stats.csv
+2026-02-03 17:00:08 [INFO] Commute.collect_commute_data: Loaded 216 records from /home/ad23883/workspace/house_hunt/Data/Results/commute_stats.csv
+2026-02-03 17:00:08 [INFO] Commute.collect_commute_data: Loaded 216 records from /home/ad23883/workspace/house_hunt/Data/Results/commute_stats.csv
+2026-02-03 17:00:08 [INFO] Commute.collect_commute_data: Successfully updated /home/ad23883/workspace/house_hunt/Data/Results/commute_stats.csv with 212 records
+2026-02-03 17:00:08 [INFO] Commute.collect_commute_data: Successfully updated /home/ad23883/workspace/house_hunt/Data/Results/commute_stats.csv with 212 records
+2026-02-03 17:00:08 [INFO] utils: Updated API usage: 212 this run, 2,459 / 13,000 monthly
+2026-02-03 17:00:08 [INFO] utils: Updated API usage: 212 this run, 2,459 / 13,000 monthly
+2026-02-03 17:00:08 [INFO] utils: API_USAGE | operation=update_counter | elements=212 | estimated_cost=$0.0000
+2026-02-03 17:00:08 [INFO] utils: API_USAGE | operation=update_counter | elements=212 | estimated_cost=$0.0000
+2026-02-03 17:00:08 [INFO] Commute.collect_commute_data: Re-validating usage after API calls...
+2026-02-03 17:00:08 [INFO] Commute.collect_commute_data: Re-validating usage after API calls...
+2026-02-03 17:00:09 [INFO] utils: Google-reported usage: 2,247 elements (Advanced tier)
+2026-02-03 17:00:09 [INFO] utils: Google-reported usage: 2,247 elements (Advanced tier)
+2026-02-03 17:00:09 [INFO] utils: Free tier limit: 5,000, Remaining: 2,753
+2026-02-03 17:00:09 [INFO] utils: Free tier limit: 5,000, Remaining: 2,753
+2026-02-03 17:00:09 [INFO] utils: === Usage Validation ===
+2026-02-03 17:00:09 [INFO] utils: === Usage Validation ===
+2026-02-03 17:00:09 [INFO] utils: Tier:            Advanced
+2026-02-03 17:00:09 [INFO] utils: Tier:            Advanced
+2026-02-03 17:00:09 [INFO] utils: Local tracking:  2,459 elements
+2026-02-03 17:00:09 [INFO] utils: Local tracking:  2,459 elements
+2026-02-03 17:00:09 [INFO] utils: Google reports:  2,247 elements
+2026-02-03 17:00:09 [INFO] utils: Google reports:  2,247 elements
+2026-02-03 17:00:09 [INFO] utils: Free tier:       5,000
+2026-02-03 17:00:09 [INFO] utils: Free tier:       5,000
+2026-02-03 17:00:09 [INFO] utils: Remaining:       2,753
+2026-02-03 17:00:09 [INFO] utils: Remaining:       2,753
+2026-02-03 17:00:09 [INFO] utils: Discrepancy:     212 elements
+2026-02-03 17:00:09 [INFO] utils: Discrepancy:     212 elements
+2026-02-03 17:00:09 [WARNING] utils: ⚠️  Significant discrepancy detected! Consider using Google's count as source of truth.
+2026-02-03 17:00:09 [WARNING] utils: ⚠️  Significant discrepancy detected! Consider using Google's count as source of truth.
+2026-02-03 17:00:09 [INFO] Commute.collect_commute_data: Commute data collection completed successfully
+2026-02-03 17:00:09 [INFO] Commute.collect_commute_data: Commute data collection completed successfully
+2026-02-03 17:00:09 [INFO] __main__: Commute collection completed successfully
+2026-02-03 17:00:09 [INFO] __main__: ======================================================================
+2026-02-03 17:00:09 [INFO] __main__: EXECUTION SUMMARY
+2026-02-03 17:00:09 [INFO] __main__: ----------------------------------------------------------------------
+2026-02-03 17:00:09 [INFO] __main__: COMMUTE: ✓ SUCCESS
+2026-02-03 17:00:09 [INFO] __main__: ----------------------------------------------------------------------
+2026-02-03 17:00:09 [INFO] __main__: Completed 1/1 modules successfully
+2026-02-03 17:00:09 [INFO] __main__: ======================================================================
+2026-02-04 07:00:03 [INFO] __main__: House Hunt execution started at 2026-02-04 07:00:03.626434
+2026-02-04 07:00:03 [INFO] __main__: ======================================================================
+2026-02-04 07:00:03 [INFO] __main__: Starting Commute Data Collection
+2026-02-04 07:00:03 [INFO] __main__: ======================================================================
+2026-02-04 07:00:03 [INFO] Commute.collect_commute_data: ======================================================================
+2026-02-04 07:00:03 [INFO] Commute.collect_commute_data: ======================================================================
+2026-02-04 07:00:03 [INFO] Commute.collect_commute_data: Starting commute data collection
+2026-02-04 07:00:03 [INFO] Commute.collect_commute_data: Starting commute data collection
+2026-02-04 07:00:03 [INFO] Commute.collect_commute_data: ======================================================================
+2026-02-04 07:00:03 [INFO] Commute.collect_commute_data: ======================================================================
+2026-02-04 07:00:03 [INFO] Commute.collect_commute_data: Before noon - collecting morning commute data
+2026-02-04 07:00:03 [INFO] Commute.collect_commute_data: Before noon - collecting morning commute data
+2026-02-04 07:00:03 [INFO] Commute.collect_commute_data: Direction: morning commute
+2026-02-04 07:00:03 [INFO] Commute.collect_commute_data: Direction: morning commute
+2026-02-04 07:00:03 [INFO] Commute.collect_commute_data: Validating current API usage against Google...
+2026-02-04 07:00:03 [INFO] Commute.collect_commute_data: Validating current API usage against Google...
+2026-02-04 07:00:05 [INFO] utils: Google-reported usage: 2,459 elements (Advanced tier)
+2026-02-04 07:00:05 [INFO] utils: Google-reported usage: 2,459 elements (Advanced tier)
+2026-02-04 07:00:05 [INFO] utils: Free tier limit: 5,000, Remaining: 2,541
+2026-02-04 07:00:05 [INFO] utils: Free tier limit: 5,000, Remaining: 2,541
+2026-02-04 07:00:05 [INFO] utils: === Usage Validation ===
+2026-02-04 07:00:05 [INFO] utils: === Usage Validation ===
+2026-02-04 07:00:05 [INFO] utils: Tier:            Advanced
+2026-02-04 07:00:05 [INFO] utils: Tier:            Advanced
+2026-02-04 07:00:05 [INFO] utils: Local tracking:  2,459 elements
+2026-02-04 07:00:05 [INFO] utils: Local tracking:  2,459 elements
+2026-02-04 07:00:05 [INFO] utils: Google reports:  2,459 elements
+2026-02-04 07:00:05 [INFO] utils: Google reports:  2,459 elements
+2026-02-04 07:00:05 [INFO] utils: Free tier:       5,000
+2026-02-04 07:00:05 [INFO] utils: Free tier:       5,000
+2026-02-04 07:00:05 [INFO] utils: Remaining:       2,541
+2026-02-04 07:00:05 [INFO] utils: Remaining:       2,541
+2026-02-04 07:00:05 [INFO] utils: Discrepancy:     0 elements
+2026-02-04 07:00:05 [INFO] utils: Discrepancy:     0 elements
+2026-02-04 07:00:05 [INFO] Commute.collect_commute_data: Loading zip codes within 40 miles of work...
+2026-02-04 07:00:05 [INFO] Commute.collect_commute_data: Loading zip codes within 40 miles of work...
+2026-02-04 07:00:05 [INFO] utils: Parsing ZIP database: /home/ad23883/workspace/house_hunt/Data/Raw/zip_code_database.csv
+2026-02-04 07:00:05 [INFO] utils: Parsing ZIP database: /home/ad23883/workspace/house_hunt/Data/Raw/zip_code_database.csv
+2026-02-04 07:00:06 [INFO] utils: Loaded 795 active standard ZIPs for MA, RI, NH
+2026-02-04 07:00:06 [INFO] utils: Loaded 795 active standard ZIPs for MA, RI, NH
+2026-02-04 07:00:06 [INFO] utils: Loading cached town results from /home/ad23883/workspace/house_hunt/Data/Processed/towns_within_40mi.csv
+2026-02-04 07:00:06 [INFO] utils: Loading cached town results from /home/ad23883/workspace/house_hunt/Data/Processed/towns_within_40mi.csv
+2026-02-04 07:00:06 [INFO] utils: Loaded 212 cached towns (range: 40mi)
+2026-02-04 07:00:06 [INFO] utils: Loaded 212 cached towns (range: 40mi)
+2026-02-04 07:00:06 [INFO] Commute.collect_commute_data: Found 212 addresses within range
+2026-02-04 07:00:06 [INFO] Commute.collect_commute_data: Found 212 addresses within range
+2026-02-04 07:00:06 [INFO] utils: Current monthly API usage: 2,459 / 13,000
+2026-02-04 07:00:06 [INFO] utils: Current monthly API usage: 2,459 / 13,000
+2026-02-04 07:00:06 [DEBUG] utils: API Key loaded from /home/ad23883/workspace/house_hunt/Data/google_api_key
+2026-02-04 07:00:06 [DEBUG] utils: API Key loaded from /home/ad23883/workspace/house_hunt/Data/google_api_key
+2026-02-04 07:00:06 [INFO] Commute.collect_commute_data: Morning commute: 212 locations → 123 Main St. Anytown, MA 00000
+2026-02-04 07:00:06 [INFO] Commute.collect_commute_data: Morning commute: 212 locations → 123 Main St. Anytown, MA 00000
+2026-02-04 07:00:06 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-04 07:00:06 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-04 07:00:06 [DEBUG] Commute.collect_commute_data: Processing 25 rows from API
+2026-02-04 07:00:06 [DEBUG] Commute.collect_commute_data: Processing 25 rows from API
+2026-02-04 07:00:06 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-04 07:00:06 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-04 07:00:06 [DEBUG] Commute.collect_commute_data: Processing 25 rows from API
+2026-02-04 07:00:06 [DEBUG] Commute.collect_commute_data: Processing 25 rows from API
+2026-02-04 07:00:06 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-04 07:00:06 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-04 07:00:07 [DEBUG] Commute.collect_commute_data: Processing 25 rows from API
+2026-02-04 07:00:07 [DEBUG] Commute.collect_commute_data: Processing 25 rows from API
+2026-02-04 07:00:07 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-04 07:00:07 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-04 07:00:07 [DEBUG] Commute.collect_commute_data: Processing 25 rows from API
+2026-02-04 07:00:07 [DEBUG] Commute.collect_commute_data: Processing 25 rows from API
+2026-02-04 07:00:07 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-04 07:00:07 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-04 07:00:07 [DEBUG] Commute.collect_commute_data: Processing 25 rows from API
+2026-02-04 07:00:07 [DEBUG] Commute.collect_commute_data: Processing 25 rows from API
+2026-02-04 07:00:07 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-04 07:00:07 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-04 07:00:07 [DEBUG] Commute.collect_commute_data: Processing 25 rows from API
+2026-02-04 07:00:07 [DEBUG] Commute.collect_commute_data: Processing 25 rows from API
+2026-02-04 07:00:07 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-04 07:00:07 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-04 07:00:07 [DEBUG] Commute.collect_commute_data: Processing 25 rows from API
+2026-02-04 07:00:07 [DEBUG] Commute.collect_commute_data: Processing 25 rows from API
+2026-02-04 07:00:07 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-04 07:00:07 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-04 07:00:08 [DEBUG] Commute.collect_commute_data: Processing 25 rows from API
+2026-02-04 07:00:08 [DEBUG] Commute.collect_commute_data: Processing 25 rows from API
+2026-02-04 07:00:08 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-04 07:00:08 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-04 07:00:08 [DEBUG] Commute.collect_commute_data: Processing 12 rows from API
+2026-02-04 07:00:08 [DEBUG] Commute.collect_commute_data: Processing 12 rows from API
+2026-02-04 07:00:08 [INFO] Commute.collect_commute_data: Completed 9 requests, processed 212 elements, collected 212 valid results
+2026-02-04 07:00:08 [INFO] Commute.collect_commute_data: Completed 9 requests, processed 212 elements, collected 212 valid results
+2026-02-04 07:00:08 [INFO] utils: Loaded 216 records from /home/ad23883/workspace/house_hunt/Data/Results/commute_stats.csv
+2026-02-04 07:00:08 [INFO] utils: Loaded 216 records from /home/ad23883/workspace/house_hunt/Data/Results/commute_stats.csv
+2026-02-04 07:00:08 [INFO] Commute.collect_commute_data: Loaded 216 records from /home/ad23883/workspace/house_hunt/Data/Results/commute_stats.csv
+2026-02-04 07:00:08 [INFO] Commute.collect_commute_data: Loaded 216 records from /home/ad23883/workspace/house_hunt/Data/Results/commute_stats.csv
+2026-02-04 07:00:08 [INFO] Commute.collect_commute_data: Successfully updated /home/ad23883/workspace/house_hunt/Data/Results/commute_stats.csv with 212 records
+2026-02-04 07:00:08 [INFO] Commute.collect_commute_data: Successfully updated /home/ad23883/workspace/house_hunt/Data/Results/commute_stats.csv with 212 records
+2026-02-04 07:00:08 [INFO] utils: Updated API usage: 212 this run, 2,671 / 13,000 monthly
+2026-02-04 07:00:08 [INFO] utils: Updated API usage: 212 this run, 2,671 / 13,000 monthly
+2026-02-04 07:00:08 [INFO] utils: API_USAGE | operation=update_counter | elements=212 | estimated_cost=$0.0000
+2026-02-04 07:00:08 [INFO] utils: API_USAGE | operation=update_counter | elements=212 | estimated_cost=$0.0000
+2026-02-04 07:00:08 [INFO] Commute.collect_commute_data: Re-validating usage after API calls...
+2026-02-04 07:00:08 [INFO] Commute.collect_commute_data: Re-validating usage after API calls...
+2026-02-04 07:00:09 [INFO] utils: Google-reported usage: 2,459 elements (Advanced tier)
+2026-02-04 07:00:09 [INFO] utils: Google-reported usage: 2,459 elements (Advanced tier)
+2026-02-04 07:00:09 [INFO] utils: Free tier limit: 5,000, Remaining: 2,541
+2026-02-04 07:00:09 [INFO] utils: Free tier limit: 5,000, Remaining: 2,541
+2026-02-04 07:00:09 [INFO] utils: === Usage Validation ===
+2026-02-04 07:00:09 [INFO] utils: === Usage Validation ===
+2026-02-04 07:00:09 [INFO] utils: Tier:            Advanced
+2026-02-04 07:00:09 [INFO] utils: Tier:            Advanced
+2026-02-04 07:00:09 [INFO] utils: Local tracking:  2,671 elements
+2026-02-04 07:00:09 [INFO] utils: Local tracking:  2,671 elements
+2026-02-04 07:00:09 [INFO] utils: Google reports:  2,459 elements
+2026-02-04 07:00:09 [INFO] utils: Google reports:  2,459 elements
+2026-02-04 07:00:09 [INFO] utils: Free tier:       5,000
+2026-02-04 07:00:09 [INFO] utils: Free tier:       5,000
+2026-02-04 07:00:09 [INFO] utils: Remaining:       2,541
+2026-02-04 07:00:09 [INFO] utils: Remaining:       2,541
+2026-02-04 07:00:09 [INFO] utils: Discrepancy:     212 elements
+2026-02-04 07:00:09 [INFO] utils: Discrepancy:     212 elements
+2026-02-04 07:00:09 [WARNING] utils: ⚠️  Significant discrepancy detected! Consider using Google's count as source of truth.
+2026-02-04 07:00:09 [WARNING] utils: ⚠️  Significant discrepancy detected! Consider using Google's count as source of truth.
+2026-02-04 07:00:09 [INFO] Commute.collect_commute_data: Commute data collection completed successfully
+2026-02-04 07:00:09 [INFO] Commute.collect_commute_data: Commute data collection completed successfully
+2026-02-04 07:00:09 [INFO] __main__: Commute collection completed successfully
+2026-02-04 07:00:09 [INFO] __main__: ======================================================================
+2026-02-04 07:00:09 [INFO] __main__: EXECUTION SUMMARY
+2026-02-04 07:00:09 [INFO] __main__: ----------------------------------------------------------------------
+2026-02-04 07:00:09 [INFO] __main__: COMMUTE: ✓ SUCCESS
+2026-02-04 07:00:09 [INFO] __main__: ----------------------------------------------------------------------
+2026-02-04 07:00:09 [INFO] __main__: Completed 1/1 modules successfully
+2026-02-04 07:00:09 [INFO] __main__: ======================================================================
+2026-02-04 17:00:03 [INFO] __main__: House Hunt execution started at 2026-02-04 17:00:03.508098
+2026-02-04 17:00:03 [INFO] __main__: ======================================================================
+2026-02-04 17:00:03 [INFO] __main__: Starting Commute Data Collection
+2026-02-04 17:00:03 [INFO] __main__: ======================================================================
+2026-02-04 17:00:03 [INFO] Commute.collect_commute_data: ======================================================================
+2026-02-04 17:00:03 [INFO] Commute.collect_commute_data: ======================================================================
+2026-02-04 17:00:03 [INFO] Commute.collect_commute_data: Starting commute data collection
+2026-02-04 17:00:03 [INFO] Commute.collect_commute_data: Starting commute data collection
+2026-02-04 17:00:03 [INFO] Commute.collect_commute_data: ======================================================================
+2026-02-04 17:00:03 [INFO] Commute.collect_commute_data: ======================================================================
+2026-02-04 17:00:03 [INFO] Commute.collect_commute_data: After noon - collecting afternoon commute data
+2026-02-04 17:00:03 [INFO] Commute.collect_commute_data: After noon - collecting afternoon commute data
+2026-02-04 17:00:03 [INFO] Commute.collect_commute_data: Direction: afternoon commute
+2026-02-04 17:00:03 [INFO] Commute.collect_commute_data: Direction: afternoon commute
+2026-02-04 17:00:03 [INFO] Commute.collect_commute_data: Validating current API usage against Google...
+2026-02-04 17:00:03 [INFO] Commute.collect_commute_data: Validating current API usage against Google...
+2026-02-04 17:00:05 [INFO] utils: Google-reported usage: 2,671 elements (Advanced tier)
+2026-02-04 17:00:05 [INFO] utils: Google-reported usage: 2,671 elements (Advanced tier)
+2026-02-04 17:00:05 [INFO] utils: Free tier limit: 5,000, Remaining: 2,329
+2026-02-04 17:00:05 [INFO] utils: Free tier limit: 5,000, Remaining: 2,329
+2026-02-04 17:00:05 [INFO] utils: === Usage Validation ===
+2026-02-04 17:00:05 [INFO] utils: === Usage Validation ===
+2026-02-04 17:00:05 [INFO] utils: Tier:            Advanced
+2026-02-04 17:00:05 [INFO] utils: Tier:            Advanced
+2026-02-04 17:00:05 [INFO] utils: Local tracking:  2,671 elements
+2026-02-04 17:00:05 [INFO] utils: Local tracking:  2,671 elements
+2026-02-04 17:00:05 [INFO] utils: Google reports:  2,671 elements
+2026-02-04 17:00:05 [INFO] utils: Google reports:  2,671 elements
+2026-02-04 17:00:05 [INFO] utils: Free tier:       5,000
+2026-02-04 17:00:05 [INFO] utils: Free tier:       5,000
+2026-02-04 17:00:05 [INFO] utils: Remaining:       2,329
+2026-02-04 17:00:05 [INFO] utils: Remaining:       2,329
+2026-02-04 17:00:05 [INFO] utils: Discrepancy:     0 elements
+2026-02-04 17:00:05 [INFO] utils: Discrepancy:     0 elements
+2026-02-04 17:00:05 [INFO] Commute.collect_commute_data: Loading zip codes within 40 miles of work...
+2026-02-04 17:00:05 [INFO] Commute.collect_commute_data: Loading zip codes within 40 miles of work...
+2026-02-04 17:00:05 [INFO] utils: Parsing ZIP database: /home/ad23883/workspace/house_hunt/Data/Raw/zip_code_database.csv
+2026-02-04 17:00:05 [INFO] utils: Parsing ZIP database: /home/ad23883/workspace/house_hunt/Data/Raw/zip_code_database.csv
+2026-02-04 17:00:06 [INFO] utils: Loaded 795 active standard ZIPs for MA, RI, NH
+2026-02-04 17:00:06 [INFO] utils: Loaded 795 active standard ZIPs for MA, RI, NH
+2026-02-04 17:00:06 [INFO] utils: Loading cached town results from /home/ad23883/workspace/house_hunt/Data/Processed/towns_within_40mi.csv
+2026-02-04 17:00:06 [INFO] utils: Loading cached town results from /home/ad23883/workspace/house_hunt/Data/Processed/towns_within_40mi.csv
+2026-02-04 17:00:06 [INFO] utils: Loaded 212 cached towns (range: 40mi)
+2026-02-04 17:00:06 [INFO] utils: Loaded 212 cached towns (range: 40mi)
+2026-02-04 17:00:06 [INFO] Commute.collect_commute_data: Found 212 addresses within range
+2026-02-04 17:00:06 [INFO] Commute.collect_commute_data: Found 212 addresses within range
+2026-02-04 17:00:06 [INFO] utils: Current monthly API usage: 2,671 / 13,000
+2026-02-04 17:00:06 [INFO] utils: Current monthly API usage: 2,671 / 13,000
+2026-02-04 17:00:06 [DEBUG] utils: API Key loaded from /home/ad23883/workspace/house_hunt/Data/google_api_key
+2026-02-04 17:00:06 [DEBUG] utils: API Key loaded from /home/ad23883/workspace/house_hunt/Data/google_api_key
+2026-02-04 17:00:06 [INFO] Commute.collect_commute_data: Afternoon commute: 123 Main St. Anytown, MA 00000 → 212 locations
+2026-02-04 17:00:06 [INFO] Commute.collect_commute_data: Afternoon commute: 123 Main St. Anytown, MA 00000 → 212 locations
+2026-02-04 17:00:06 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-04 17:00:06 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-04 17:00:06 [DEBUG] Commute.collect_commute_data: Processing 25 elements
+2026-02-04 17:00:06 [DEBUG] Commute.collect_commute_data: Processing 25 elements
+2026-02-04 17:00:06 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-04 17:00:06 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-04 17:00:06 [DEBUG] Commute.collect_commute_data: Processing 25 elements
+2026-02-04 17:00:06 [DEBUG] Commute.collect_commute_data: Processing 25 elements
+2026-02-04 17:00:06 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-04 17:00:06 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-04 17:00:06 [DEBUG] Commute.collect_commute_data: Processing 25 elements
+2026-02-04 17:00:06 [DEBUG] Commute.collect_commute_data: Processing 25 elements
+2026-02-04 17:00:06 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-04 17:00:06 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-04 17:00:07 [DEBUG] Commute.collect_commute_data: Processing 25 elements
+2026-02-04 17:00:07 [DEBUG] Commute.collect_commute_data: Processing 25 elements
+2026-02-04 17:00:07 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-04 17:00:07 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-04 17:00:07 [DEBUG] Commute.collect_commute_data: Processing 25 elements
+2026-02-04 17:00:07 [DEBUG] Commute.collect_commute_data: Processing 25 elements
+2026-02-04 17:00:07 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-04 17:00:07 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-04 17:00:07 [DEBUG] Commute.collect_commute_data: Processing 25 elements
+2026-02-04 17:00:07 [DEBUG] Commute.collect_commute_data: Processing 25 elements
+2026-02-04 17:00:07 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-04 17:00:07 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-04 17:00:07 [DEBUG] Commute.collect_commute_data: Processing 25 elements
+2026-02-04 17:00:07 [DEBUG] Commute.collect_commute_data: Processing 25 elements
+2026-02-04 17:00:07 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-04 17:00:07 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-04 17:00:08 [DEBUG] Commute.collect_commute_data: Processing 25 elements
+2026-02-04 17:00:08 [DEBUG] Commute.collect_commute_data: Processing 25 elements
+2026-02-04 17:00:08 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-04 17:00:08 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-04 17:00:08 [DEBUG] Commute.collect_commute_data: Processing 12 elements
+2026-02-04 17:00:08 [DEBUG] Commute.collect_commute_data: Processing 12 elements
+2026-02-04 17:00:08 [INFO] Commute.collect_commute_data: Completed 9 requests, processed 212 elements, collected 212 valid results
+2026-02-04 17:00:08 [INFO] Commute.collect_commute_data: Completed 9 requests, processed 212 elements, collected 212 valid results
+2026-02-04 17:00:08 [INFO] utils: Loaded 216 records from /home/ad23883/workspace/house_hunt/Data/Results/commute_stats.csv
+2026-02-04 17:00:08 [INFO] utils: Loaded 216 records from /home/ad23883/workspace/house_hunt/Data/Results/commute_stats.csv
+2026-02-04 17:00:08 [INFO] Commute.collect_commute_data: Loaded 216 records from /home/ad23883/workspace/house_hunt/Data/Results/commute_stats.csv
+2026-02-04 17:00:08 [INFO] Commute.collect_commute_data: Loaded 216 records from /home/ad23883/workspace/house_hunt/Data/Results/commute_stats.csv
+2026-02-04 17:00:08 [INFO] Commute.collect_commute_data: Successfully updated /home/ad23883/workspace/house_hunt/Data/Results/commute_stats.csv with 212 records
+2026-02-04 17:00:08 [INFO] Commute.collect_commute_data: Successfully updated /home/ad23883/workspace/house_hunt/Data/Results/commute_stats.csv with 212 records
+2026-02-04 17:00:08 [INFO] utils: Updated API usage: 212 this run, 2,883 / 13,000 monthly
+2026-02-04 17:00:08 [INFO] utils: Updated API usage: 212 this run, 2,883 / 13,000 monthly
+2026-02-04 17:00:08 [INFO] utils: API_USAGE | operation=update_counter | elements=212 | estimated_cost=$0.0000
+2026-02-04 17:00:08 [INFO] utils: API_USAGE | operation=update_counter | elements=212 | estimated_cost=$0.0000
+2026-02-04 17:00:08 [INFO] Commute.collect_commute_data: Re-validating usage after API calls...
+2026-02-04 17:00:08 [INFO] Commute.collect_commute_data: Re-validating usage after API calls...
+2026-02-04 17:00:08 [INFO] utils: Google-reported usage: 2,671 elements (Advanced tier)
+2026-02-04 17:00:08 [INFO] utils: Google-reported usage: 2,671 elements (Advanced tier)
+2026-02-04 17:00:08 [INFO] utils: Free tier limit: 5,000, Remaining: 2,329
+2026-02-04 17:00:08 [INFO] utils: Free tier limit: 5,000, Remaining: 2,329
+2026-02-04 17:00:08 [INFO] utils: === Usage Validation ===
+2026-02-04 17:00:08 [INFO] utils: === Usage Validation ===
+2026-02-04 17:00:08 [INFO] utils: Tier:            Advanced
+2026-02-04 17:00:08 [INFO] utils: Tier:            Advanced
+2026-02-04 17:00:08 [INFO] utils: Local tracking:  2,883 elements
+2026-02-04 17:00:08 [INFO] utils: Local tracking:  2,883 elements
+2026-02-04 17:00:08 [INFO] utils: Google reports:  2,671 elements
+2026-02-04 17:00:08 [INFO] utils: Google reports:  2,671 elements
+2026-02-04 17:00:08 [INFO] utils: Free tier:       5,000
+2026-02-04 17:00:08 [INFO] utils: Free tier:       5,000
+2026-02-04 17:00:08 [INFO] utils: Remaining:       2,329
+2026-02-04 17:00:08 [INFO] utils: Remaining:       2,329
+2026-02-04 17:00:08 [INFO] utils: Discrepancy:     212 elements
+2026-02-04 17:00:08 [INFO] utils: Discrepancy:     212 elements
+2026-02-04 17:00:08 [WARNING] utils: ⚠️  Significant discrepancy detected! Consider using Google's count as source of truth.
+2026-02-04 17:00:08 [WARNING] utils: ⚠️  Significant discrepancy detected! Consider using Google's count as source of truth.
+2026-02-04 17:00:08 [INFO] Commute.collect_commute_data: Commute data collection completed successfully
+2026-02-04 17:00:08 [INFO] Commute.collect_commute_data: Commute data collection completed successfully
+2026-02-04 17:00:08 [INFO] __main__: Commute collection completed successfully
+2026-02-04 17:00:08 [INFO] __main__: ======================================================================
+2026-02-04 17:00:08 [INFO] __main__: EXECUTION SUMMARY
+2026-02-04 17:00:08 [INFO] __main__: ----------------------------------------------------------------------
+2026-02-04 17:00:08 [INFO] __main__: COMMUTE: ✓ SUCCESS
+2026-02-04 17:00:08 [INFO] __main__: ----------------------------------------------------------------------
+2026-02-04 17:00:08 [INFO] __main__: Completed 1/1 modules successfully
+2026-02-04 17:00:08 [INFO] __main__: ======================================================================
+2026-02-05 07:00:03 [INFO] __main__: House Hunt execution started at 2026-02-05 07:00:03.453221
+2026-02-05 07:00:03 [INFO] __main__: ======================================================================
+2026-02-05 07:00:03 [INFO] __main__: Starting Commute Data Collection
+2026-02-05 07:00:03 [INFO] __main__: ======================================================================
+2026-02-05 07:00:03 [INFO] Commute.collect_commute_data: ======================================================================
+2026-02-05 07:00:03 [INFO] Commute.collect_commute_data: Starting commute data collection
+2026-02-05 07:00:03 [INFO] Commute.collect_commute_data: ======================================================================
+2026-02-05 07:00:03 [INFO] Commute.collect_commute_data: Before noon - collecting morning commute data
+2026-02-05 07:00:03 [INFO] Commute.collect_commute_data: Direction: morning commute
+2026-02-05 07:00:03 [INFO] Commute.collect_commute_data: Validating current API usage against Google...
+2026-02-05 07:00:05 [INFO] utils: Google-reported usage: 2,883 elements (Advanced tier based on TRAFFIC_MODEL=best_guess)
+2026-02-05 07:00:05 [INFO] utils: Free tier limit: 5,000, Remaining: 2,117
+2026-02-05 07:00:05 [INFO] utils: === Usage Validation ===
+2026-02-05 07:00:05 [INFO] utils: Tier:            Advanced
+2026-02-05 07:00:05 [INFO] utils: Local tracking:  2,883 elements
+2026-02-05 07:00:05 [INFO] utils: Google reports:  2,883 elements
+2026-02-05 07:00:05 [INFO] utils: Free tier:       5,000
+2026-02-05 07:00:05 [INFO] utils: Remaining:       2,117
+2026-02-05 07:00:05 [INFO] utils: Discrepancy:     0 elements
+2026-02-05 07:00:05 [INFO] Commute.collect_commute_data: Loading zip codes within 40 miles of work...
+2026-02-05 07:00:05 [INFO] utils: Parsing ZIP database: /home/ad23883/production/house_hunt/Data/Raw/zip_code_database.csv
+2026-02-05 07:00:06 [INFO] utils: Loaded 795 active standard ZIPs for MA, RI, NH
+2026-02-05 07:00:06 [INFO] utils: Loading cached town results from /home/ad23883/production/house_hunt/Data/Processed/towns_within_40mi.csv
+2026-02-05 07:00:06 [INFO] utils: Loaded 182 cached towns (range: 40mi)
+2026-02-05 07:00:06 [INFO] Commute.collect_commute_data: Found 182 addresses within range
+2026-02-05 07:00:06 [INFO] utils: Current monthly API usage: 2,883 / 10,000
+2026-02-05 07:00:06 [DEBUG] utils: API Key successfully loaded from /home/ad23883/production/house_hunt/Data/google_api_key
+2026-02-05 07:00:06 [INFO] Commute.collect_commute_data: Morning commute: 182 locations → 123 Main St. Anytown, MA 00000
+2026-02-05 07:00:06 [INFO] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-05 07:00:06 [DEBUG] urllib3.connectionpool: Starting new HTTPS connection (1): maps.googleapis.com:443
+2026-02-05 07:00:07 [DEBUG] urllib3.connectionpool: https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=244+Wood+St.+Lexington%2C+MA+02421&mode=driving&origins=Abington%2C+MA+02351%7CActon%2C+MA+01718%7CAllston%2C+MA+02134%7CAmesbury%2C+MA+01913%7CAmherst%2C+NH+03031%7CArlington%2C+MA+02474%7CAshby%2C+MA+01431%7CAshland%2C+MA+01721%7CAtkinson%2C+NH+03811%7CAuburndale%2C+MA+02466%7CAvon%2C+MA+02322%7CAyer%2C+MA+01432%7CBedford%2C+MA+01730%7CBellingham%2C+MA+02019%7CBelmont%2C+MA+02478%7CBerlin%2C+MA+01503%7CBeverly%2C+MA+01915%7CBillerica%2C+MA+01821%7CBlackstone%2C+MA+01504%7CBolton%2C+MA+01740%7CBoston%2C+MA+02108%7CBoxborough%2C+MA+01719%7CBoxford%2C+MA+01921%7CBoylston%2C+MA+01505%7CBraintree%2C+MA+02184&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+2026-02-05 07:00:07 [DEBUG] Commute.collect_commute_data: Processing 25 rows from API response
+2026-02-05 07:00:07 [INFO] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-05 07:00:07 [DEBUG] urllib3.connectionpool: https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=244+Wood+St.+Lexington%2C+MA+02421&mode=driving&origins=Brighton%2C+MA+02135%7CBrockton%2C+MA+02301%7CBrookline%2C+MA+02445%7CBrookline%2C+NH+03033%7CBurlington%2C+MA+01803%7CByfield%2C+MA+01922%7CCambridge%2C+MA+02138%7CCanton%2C+MA+02021%7CCarlisle%2C+MA+01741%7CCharlestown%2C+MA+02129%7CChelmsford%2C+MA+01824%7CChelsea%2C+MA+02150%7CChestnut+Hill%2C+MA+02467%7CClinton%2C+MA+01510%7CCohasset%2C+MA+02025%7CConcord%2C+MA+01742%7CDanvers%2C+MA+01923%7CDedham%2C+MA+02026%7CDerry%2C+NH+03038%7CDevens%2C+MA+01434%7CDorchester%2C+MA+02121%7CDover%2C+MA+02030%7CDracut%2C+MA+01826%7CDunstable%2C+MA+01827%7CEssex%2C+MA+01929&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+2026-02-05 07:00:07 [DEBUG] Commute.collect_commute_data: Processing 25 rows from API response
+2026-02-05 07:00:07 [INFO] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-05 07:00:07 [DEBUG] urllib3.connectionpool: https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=244+Wood+St.+Lexington%2C+MA+02421&mode=driving&origins=Everett%2C+MA+02149%7CFayville%2C+MA+01745%7CFitchburg%2C+MA+01420%7CFoxboro%2C+MA+02035%7CFramingham%2C+MA+01701%7CFranklin%2C+MA+02038%7CGeorgetown%2C+MA+01833%7CGrafton%2C+MA+01519%7CGreenville%2C+NH+03048%7CGroton%2C+MA+01450%7CGroveland%2C+MA+01834%7CHampstead%2C+NH+03841%7CHarvard%2C+MA+01451%7CHaverhill%2C+MA+01830%7CHingham%2C+MA+02043%7CHolbrook%2C+MA+02343%7CHolden%2C+MA+01520%7CHollis%2C+NH+03049%7CHolliston%2C+MA+01746%7CHopedale%2C+MA+01747%7CHopkinton%2C+MA+01748%7CHudson%2C+MA+01749%7CHudson%2C+NH+03051%7CHull%2C+MA+02045%7CHyde+Park%2C+MA+02136&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+2026-02-05 07:00:07 [DEBUG] Commute.collect_commute_data: Processing 25 rows from API response
+2026-02-05 07:00:07 [INFO] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-05 07:00:07 [DEBUG] urllib3.connectionpool: https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=244+Wood+St.+Lexington%2C+MA+02421&mode=driving&origins=Ipswich%2C+MA+01938%7CJamaica+Plain%2C+MA+02130%7CJefferson%2C+MA+01522%7CLancaster%2C+MA+01523%7CLawrence%2C+MA+01840%7CLeominster%2C+MA+01453%7CLexington%2C+MA+02420%7CLincoln%2C+MA+01773%7CLitchfield%2C+NH+03052%7CLittleton%2C+MA+01460%7CLondonderry%2C+NH+03053%7CLowell%2C+MA+01850%7CLunenburg%2C+MA+01462%7CLynn%2C+MA+01901%7CLynnfield%2C+MA+01940%7CMalden%2C+MA+02148%7CManchester%2C+MA+01944%7CMarblehead%2C+MA+01945%7CMarlborough%2C+MA+01752%7CMattapan%2C+MA+02126%7CMaynard%2C+MA+01754%7CMedfield%2C+MA+02052%7CMedford%2C+MA+02155%7CMedway%2C+MA+02053%7CMelrose%2C+MA+02176&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+2026-02-05 07:00:07 [DEBUG] Commute.collect_commute_data: Processing 25 rows from API response
+2026-02-05 07:00:07 [INFO] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-05 07:00:08 [DEBUG] urllib3.connectionpool: https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=244+Wood+St.+Lexington%2C+MA+02421&mode=driving&origins=Mendon%2C+MA+01756%7CMerrimac%2C+MA+01860%7CMerrimack%2C+NH+03054%7CMethuen%2C+MA+01844%7CMiddleton%2C+MA+01949%7CMilford%2C+MA+01757%7CMillis%2C+MA+02054%7CMilton%2C+MA+02186%7CNahant%2C+MA+01908%7CNashua%2C+NH+03060%7CNatick%2C+MA+01760%7CNeedham%2C+MA+02492%7CNewbury%2C+MA+01951%7CNewton%2C+MA+02458%7CNewton%2C+NH+03858%7CNorfolk%2C+MA+02056%7CNorth+Andover%2C+MA+01845%7CNorth+Easton%2C+MA+02356%7CNorthborough%2C+MA+01532%7CNorthbridge%2C+MA+01534%7CNorwell%2C+MA+02061%7CNorwood%2C+MA+02062%7CPeabody%2C+MA+01960%7CPelham%2C+NH+03076%7CPepperell%2C+MA+01463&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+2026-02-05 07:00:08 [DEBUG] Commute.collect_commute_data: Processing 25 rows from API response
+2026-02-05 07:00:08 [INFO] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-05 07:00:08 [DEBUG] urllib3.connectionpool: https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=244+Wood+St.+Lexington%2C+MA+02421&mode=driving&origins=Plainville%2C+MA+02762%7CPlaistow%2C+NH+03865%7CPrinceton%2C+MA+01541%7CQuincy%2C+MA+02169%7CRandolph%2C+MA+02368%7CReading%2C+MA+01867%7CRevere%2C+MA+02151%7CRockland%2C+MA+02370%7CRoslindale%2C+MA+02131%7CRowley%2C+MA+01969%7CRoxbury%2C+MA+02119%7CSalem%2C+MA+01970%7CSalem%2C+NH+03079%7CSandown%2C+NH+03873%7CSaugus%2C+MA+01906%7CScituate%2C+MA+02066%7CSharon%2C+MA+02067%7CSherborn%2C+MA+01770%7CShirley%2C+MA+01464%7CShrewsbury%2C+MA+01545%7CSomerville%2C+MA+02143%7CSouth+Hamilton%2C+MA+01982%7CSouthborough%2C+MA+01772%7CSterling%2C+MA+01564%7CStoneham%2C+MA+02180&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+2026-02-05 07:00:08 [DEBUG] Commute.collect_commute_data: Processing 25 rows from API response
+2026-02-05 07:00:08 [INFO] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-05 07:00:08 [DEBUG] urllib3.connectionpool: https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=244+Wood+St.+Lexington%2C+MA+02421&mode=driving&origins=Stoughton%2C+MA+02072%7CStow%2C+MA+01775%7CSudbury%2C+MA+01776%7CSwampscott%2C+MA+01907%7CTewksbury%2C+MA+01876%7CTopsfield%2C+MA+01983%7CTownsend%2C+MA+01469%7CTyngsboro%2C+MA+01879%7CUpton%2C+MA+01568%7CWaban%2C+MA+02468%7CWakefield%2C+MA+01880%7CWalpole%2C+MA+02081%7CWaltham%2C+MA+02451%7CWatertown%2C+MA+02472%7CWayland%2C+MA+01778%7CWellesley%2C+MA+02482%7CWenham%2C+MA+01984%7CWest+Bridgewater%2C+MA+02379%7CWestborough%2C+MA+01581%7CWestford%2C+MA+01886%7CWeston%2C+MA+02493%7CWestwood%2C+MA+02090%7CWeymouth%2C+MA+02188%7CWhitinsville%2C+MA+01588%7CWhitman%2C+MA+02382&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+2026-02-05 07:00:08 [DEBUG] Commute.collect_commute_data: Processing 25 rows from API response
+2026-02-05 07:00:08 [INFO] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-05 07:00:09 [DEBUG] urllib3.connectionpool: https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=244+Wood+St.+Lexington%2C+MA+02421&mode=driving&origins=Wilmington%2C+MA+01887%7CWinchester%2C+MA+01890%7CWindham%2C+NH+03087%7CWinthrop%2C+MA+02152%7CWoburn%2C+MA+01801%7CWrentham%2C+MA+02093%7CSomerset%2C+MA+02726&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+2026-02-05 07:00:09 [DEBUG] Commute.collect_commute_data: Processing 7 rows from API response
+2026-02-05 07:00:09 [INFO] Commute.collect_commute_data: Completed 8 requests, processed 182 elements, collected 182 valid results
+2026-02-05 07:00:09 [INFO] utils: Loaded 181 records from /home/ad23883/production/house_hunt/Data/Results/commute_stats.csv
+2026-02-05 07:00:09 [INFO] Commute.collect_commute_data: Loaded 181 records from /home/ad23883/production/house_hunt/Data/Results/commute_stats.csv
+2026-02-05 07:00:09 [INFO] Commute.collect_commute_data: Successfully updated /home/ad23883/production/house_hunt/Data/Results/commute_stats.csv with 182 records
+2026-02-05 07:00:09 [INFO] utils: Updated API usage: 182 elements this run, 3,065 / 10,000 monthly total
+2026-02-05 07:00:09 [INFO] Commute.collect_commute_data: Re-validating usage after API calls...
+2026-02-05 07:00:10 [INFO] utils: Google-reported usage: 2,883 elements (Advanced tier based on TRAFFIC_MODEL=best_guess)
+2026-02-05 07:00:10 [INFO] utils: Free tier limit: 5,000, Remaining: 2,117
+2026-02-05 07:00:10 [INFO] utils: === Usage Validation ===
+2026-02-05 07:00:10 [INFO] utils: Tier:            Advanced
+2026-02-05 07:00:10 [INFO] utils: Local tracking:  3,065 elements
+2026-02-05 07:00:10 [INFO] utils: Google reports:  2,883 elements
+2026-02-05 07:00:10 [INFO] utils: Free tier:       5,000
+2026-02-05 07:00:10 [INFO] utils: Remaining:       2,117
+2026-02-05 07:00:10 [INFO] utils: Discrepancy:     182 elements
+2026-02-05 07:00:10 [WARNING] utils: ⚠️  Significant discrepancy detected! Consider using Google's count as source of truth.
+2026-02-05 07:00:10 [INFO] Commute.collect_commute_data: Commute data collection completed successfully
+2026-02-05 07:00:10 [INFO] __main__: Commute collection completed successfully
+2026-02-05 07:00:10 [INFO] __main__: ======================================================================
+2026-02-05 07:00:10 [INFO] __main__: EXECUTION SUMMARY
+2026-02-05 07:00:10 [INFO] __main__: ----------------------------------------------------------------------
+2026-02-05 07:00:10 [INFO] __main__: COMMUTE: ✓ SUCCESS
+2026-02-05 07:00:10 [INFO] __main__: ----------------------------------------------------------------------
+2026-02-05 07:00:10 [INFO] __main__: Completed 1/1 modules successfully
+2026-02-05 07:00:10 [INFO] __main__: ======================================================================
+2026-02-05 17:00:05 [INFO] __main__: House Hunt execution started at 2026-02-05 17:00:05.606889
+2026-02-05 17:00:05 [INFO] __main__: ======================================================================
+2026-02-05 17:00:05 [INFO] __main__: Starting Commute Data Collection
+2026-02-05 17:00:05 [INFO] __main__: ======================================================================
+2026-02-05 17:00:05 [INFO] Commute.collect_commute_data: ======================================================================
+2026-02-05 17:00:05 [INFO] Commute.collect_commute_data: Starting commute data collection
+2026-02-05 17:00:05 [INFO] Commute.collect_commute_data: ======================================================================
+2026-02-05 17:00:05 [INFO] Commute.collect_commute_data: After noon - collecting afternoon commute data
+2026-02-05 17:00:05 [INFO] Commute.collect_commute_data: Direction: afternoon commute
+2026-02-05 17:00:05 [INFO] Commute.collect_commute_data: Validating current API usage against Google...
+2026-02-05 17:00:07 [INFO] utils: Google-reported usage: 3,065 elements (Advanced tier based on TRAFFIC_MODEL=best_guess)
+2026-02-05 17:00:07 [INFO] utils: Free tier limit: 5,000, Remaining: 1,935
+2026-02-05 17:00:07 [INFO] utils: === Usage Validation ===
+2026-02-05 17:00:07 [INFO] utils: Tier:            Advanced
+2026-02-05 17:00:07 [INFO] utils: Local tracking:  3,065 elements
+2026-02-05 17:00:07 [INFO] utils: Google reports:  3,065 elements
+2026-02-05 17:00:07 [INFO] utils: Free tier:       5,000
+2026-02-05 17:00:07 [INFO] utils: Remaining:       1,935
+2026-02-05 17:00:07 [INFO] utils: Discrepancy:     0 elements
+2026-02-05 17:00:07 [INFO] Commute.collect_commute_data: Loading zip codes within 40 miles of work...
+2026-02-05 17:00:07 [INFO] utils: Parsing ZIP database: /home/ad23883/production/house_hunt/Data/Raw/zip_code_database.csv
+2026-02-05 17:00:08 [INFO] utils: Loaded 795 active standard ZIPs for MA, RI, NH
+2026-02-05 17:00:08 [INFO] utils: Loading cached town results from /home/ad23883/production/house_hunt/Data/Processed/towns_within_40mi.csv
+2026-02-05 17:00:08 [INFO] utils: Loaded 182 cached towns (range: 40mi)
+2026-02-05 17:00:08 [INFO] Commute.collect_commute_data: Found 182 addresses within range
+2026-02-05 17:00:08 [INFO] utils: Current monthly API usage: 3,065 / 10,000
+2026-02-05 17:00:08 [DEBUG] utils: API Key successfully loaded from /home/ad23883/production/house_hunt/Data/google_api_key
+2026-02-05 17:00:08 [INFO] Commute.collect_commute_data: Afternoon commute: 123 Main St. Anytown, MA 00000 → 182 locations
+2026-02-05 17:00:08 [INFO] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-05 17:00:08 [DEBUG] urllib3.connectionpool: Starting new HTTPS connection (1): maps.googleapis.com:443
+2026-02-05 17:00:09 [DEBUG] urllib3.connectionpool: https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=Abington%2C+MA+02351%7CActon%2C+MA+01718%7CAllston%2C+MA+02134%7CAmesbury%2C+MA+01913%7CAmherst%2C+NH+03031%7CArlington%2C+MA+02474%7CAshby%2C+MA+01431%7CAshland%2C+MA+01721%7CAtkinson%2C+NH+03811%7CAuburndale%2C+MA+02466%7CAvon%2C+MA+02322%7CAyer%2C+MA+01432%7CBedford%2C+MA+01730%7CBellingham%2C+MA+02019%7CBelmont%2C+MA+02478%7CBerlin%2C+MA+01503%7CBeverly%2C+MA+01915%7CBillerica%2C+MA+01821%7CBlackstone%2C+MA+01504%7CBolton%2C+MA+01740%7CBoston%2C+MA+02108%7CBoxborough%2C+MA+01719%7CBoxford%2C+MA+01921%7CBoylston%2C+MA+01505%7CBraintree%2C+MA+02184&mode=driving&origins=244+Wood+St.+Lexington%2C+MA+02421&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+2026-02-05 17:00:09 [DEBUG] Commute.collect_commute_data: Processing 25 elements from API response
+2026-02-05 17:00:09 [INFO] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-05 17:00:09 [DEBUG] urllib3.connectionpool: https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=Brighton%2C+MA+02135%7CBrockton%2C+MA+02301%7CBrookline%2C+MA+02445%7CBrookline%2C+NH+03033%7CBurlington%2C+MA+01803%7CByfield%2C+MA+01922%7CCambridge%2C+MA+02138%7CCanton%2C+MA+02021%7CCarlisle%2C+MA+01741%7CCharlestown%2C+MA+02129%7CChelmsford%2C+MA+01824%7CChelsea%2C+MA+02150%7CChestnut+Hill%2C+MA+02467%7CClinton%2C+MA+01510%7CCohasset%2C+MA+02025%7CConcord%2C+MA+01742%7CDanvers%2C+MA+01923%7CDedham%2C+MA+02026%7CDerry%2C+NH+03038%7CDevens%2C+MA+01434%7CDorchester%2C+MA+02121%7CDover%2C+MA+02030%7CDracut%2C+MA+01826%7CDunstable%2C+MA+01827%7CEssex%2C+MA+01929&mode=driving&origins=244+Wood+St.+Lexington%2C+MA+02421&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+2026-02-05 17:00:09 [DEBUG] Commute.collect_commute_data: Processing 25 elements from API response
+2026-02-05 17:00:09 [INFO] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-05 17:00:09 [DEBUG] urllib3.connectionpool: https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=Everett%2C+MA+02149%7CFayville%2C+MA+01745%7CFitchburg%2C+MA+01420%7CFoxboro%2C+MA+02035%7CFramingham%2C+MA+01701%7CFranklin%2C+MA+02038%7CGeorgetown%2C+MA+01833%7CGrafton%2C+MA+01519%7CGreenville%2C+NH+03048%7CGroton%2C+MA+01450%7CGroveland%2C+MA+01834%7CHampstead%2C+NH+03841%7CHarvard%2C+MA+01451%7CHaverhill%2C+MA+01830%7CHingham%2C+MA+02043%7CHolbrook%2C+MA+02343%7CHolden%2C+MA+01520%7CHollis%2C+NH+03049%7CHolliston%2C+MA+01746%7CHopedale%2C+MA+01747%7CHopkinton%2C+MA+01748%7CHudson%2C+MA+01749%7CHudson%2C+NH+03051%7CHull%2C+MA+02045%7CHyde+Park%2C+MA+02136&mode=driving&origins=244+Wood+St.+Lexington%2C+MA+02421&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+2026-02-05 17:00:09 [DEBUG] Commute.collect_commute_data: Processing 25 elements from API response
+2026-02-05 17:00:09 [INFO] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-05 17:00:09 [DEBUG] urllib3.connectionpool: https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=Ipswich%2C+MA+01938%7CJamaica+Plain%2C+MA+02130%7CJefferson%2C+MA+01522%7CLancaster%2C+MA+01523%7CLawrence%2C+MA+01840%7CLeominster%2C+MA+01453%7CLexington%2C+MA+02420%7CLincoln%2C+MA+01773%7CLitchfield%2C+NH+03052%7CLittleton%2C+MA+01460%7CLondonderry%2C+NH+03053%7CLowell%2C+MA+01850%7CLunenburg%2C+MA+01462%7CLynn%2C+MA+01901%7CLynnfield%2C+MA+01940%7CMalden%2C+MA+02148%7CManchester%2C+MA+01944%7CMarblehead%2C+MA+01945%7CMarlborough%2C+MA+01752%7CMattapan%2C+MA+02126%7CMaynard%2C+MA+01754%7CMedfield%2C+MA+02052%7CMedford%2C+MA+02155%7CMedway%2C+MA+02053%7CMelrose%2C+MA+02176&mode=driving&origins=244+Wood+St.+Lexington%2C+MA+02421&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+2026-02-05 17:00:09 [DEBUG] Commute.collect_commute_data: Processing 25 elements from API response
+2026-02-05 17:00:09 [INFO] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-05 17:00:10 [DEBUG] urllib3.connectionpool: https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=Mendon%2C+MA+01756%7CMerrimac%2C+MA+01860%7CMerrimack%2C+NH+03054%7CMethuen%2C+MA+01844%7CMiddleton%2C+MA+01949%7CMilford%2C+MA+01757%7CMillis%2C+MA+02054%7CMilton%2C+MA+02186%7CNahant%2C+MA+01908%7CNashua%2C+NH+03060%7CNatick%2C+MA+01760%7CNeedham%2C+MA+02492%7CNewbury%2C+MA+01951%7CNewton%2C+MA+02458%7CNewton%2C+NH+03858%7CNorfolk%2C+MA+02056%7CNorth+Andover%2C+MA+01845%7CNorth+Easton%2C+MA+02356%7CNorthborough%2C+MA+01532%7CNorthbridge%2C+MA+01534%7CNorwell%2C+MA+02061%7CNorwood%2C+MA+02062%7CPeabody%2C+MA+01960%7CPelham%2C+NH+03076%7CPepperell%2C+MA+01463&mode=driving&origins=244+Wood+St.+Lexington%2C+MA+02421&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+2026-02-05 17:00:10 [DEBUG] Commute.collect_commute_data: Processing 25 elements from API response
+2026-02-05 17:00:10 [INFO] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-05 17:00:10 [DEBUG] urllib3.connectionpool: https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=Plainville%2C+MA+02762%7CPlaistow%2C+NH+03865%7CPrinceton%2C+MA+01541%7CQuincy%2C+MA+02169%7CRandolph%2C+MA+02368%7CReading%2C+MA+01867%7CRevere%2C+MA+02151%7CRockland%2C+MA+02370%7CRoslindale%2C+MA+02131%7CRowley%2C+MA+01969%7CRoxbury%2C+MA+02119%7CSalem%2C+MA+01970%7CSalem%2C+NH+03079%7CSandown%2C+NH+03873%7CSaugus%2C+MA+01906%7CScituate%2C+MA+02066%7CSharon%2C+MA+02067%7CSherborn%2C+MA+01770%7CShirley%2C+MA+01464%7CShrewsbury%2C+MA+01545%7CSomerville%2C+MA+02143%7CSouth+Hamilton%2C+MA+01982%7CSouthborough%2C+MA+01772%7CSterling%2C+MA+01564%7CStoneham%2C+MA+02180&mode=driving&origins=244+Wood+St.+Lexington%2C+MA+02421&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+2026-02-05 17:00:10 [DEBUG] Commute.collect_commute_data: Processing 25 elements from API response
+2026-02-05 17:00:10 [INFO] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-05 17:00:10 [DEBUG] urllib3.connectionpool: https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=Stoughton%2C+MA+02072%7CStow%2C+MA+01775%7CSudbury%2C+MA+01776%7CSwampscott%2C+MA+01907%7CTewksbury%2C+MA+01876%7CTopsfield%2C+MA+01983%7CTownsend%2C+MA+01469%7CTyngsboro%2C+MA+01879%7CUpton%2C+MA+01568%7CWaban%2C+MA+02468%7CWakefield%2C+MA+01880%7CWalpole%2C+MA+02081%7CWaltham%2C+MA+02451%7CWatertown%2C+MA+02472%7CWayland%2C+MA+01778%7CWellesley%2C+MA+02482%7CWenham%2C+MA+01984%7CWest+Bridgewater%2C+MA+02379%7CWestborough%2C+MA+01581%7CWestford%2C+MA+01886%7CWeston%2C+MA+02493%7CWestwood%2C+MA+02090%7CWeymouth%2C+MA+02188%7CWhitinsville%2C+MA+01588%7CWhitman%2C+MA+02382&mode=driving&origins=244+Wood+St.+Lexington%2C+MA+02421&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+2026-02-05 17:00:10 [DEBUG] Commute.collect_commute_data: Processing 25 elements from API response
+2026-02-05 17:00:10 [INFO] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-05 17:00:10 [DEBUG] urllib3.connectionpool: https://maps.googleapis.com:443 "GET /maps/api/distancematrix/json?avoid=highways&destinations=Wilmington%2C+MA+01887%7CWinchester%2C+MA+01890%7CWindham%2C+NH+03087%7CWinthrop%2C+MA+02152%7CWoburn%2C+MA+01801%7CWrentham%2C+MA+02093%7CSomerset%2C+MA+02726&mode=driving&origins=244+Wood+St.+Lexington%2C+MA+02421&units=imperial&key=AIzaSyBULZvoQ4yYohnrG7CX0rSE9ZYPqS4NHx8 HTTP/1.1" 200 None
+2026-02-05 17:00:10 [DEBUG] Commute.collect_commute_data: Processing 7 elements from API response
+2026-02-05 17:00:10 [INFO] Commute.collect_commute_data: Completed 8 requests, processed 182 elements, collected 182 valid results
+2026-02-05 17:00:10 [INFO] utils: Loaded 182 records from /home/ad23883/production/house_hunt/Data/Results/commute_stats.csv
+2026-02-05 17:00:10 [INFO] Commute.collect_commute_data: Loaded 182 records from /home/ad23883/production/house_hunt/Data/Results/commute_stats.csv
+2026-02-05 17:00:10 [INFO] Commute.collect_commute_data: Successfully updated /home/ad23883/production/house_hunt/Data/Results/commute_stats.csv with 182 records
+2026-02-05 17:00:10 [INFO] utils: Updated API usage: 182 elements this run, 3,247 / 10,000 monthly total
+2026-02-05 17:00:10 [INFO] Commute.collect_commute_data: Re-validating usage after API calls...
+2026-02-05 17:00:11 [INFO] utils: Google-reported usage: 3,065 elements (Advanced tier based on TRAFFIC_MODEL=best_guess)
+2026-02-05 17:00:11 [INFO] utils: Free tier limit: 5,000, Remaining: 1,935
+2026-02-05 17:00:11 [INFO] utils: === Usage Validation ===
+2026-02-05 17:00:11 [INFO] utils: Tier:            Advanced
+2026-02-05 17:00:11 [INFO] utils: Local tracking:  3,247 elements
+2026-02-05 17:00:11 [INFO] utils: Google reports:  3,065 elements
+2026-02-05 17:00:11 [INFO] utils: Free tier:       5,000
+2026-02-05 17:00:11 [INFO] utils: Remaining:       1,935
+2026-02-05 17:00:11 [INFO] utils: Discrepancy:     182 elements
+2026-02-05 17:00:11 [WARNING] utils: ⚠️  Significant discrepancy detected! Consider using Google's count as source of truth.
+2026-02-05 17:00:11 [INFO] Commute.collect_commute_data: Commute data collection completed successfully
+2026-02-05 17:00:11 [INFO] __main__: Commute collection completed successfully
+2026-02-05 17:00:11 [INFO] __main__: ======================================================================
+2026-02-05 17:00:11 [INFO] __main__: EXECUTION SUMMARY
+2026-02-05 17:00:11 [INFO] __main__: ----------------------------------------------------------------------
+2026-02-05 17:00:11 [INFO] __main__: COMMUTE: ✓ SUCCESS
+2026-02-05 17:00:11 [INFO] __main__: ----------------------------------------------------------------------
+2026-02-05 17:00:11 [INFO] __main__: Completed 1/1 modules successfully
+2026-02-05 17:00:11 [INFO] __main__: ======================================================================
+2026-02-10 16:57:23 [DEBUG] utils: API Key loaded from /tmp/pytest-of-ad23883/pytest-0/test_get_google_api_key_succes0/google_api_key
+2026-02-10 16:57:23 [ERROR] utils: API key file not found: /tmp/pytest-of-ad23883/pytest-0/test_get_google_api_key_missin0/nonexistent
+2026-02-10 16:57:23 [DEBUG] utils: API Key loaded from /tmp/pytest-of-ad23883/pytest-0/test_get_google_api_key_whites0/google_api_key
+2026-02-10 16:57:23 [INFO] utils: Parsing ZIP database: /tmp/pytest-of-ad23883/pytest-0/test_get_zip_data_success0/test_zip.csv
+2026-02-10 16:57:23 [WARNING] utils: Found 2 rows with missing data
+2026-02-10 16:57:23 [WARNING] utils:   Row 2: Zip=99999, Town=Test City
+2026-02-10 16:57:23 [WARNING] utils:   Row 3: Zip=88888, Town=nan
+2026-02-10 16:57:23 [WARNING] utils: Dropped 2 rows with missing data
+2026-02-10 16:57:23 [INFO] utils: Loaded 2 active standard ZIPs for MA
+2026-02-10 16:57:23 [CRITICAL] utils: Source file not found: /tmp/pytest-of-ad23883/pytest-0/test_get_zip_data_missing_file0/nonexistent.csv
+2026-02-10 16:57:23 [INFO] utils: Parsing ZIP database: /tmp/pytest-of-ad23883/pytest-0/test_get_zip_data_filters_deco0/test_zip.csv
+2026-02-10 16:57:23 [WARNING] utils: Found 2 rows with missing data
+2026-02-10 16:57:23 [WARNING] utils:   Row 2: Zip=99999, Town=Test City
+2026-02-10 16:57:23 [WARNING] utils:   Row 3: Zip=88888, Town=nan
+2026-02-10 16:57:23 [WARNING] utils: Dropped 2 rows with missing data
+2026-02-10 16:57:23 [INFO] utils: Loaded 2 active standard ZIPs for MA
+2026-02-10 16:57:23 [INFO] utils: Parsing ZIP database: /tmp/pytest-of-ad23883/pytest-0/test_get_zip_data_missing_coor0/test_zip.csv
+2026-02-10 16:57:23 [WARNING] utils: Found 2 rows with missing data
+2026-02-10 16:57:23 [WARNING] utils:   Row 2: Zip=99999, Town=Test City
+2026-02-10 16:57:23 [WARNING] utils:   Row 3: Zip=88888, Town=nan
+2026-02-10 16:57:23 [WARNING] utils: Dropped 2 rows with missing data
+2026-02-10 16:57:23 [INFO] utils: Loaded 2 active standard ZIPs for MA
+2026-02-10 16:57:23 [INFO] utils: Parsing ZIP database: /tmp/pytest-of-ad23883/pytest-0/test_get_zip_data_zero_padding0/test_zip.csv
+2026-02-10 16:57:23 [WARNING] utils: Found 2 rows with missing data
+2026-02-10 16:57:23 [WARNING] utils:   Row 2: Zip=99999, Town=Test City
+2026-02-10 16:57:23 [WARNING] utils:   Row 3: Zip=88888, Town=nan
+2026-02-10 16:57:23 [WARNING] utils: Dropped 2 rows with missing data
+2026-02-10 16:57:23 [INFO] utils: Loaded 2 active standard ZIPs for MA
+2026-02-10 16:57:23 [INFO] utils: Current monthly API usage: 0 / 13,000
+2026-02-10 16:57:23 [INFO] utils: Current monthly API usage: 0 / 13,000
+2026-02-10 16:57:23 [INFO] utils: Current monthly API usage: 0 / 13,000
+2026-02-10 16:57:23 [INFO] utils: Current monthly API usage: 0 / 13,000
+2026-02-10 16:57:23 [INFO] utils: Updated API usage: 150 this run, 150 / 20,000 monthly
+2026-02-10 16:57:23 [INFO] utils: API_USAGE | operation=update_counter | elements=150 | estimated_cost=$0.0000
+2026-02-10 16:57:23 [INFO] utils: Updated API usage: 150 this run, 300 / 20,000 monthly
+2026-02-10 16:57:23 [INFO] utils: API_USAGE | operation=update_counter | elements=150 | estimated_cost=$0.0000
+2026-02-10 16:57:24 [INFO] utils: Loaded 2 records from /tmp/pytest-of-ad23883/pytest-0/test_load_csv_with_zip_success0/test.csv
+2026-02-10 16:57:24 [INFO] utils: File not found: /tmp/pytest-of-ad23883/pytest-0/test_load_csv_with_zip_missing0/nonexistent.csv
+2026-02-10 16:57:24 [INFO] utils: Current monthly API usage: 300 / 13,000
+2026-02-10 16:57:24 [INFO] utils: Checking range for 3 locations against 244 Wood St, Lexington, MA
+2026-02-10 16:57:24 [DEBUG] utils: No route found for Bedford, MA 01730
+2026-02-10 16:57:24 [INFO] utils: API usage: 1 requests, 3 elements, Monthly total: 303 / 20,000
+2026-02-10 16:57:24 [INFO] utils: Saved 1 locations to /tmp/pytest-of-ad23883/pytest-0/test_get_zips_within_range_suc0/Processed/zips_within_30mi.csv
+2026-02-10 16:57:24 [INFO] utils: Returning 1 addresses within range
+2026-02-10 16:57:24 [INFO] utils: Current monthly API usage: 303 / 13,000
+2026-02-10 16:57:24 [INFO] utils: Checking range for 2 locations against 244 Wood St, Lexington, MA
+2026-02-10 16:57:24 [INFO] utils: API usage: 1 requests, 2 elements, Monthly total: 305 / 20,000
+2026-02-10 16:57:24 [WARNING] utils: No locations found within 30 miles
+2026-02-10 16:57:24 [INFO] utils: Returning 0 addresses within range
+2026-02-10 16:57:24 [INFO] utils: Current monthly API usage: 305 / 13,000
+2026-02-10 16:57:24 [INFO] utils: Checking range for 1 locations against 244 Wood St, Lexington, MA
+2026-02-10 16:57:24 [ERROR] error_handlers: API Error in distance_matrix: ApiError: API Error
+2026-02-10 16:57:24 [ERROR] error_handlers: This may be a quota, authentication, or API key issue. Check your API key and billing settings.
+2026-02-10 16:57:24 [INFO] utils: API usage: 0 requests, 1 elements, Monthly total: 306 / 20,000
+2026-02-10 16:57:24 [WARNING] utils: No locations found within 30 miles
+2026-02-10 16:57:24 [INFO] utils: Returning 0 addresses within range
+2026-02-10 16:57:24 [INFO] utils: Current monthly API usage: 0 / 13,000
+2026-02-10 16:57:24 [CRITICAL] utils: Google API key not found
+2026-02-10 16:57:24 [INFO] utils: Updated tier tracking - This run: 100 (basic), Monthly: Basic=100, Advanced=0
+2026-02-10 16:57:24 [INFO] utils: API_USAGE | operation=update_tier_basic | elements=100 | estimated_cost=$0.0000
+2026-02-10 16:57:24 [INFO] utils: Updated tier tracking - This run: 50 (advanced), Monthly: Basic=0, Advanced=50
+2026-02-10 16:57:24 [INFO] utils: API_USAGE | operation=update_tier_advanced | elements=50 | estimated_cost=$0.0000
+2026-02-10 16:57:24 [INFO] utils: Updated tier tracking - This run: 100 (basic), Monthly: Basic=100, Advanced=0
+2026-02-10 16:57:24 [INFO] utils: API_USAGE | operation=update_tier_basic | elements=100 | estimated_cost=$0.0000
+2026-02-10 16:57:24 [INFO] utils: Updated tier tracking - This run: 50 (basic), Monthly: Basic=150, Advanced=0
+2026-02-10 16:57:24 [INFO] utils: API_USAGE | operation=update_tier_basic | elements=50 | estimated_cost=$0.0000
+2026-02-10 16:57:24 [INFO] utils: Updated tier tracking - This run: 100 (basic), Monthly: Basic=100, Advanced=0
+2026-02-10 16:57:24 [INFO] utils: API_USAGE | operation=update_tier_basic | elements=100 | estimated_cost=$0.0000
+2026-02-10 16:57:24 [INFO] utils: Updated tier tracking - This run: 50 (advanced), Monthly: Basic=100, Advanced=50
+2026-02-10 16:57:24 [INFO] utils: API_USAGE | operation=update_tier_advanced | elements=50 | estimated_cost=$0.0000
+2026-02-10 16:57:24 [INFO] utils: Updated tier tracking - This run: 100 (basic), Monthly: Basic=100, Advanced=0
+2026-02-10 16:57:24 [INFO] utils: API_USAGE | operation=update_tier_basic | elements=100 | estimated_cost=$0.0000
+2026-02-10 16:57:24 [INFO] utils: === Usage Validation ===
+2026-02-10 16:57:24 [INFO] utils: Local tier tracking:
+2026-02-10 16:57:24 [INFO] utils:   Basic:     3,000 / 10,000 ($0.00)
+2026-02-10 16:57:24 [INFO] utils:   Advanced:  2,000 / 5,000 ($0.00)
+2026-02-10 16:57:24 [INFO] utils:   Total:     5,000
+2026-02-10 16:57:24 [INFO] utils: Legacy counter: 5,000
+2026-02-10 16:57:24 [INFO] utils: Google reports: 5,000
+2026-02-10 16:57:24 [INFO] utils: Discrepancy:    0 elements
+2026-02-10 16:57:24 [INFO] utils: Estimated cost: $0.00
+2026-02-10 16:57:24 [ERROR] utils: Failed to update tier tracking: [Errno 13] Permission denied: '/tmp/pytest-of-ad23883/pytest-0/test_update_api_usage_by_tier_5/usage_by_tier.txt'
+2026-02-10 16:57:24 [INFO] utils: Updated tier tracking - This run: 100 (basic), Monthly: Basic=100, Advanced=0
+2026-02-10 16:57:24 [INFO] utils: API_USAGE | operation=update_tier_basic | elements=100 | estimated_cost=$0.0000
+2026-02-10 17:08:14 [DEBUG] utils: API Key loaded from /tmp/pytest-of-ad23883/pytest-1/test_get_google_api_key_succes0/google_api_key
+2026-02-10 17:08:14 [ERROR] utils: API key file not found: /tmp/pytest-of-ad23883/pytest-1/test_get_google_api_key_missin0/nonexistent
+2026-02-10 17:08:14 [DEBUG] utils: API Key loaded from /tmp/pytest-of-ad23883/pytest-1/test_get_google_api_key_whites0/google_api_key
+2026-02-10 17:08:14 [INFO] utils: Parsing ZIP database: /tmp/pytest-of-ad23883/pytest-1/test_get_zip_data_success0/test_zip.csv
+2026-02-10 17:08:14 [WARNING] utils: Found 2 rows with missing data
+2026-02-10 17:08:14 [WARNING] utils:   Row 2: Zip=99999, Town=Test City
+2026-02-10 17:08:14 [WARNING] utils:   Row 3: Zip=88888, Town=nan
+2026-02-10 17:08:14 [WARNING] utils: Dropped 2 rows with missing data
+2026-02-10 17:08:14 [INFO] utils: Loaded 2 active standard ZIPs for MA
+2026-02-10 17:08:14 [CRITICAL] utils: Source file not found: /tmp/pytest-of-ad23883/pytest-1/test_get_zip_data_missing_file0/nonexistent.csv
+2026-02-10 17:08:14 [INFO] utils: Parsing ZIP database: /tmp/pytest-of-ad23883/pytest-1/test_get_zip_data_filters_deco0/test_zip.csv
+2026-02-10 17:08:14 [WARNING] utils: Found 2 rows with missing data
+2026-02-10 17:08:14 [WARNING] utils:   Row 2: Zip=99999, Town=Test City
+2026-02-10 17:08:14 [WARNING] utils:   Row 3: Zip=88888, Town=nan
+2026-02-10 17:08:14 [WARNING] utils: Dropped 2 rows with missing data
+2026-02-10 17:08:14 [INFO] utils: Loaded 2 active standard ZIPs for MA
+2026-02-10 17:08:14 [INFO] utils: Parsing ZIP database: /tmp/pytest-of-ad23883/pytest-1/test_get_zip_data_missing_coor0/test_zip.csv
+2026-02-10 17:08:14 [WARNING] utils: Found 2 rows with missing data
+2026-02-10 17:08:14 [WARNING] utils:   Row 2: Zip=99999, Town=Test City
+2026-02-10 17:08:14 [WARNING] utils:   Row 3: Zip=88888, Town=nan
+2026-02-10 17:08:14 [WARNING] utils: Dropped 2 rows with missing data
+2026-02-10 17:08:14 [INFO] utils: Loaded 2 active standard ZIPs for MA
+2026-02-10 17:08:15 [INFO] utils: Parsing ZIP database: /tmp/pytest-of-ad23883/pytest-1/test_get_zip_data_zero_padding0/test_zip.csv
+2026-02-10 17:08:15 [WARNING] utils: Found 2 rows with missing data
+2026-02-10 17:08:15 [WARNING] utils:   Row 2: Zip=99999, Town=Test City
+2026-02-10 17:08:15 [WARNING] utils:   Row 3: Zip=88888, Town=nan
+2026-02-10 17:08:15 [WARNING] utils: Dropped 2 rows with missing data
+2026-02-10 17:08:15 [INFO] utils: Loaded 2 active standard ZIPs for MA
+2026-02-10 17:08:15 [INFO] utils: Current monthly API usage: 5,000 / 13,000
+2026-02-10 17:08:15 [INFO] utils: Current monthly API usage: 20,000 / 13,000
+2026-02-10 17:08:15 [CRITICAL] utils: !!! MONTHLY BUDGET LIMIT REACHED !!!
+Current: 20,000 / 13,000
+Aborting to prevent overage charges.
+2026-02-10 17:08:15 [INFO] utils: Current monthly API usage: 0 / 13,000
+2026-02-10 17:08:15 [INFO] utils: Current monthly API usage: 0 / 13,000
+2026-02-10 17:08:15 [INFO] utils: Updated API usage: 150 this run, 150 / 20,000 monthly
+2026-02-10 17:08:15 [INFO] utils: API_USAGE | operation=update_counter | elements=150 | estimated_cost=$0.0000
+2026-02-10 17:08:15 [INFO] utils: Updated API usage: 150 this run, 5,150 / 20,000 monthly
+2026-02-10 17:08:15 [INFO] utils: API_USAGE | operation=update_counter | elements=150 | estimated_cost=$0.0000
+2026-02-10 17:08:15 [INFO] utils: Loaded 2 records from /tmp/pytest-of-ad23883/pytest-1/test_load_csv_with_zip_success0/test.csv
+2026-02-10 17:08:15 [INFO] utils: File not found: /tmp/pytest-of-ad23883/pytest-1/test_load_csv_with_zip_missing0/nonexistent.csv
+2026-02-10 17:08:15 [INFO] utils: Current monthly API usage: 0 / 13,000
+2026-02-10 17:08:15 [INFO] utils: Checking range for 3 locations against 244 Wood St, Lexington, MA
+2026-02-10 17:08:15 [DEBUG] utils: No route found for Bedford, MA 01730
+2026-02-10 17:08:15 [INFO] utils: API usage: 1 requests, 3 elements, Monthly total: 3 / 20,000
+2026-02-10 17:08:15 [INFO] utils: Saved 1 locations to /tmp/pytest-of-ad23883/pytest-1/test_get_zips_within_range_suc0/Processed/zips_within_30mi.csv
+2026-02-10 17:08:15 [INFO] utils: Returning 1 addresses within range
+2026-02-10 17:08:15 [WARNING] utils: Filtered out 1 ZIP codes with missing coordinates
+2026-02-10 17:08:15 [INFO] utils: Current monthly API usage: 0 / 13,000
+2026-02-10 17:08:15 [INFO] utils: Checking range for 1 locations against 244 Wood St, Lexington, MA
+2026-02-10 17:08:15 [INFO] utils: API usage: 1 requests, 1 elements, Monthly total: 1 / 20,000
+2026-02-10 17:08:15 [WARNING] utils: No locations found within 30 miles
+2026-02-10 17:08:15 [INFO] utils: Returning 0 addresses within range
+2026-02-10 17:08:15 [INFO] utils: Current monthly API usage: 0 / 13,000
+2026-02-10 17:08:15 [INFO] utils: Checking range for 1 locations against 244 Wood St, Lexington, MA
+2026-02-10 17:08:15 [ERROR] error_handlers: API Error in distance_matrix: ApiError: API Error
+2026-02-10 17:08:15 [ERROR] error_handlers: This may be a quota, authentication, or API key issue. Check your API key and billing settings.
+2026-02-10 17:08:15 [INFO] utils: API usage: 0 requests, 1 elements, Monthly total: 1 / 20,000
+2026-02-10 17:08:15 [WARNING] utils: No locations found within 30 miles
+2026-02-10 17:08:15 [INFO] utils: Returning 0 addresses within range
+2026-02-10 17:08:15 [INFO] utils: Current monthly API usage: 0 / 13,000
+2026-02-10 17:08:15 [CRITICAL] utils: Google API key not found
+2026-02-10 17:08:15 [INFO] utils: Updated tier tracking - This run: 100 (basic), Monthly: Basic=100, Advanced=0
+2026-02-10 17:08:15 [INFO] utils: API_USAGE | operation=update_tier_basic | elements=100 | estimated_cost=$0.0000
+2026-02-10 17:08:15 [INFO] utils: Updated tier tracking - This run: 50 (advanced), Monthly: Basic=0, Advanced=50
+2026-02-10 17:08:15 [INFO] utils: API_USAGE | operation=update_tier_advanced | elements=50 | estimated_cost=$0.0000
+2026-02-10 17:08:15 [INFO] utils: Updated tier tracking - This run: 100 (basic), Monthly: Basic=100, Advanced=0
+2026-02-10 17:08:15 [INFO] utils: API_USAGE | operation=update_tier_basic | elements=100 | estimated_cost=$0.0000
+2026-02-10 17:08:15 [INFO] utils: Updated tier tracking - This run: 50 (basic), Monthly: Basic=150, Advanced=0
+2026-02-10 17:08:15 [INFO] utils: API_USAGE | operation=update_tier_basic | elements=50 | estimated_cost=$0.0000
+2026-02-10 17:08:15 [INFO] utils: Updated tier tracking - This run: 100 (basic), Monthly: Basic=100, Advanced=0
+2026-02-10 17:08:15 [INFO] utils: API_USAGE | operation=update_tier_basic | elements=100 | estimated_cost=$0.0000
+2026-02-10 17:08:15 [INFO] utils: Updated tier tracking - This run: 50 (advanced), Monthly: Basic=100, Advanced=50
+2026-02-10 17:08:15 [INFO] utils: API_USAGE | operation=update_tier_advanced | elements=50 | estimated_cost=$0.0000
+2026-02-10 17:08:15 [INFO] utils: Updated tier tracking - This run: 100 (basic), Monthly: Basic=100, Advanced=0
+2026-02-10 17:08:15 [INFO] utils: API_USAGE | operation=update_tier_basic | elements=100 | estimated_cost=$0.0000
+2026-02-10 17:08:15 [INFO] utils: === Usage Validation ===
+2026-02-10 17:08:15 [INFO] utils: Local tier tracking:
+2026-02-10 17:08:15 [INFO] utils:   Basic:     3,000 / 10,000 ($0.00)
+2026-02-10 17:08:15 [INFO] utils:   Advanced:  2,000 / 5,000 ($0.00)
+2026-02-10 17:08:15 [INFO] utils:   Total:     5,000
+2026-02-10 17:08:15 [INFO] utils: Legacy counter: 5,000
+2026-02-10 17:08:15 [INFO] utils: Google reports: 5,000
+2026-02-10 17:08:15 [INFO] utils: Discrepancy:    0 elements
+2026-02-10 17:08:15 [INFO] utils: Estimated cost: $0.00
+2026-02-10 17:08:15 [ERROR] utils: Failed to update tier tracking: [Errno 13] Permission denied: '/tmp/pytest-of-ad23883/pytest-1/test_update_api_usage_by_tier_5/usage_by_tier.txt'
+2026-02-10 17:08:15 [INFO] utils: Updated tier tracking - This run: 100 (basic), Monthly: Basic=100, Advanced=0
+2026-02-10 17:08:15 [INFO] utils: API_USAGE | operation=update_tier_basic | elements=100 | estimated_cost=$0.0000
+2026-02-10 17:12:44 [DEBUG] utils: API Key loaded from /tmp/pytest-of-ad23883/pytest-2/test_get_google_api_key_succes0/google_api_key
+2026-02-10 17:12:44 [ERROR] utils: API key file not found: /tmp/pytest-of-ad23883/pytest-2/test_get_google_api_key_missin0/nonexistent
+2026-02-10 17:12:44 [DEBUG] utils: API Key loaded from /tmp/pytest-of-ad23883/pytest-2/test_get_google_api_key_whites0/google_api_key
+2026-02-10 17:12:44 [INFO] utils: Parsing ZIP database: /tmp/pytest-of-ad23883/pytest-2/test_get_zip_data_success0/test_zip.csv
+2026-02-10 17:12:44 [WARNING] utils: Found 2 rows with missing data
+2026-02-10 17:12:44 [WARNING] utils:   Row 2: Zip=99999, Town=Test City
+2026-02-10 17:12:44 [WARNING] utils:   Row 3: Zip=88888, Town=nan
+2026-02-10 17:12:44 [WARNING] utils: Dropped 2 rows with missing data
+2026-02-10 17:12:44 [INFO] utils: Loaded 2 active standard ZIPs for MA
+2026-02-10 17:12:44 [CRITICAL] utils: Source file not found: /tmp/pytest-of-ad23883/pytest-2/test_get_zip_data_missing_file0/nonexistent.csv
+2026-02-10 17:12:44 [INFO] utils: Parsing ZIP database: /tmp/pytest-of-ad23883/pytest-2/test_get_zip_data_filters_deco0/test_zip.csv
+2026-02-10 17:12:44 [WARNING] utils: Found 2 rows with missing data
+2026-02-10 17:12:44 [WARNING] utils:   Row 2: Zip=99999, Town=Test City
+2026-02-10 17:12:44 [WARNING] utils:   Row 3: Zip=88888, Town=nan
+2026-02-10 17:12:44 [WARNING] utils: Dropped 2 rows with missing data
+2026-02-10 17:12:44 [INFO] utils: Loaded 2 active standard ZIPs for MA
+2026-02-10 17:12:44 [INFO] utils: Parsing ZIP database: /tmp/pytest-of-ad23883/pytest-2/test_get_zip_data_missing_coor0/test_zip.csv
+2026-02-10 17:12:44 [WARNING] utils: Found 2 rows with missing data
+2026-02-10 17:12:44 [WARNING] utils:   Row 2: Zip=99999, Town=Test City
+2026-02-10 17:12:44 [WARNING] utils:   Row 3: Zip=88888, Town=nan
+2026-02-10 17:12:44 [WARNING] utils: Dropped 2 rows with missing data
+2026-02-10 17:12:44 [INFO] utils: Loaded 2 active standard ZIPs for MA
+2026-02-10 17:12:44 [INFO] utils: Parsing ZIP database: /tmp/pytest-of-ad23883/pytest-2/test_get_zip_data_zero_padding0/test_zip.csv
+2026-02-10 17:12:44 [WARNING] utils: Found 2 rows with missing data
+2026-02-10 17:12:44 [WARNING] utils:   Row 2: Zip=99999, Town=Test City
+2026-02-10 17:12:44 [WARNING] utils:   Row 3: Zip=88888, Town=nan
+2026-02-10 17:12:44 [WARNING] utils: Dropped 2 rows with missing data
+2026-02-10 17:12:44 [INFO] utils: Loaded 2 active standard ZIPs for MA
+2026-02-10 17:12:45 [INFO] utils: Current monthly API usage: 5,000 / 13,000
+2026-02-10 17:12:45 [INFO] utils: Current monthly API usage: 20,000 / 13,000
+2026-02-10 17:12:45 [CRITICAL] utils: !!! MONTHLY BUDGET LIMIT REACHED !!!
+Current: 20,000 / 13,000
+Aborting to prevent overage charges.
+2026-02-10 17:12:45 [INFO] utils: Current monthly API usage: 0 / 13,000
+2026-02-10 17:12:45 [INFO] utils: Current monthly API usage: 0 / 13,000
+2026-02-10 17:12:45 [INFO] utils: Updated API usage: 150 this run, 150 / 20,000 monthly
+2026-02-10 17:12:45 [INFO] utils: API_USAGE | operation=update_counter | elements=150 | estimated_cost=$0.0000
+2026-02-10 17:12:45 [INFO] utils: Updated API usage: 150 this run, 5,150 / 20,000 monthly
+2026-02-10 17:12:45 [INFO] utils: API_USAGE | operation=update_counter | elements=150 | estimated_cost=$0.0000
+2026-02-10 17:12:45 [INFO] utils: Loaded 2 records from /tmp/pytest-of-ad23883/pytest-2/test_load_csv_with_zip_success0/test.csv
+2026-02-10 17:12:45 [INFO] utils: File not found: /tmp/pytest-of-ad23883/pytest-2/test_load_csv_with_zip_missing0/nonexistent.csv
+2026-02-10 17:12:45 [INFO] utils: Current monthly API usage: 0 / 13,000
+2026-02-10 17:12:45 [INFO] utils: Checking range for 3 locations against 244 Wood St, Lexington, MA
+2026-02-10 17:12:45 [DEBUG] utils: No route found for Bedford, MA 01730
+2026-02-10 17:12:45 [INFO] utils: API usage: 1 requests, 3 elements, Monthly total: 3 / 20,000
+2026-02-10 17:12:45 [INFO] utils: Saved 1 locations to /tmp/pytest-of-ad23883/pytest-2/test_get_zips_within_range_suc0/Processed/zips_within_30mi.csv
+2026-02-10 17:12:45 [INFO] utils: Returning 1 addresses within range
+2026-02-10 17:12:45 [WARNING] utils: Filtered out 1 ZIP codes with missing coordinates
+2026-02-10 17:12:45 [INFO] utils: Current monthly API usage: 0 / 13,000
+2026-02-10 17:12:45 [INFO] utils: Checking range for 1 locations against 244 Wood St, Lexington, MA
+2026-02-10 17:12:45 [INFO] utils: API usage: 1 requests, 1 elements, Monthly total: 1 / 20,000
+2026-02-10 17:12:45 [WARNING] utils: No locations found within 30 miles
+2026-02-10 17:12:45 [INFO] utils: Returning 0 addresses within range
+2026-02-10 17:12:45 [INFO] utils: Current monthly API usage: 0 / 13,000
+2026-02-10 17:12:45 [INFO] utils: Checking range for 1 locations against 244 Wood St, Lexington, MA
+2026-02-10 17:12:45 [ERROR] error_handlers: API Error in distance_matrix: ApiError: API Error
+2026-02-10 17:12:45 [ERROR] error_handlers: This may be a quota, authentication, or API key issue. Check your API key and billing settings.
+2026-02-10 17:12:45 [INFO] utils: API usage: 0 requests, 1 elements, Monthly total: 1 / 20,000
+2026-02-10 17:12:45 [WARNING] utils: No locations found within 30 miles
+2026-02-10 17:12:45 [INFO] utils: Returning 0 addresses within range
+2026-02-10 17:12:45 [INFO] utils: Current monthly API usage: 0 / 13,000
+2026-02-10 17:12:45 [CRITICAL] utils: Google API key not found
+2026-02-10 17:12:45 [INFO] utils: Updated tier tracking - This run: 100 (basic), Monthly: Basic=100, Advanced=0
+2026-02-10 17:12:45 [INFO] utils: API_USAGE | operation=update_tier_basic | elements=100 | estimated_cost=$0.0000
+2026-02-10 17:12:45 [INFO] utils: Updated tier tracking - This run: 50 (advanced), Monthly: Basic=0, Advanced=50
+2026-02-10 17:12:45 [INFO] utils: API_USAGE | operation=update_tier_advanced | elements=50 | estimated_cost=$0.0000
+2026-02-10 17:12:45 [INFO] utils: Updated tier tracking - This run: 100 (basic), Monthly: Basic=100, Advanced=0
+2026-02-10 17:12:45 [INFO] utils: API_USAGE | operation=update_tier_basic | elements=100 | estimated_cost=$0.0000
+2026-02-10 17:12:45 [INFO] utils: Updated tier tracking - This run: 50 (basic), Monthly: Basic=150, Advanced=0
+2026-02-10 17:12:45 [INFO] utils: API_USAGE | operation=update_tier_basic | elements=50 | estimated_cost=$0.0000
+2026-02-10 17:12:45 [INFO] utils: Updated tier tracking - This run: 100 (basic), Monthly: Basic=100, Advanced=0
+2026-02-10 17:12:45 [INFO] utils: API_USAGE | operation=update_tier_basic | elements=100 | estimated_cost=$0.0000
+2026-02-10 17:12:45 [INFO] utils: Updated tier tracking - This run: 50 (advanced), Monthly: Basic=100, Advanced=50
+2026-02-10 17:12:45 [INFO] utils: API_USAGE | operation=update_tier_advanced | elements=50 | estimated_cost=$0.0000
+2026-02-10 17:12:45 [INFO] utils: Updated tier tracking - This run: 100 (basic), Monthly: Basic=100, Advanced=0
+2026-02-10 17:12:45 [INFO] utils: API_USAGE | operation=update_tier_basic | elements=100 | estimated_cost=$0.0000
+2026-02-10 17:12:45 [INFO] utils: === Usage Validation ===
+2026-02-10 17:12:45 [INFO] utils: Local tier tracking:
+2026-02-10 17:12:45 [INFO] utils:   Basic:     3,000 / 10,000 ($0.00)
+2026-02-10 17:12:45 [INFO] utils:   Advanced:  2,000 / 5,000 ($0.00)
+2026-02-10 17:12:45 [INFO] utils:   Total:     5,000
+2026-02-10 17:12:45 [INFO] utils: Legacy counter: 5,000
+2026-02-10 17:12:45 [INFO] utils: Google reports: 5,000
+2026-02-10 17:12:45 [INFO] utils: Discrepancy:    0 elements
+2026-02-10 17:12:45 [INFO] utils: Estimated cost: $0.00
+2026-02-10 17:12:45 [ERROR] utils: Failed to update tier tracking: [Errno 13] Permission denied: '/tmp/pytest-of-ad23883/pytest-2/test_update_api_usage_by_tier_5/usage_by_tier.txt'
+2026-02-10 17:12:45 [INFO] utils: Updated tier tracking - This run: 100 (basic), Monthly: Basic=100, Advanced=0
+2026-02-10 17:12:45 [INFO] utils: API_USAGE | operation=update_tier_basic | elements=100 | estimated_cost=$0.0000
+2026-02-10 17:12:53 [INFO] __main__: ======================================================================
+2026-02-10 17:12:53 [INFO] __main__: Starting commute data collection
+2026-02-10 17:12:53 [INFO] __main__: ======================================================================
+2026-02-10 17:12:53 [INFO] __main__: After noon - collecting afternoon commute data
+2026-02-10 17:12:53 [INFO] __main__: Direction: afternoon commute
+2026-02-10 17:12:53 [INFO] __main__: Validating current API usage against Google...
+2026-02-10 17:12:55 [INFO] utils: Google-reported usage: 4,339 elements (Advanced tier)
+2026-02-10 17:12:55 [INFO] utils: Free tier limit: 5,000, Remaining: 661
+2026-02-10 17:12:55 [INFO] utils: === Usage Validation ===
+2026-02-10 17:12:55 [INFO] utils: Local tier tracking:
+2026-02-10 17:12:55 [INFO] utils:   Basic:     0 / 10,000 ($0.00)
+2026-02-10 17:12:55 [INFO] utils:   Advanced:  0 / 5,000 ($0.00)
+2026-02-10 17:12:55 [INFO] utils:   Total:     0
+2026-02-10 17:12:55 [INFO] utils: Legacy counter: 0
+2026-02-10 17:12:55 [INFO] utils: Google reports: 4,339
+2026-02-10 17:12:55 [INFO] utils: Discrepancy:    4,339 elements
+2026-02-10 17:12:55 [INFO] utils: Estimated cost: $0.00
+2026-02-10 17:12:55 [WARNING] utils: ⚠️  Significant discrepancy detected! Consider checking billing reports.
+2026-02-10 17:12:55 [CRITICAL] __main__: Fatal error: KeyError: 'local'
+========================================================================================================================
+2026-02-10 17:19:30 [INFO] __main__: ======================================================================
+2026-02-10 17:19:30 [INFO] __main__: Starting commute data collection
+2026-02-10 17:19:30 [INFO] __main__: ======================================================================
+2026-02-10 17:19:30 [INFO] __main__: After noon - collecting afternoon commute data
+2026-02-10 17:19:30 [INFO] __main__: Direction: afternoon commute
+2026-02-10 17:19:30 [INFO] __main__: Validating current API usage against Google...
+2026-02-10 17:19:31 [INFO] utils: Google-reported usage: 4,339 elements (Advanced tier)
+2026-02-10 17:19:31 [INFO] utils: Free tier limit: 5,000, Remaining: 661
+2026-02-10 17:19:31 [INFO] utils: === Usage Validation ===
+2026-02-10 17:19:31 [INFO] utils: Local tier tracking:
+2026-02-10 17:19:31 [INFO] utils:   Basic:     0 / 10,000 ($0.00)
+2026-02-10 17:19:31 [INFO] utils:   Advanced:  0 / 5,000 ($0.00)
+2026-02-10 17:19:31 [INFO] utils:   Total:     0
+2026-02-10 17:19:31 [INFO] utils: Legacy counter: 0
+2026-02-10 17:19:31 [INFO] utils: Google reports: 4,339
+2026-02-10 17:19:31 [INFO] utils: Discrepancy:    4,339 elements
+2026-02-10 17:19:31 [INFO] utils: Estimated cost: $0.00
+2026-02-10 17:19:31 [WARNING] utils: ⚠️  Significant discrepancy detected! Consider checking billing reports.
+2026-02-10 17:19:31 [CRITICAL] __main__: Fatal error: KeyError: 'local'
+2026-02-10 17:20:55 [INFO] __main__: ======================================================================
+2026-02-10 17:20:55 [INFO] __main__: Starting commute data collection
+2026-02-10 17:20:56 [INFO] __main__: ======================================================================
+2026-02-10 17:20:57 [INFO] __main__: After noon - collecting afternoon commute data
+2026-02-10 17:21:17 [INFO] __main__: Direction: afternoon commute
+2026-02-10 17:21:17 [INFO] __main__: Validating current API usage against Google...
+2026-02-10 17:21:19 [INFO] utils: Google-reported usage: 4,339 elements (Advanced tier)
+2026-02-10 17:21:19 [INFO] utils: Free tier limit: 5,000, Remaining: 661
+2026-02-10 17:21:19 [INFO] utils: === Usage Validation ===
+2026-02-10 17:21:19 [INFO] utils: Local tier tracking:
+2026-02-10 17:21:19 [INFO] utils:   Basic:     0 / 10,000 ($0.00)
+2026-02-10 17:21:19 [INFO] utils:   Advanced:  0 / 5,000 ($0.00)
+2026-02-10 17:21:19 [INFO] utils:   Total:     0
+2026-02-10 17:21:19 [INFO] utils: Legacy counter: 0
+2026-02-10 17:21:19 [INFO] utils: Google reports: 4,339
+2026-02-10 17:21:19 [INFO] utils: Discrepancy:    4,339 elements
+2026-02-10 17:21:19 [INFO] utils: Estimated cost: $0.00
+2026-02-10 17:21:19 [WARNING] utils: ⚠️  Significant discrepancy detected! Consider checking billing reports.
+2026-02-10 17:21:19 [CRITICAL] __main__: Fatal error: KeyError: 'local'
+2026-02-10 17:26:43 [INFO] __main__: ======================================================================
+2026-02-10 17:26:43 [INFO] __main__: Starting commute data collection
+2026-02-10 17:26:43 [INFO] __main__: ======================================================================
+2026-02-10 17:26:43 [INFO] __main__: After noon - collecting afternoon commute data
+2026-02-10 17:26:43 [INFO] __main__: Direction: afternoon commute
+2026-02-10 17:26:43 [INFO] __main__: Validating current API usage against Google...
+2026-02-10 17:26:44 [INFO] utils: Google-reported usage: 4,339 elements (Advanced tier)
+2026-02-10 17:26:44 [INFO] utils: Free tier limit: 5,000, Remaining: 661
+2026-02-10 17:26:44 [INFO] utils: === Usage Validation ===
+2026-02-10 17:26:44 [INFO] utils: Local tier tracking:
+2026-02-10 17:26:44 [INFO] utils:   Basic:     0 / 10,000 ($0.00)
+2026-02-10 17:26:44 [INFO] utils:   Advanced:  0 / 5,000 ($0.00)
+2026-02-10 17:26:44 [INFO] utils:   Total:     0
+2026-02-10 17:26:44 [INFO] utils: Legacy counter: 0
+2026-02-10 17:26:44 [INFO] utils: Google reports: 4,339
+2026-02-10 17:26:44 [INFO] utils: Discrepancy:    4,339 elements
+2026-02-10 17:26:44 [INFO] utils: Estimated cost: $0.00
+2026-02-10 17:26:44 [WARNING] utils: ⚠️  Significant discrepancy detected! Consider checking billing reports.
+2026-02-10 17:26:44 [INFO] __main__: Local counter corrected to: 4,339
+2026-02-10 17:26:44 [INFO] __main__: Loading zip codes within 40 miles of work...
+2026-02-10 17:26:44 [INFO] utils: Parsing ZIP database: /home/ad23883/workspace/house_hunt/Data/Raw/zip_code_database.csv
+2026-02-10 17:26:45 [INFO] utils: Loaded 795 active standard ZIPs for MA, RI, NH
+2026-02-10 17:26:45 [INFO] utils: Loading cached town results from /home/ad23883/workspace/house_hunt/Data/Processed/towns_within_40mi.csv
+2026-02-10 17:26:45 [INFO] utils: Loaded 182 cached towns (range: 40mi)
+2026-02-10 17:26:45 [INFO] __main__: Found 182 addresses within range
+2026-02-10 17:26:45 [INFO] utils: Current monthly API usage: 4,339 / 10,000
+2026-02-10 17:26:45 [DEBUG] utils: API Key loaded from /home/ad23883/workspace/house_hunt/Data/google_api_key
+2026-02-10 17:26:45 [INFO] __main__: Afternoon commute: 123 Main St. Anytown, MA 00000 → 182 locations
+2026-02-10 17:26:45 [DEBUG] __main__: Using Basic tier (no traffic)
+2026-02-10 17:26:45 [DEBUG] __main__: Processing 25 elements
+2026-02-10 17:26:45 [DEBUG] __main__: Using Basic tier (no traffic)
+2026-02-10 17:26:45 [DEBUG] __main__: Processing 25 elements
+2026-02-10 17:26:45 [DEBUG] __main__: Using Basic tier (no traffic)
+2026-02-10 17:26:45 [DEBUG] __main__: Processing 25 elements
+2026-02-10 17:26:45 [DEBUG] __main__: Using Basic tier (no traffic)
+2026-02-10 17:26:46 [DEBUG] __main__: Processing 25 elements
+2026-02-10 17:26:46 [DEBUG] __main__: Using Basic tier (no traffic)
+2026-02-10 17:26:46 [DEBUG] __main__: Processing 25 elements
+2026-02-10 17:26:46 [DEBUG] __main__: Using Basic tier (no traffic)
+2026-02-10 17:26:46 [DEBUG] __main__: Processing 25 elements
+2026-02-10 17:26:46 [DEBUG] __main__: Using Basic tier (no traffic)
+2026-02-10 17:26:46 [DEBUG] __main__: Processing 25 elements
+2026-02-10 17:26:46 [DEBUG] __main__: Using Basic tier (no traffic)
+2026-02-10 17:26:46 [DEBUG] __main__: Processing 7 elements
+2026-02-10 17:26:46 [INFO] __main__: Completed 8 requests, processed 182 elements, collected 182 valid results
+2026-02-10 17:26:46 [INFO] utils: File not found: /home/ad23883/workspace/house_hunt/Data/Results/commute_stats.csv
+2026-02-10 17:26:46 [INFO] __main__: No historical data found. Starting fresh.
+2026-02-10 17:26:46 [INFO] __main__: Successfully updated /home/ad23883/workspace/house_hunt/Data/Results/commute_stats.csv with 182 records
+2026-02-10 17:26:46 [INFO] utils: Updated tier tracking - This run: 182 (advanced), Monthly: Basic=0, Advanced=182
+2026-02-10 17:26:46 [INFO] utils: API_USAGE | operation=update_tier_advanced | elements=182 | estimated_cost=$0.0000
+2026-02-10 17:26:46 [INFO] utils: Updated API usage: 182 this run, 4,521 / 10,000 monthly
+2026-02-10 17:26:46 [INFO] utils: API_USAGE | operation=update_counter | elements=182 | estimated_cost=$0.0000
+2026-02-10 17:26:46 [INFO] __main__: Re-validating usage after API calls...
+2026-02-10 17:26:47 [INFO] utils: Google-reported usage: 4,339 elements (Advanced tier)
+2026-02-10 17:26:47 [INFO] utils: Free tier limit: 5,000, Remaining: 661
+2026-02-10 17:26:47 [INFO] utils: === Usage Validation ===
+2026-02-10 17:26:47 [INFO] utils: Local tier tracking:
+2026-02-10 17:26:47 [INFO] utils:   Basic:     0 / 10,000 ($0.00)
+2026-02-10 17:26:47 [INFO] utils:   Advanced:  182 / 5,000 ($0.00)
+2026-02-10 17:26:47 [INFO] utils:   Total:     182
+2026-02-10 17:26:47 [INFO] utils: Legacy counter: 4,521
+2026-02-10 17:26:47 [INFO] utils: Google reports: 4,339
+2026-02-10 17:26:47 [INFO] utils: Discrepancy:    4,157 elements
+2026-02-10 17:26:47 [INFO] utils: Estimated cost: $0.00
+2026-02-10 17:26:47 [WARNING] utils: ⚠️  Significant discrepancy detected! Consider checking billing reports.
+2026-02-10 17:26:47 [INFO] __main__: Commute data collection completed successfully
+2026-02-11 15:06:51 [DEBUG] utils: API Key loaded from /tmp/pytest-of-ad23883/pytest-3/test_get_google_api_key_succes0/google_api_key
+2026-02-11 15:06:51 [ERROR] utils: API key file not found: /tmp/pytest-of-ad23883/pytest-3/test_get_google_api_key_missin0/nonexistent
+2026-02-11 15:06:51 [DEBUG] utils: API Key loaded from /tmp/pytest-of-ad23883/pytest-3/test_get_google_api_key_whites0/google_api_key
+2026-02-11 15:06:51 [INFO] utils: Parsing ZIP database: /tmp/pytest-of-ad23883/pytest-3/test_get_zip_data_success0/test_zip.csv
+2026-02-11 15:06:51 [WARNING] utils: Found 2 rows with missing data
+2026-02-11 15:06:51 [WARNING] utils:   Row 2: Zip=99999, Town=Test City
+2026-02-11 15:06:51 [WARNING] utils:   Row 3: Zip=88888, Town=nan
+2026-02-11 15:06:51 [WARNING] utils: Dropped 2 rows with missing data
+2026-02-11 15:06:51 [INFO] utils: Loaded 2 active standard ZIPs for MA
+2026-02-11 15:06:51 [CRITICAL] utils: Source file not found: /tmp/pytest-of-ad23883/pytest-3/test_get_zip_data_missing_file0/nonexistent.csv
+2026-02-11 15:06:51 [INFO] utils: Parsing ZIP database: /tmp/pytest-of-ad23883/pytest-3/test_get_zip_data_filters_deco0/test_zip.csv
+2026-02-11 15:06:51 [WARNING] utils: Found 2 rows with missing data
+2026-02-11 15:06:51 [WARNING] utils:   Row 2: Zip=99999, Town=Test City
+2026-02-11 15:06:51 [WARNING] utils:   Row 3: Zip=88888, Town=nan
+2026-02-11 15:06:51 [WARNING] utils: Dropped 2 rows with missing data
+2026-02-11 15:06:51 [INFO] utils: Loaded 2 active standard ZIPs for MA
+2026-02-11 15:06:51 [INFO] utils: Parsing ZIP database: /tmp/pytest-of-ad23883/pytest-3/test_get_zip_data_missing_coor0/test_zip.csv
+2026-02-11 15:06:51 [WARNING] utils: Found 2 rows with missing data
+2026-02-11 15:06:51 [WARNING] utils:   Row 2: Zip=99999, Town=Test City
+2026-02-11 15:06:51 [WARNING] utils:   Row 3: Zip=88888, Town=nan
+2026-02-11 15:06:51 [WARNING] utils: Dropped 2 rows with missing data
+2026-02-11 15:06:51 [INFO] utils: Loaded 2 active standard ZIPs for MA
+2026-02-11 15:06:51 [INFO] utils: Parsing ZIP database: /tmp/pytest-of-ad23883/pytest-3/test_get_zip_data_zero_padding0/test_zip.csv
+2026-02-11 15:06:51 [WARNING] utils: Found 2 rows with missing data
+2026-02-11 15:06:51 [WARNING] utils:   Row 2: Zip=99999, Town=Test City
+2026-02-11 15:06:51 [WARNING] utils:   Row 3: Zip=88888, Town=nan
+2026-02-11 15:06:51 [WARNING] utils: Dropped 2 rows with missing data
+2026-02-11 15:06:51 [INFO] utils: Loaded 2 active standard ZIPs for MA
+2026-02-11 15:06:51 [INFO] utils: Current monthly API usage: 5,000 / 10,000
+2026-02-11 15:06:51 [INFO] utils: Current monthly API usage: 20,000 / 10,000
+2026-02-11 15:06:51 [CRITICAL] utils: !!! MONTHLY BUDGET LIMIT REACHED !!!
+Current: 20,000 / 10,000
+Aborting to prevent overage charges.
+2026-02-11 15:06:51 [INFO] utils: Current monthly API usage: 0 / 10,000
+2026-02-11 15:06:51 [INFO] utils: Current monthly API usage: 0 / 10,000
+2026-02-11 15:06:51 [INFO] utils: Updated API usage: 150 this run, 150 / 20,000 monthly
+2026-02-11 15:06:51 [INFO] utils: API_USAGE | operation=update_counter | elements=150 | estimated_cost=$0.0000
+2026-02-11 15:06:51 [INFO] utils: Updated API usage: 150 this run, 5,150 / 20,000 monthly
+2026-02-11 15:06:51 [INFO] utils: API_USAGE | operation=update_counter | elements=150 | estimated_cost=$0.0000
+2026-02-11 15:06:51 [INFO] utils: Loaded 2 records from /tmp/pytest-of-ad23883/pytest-3/test_load_csv_with_zip_success0/test.csv
+2026-02-11 15:06:51 [INFO] utils: File not found: /tmp/pytest-of-ad23883/pytest-3/test_load_csv_with_zip_missing0/nonexistent.csv
+2026-02-11 15:06:51 [INFO] utils: Current monthly API usage: 0 / 10,000
+2026-02-11 15:06:51 [INFO] utils: Checking range for 3 locations against 244 Wood St, Lexington, MA
+2026-02-11 15:06:51 [DEBUG] utils: No route found for Bedford, MA 01730
+2026-02-11 15:06:51 [INFO] utils: API usage: 1 requests, 3 elements, Monthly total: 3 / 20,000
+2026-02-11 15:06:51 [INFO] utils: Saved 1 locations to /tmp/pytest-of-ad23883/pytest-3/test_get_zips_within_range_suc0/Processed/zips_within_30mi.csv
+2026-02-11 15:06:51 [INFO] utils: Returning 1 addresses within range
+2026-02-11 15:06:52 [WARNING] utils: Filtered out 1 ZIP codes with missing coordinates
+2026-02-11 15:06:52 [INFO] utils: Current monthly API usage: 0 / 10,000
+2026-02-11 15:06:52 [INFO] utils: Checking range for 1 locations against 244 Wood St, Lexington, MA
+2026-02-11 15:06:52 [INFO] utils: API usage: 1 requests, 1 elements, Monthly total: 1 / 20,000
+2026-02-11 15:06:52 [WARNING] utils: No locations found within 30 miles
+2026-02-11 15:06:52 [INFO] utils: Returning 0 addresses within range
+2026-02-11 15:06:52 [INFO] utils: Current monthly API usage: 0 / 10,000
+2026-02-11 15:06:52 [INFO] utils: Checking range for 1 locations against 244 Wood St, Lexington, MA
+2026-02-11 15:06:52 [ERROR] error_handlers: API Error in distance_matrix: ApiError: API Error
+2026-02-11 15:06:52 [ERROR] error_handlers: This may be a quota, authentication, or API key issue. Check your API key and billing settings.
+2026-02-11 15:06:52 [INFO] utils: API usage: 0 requests, 1 elements, Monthly total: 1 / 20,000
+2026-02-11 15:06:52 [WARNING] utils: No locations found within 30 miles
+2026-02-11 15:06:52 [INFO] utils: Returning 0 addresses within range
+2026-02-11 15:06:52 [INFO] utils: Current monthly API usage: 0 / 10,000
+2026-02-11 15:06:52 [CRITICAL] utils: Google API key not found
+2026-02-11 15:06:52 [INFO] utils: Updated tier tracking - This run: 100 (basic), Monthly: Basic=100, Advanced=0
+2026-02-11 15:06:52 [INFO] utils: API_USAGE | operation=update_tier_basic | elements=100 | estimated_cost=$0.0000
+2026-02-11 15:06:52 [INFO] utils: Updated tier tracking - This run: 50 (basic), Monthly: Basic=50, Advanced=0
+2026-02-11 15:06:52 [INFO] utils: API_USAGE | operation=update_tier_basic | elements=50 | estimated_cost=$0.0000
+2026-02-11 15:06:52 [INFO] utils: Updated tier tracking - This run: 100 (basic), Monthly: Basic=100, Advanced=0
+2026-02-11 15:06:52 [INFO] utils: API_USAGE | operation=update_tier_basic | elements=100 | estimated_cost=$0.0000
+2026-02-11 15:06:52 [INFO] utils: Updated tier tracking - This run: 50 (basic), Monthly: Basic=150, Advanced=0
+2026-02-11 15:06:52 [INFO] utils: API_USAGE | operation=update_tier_basic | elements=50 | estimated_cost=$0.0000
+2026-02-11 15:06:52 [INFO] utils: Updated tier tracking - This run: 100 (basic), Monthly: Basic=100, Advanced=0
+2026-02-11 15:06:52 [INFO] utils: API_USAGE | operation=update_tier_basic | elements=100 | estimated_cost=$0.0000
+2026-02-11 15:06:52 [INFO] utils: Updated tier tracking - This run: 50 (basic), Monthly: Basic=150, Advanced=0
+2026-02-11 15:06:52 [INFO] utils: API_USAGE | operation=update_tier_basic | elements=50 | estimated_cost=$0.0000
+2026-02-11 15:06:52 [INFO] utils: Updated tier tracking - This run: 100 (basic), Monthly: Basic=100, Advanced=0
+2026-02-11 15:06:52 [INFO] utils: API_USAGE | operation=update_tier_basic | elements=100 | estimated_cost=$0.0000
+2026-02-11 15:06:52 [INFO] utils: === Usage Validation ===
+2026-02-11 15:06:52 [INFO] utils: Current tier: Basic
+2026-02-11 15:06:52 [INFO] utils: Local tier tracking:
+2026-02-11 15:06:52 [INFO] utils:   Basic:     3,000 / 10,000 ($0.00)
+2026-02-11 15:06:52 [INFO] utils:   Advanced:  2,000 / 5,000 ($0.00)
+2026-02-11 15:06:52 [INFO] utils:   Total:     5,000
+2026-02-11 15:06:52 [INFO] utils: Legacy counter: 5,000
+2026-02-11 15:06:52 [INFO] utils: Google reports: 5,000
+2026-02-11 15:06:52 [INFO] utils: Discrepancy:    0 elements
+2026-02-11 15:06:52 [INFO] utils: Estimated cost: $0.00
+2026-02-11 15:06:52 [ERROR] utils: Failed to update tier tracking: [Errno 13] Permission denied: '/tmp/pytest-of-ad23883/pytest-3/test_update_api_usage_by_tier_5/usage_by_tier.txt'
+2026-02-11 15:06:52 [INFO] utils: Updated tier tracking - This run: 100 (basic), Monthly: Basic=100, Advanced=0
+2026-02-11 15:06:52 [INFO] utils: API_USAGE | operation=update_tier_basic | elements=100 | estimated_cost=$0.0000
+2026-02-11 15:13:28 [DEBUG] utils: API Key loaded from /tmp/pytest-of-ad23883/pytest-4/test_get_google_api_key_succes0/google_api_key
+2026-02-11 15:13:28 [ERROR] utils: API key file not found: /tmp/pytest-of-ad23883/pytest-4/test_get_google_api_key_missin0/nonexistent
+2026-02-11 15:13:28 [DEBUG] utils: API Key loaded from /tmp/pytest-of-ad23883/pytest-4/test_get_google_api_key_whites0/google_api_key
+2026-02-11 15:13:28 [INFO] utils: Parsing ZIP database: /tmp/pytest-of-ad23883/pytest-4/test_get_zip_data_success0/test_zip.csv
+2026-02-11 15:13:28 [WARNING] utils: Found 2 rows with missing data
+2026-02-11 15:13:28 [WARNING] utils:   Row 2: Zip=99999, Town=Test City
+2026-02-11 15:13:28 [WARNING] utils:   Row 3: Zip=88888, Town=nan
+2026-02-11 15:13:28 [WARNING] utils: Dropped 2 rows with missing data
+2026-02-11 15:13:28 [INFO] utils: Loaded 2 active standard ZIPs for MA
+2026-02-11 15:13:28 [CRITICAL] utils: Source file not found: /tmp/pytest-of-ad23883/pytest-4/test_get_zip_data_missing_file0/nonexistent.csv
+2026-02-11 15:13:28 [INFO] utils: Parsing ZIP database: /tmp/pytest-of-ad23883/pytest-4/test_get_zip_data_filters_deco0/test_zip.csv
+2026-02-11 15:13:28 [WARNING] utils: Found 2 rows with missing data
+2026-02-11 15:13:28 [WARNING] utils:   Row 2: Zip=99999, Town=Test City
+2026-02-11 15:13:28 [WARNING] utils:   Row 3: Zip=88888, Town=nan
+2026-02-11 15:13:28 [WARNING] utils: Dropped 2 rows with missing data
+2026-02-11 15:13:28 [INFO] utils: Loaded 2 active standard ZIPs for MA
+2026-02-11 15:13:28 [INFO] utils: Parsing ZIP database: /tmp/pytest-of-ad23883/pytest-4/test_get_zip_data_missing_coor0/test_zip.csv
+2026-02-11 15:13:28 [WARNING] utils: Found 2 rows with missing data
+2026-02-11 15:13:28 [WARNING] utils:   Row 2: Zip=99999, Town=Test City
+2026-02-11 15:13:28 [WARNING] utils:   Row 3: Zip=88888, Town=nan
+2026-02-11 15:13:28 [WARNING] utils: Dropped 2 rows with missing data
+2026-02-11 15:13:28 [INFO] utils: Loaded 2 active standard ZIPs for MA
+2026-02-11 15:13:28 [INFO] utils: Parsing ZIP database: /tmp/pytest-of-ad23883/pytest-4/test_get_zip_data_zero_padding0/test_zip.csv
+2026-02-11 15:13:28 [WARNING] utils: Found 2 rows with missing data
+2026-02-11 15:13:28 [WARNING] utils:   Row 2: Zip=99999, Town=Test City
+2026-02-11 15:13:28 [WARNING] utils:   Row 3: Zip=88888, Town=nan
+2026-02-11 15:13:28 [WARNING] utils: Dropped 2 rows with missing data
+2026-02-11 15:13:28 [INFO] utils: Loaded 2 active standard ZIPs for MA
+2026-02-11 15:13:28 [INFO] utils: Current monthly API usage: 5,000 / 10,000
+2026-02-11 15:13:28 [INFO] utils: Current monthly API usage: 20,000 / 10,000
+2026-02-11 15:13:28 [CRITICAL] utils: !!! MONTHLY BUDGET LIMIT REACHED !!!
+Current: 20,000 / 10,000
+Aborting to prevent overage charges.
+2026-02-11 15:13:28 [INFO] utils: Current monthly API usage: 0 / 10,000
+2026-02-11 15:13:28 [INFO] utils: Current monthly API usage: 0 / 10,000
+2026-02-11 15:13:28 [INFO] utils: Updated API usage: 150 this run, 150 / 20,000 monthly
+2026-02-11 15:13:28 [INFO] utils: API_USAGE | operation=update_counter | elements=150 | estimated_cost=$0.0000
+2026-02-11 15:13:28 [INFO] utils: Updated API usage: 150 this run, 5,150 / 20,000 monthly
+2026-02-11 15:13:28 [INFO] utils: API_USAGE | operation=update_counter | elements=150 | estimated_cost=$0.0000
+2026-02-11 15:13:28 [INFO] utils: Loaded 2 records from /tmp/pytest-of-ad23883/pytest-4/test_load_csv_with_zip_success0/test.csv
+2026-02-11 15:13:28 [INFO] utils: File not found: /tmp/pytest-of-ad23883/pytest-4/test_load_csv_with_zip_missing0/nonexistent.csv
+2026-02-11 15:13:28 [INFO] utils: Current monthly API usage: 0 / 10,000
+2026-02-11 15:13:28 [INFO] utils: Checking range for 3 locations against 244 Wood St, Lexington, MA
+2026-02-11 15:13:28 [DEBUG] utils: No route found for Bedford, MA 01730
+2026-02-11 15:13:28 [INFO] utils: API usage: 1 requests, 3 elements, Monthly total: 3 / 20,000
+2026-02-11 15:13:28 [INFO] utils: Saved 1 locations to /tmp/pytest-of-ad23883/pytest-4/test_get_zips_within_range_suc0/Processed/zips_within_30mi.csv
+2026-02-11 15:13:28 [INFO] utils: Returning 1 addresses within range
+2026-02-11 15:13:28 [WARNING] utils: Filtered out 1 ZIP codes with missing coordinates
+2026-02-11 15:13:28 [INFO] utils: Current monthly API usage: 0 / 10,000
+2026-02-11 15:13:28 [INFO] utils: Checking range for 1 locations against 244 Wood St, Lexington, MA
+2026-02-11 15:13:28 [INFO] utils: API usage: 1 requests, 1 elements, Monthly total: 1 / 20,000
+2026-02-11 15:13:28 [WARNING] utils: No locations found within 30 miles
+2026-02-11 15:13:28 [INFO] utils: Returning 0 addresses within range
+2026-02-11 15:13:28 [INFO] utils: Current monthly API usage: 0 / 10,000
+2026-02-11 15:13:28 [INFO] utils: Checking range for 1 locations against 244 Wood St, Lexington, MA
+2026-02-11 15:13:28 [ERROR] error_handlers: API Error in distance_matrix: ApiError: API Error
+2026-02-11 15:13:28 [ERROR] error_handlers: This may be a quota, authentication, or API key issue. Check your API key and billing settings.
+2026-02-11 15:13:28 [INFO] utils: API usage: 0 requests, 1 elements, Monthly total: 1 / 20,000
+2026-02-11 15:13:28 [WARNING] utils: No locations found within 30 miles
+2026-02-11 15:13:28 [INFO] utils: Returning 0 addresses within range
+2026-02-11 15:13:28 [INFO] utils: Current monthly API usage: 0 / 10,000
+2026-02-11 15:13:28 [CRITICAL] utils: Google API key not found
+2026-02-11 15:13:28 [INFO] utils: Updated tier tracking - This run: 100 (basic), Monthly: Basic=100, Advanced=0
+2026-02-11 15:13:28 [INFO] utils: API_USAGE | operation=update_tier_basic | elements=100 | estimated_cost=$0.0000
+2026-02-11 15:13:28 [INFO] utils: Updated tier tracking - This run: 50 (basic), Monthly: Basic=50, Advanced=0
+2026-02-11 15:13:28 [INFO] utils: API_USAGE | operation=update_tier_basic | elements=50 | estimated_cost=$0.0000
+2026-02-11 15:13:28 [INFO] utils: Updated tier tracking - This run: 100 (basic), Monthly: Basic=100, Advanced=0
+2026-02-11 15:13:28 [INFO] utils: API_USAGE | operation=update_tier_basic | elements=100 | estimated_cost=$0.0000
+2026-02-11 15:13:28 [INFO] utils: Updated tier tracking - This run: 50 (basic), Monthly: Basic=150, Advanced=0
+2026-02-11 15:13:28 [INFO] utils: API_USAGE | operation=update_tier_basic | elements=50 | estimated_cost=$0.0000
+2026-02-11 15:13:28 [INFO] utils: Updated tier tracking - This run: 100 (basic), Monthly: Basic=100, Advanced=0
+2026-02-11 15:13:28 [INFO] utils: API_USAGE | operation=update_tier_basic | elements=100 | estimated_cost=$0.0000
+2026-02-11 15:13:28 [INFO] utils: Updated tier tracking - This run: 50 (basic), Monthly: Basic=150, Advanced=0
+2026-02-11 15:13:28 [INFO] utils: API_USAGE | operation=update_tier_basic | elements=50 | estimated_cost=$0.0000
+2026-02-11 15:13:28 [INFO] utils: Updated tier tracking - This run: 100 (basic), Monthly: Basic=100, Advanced=0
+2026-02-11 15:13:28 [INFO] utils: API_USAGE | operation=update_tier_basic | elements=100 | estimated_cost=$0.0000
+2026-02-11 15:13:28 [INFO] utils: === Usage Validation ===
+2026-02-11 15:13:28 [INFO] utils: Current tier: Basic
+2026-02-11 15:13:28 [INFO] utils: Local tier tracking:
+2026-02-11 15:13:28 [INFO] utils:   Basic:     3,000 / 10,000 ($0.00)
+2026-02-11 15:13:28 [INFO] utils:   Advanced:  2,000 / 5,000 ($0.00)
+2026-02-11 15:13:28 [INFO] utils:   Total:     5,000
+2026-02-11 15:13:28 [INFO] utils: Legacy counter: 5,000
+2026-02-11 15:13:28 [INFO] utils: Google reports: 5,000
+2026-02-11 15:13:28 [INFO] utils: Discrepancy:    0 elements
+2026-02-11 15:13:28 [INFO] utils: Estimated cost: $0.00
+2026-02-11 15:13:28 [ERROR] utils: Failed to update tier tracking: [Errno 13] Permission denied: '/tmp/pytest-of-ad23883/pytest-4/test_update_api_usage_by_tier_5/usage_by_tier.txt'
+2026-02-11 15:13:28 [INFO] utils: Updated tier tracking - This run: 100 (basic), Monthly: Basic=100, Advanced=0
+2026-02-11 15:13:28 [INFO] utils: API_USAGE | operation=update_tier_basic | elements=100 | estimated_cost=$0.0000
+2026-02-11 15:17:05 [DEBUG] utils: API Key loaded from /tmp/pytest-of-ad23883/pytest-5/test_get_google_api_key_succes0/google_api_key
+2026-02-11 15:17:05 [ERROR] utils: API key file not found: /tmp/pytest-of-ad23883/pytest-5/test_get_google_api_key_missin0/nonexistent
+2026-02-11 15:17:05 [DEBUG] utils: API Key loaded from /tmp/pytest-of-ad23883/pytest-5/test_get_google_api_key_whites0/google_api_key
+2026-02-11 15:17:05 [INFO] utils: Parsing ZIP database: /tmp/pytest-of-ad23883/pytest-5/test_get_zip_data_success0/test_zip.csv
+2026-02-11 15:17:05 [WARNING] utils: Found 2 rows with missing data
+2026-02-11 15:17:05 [WARNING] utils:   Row 2: Zip=99999, Town=Test City
+2026-02-11 15:17:05 [WARNING] utils:   Row 3: Zip=88888, Town=nan
+2026-02-11 15:17:05 [WARNING] utils: Dropped 2 rows with missing data
+2026-02-11 15:17:05 [INFO] utils: Loaded 2 active standard ZIPs for MA
+2026-02-11 15:17:05 [CRITICAL] utils: Source file not found: /tmp/pytest-of-ad23883/pytest-5/test_get_zip_data_missing_file0/nonexistent.csv
+2026-02-11 15:17:05 [INFO] utils: Parsing ZIP database: /tmp/pytest-of-ad23883/pytest-5/test_get_zip_data_filters_deco0/test_zip.csv
+2026-02-11 15:17:05 [WARNING] utils: Found 2 rows with missing data
+2026-02-11 15:17:05 [WARNING] utils:   Row 2: Zip=99999, Town=Test City
+2026-02-11 15:17:05 [WARNING] utils:   Row 3: Zip=88888, Town=nan
+2026-02-11 15:17:05 [WARNING] utils: Dropped 2 rows with missing data
+2026-02-11 15:17:05 [INFO] utils: Loaded 2 active standard ZIPs for MA
+2026-02-11 15:17:05 [INFO] utils: Parsing ZIP database: /tmp/pytest-of-ad23883/pytest-5/test_get_zip_data_missing_coor0/test_zip.csv
+2026-02-11 15:17:05 [WARNING] utils: Found 2 rows with missing data
+2026-02-11 15:17:05 [WARNING] utils:   Row 2: Zip=99999, Town=Test City
+2026-02-11 15:17:05 [WARNING] utils:   Row 3: Zip=88888, Town=nan
+2026-02-11 15:17:05 [WARNING] utils: Dropped 2 rows with missing data
+2026-02-11 15:17:05 [INFO] utils: Loaded 2 active standard ZIPs for MA
+2026-02-11 15:17:05 [INFO] utils: Parsing ZIP database: /tmp/pytest-of-ad23883/pytest-5/test_get_zip_data_zero_padding0/test_zip.csv
+2026-02-11 15:17:05 [WARNING] utils: Found 2 rows with missing data
+2026-02-11 15:17:05 [WARNING] utils:   Row 2: Zip=99999, Town=Test City
+2026-02-11 15:17:05 [WARNING] utils:   Row 3: Zip=88888, Town=nan
+2026-02-11 15:17:05 [WARNING] utils: Dropped 2 rows with missing data
+2026-02-11 15:17:05 [INFO] utils: Loaded 2 active standard ZIPs for MA
+2026-02-11 15:17:05 [INFO] utils: Current monthly API usage: 5,000 / 10,000
+2026-02-11 15:17:05 [INFO] utils: Current monthly API usage: 20,000 / 10,000
+2026-02-11 15:17:05 [CRITICAL] utils: !!! MONTHLY BUDGET LIMIT REACHED !!!
+Current: 20,000 / 10,000
+Aborting to prevent overage charges.
+2026-02-11 15:17:05 [INFO] utils: Current monthly API usage: 0 / 10,000
+2026-02-11 15:17:05 [INFO] utils: Current monthly API usage: 0 / 10,000
+2026-02-11 15:17:05 [INFO] utils: Updated API usage: 150 this run, 150 / 20,000 monthly
+2026-02-11 15:17:05 [INFO] utils: API_USAGE | operation=update_counter | elements=150 | estimated_cost=$0.0000
+2026-02-11 15:17:05 [INFO] utils: Updated API usage: 150 this run, 5,150 / 20,000 monthly
+2026-02-11 15:17:05 [INFO] utils: API_USAGE | operation=update_counter | elements=150 | estimated_cost=$0.0000
+2026-02-11 15:17:05 [INFO] utils: Loaded 2 records from /tmp/pytest-of-ad23883/pytest-5/test_load_csv_with_zip_success0/test.csv
+2026-02-11 15:17:05 [INFO] utils: File not found: /tmp/pytest-of-ad23883/pytest-5/test_load_csv_with_zip_missing0/nonexistent.csv
+2026-02-11 15:17:05 [INFO] utils: Current monthly API usage: 0 / 10,000
+2026-02-11 15:17:05 [INFO] utils: Checking range for 3 locations against 244 Wood St, Lexington, MA
+2026-02-11 15:17:05 [DEBUG] utils: No route found for Bedford, MA 01730
+2026-02-11 15:17:05 [INFO] utils: API usage: 1 requests, 3 elements, Monthly total: 3 / 20,000
+2026-02-11 15:17:05 [INFO] utils: Saved 1 locations to /tmp/pytest-of-ad23883/pytest-5/test_get_zips_within_range_suc0/Processed/zips_within_30mi.csv
+2026-02-11 15:17:05 [INFO] utils: Returning 1 addresses within range
+2026-02-11 15:17:05 [WARNING] utils: Filtered out 1 ZIP codes with missing coordinates
+2026-02-11 15:17:05 [INFO] utils: Current monthly API usage: 0 / 10,000
+2026-02-11 15:17:05 [INFO] utils: Checking range for 1 locations against 244 Wood St, Lexington, MA
+2026-02-11 15:17:05 [INFO] utils: API usage: 1 requests, 1 elements, Monthly total: 1 / 20,000
+2026-02-11 15:17:05 [WARNING] utils: No locations found within 30 miles
+2026-02-11 15:17:05 [INFO] utils: Returning 0 addresses within range
+2026-02-11 15:17:05 [INFO] utils: Current monthly API usage: 0 / 10,000
+2026-02-11 15:17:05 [INFO] utils: Checking range for 1 locations against 244 Wood St, Lexington, MA
+2026-02-11 15:17:05 [ERROR] error_handlers: API Error in distance_matrix: ApiError: API Error
+2026-02-11 15:17:05 [ERROR] error_handlers: This may be a quota, authentication, or API key issue. Check your API key and billing settings.
+2026-02-11 15:17:05 [INFO] utils: API usage: 0 requests, 1 elements, Monthly total: 1 / 20,000
+2026-02-11 15:17:05 [WARNING] utils: No locations found within 30 miles
+2026-02-11 15:17:05 [INFO] utils: Returning 0 addresses within range
+2026-02-11 15:17:05 [INFO] utils: Current monthly API usage: 0 / 10,000
+2026-02-11 15:17:05 [CRITICAL] utils: Google API key not found
+2026-02-11 15:17:05 [INFO] utils: Updated tier tracking - This run: 100 (basic), Monthly: Basic=100, Advanced=0
+2026-02-11 15:17:05 [INFO] utils: API_USAGE | operation=update_tier_basic | elements=100 | estimated_cost=$0.0000
+2026-02-11 15:17:05 [INFO] utils: Updated tier tracking - This run: 50 (advanced), Monthly: Basic=0, Advanced=50
+2026-02-11 15:17:05 [INFO] utils: API_USAGE | operation=update_tier_advanced | elements=50 | estimated_cost=$0.0000
+2026-02-11 15:17:05 [INFO] utils: Updated tier tracking - This run: 100 (basic), Monthly: Basic=100, Advanced=0
+2026-02-11 15:17:05 [INFO] utils: API_USAGE | operation=update_tier_basic | elements=100 | estimated_cost=$0.0000
+2026-02-11 15:17:05 [INFO] utils: Updated tier tracking - This run: 50 (basic), Monthly: Basic=150, Advanced=0
+2026-02-11 15:17:05 [INFO] utils: API_USAGE | operation=update_tier_basic | elements=50 | estimated_cost=$0.0000
+2026-02-11 15:17:05 [INFO] utils: Updated tier tracking - This run: 100 (basic), Monthly: Basic=100, Advanced=0
+2026-02-11 15:17:05 [INFO] utils: API_USAGE | operation=update_tier_basic | elements=100 | estimated_cost=$0.0000
+2026-02-11 15:17:05 [INFO] utils: Updated tier tracking - This run: 50 (basic), Monthly: Basic=150, Advanced=0
+2026-02-11 15:17:05 [INFO] utils: API_USAGE | operation=update_tier_basic | elements=50 | estimated_cost=$0.0000
+2026-02-11 15:17:05 [INFO] utils: Updated tier tracking - This run: 100 (basic), Monthly: Basic=100, Advanced=0
+2026-02-11 15:17:05 [INFO] utils: API_USAGE | operation=update_tier_basic | elements=100 | estimated_cost=$0.0000
+2026-02-11 15:17:05 [INFO] utils: === Usage Validation ===
+2026-02-11 15:17:05 [INFO] utils: Current tier: Basic
+2026-02-11 15:17:05 [INFO] utils: Local tier tracking:
+2026-02-11 15:17:05 [INFO] utils:   Basic:     3,000 / 10,000 ($0.00)
+2026-02-11 15:17:05 [INFO] utils:   Advanced:  2,000 / 5,000 ($0.00)
+2026-02-11 15:17:05 [INFO] utils:   Total:     5,000
+2026-02-11 15:17:05 [INFO] utils: Legacy counter: 5,000
+2026-02-11 15:17:05 [INFO] utils: Google reports: 5,000
+2026-02-11 15:17:05 [INFO] utils: Discrepancy:    0 elements
+2026-02-11 15:17:05 [INFO] utils: Estimated cost: $0.00
+2026-02-11 15:17:05 [ERROR] utils: Failed to update tier tracking: [Errno 13] Permission denied: '/tmp/pytest-of-ad23883/pytest-5/test_update_api_usage_by_tier_5/usage_by_tier.txt'
+2026-02-11 15:17:05 [INFO] utils: Updated tier tracking - This run: 100 (basic), Monthly: Basic=100, Advanced=0
+2026-02-11 15:17:05 [INFO] utils: API_USAGE | operation=update_tier_basic | elements=100 | estimated_cost=$0.0000
+2026-02-11 15:20:47 [DEBUG] utils: API Key loaded from /tmp/pytest-of-ad23883/pytest-6/test_get_google_api_key_succes0/google_api_key
+2026-02-11 15:20:47 [ERROR] utils: API key file not found: /tmp/pytest-of-ad23883/pytest-6/test_get_google_api_key_missin0/nonexistent
+2026-02-11 15:20:47 [DEBUG] utils: API Key loaded from /tmp/pytest-of-ad23883/pytest-6/test_get_google_api_key_whites0/google_api_key
+2026-02-11 15:20:47 [INFO] utils: Parsing ZIP database: /tmp/pytest-of-ad23883/pytest-6/test_get_zip_data_success0/test_zip.csv
+2026-02-11 15:20:47 [WARNING] utils: Found 2 rows with missing data
+2026-02-11 15:20:47 [WARNING] utils:   Row 2: Zip=99999, Town=Test City
+2026-02-11 15:20:47 [WARNING] utils:   Row 3: Zip=88888, Town=nan
+2026-02-11 15:20:47 [WARNING] utils: Dropped 2 rows with missing data
+2026-02-11 15:20:47 [INFO] utils: Loaded 2 active standard ZIPs for MA
+2026-02-11 15:20:47 [CRITICAL] utils: Source file not found: /tmp/pytest-of-ad23883/pytest-6/test_get_zip_data_missing_file0/nonexistent.csv
+2026-02-11 15:20:47 [INFO] utils: Parsing ZIP database: /tmp/pytest-of-ad23883/pytest-6/test_get_zip_data_filters_deco0/test_zip.csv
+2026-02-11 15:20:47 [WARNING] utils: Found 2 rows with missing data
+2026-02-11 15:20:47 [WARNING] utils:   Row 2: Zip=99999, Town=Test City
+2026-02-11 15:20:47 [WARNING] utils:   Row 3: Zip=88888, Town=nan
+2026-02-11 15:20:47 [WARNING] utils: Dropped 2 rows with missing data
+2026-02-11 15:20:47 [INFO] utils: Loaded 2 active standard ZIPs for MA
+2026-02-11 15:20:47 [INFO] utils: Parsing ZIP database: /tmp/pytest-of-ad23883/pytest-6/test_get_zip_data_missing_coor0/test_zip.csv
+2026-02-11 15:20:47 [WARNING] utils: Found 2 rows with missing data
+2026-02-11 15:20:47 [WARNING] utils:   Row 2: Zip=99999, Town=Test City
+2026-02-11 15:20:47 [WARNING] utils:   Row 3: Zip=88888, Town=nan
+2026-02-11 15:20:47 [WARNING] utils: Dropped 2 rows with missing data
+2026-02-11 15:20:47 [INFO] utils: Loaded 2 active standard ZIPs for MA
+2026-02-11 15:20:47 [INFO] utils: Parsing ZIP database: /tmp/pytest-of-ad23883/pytest-6/test_get_zip_data_zero_padding0/test_zip.csv
+2026-02-11 15:20:47 [WARNING] utils: Found 2 rows with missing data
+2026-02-11 15:20:47 [WARNING] utils:   Row 2: Zip=99999, Town=Test City
+2026-02-11 15:20:47 [WARNING] utils:   Row 3: Zip=88888, Town=nan
+2026-02-11 15:20:47 [WARNING] utils: Dropped 2 rows with missing data
+2026-02-11 15:20:47 [INFO] utils: Loaded 2 active standard ZIPs for MA
+2026-02-11 15:20:47 [INFO] utils: Current monthly API usage: 5,000 / 10,000
+2026-02-11 15:20:47 [INFO] utils: Current monthly API usage: 20,000 / 10,000
+2026-02-11 15:20:47 [CRITICAL] utils: !!! MONTHLY BUDGET LIMIT REACHED !!!
+Current: 20,000 / 10,000
+Aborting to prevent overage charges.
+2026-02-11 15:20:47 [INFO] utils: Current monthly API usage: 0 / 10,000
+2026-02-11 15:20:47 [INFO] utils: Current monthly API usage: 0 / 10,000
+2026-02-11 15:20:47 [INFO] utils: Updated API usage: 150 this run, 150 / 20,000 monthly
+2026-02-11 15:20:47 [INFO] utils: API_USAGE | operation=update_counter | elements=150 | estimated_cost=$0.0000
+2026-02-11 15:20:47 [INFO] utils: Updated API usage: 150 this run, 5,150 / 20,000 monthly
+2026-02-11 15:20:47 [INFO] utils: API_USAGE | operation=update_counter | elements=150 | estimated_cost=$0.0000
+2026-02-11 15:20:47 [INFO] utils: Loaded 2 records from /tmp/pytest-of-ad23883/pytest-6/test_load_csv_with_zip_success0/test.csv
+2026-02-11 15:20:47 [INFO] utils: File not found: /tmp/pytest-of-ad23883/pytest-6/test_load_csv_with_zip_missing0/nonexistent.csv
+2026-02-11 15:20:47 [INFO] utils: Current monthly API usage: 0 / 10,000
+2026-02-11 15:20:47 [INFO] utils: Checking range for 3 locations against 244 Wood St, Lexington, MA
+2026-02-11 15:20:47 [DEBUG] utils: No route found for Bedford, MA 01730
+2026-02-11 15:20:47 [INFO] utils: API usage: 1 requests, 3 elements, Monthly total: 3 / 20,000
+2026-02-11 15:20:47 [INFO] utils: Saved 1 locations to /tmp/pytest-of-ad23883/pytest-6/test_get_zips_within_range_suc0/Processed/zips_within_30mi.csv
+2026-02-11 15:20:47 [INFO] utils: Returning 1 addresses within range
+2026-02-11 15:20:47 [WARNING] utils: Filtered out 1 ZIP codes with missing coordinates
+2026-02-11 15:20:47 [INFO] utils: Current monthly API usage: 0 / 10,000
+2026-02-11 15:20:47 [INFO] utils: Checking range for 1 locations against 244 Wood St, Lexington, MA
+2026-02-11 15:20:47 [INFO] utils: API usage: 1 requests, 1 elements, Monthly total: 1 / 20,000
+2026-02-11 15:20:47 [WARNING] utils: No locations found within 30 miles
+2026-02-11 15:20:47 [INFO] utils: Returning 0 addresses within range
+2026-02-11 15:20:47 [INFO] utils: Current monthly API usage: 0 / 10,000
+2026-02-11 15:20:47 [INFO] utils: Checking range for 1 locations against 244 Wood St, Lexington, MA
+2026-02-11 15:20:47 [ERROR] error_handlers: API Error in distance_matrix: ApiError: API Error
+2026-02-11 15:20:47 [ERROR] error_handlers: This may be a quota, authentication, or API key issue. Check your API key and billing settings.
+2026-02-11 15:20:47 [INFO] utils: API usage: 0 requests, 1 elements, Monthly total: 1 / 20,000
+2026-02-11 15:20:47 [WARNING] utils: No locations found within 30 miles
+2026-02-11 15:20:47 [INFO] utils: Returning 0 addresses within range
+2026-02-11 15:20:47 [INFO] utils: Current monthly API usage: 0 / 10,000
+2026-02-11 15:20:47 [CRITICAL] utils: Google API key not found
+2026-02-11 15:20:47 [INFO] utils: Updated tier tracking - This run: 100 (basic), Monthly: Basic=100, Advanced=0
+2026-02-11 15:20:47 [INFO] utils: API_USAGE | operation=update_tier_basic | elements=100 | estimated_cost=$0.0000
+2026-02-11 15:20:47 [INFO] utils: Updated tier tracking - This run: 50 (advanced), Monthly: Basic=0, Advanced=50
+2026-02-11 15:20:47 [INFO] utils: API_USAGE | operation=update_tier_advanced | elements=50 | estimated_cost=$0.0000
+2026-02-11 15:20:47 [INFO] utils: Updated tier tracking - This run: 100 (basic), Monthly: Basic=100, Advanced=0
+2026-02-11 15:20:47 [INFO] utils: API_USAGE | operation=update_tier_basic | elements=100 | estimated_cost=$0.0000
+2026-02-11 15:20:47 [INFO] utils: Updated tier tracking - This run: 50 (basic), Monthly: Basic=150, Advanced=0
+2026-02-11 15:20:47 [INFO] utils: API_USAGE | operation=update_tier_basic | elements=50 | estimated_cost=$0.0000
+2026-02-11 15:20:47 [INFO] utils: Updated tier tracking - This run: 100 (basic), Monthly: Basic=100, Advanced=0
+2026-02-11 15:20:47 [INFO] utils: API_USAGE | operation=update_tier_basic | elements=100 | estimated_cost=$0.0000
+2026-02-11 15:20:47 [INFO] utils: Updated tier tracking - This run: 50 (advanced), Monthly: Basic=100, Advanced=50
+2026-02-11 15:20:47 [INFO] utils: API_USAGE | operation=update_tier_advanced | elements=50 | estimated_cost=$0.0000
+2026-02-11 15:20:47 [INFO] utils: Updated tier tracking - This run: 100 (basic), Monthly: Basic=100, Advanced=0
+2026-02-11 15:20:47 [INFO] utils: API_USAGE | operation=update_tier_basic | elements=100 | estimated_cost=$0.0000
+2026-02-11 15:20:47 [INFO] utils: === Usage Validation ===
+2026-02-11 15:20:47 [INFO] utils: Current tier: Basic
+2026-02-11 15:20:47 [INFO] utils: Local tier tracking:
+2026-02-11 15:20:47 [INFO] utils:   Basic:     3,000 / 10,000 ($0.00)
+2026-02-11 15:20:47 [INFO] utils:   Advanced:  2,000 / 5,000 ($0.00)
+2026-02-11 15:20:47 [INFO] utils:   Total:     5,000
+2026-02-11 15:20:47 [INFO] utils: Legacy counter: 5,000
+2026-02-11 15:20:47 [INFO] utils: Google reports: 5,000
+2026-02-11 15:20:47 [INFO] utils: Discrepancy:    0 elements
+2026-02-11 15:20:47 [INFO] utils: Estimated cost: $0.00
+2026-02-11 15:20:47 [ERROR] utils: Failed to update tier tracking: [Errno 13] Permission denied: '/tmp/pytest-of-ad23883/pytest-6/test_update_api_usage_by_tier_5/usage_by_tier.txt'
+2026-02-11 15:20:47 [INFO] utils: Updated tier tracking - This run: 100 (basic), Monthly: Basic=100, Advanced=0
+2026-02-11 15:20:47 [INFO] utils: API_USAGE | operation=update_tier_basic | elements=100 | estimated_cost=$0.0000
+------------------------------------------------------------------------------------------------------------------------------------------------
+
+2026-02-11 15:21:36 [INFO] __main__: ======================================================================
+2026-02-11 15:21:36 [INFO] __main__: Starting commute data collection
+2026-02-11 15:21:36 [INFO] __main__: ======================================================================
+2026-02-11 15:21:36 [INFO] __main__: After noon - collecting afternoon commute data
+2026-02-11 15:21:36 [INFO] __main__: Direction: afternoon commute
+2026-02-11 15:21:36 [INFO] __main__: Validating current API usage against Google...
+2026-02-11 15:21:38 [INFO] utils: Google-reported usage: 4,703 elements (Basic tier)
+2026-02-11 15:21:38 [INFO] utils: Free tier limit: 10,000, Remaining: 5,297
+2026-02-11 15:21:38 [INFO] utils: === Usage Validation ===
+2026-02-11 15:21:38 [INFO] utils: Current tier: Basic
+2026-02-11 15:21:38 [INFO] utils: Local tier tracking:
+2026-02-11 15:21:38 [INFO] utils:   Basic:     0 / 10,000 ($0.00)
+2026-02-11 15:21:38 [INFO] utils:   Advanced:  182 / 5,000 ($0.00)
+2026-02-11 15:21:38 [INFO] utils:   Total:     182
+2026-02-11 15:21:38 [INFO] utils: Legacy counter: 4,521
+2026-02-11 15:21:38 [INFO] utils: Google reports: 4,703
+2026-02-11 15:21:38 [INFO] utils: Discrepancy:    4,521 elements
+2026-02-11 15:21:38 [INFO] utils: Estimated cost: $0.00
+2026-02-11 15:21:38 [WARNING] utils: ⚠️  Significant discrepancy detected! Consider checking billing reports.
+2026-02-11 15:21:38 [INFO] __main__: Local counter corrected to: 4,703
+2026-02-11 15:21:38 [INFO] __main__: Loading zip codes within 40 miles of work...
+2026-02-11 15:21:38 [INFO] utils: Parsing ZIP database: /home/ad23883/workspace/house_hunt/Data/Raw/zip_code_database.csv
+2026-02-11 15:21:39 [INFO] utils: Loaded 795 active standard ZIPs for MA, RI, NH
+2026-02-11 15:21:39 [INFO] utils: Loading cached town results from /home/ad23883/workspace/house_hunt/Data/Processed/towns_within_40mi.csv
+2026-02-11 15:21:39 [INFO] utils: Loaded 182 cached towns (range: 40mi)
+2026-02-11 15:21:39 [INFO] __main__: Found 182 addresses within range
+2026-02-11 15:21:39 [INFO] utils: Current monthly API usage: 4,703 / 10,000
+2026-02-11 15:21:39 [DEBUG] utils: API Key loaded from /home/ad23883/workspace/house_hunt/Data/google_api_key
+2026-02-11 15:21:39 [INFO] __main__: Afternoon commute: 123 Main St. Anytown, MA 00000 → 182 locations
+2026-02-11 15:21:39 [DEBUG] __main__: Using Basic tier (no traffic)
+2026-02-11 15:21:39 [DEBUG] __main__: Processing 25 elements
+2026-02-11 15:21:39 [DEBUG] __main__: Using Basic tier (no traffic)
+2026-02-11 15:21:39 [DEBUG] __main__: Processing 25 elements
+2026-02-11 15:21:39 [DEBUG] __main__: Using Basic tier (no traffic)
+2026-02-11 15:21:40 [DEBUG] __main__: Processing 25 elements
+2026-02-11 15:21:40 [DEBUG] __main__: Using Basic tier (no traffic)
+2026-02-11 15:21:40 [DEBUG] __main__: Processing 25 elements
+2026-02-11 15:21:40 [DEBUG] __main__: Using Basic tier (no traffic)
+2026-02-11 15:21:40 [DEBUG] __main__: Processing 25 elements
+2026-02-11 15:21:40 [DEBUG] __main__: Using Basic tier (no traffic)
+2026-02-11 15:21:40 [DEBUG] __main__: Processing 25 elements
+2026-02-11 15:21:40 [DEBUG] __main__: Using Basic tier (no traffic)
+2026-02-11 15:21:40 [DEBUG] __main__: Processing 25 elements
+2026-02-11 15:21:40 [DEBUG] __main__: Using Basic tier (no traffic)
+2026-02-11 15:21:41 [DEBUG] __main__: Processing 7 elements
+2026-02-11 15:21:41 [INFO] __main__: Completed 8 requests, processed 182 elements, collected 182 valid results
+2026-02-11 15:21:41 [INFO] utils: Loaded 182 records from /home/ad23883/workspace/house_hunt/Data/Results/commute_stats.csv
+2026-02-11 15:21:41 [INFO] __main__: Loaded 182 records from /home/ad23883/workspace/house_hunt/Data/Results/commute_stats.csv
+2026-02-11 15:21:41 [INFO] __main__: Successfully updated /home/ad23883/workspace/house_hunt/Data/Results/commute_stats.csv with 182 records
+2026-02-11 15:21:41 [INFO] utils: Updated tier tracking - This run: 182 (basic), Monthly: Basic=182, Advanced=182
+2026-02-11 15:21:41 [INFO] utils: API_USAGE | operation=update_tier_basic | elements=182 | estimated_cost=$0.0000
+2026-02-11 15:21:41 [INFO] utils: Updated API usage: 182 this run, 4,885 / 10,000 monthly
+2026-02-11 15:21:41 [INFO] utils: API_USAGE | operation=update_counter | elements=182 | estimated_cost=$0.0000
+2026-02-11 15:21:41 [INFO] __main__: Re-validating usage after API calls...
+2026-02-11 15:21:41 [INFO] utils: Google-reported usage: 4,703 elements (Basic tier)
+2026-02-11 15:21:41 [INFO] utils: Free tier limit: 10,000, Remaining: 5,297
+2026-02-11 15:21:41 [INFO] utils: === Usage Validation ===
+2026-02-11 15:21:41 [INFO] utils: Current tier: Basic
+2026-02-11 15:21:41 [INFO] utils: Local tier tracking:
+2026-02-11 15:21:41 [INFO] utils:   Basic:     182 / 10,000 ($0.00)
+2026-02-11 15:21:41 [INFO] utils:   Advanced:  182 / 5,000 ($0.00)
+2026-02-11 15:21:41 [INFO] utils:   Total:     364
+2026-02-11 15:21:41 [INFO] utils: Legacy counter: 4,885
+2026-02-11 15:21:41 [INFO] utils: Google reports: 4,703
+2026-02-11 15:21:41 [INFO] utils: Discrepancy:    4,339 elements
+2026-02-11 15:21:41 [INFO] utils: Estimated cost: $0.00
+2026-02-11 15:21:41 [WARNING] utils: ⚠️  Significant discrepancy detected! Consider checking billing reports.
+2026-02-11 15:21:41 [INFO] __main__: Commute data collection completed successfully
+2026-02-11 15:44:08 [DEBUG] utils: API Key loaded from /tmp/pytest-of-ad23883/pytest-7/test_get_google_api_key_succes0/google_api_key
+2026-02-11 15:44:08 [ERROR] utils: API key file not found: /tmp/pytest-of-ad23883/pytest-7/test_get_google_api_key_missin0/nonexistent
+2026-02-11 15:44:08 [DEBUG] utils: API Key loaded from /tmp/pytest-of-ad23883/pytest-7/test_get_google_api_key_whites0/google_api_key
+2026-02-11 15:44:08 [INFO] utils: Parsing ZIP database: /tmp/pytest-of-ad23883/pytest-7/test_get_zip_data_success0/test_zip.csv
+2026-02-11 15:44:08 [WARNING] utils: Found 2 rows with missing data
+2026-02-11 15:44:08 [WARNING] utils:   Row 2: Zip=99999, Town=Test City
+2026-02-11 15:44:08 [WARNING] utils:   Row 3: Zip=88888, Town=nan
+2026-02-11 15:44:08 [WARNING] utils: Dropped 2 rows with missing data
+2026-02-11 15:44:08 [INFO] utils: Loaded 2 active standard ZIPs for MA
+2026-02-11 15:44:08 [CRITICAL] utils: Source file not found: /tmp/pytest-of-ad23883/pytest-7/test_get_zip_data_missing_file0/nonexistent.csv
+2026-02-11 15:44:08 [INFO] utils: Parsing ZIP database: /tmp/pytest-of-ad23883/pytest-7/test_get_zip_data_filters_deco0/test_zip.csv
+2026-02-11 15:44:08 [WARNING] utils: Found 2 rows with missing data
+2026-02-11 15:44:08 [WARNING] utils:   Row 2: Zip=99999, Town=Test City
+2026-02-11 15:44:08 [WARNING] utils:   Row 3: Zip=88888, Town=nan
+2026-02-11 15:44:08 [WARNING] utils: Dropped 2 rows with missing data
+2026-02-11 15:44:08 [INFO] utils: Loaded 2 active standard ZIPs for MA
+2026-02-11 15:44:08 [INFO] utils: Parsing ZIP database: /tmp/pytest-of-ad23883/pytest-7/test_get_zip_data_missing_coor0/test_zip.csv
+2026-02-11 15:44:08 [WARNING] utils: Found 2 rows with missing data
+2026-02-11 15:44:08 [WARNING] utils:   Row 2: Zip=99999, Town=Test City
+2026-02-11 15:44:08 [WARNING] utils:   Row 3: Zip=88888, Town=nan
+2026-02-11 15:44:08 [WARNING] utils: Dropped 2 rows with missing data
+2026-02-11 15:44:08 [INFO] utils: Loaded 2 active standard ZIPs for MA
+2026-02-11 15:44:08 [INFO] utils: Parsing ZIP database: /tmp/pytest-of-ad23883/pytest-7/test_get_zip_data_zero_padding0/test_zip.csv
+2026-02-11 15:44:08 [WARNING] utils: Found 2 rows with missing data
+2026-02-11 15:44:08 [WARNING] utils:   Row 2: Zip=99999, Town=Test City
+2026-02-11 15:44:08 [WARNING] utils:   Row 3: Zip=88888, Town=nan
+2026-02-11 15:44:08 [WARNING] utils: Dropped 2 rows with missing data
+2026-02-11 15:44:08 [INFO] utils: Loaded 2 active standard ZIPs for MA
+2026-02-11 15:44:08 [INFO] utils: Current monthly API usage: 0 / 10,000
+2026-02-11 15:44:08 [INFO] utils: Current monthly API usage: 0 / 10,000
+2026-02-11 15:44:08 [INFO] utils: Current monthly API usage: 0 / 10,000
+2026-02-11 15:44:08 [INFO] utils: Current monthly API usage: 0 / 10,000
+2026-02-11 15:44:08 [INFO] utils: Loaded 2 records from /tmp/pytest-of-ad23883/pytest-7/test_load_csv_with_zip_success0/test.csv
+2026-02-11 15:44:08 [INFO] utils: File not found: /tmp/pytest-of-ad23883/pytest-7/test_load_csv_with_zip_missing0/nonexistent.csv
+2026-02-11 15:44:08 [INFO] utils: Current monthly API usage: 0 / 10,000
+2026-02-11 15:44:08 [INFO] utils: Checking range for 3 locations against 244 Wood St, Lexington, MA
+2026-02-11 15:44:08 [DEBUG] utils: No route found for Bedford, MA 01730
+2026-02-11 15:44:08 [WARNING] utils: Filtered out 1 ZIP codes with missing coordinates
+2026-02-11 15:44:08 [INFO] utils: Current monthly API usage: 0 / 10,000
+2026-02-11 15:44:08 [INFO] utils: Checking range for 1 locations against 244 Wood St, Lexington, MA
+2026-02-11 15:44:09 [INFO] utils: Current monthly API usage: 0 / 10,000
+2026-02-11 15:44:09 [INFO] utils: Checking range for 1 locations against 244 Wood St, Lexington, MA
+2026-02-11 15:44:09 [ERROR] error_handlers: API Error in distance_matrix: ApiError: API Error
+2026-02-11 15:44:09 [ERROR] error_handlers: This may be a quota, authentication, or API key issue. Check your API key and billing settings.
+2026-02-11 15:44:09 [INFO] utils: Current monthly API usage: 0 / 10,000
+2026-02-11 15:44:09 [CRITICAL] utils: Google API key not found
+2026-02-11 15:44:09 [INFO] utils: Updated tier tracking - This run: 100 (basic), Monthly: Basic=100, Advanced=0
+2026-02-11 15:44:09 [INFO] utils: API_USAGE | operation=update_tier_basic | elements=100 | estimated_cost=$0.0000
+2026-02-11 15:44:09 [INFO] utils: Updated tier tracking - This run: 50 (advanced), Monthly: Basic=0, Advanced=50
+2026-02-11 15:44:09 [INFO] utils: API_USAGE | operation=update_tier_advanced | elements=50 | estimated_cost=$0.0000
+2026-02-11 15:44:09 [INFO] utils: Updated tier tracking - This run: 100 (basic), Monthly: Basic=100, Advanced=0
+2026-02-11 15:44:09 [INFO] utils: API_USAGE | operation=update_tier_basic | elements=100 | estimated_cost=$0.0000
+2026-02-11 15:44:09 [INFO] utils: Updated tier tracking - This run: 50 (basic), Monthly: Basic=150, Advanced=0
+2026-02-11 15:44:09 [INFO] utils: API_USAGE | operation=update_tier_basic | elements=50 | estimated_cost=$0.0000
+2026-02-11 15:44:09 [INFO] utils: Updated tier tracking - This run: 100 (basic), Monthly: Basic=100, Advanced=0
+2026-02-11 15:44:09 [INFO] utils: API_USAGE | operation=update_tier_basic | elements=100 | estimated_cost=$0.0000
+2026-02-11 15:44:09 [INFO] utils: Updated tier tracking - This run: 50 (advanced), Monthly: Basic=100, Advanced=50
+2026-02-11 15:44:09 [INFO] utils: API_USAGE | operation=update_tier_advanced | elements=50 | estimated_cost=$0.0000
+2026-02-11 15:44:09 [INFO] utils: Updated tier tracking - This run: 100 (basic), Monthly: Basic=100, Advanced=0
+2026-02-11 15:44:09 [INFO] utils: API_USAGE | operation=update_tier_basic | elements=100 | estimated_cost=$0.0000
+2026-02-11 15:44:09 [INFO] utils: === Usage Validation ===
+2026-02-11 15:44:09 [INFO] utils: Current tier: Basic
+2026-02-11 15:44:09 [INFO] utils: Local tier tracking:
+2026-02-11 15:44:09 [INFO] utils:   Basic:     3,000 / 10,000 ($0.00)
+2026-02-11 15:44:09 [INFO] utils:   Advanced:  2,000 / 5,000 ($0.00)
+2026-02-11 15:44:09 [INFO] utils:   Total:     5,000
+2026-02-11 15:44:09 [INFO] utils: Google reports: 5,000
+2026-02-11 15:44:09 [INFO] utils: Discrepancy:    0 elements
+2026-02-11 15:44:09 [INFO] utils: Estimated cost: $0.00
+2026-02-11 15:44:09 [ERROR] utils: Failed to update tier tracking: [Errno 13] Permission denied: '/tmp/pytest-of-ad23883/pytest-7/test_update_api_usage_by_tier_5/usage_by_tier.txt'
+2026-02-11 15:44:09 [INFO] utils: Updated tier tracking - This run: 100 (basic), Monthly: Basic=100, Advanced=0
+2026-02-11 15:44:09 [INFO] utils: API_USAGE | operation=update_tier_basic | elements=100 | estimated_cost=$0.0000
