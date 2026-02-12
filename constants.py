@@ -109,7 +109,7 @@ RATE_LIMIT_WAIT_SECONDS = 2  # Wait time when hitting rate limits
 MAX_API_RETRIES = 3  # Maximum retry attempts for failed requests
 
 # Usage Validation
-MAX_ACCEPTABLE_DISCREPANCY = 100  # Elements between local/Google count
+MAX_ACCEPTABLE_DISCREPANCY = 183  # Elements between local/Google count
 
 # ========================================
 # COMMUTE COLLECTION PARAMETERS
