@@ -1679,3 +1679,61 @@ Aborting to prevent overage charges.
 2026-02-11 15:44:09 [ERROR] utils: Failed to update tier tracking: [Errno 13] Permission denied: '/tmp/pytest-of-ad23883/pytest-7/test_update_api_usage_by_tier_5/usage_by_tier.txt'
 2026-02-11 15:44:09 [INFO] utils: Updated tier tracking - This run: 100 (basic), Monthly: Basic=100, Advanced=0
 2026-02-11 15:44:09 [INFO] utils: API_USAGE | operation=update_tier_basic | elements=100 | estimated_cost=$0.0000
+2026-02-12 02:23:12 [INFO] Commute.collect_commute_data: ======================================================================
+2026-02-12 02:23:12 [INFO] Commute.collect_commute_data: Starting commute data collection
+2026-02-12 02:23:12 [INFO] Commute.collect_commute_data: ======================================================================
+2026-02-12 02:23:12 [INFO] Commute.collect_commute_data: Before noon - collecting morning commute data
+2026-02-12 02:23:12 [INFO] Commute.collect_commute_data: Direction: morning commute
+2026-02-12 02:23:12 [INFO] Commute.collect_commute_data: Validating current API usage against Google...
+2026-02-12 02:23:12 [ERROR] utils: Failed to query Google Cloud Monitoring: No module named 'google'
+2026-02-12 02:23:12 [INFO] utils: === Usage Validation ===
+2026-02-12 02:23:12 [INFO] utils: Tier:            Advanced
+2026-02-12 02:23:12 [INFO] utils: Local tracking:  4,885 elements
+2026-02-12 02:23:12 [INFO] utils: Google reports:  0 elements
+2026-02-12 02:23:12 [INFO] utils: Free tier:       5,000
+2026-02-12 02:23:12 [INFO] utils: Remaining:       5,000
+2026-02-12 02:23:12 [INFO] utils: Discrepancy:     4,885 elements
+2026-02-12 02:23:12 [WARNING] utils: ⚠️  Significant discrepancy detected! Consider using Google's count as source of truth.
+2026-02-12 02:23:12 [INFO] Commute.collect_commute_data: Local counter corrected to: 0
+2026-02-12 02:23:12 [INFO] Commute.collect_commute_data: Loading zip codes within 40 miles of work...
+2026-02-12 02:23:12 [INFO] utils: Parsing ZIP database: /home/runner/work/house_hunt/house_hunt/Data/Raw/zip_code_database.csv
+2026-02-12 02:23:13 [INFO] utils: Loaded 795 active standard ZIPs for MA, RI, NH
+2026-02-12 02:23:13 [INFO] utils: Loading cached town results from /home/runner/work/house_hunt/house_hunt/Data/Processed/towns_within_40mi.csv
+2026-02-12 02:23:13 [INFO] utils: Loaded 182 cached towns (range: 40mi)
+2026-02-12 02:23:13 [INFO] Commute.collect_commute_data: Found 182 addresses within range
+2026-02-12 02:23:13 [INFO] utils: Current monthly API usage: 0 / 13,000
+2026-02-12 02:23:13 [DEBUG] utils: API Key loaded from /home/runner/work/house_hunt/house_hunt/Data/google_api_key
+2026-02-12 02:23:13 [INFO] Commute.collect_commute_data: Morning commute: 182 locations → 123 Main St. Anytown, MA 00000
+2026-02-12 02:23:13 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-12 02:23:13 [DEBUG] Commute.collect_commute_data: Processing 25 rows from API
+2026-02-12 02:23:13 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-12 02:23:14 [DEBUG] Commute.collect_commute_data: Processing 25 rows from API
+2026-02-12 02:23:14 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-12 02:23:14 [DEBUG] Commute.collect_commute_data: Processing 25 rows from API
+2026-02-12 02:23:14 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-12 02:23:14 [DEBUG] Commute.collect_commute_data: Processing 25 rows from API
+2026-02-12 02:23:14 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-12 02:23:14 [DEBUG] Commute.collect_commute_data: Processing 25 rows from API
+2026-02-12 02:23:14 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-12 02:23:14 [DEBUG] Commute.collect_commute_data: Processing 25 rows from API
+2026-02-12 02:23:14 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-12 02:23:15 [DEBUG] Commute.collect_commute_data: Processing 25 rows from API
+2026-02-12 02:23:15 [DEBUG] Commute.collect_commute_data: Using Basic tier (no traffic)
+2026-02-12 02:23:15 [DEBUG] Commute.collect_commute_data: Processing 7 rows from API
+2026-02-12 02:23:15 [INFO] Commute.collect_commute_data: Completed 8 requests, processed 182 elements, collected 182 valid results
+2026-02-12 02:23:15 [INFO] utils: Loaded 182 records from /home/runner/work/house_hunt/house_hunt/Data/Results/commute_stats.csv
+2026-02-12 02:23:15 [INFO] Commute.collect_commute_data: Loaded 182 records from /home/runner/work/house_hunt/house_hunt/Data/Results/commute_stats.csv
+2026-02-12 02:23:15 [INFO] Commute.collect_commute_data: Successfully updated /home/runner/work/house_hunt/house_hunt/Data/Results/commute_stats.csv with 182 records
+2026-02-12 02:23:15 [INFO] utils: Updated API usage: 182 this run, 182 / 13,000 monthly
+2026-02-12 02:23:15 [INFO] utils: API_USAGE | operation=update_counter | elements=182 | estimated_cost=$0.0000
+2026-02-12 02:23:15 [INFO] Commute.collect_commute_data: Re-validating usage after API calls...
+2026-02-12 02:23:15 [ERROR] utils: Failed to query Google Cloud Monitoring: No module named 'google'
+2026-02-12 02:23:15 [INFO] utils: === Usage Validation ===
+2026-02-12 02:23:15 [INFO] utils: Tier:            Advanced
+2026-02-12 02:23:15 [INFO] utils: Local tracking:  182 elements
+2026-02-12 02:23:15 [INFO] utils: Google reports:  0 elements
+2026-02-12 02:23:15 [INFO] utils: Free tier:       5,000
+2026-02-12 02:23:15 [INFO] utils: Remaining:       5,000
+2026-02-12 02:23:15 [INFO] utils: Discrepancy:     182 elements
+2026-02-12 02:23:15 [WARNING] utils: ⚠️  Significant discrepancy detected! Consider using Google's count as source of truth.
+2026-02-12 02:23:15 [INFO] Commute.collect_commute_data: Commute data collection completed successfully
