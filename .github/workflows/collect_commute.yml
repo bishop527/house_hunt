@@ -5,7 +5,7 @@ on:
     # Monday & Friday at 7am EST (11am UTC)
     - cron: '0 11 * * 1,5'
     # Monday & Friday at 5pm EST (21:00 UTC)
-    - cron: '58 23 * * 1,5'
+    - cron: '2 0 * * 1,5'
   
   workflow_dispatch:  # Allows manual trigger from GitHub UI
 
