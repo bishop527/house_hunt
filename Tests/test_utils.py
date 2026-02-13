@@ -11,6 +11,7 @@ import pandas as pd
 from unittest.mock import Mock, patch, mock_open, MagicMock
 from datetime import datetime, timedelta
 import googlemaps.exceptions
+import logging
 
 from utils import (
     get_google_api_key,
@@ -731,6 +732,222 @@ def test_update_api_usage_by_tier_corrupted_file(tmp_path, monkeypatch):
 
     assert basic == 100
     assert advanced == 0
+
+
+def test_malformed_tier_file_logs_warning(tmp_path, caplog, monkeypatch):
+    """Verify malformed lines are logged"""
+    tier_file = tmp_path / "usage.txt"
+    tier_file.write_text("2026-02,basic,5,249\n")  # Malformed
+
+    monkeypatch.setattr('utils.API_TIER_TRACKING_FILE', str(tier_file))
+
+    with caplog.at_level(logging.WARNING, logger='utils'):
+        usage = get_current_usage_by_tier()
+
+    assert "Malformed line" in caplog.text
+    assert "expected 3 fields, got 4" in caplog.text
+
+
+def test_malformed_tier_file_logs_warning(tmp_path, caplog, monkeypatch):
+    """Verify malformed lines are logged"""
+    tier_file = tmp_path / "usage.txt"
+    tier_file.write_text("2026-02,basic,5,249\n")  # Malformed: 4 fields
+
+    monkeypatch.setattr('utils.API_TIER_TRACKING_FILE', str(tier_file))
+
+    with caplog.at_level(logging.WARNING, logger='utils'):
+        usage = get_current_usage_by_tier()
+
+    # Verify warning was logged
+    assert "Malformed line" in caplog.text
+    assert "expected 3 fields, got 4" in caplog.text
+    assert "2026-02,basic,5,249" in caplog.text
+
+
+def test_critical_discrepancy_logs_error(tmp_path, caplog, monkeypatch):
+    """Verify large discrepancies (>50%) trigger ERROR logs"""
+    # Setup tier file with low count
+    tier_file = tmp_path / "usage.txt"
+    month_str = datetime.now().strftime('%Y-%m')
+    tier_file.write_text(f"{month_str},basic,100\n{month_str},advanced,0\n")
+
+    monkeypatch.setattr('utils.API_TIER_TRACKING_FILE', str(tier_file))
+
+    # Mock Google reporting much higher count
+    with patch('utils.get_monthly_element_usage_from_google') as mock_google:
+        mock_google.return_value = (0, 0, 10000)  # Google shows 10k
+
+        with caplog.at_level(logging.ERROR, logger='utils'):
+            validation = validate_local_tracking()
+
+    # Verify ERROR level was used
+    assert "CRITICAL" in caplog.text
+    assert "severely out of sync" in caplog.text
+    assert validation['discrepancy_ratio'] > 0.5
+
+
+def test_zero_counts_warning(tmp_path, caplog, monkeypatch):
+    """Verify warning when both counts are zero despite file existing"""
+    tier_file = tmp_path / "usage.txt"
+    # Old month data that won't match current month
+    tier_file.write_text("2025-01,basic,1000\n2025-01,advanced,500\n")
+
+    monkeypatch.setattr('utils.API_TIER_TRACKING_FILE', str(tier_file))
+
+    with caplog.at_level(logging.WARNING, logger='utils'):
+        usage = get_current_usage_by_tier()
+
+    assert "Both tier counts are zero despite reading file" in caplog.text
+    assert "corrupted or for wrong month" in caplog.text
+
+
+def test_write_confirmation_logged(tmp_path, caplog, monkeypatch):
+    """Verify write operations are logged at DEBUG level"""
+    tier_file = tmp_path / "usage.txt"
+
+    monkeypatch.setattr('utils.API_TIER_TRACKING_FILE', str(tier_file))
+
+    # Must mock datetime to ensure consistent month string
+    with patch('utils.datetime') as mock_dt:
+        mock_dt.now.return_value = datetime(2026, 2, 13)
+        mock_dt.strftime = datetime.strftime  # Keep strftime working
+
+        with caplog.at_level(logging.DEBUG, logger='utils'):
+            basic, advanced, tier = update_api_usage_by_tier(
+                100,
+                use_traffic=False
+            )
+
+    # Check for write confirmation
+    assert "Wrote tier tracking to" in caplog.text
+    assert "basic=100" in caplog.text
+    assert str(tier_file) in caplog.text
+
+
+def test_moderate_discrepancy_logs_warning(tmp_path, caplog, monkeypatch):
+    """Verify moderate discrepancies (10-50%) trigger WARNING logs"""
+    tier_file = tmp_path / "usage.txt"
+    month_str = datetime.now().strftime('%Y-%m')
+    tier_file.write_text(f"{month_str},basic,1000\n{month_str},advanced,0\n")
+
+    monkeypatch.setattr('utils.API_TIER_TRACKING_FILE', str(tier_file))
+
+    # Mock Google reporting 20% more (1200 vs 1000)
+    with patch('utils.get_monthly_element_usage_from_google') as mock_google:
+        mock_google.return_value = (0, 0, 1200)  # 20% discrepancy
+
+        with caplog.at_level(logging.WARNING, logger='utils'):
+            validation = validate_local_tracking()
+
+    assert "Significant discrepancy detected" in caplog.text
+    # Check for percentage in output (could be formatted different ways)
+    assert "%" in caplog.text
+    assert validation['discrepancy_ratio'] > 0.1
+    assert validation['discrepancy_ratio'] < 0.5
+
+
+def test_acceptable_discrepancy_logs_info(tmp_path, caplog, monkeypatch):
+    """Verify small discrepancies log at INFO level with success message"""
+    tier_file = tmp_path / "usage.txt"
+    month_str = datetime.now().strftime('%Y-%m')
+    tier_file.write_text(f"{month_str},basic,1000\n{month_str},advanced,0\n")
+
+    monkeypatch.setattr('utils.API_TIER_TRACKING_FILE', str(tier_file))
+    monkeypatch.setattr('utils.MAX_ACCEPTABLE_DISCREPANCY', 100)
+
+    # Mock Google reporting nearly same count (within tolerance)
+    with patch('utils.get_monthly_element_usage_from_google') as mock_google:
+        mock_google.return_value = (0, 0, 1050)  # Only 50 difference
+
+        with caplog.at_level(logging.INFO, logger='utils'):
+            validation = validate_local_tracking()
+
+    assert "Tracking validation passed" in caplog.text
+    assert validation['discrepancy'] <= 100
+
+
+def test_invalid_count_value_logged(tmp_path, caplog, monkeypatch):
+    """Verify invalid numeric values trigger ERROR logs"""
+    tier_file = tmp_path / "usage.txt"
+    month_str = datetime.now().strftime('%Y-%m')
+    tier_file.write_text(f"{month_str},basic,not_a_number\n")
+
+    monkeypatch.setattr('utils.API_TIER_TRACKING_FILE', str(tier_file))
+
+    with caplog.at_level(logging.ERROR, logger='utils'):
+        usage = get_current_usage_by_tier()
+
+    assert "Invalid count value" in caplog.text
+    assert "not_a_number" in caplog.text
+
+
+def test_unknown_tier_logged(tmp_path, caplog, monkeypatch):
+    """Verify unknown tier names trigger WARNING logs"""
+    tier_file = tmp_path / "usage.txt"
+    month_str = datetime.now().strftime('%Y-%m')
+    tier_file.write_text(f"{month_str},premium,500\n")  # Unknown tier
+
+    monkeypatch.setattr('utils.API_TIER_TRACKING_FILE', str(tier_file))
+
+    with caplog.at_level(logging.WARNING, logger='utils'):
+        usage = get_current_usage_by_tier()
+
+    assert "Unknown tier" in caplog.text
+    assert "premium" in caplog.text
+
+
+def test_malformed_line_includes_line_number(tmp_path, caplog, monkeypatch):
+    """Verify line numbers are included in malformed line warnings"""
+    tier_file = tmp_path / "usage.txt"
+    tier_file.write_text(
+        "2026-02,basic,100\n"  # Line 1: OK
+        "2026-02,advanced,200,extra\n"  # Line 2: Malformed
+    )
+
+    monkeypatch.setattr('utils.API_TIER_TRACKING_FILE', str(tier_file))
+
+    with caplog.at_level(logging.WARNING, logger='utils'):
+        usage = get_current_usage_by_tier()
+
+    assert "line 2" in caplog.text
+    assert "Malformed line" in caplog.text
+
+
+def test_read_summary_logged(tmp_path, caplog, monkeypatch):
+    """Verify read summary is logged showing lines read and malformed count"""
+    tier_file = tmp_path / "usage.txt"
+    month_str = datetime.now().strftime('%Y-%m')
+    tier_file.write_text(
+        f"{month_str},basic,100\n"  # Line 1: OK
+        f"{month_str},advanced,200,x\n"  # Line 2: Malformed
+    )
+
+    monkeypatch.setattr('utils.API_TIER_TRACKING_FILE', str(tier_file))
+
+    with caplog.at_level(logging.DEBUG, logger='utils'):
+        usage = get_current_usage_by_tier()
+
+    assert "Tier file read complete" in caplog.text
+    assert "2 lines" in caplog.text
+    assert "1 malformed" in caplog.text
+
+
+def test_current_usage_summary_logged(tmp_path, caplog, monkeypatch):
+    """Verify summary of current usage is logged at INFO level"""
+    tier_file = tmp_path / "usage.txt"
+    month_str = datetime.now().strftime('%Y-%m')
+    tier_file.write_text(f"{month_str},basic,1234\n{month_str},advanced,5678\n")
+
+    monkeypatch.setattr('utils.API_TIER_TRACKING_FILE', str(tier_file))
+
+    with caplog.at_level(logging.INFO, logger='utils'):
+        usage = get_current_usage_by_tier()
+
+    assert "Current usage:" in caplog.text
+    assert "Basic=1,234" in caplog.text  # Formatted with commas
+    assert "Advanced=5,678" in caplog.text
+    assert "Total=6,912" in caplog.text
+
 
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])

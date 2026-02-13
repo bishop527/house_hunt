@@ -54,7 +54,8 @@ APP_LOG_FILE = os.path.join(LOGS_DIR, "app.log")
 # ========================================
 # LOGGING CONFIGURATION
 # ========================================
-LOG_LEVEL = logging.DEBUG
+# LOG_LEVEL = logging.DEBUG
+LOG_LEVEL = logging.INFO
 
 # ========================================
 # GENERAL CONFIGURATION

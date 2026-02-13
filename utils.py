@@ -285,6 +285,10 @@ def update_api_usage_by_tier(elements_used, use_traffic=None):
             f.write(f"{month_str},basic,{basic_count}\n")
             f.write(f"{month_str},advanced,{advanced_count}\n")
 
+        logger.debug(
+            f"Wrote tier tracking to {API_TIER_TRACKING_FILE}: "
+            f"{month_str} basic={basic_count:,} advanced={advanced_count:,}"
+        )
         logger.info(
             f"Updated tier tracking - This run: {elements_used} "
             f"({tier}), Monthly: Basic={basic_count:,}, "
@@ -314,19 +318,75 @@ def get_current_usage_by_tier():
     month_str = datetime.now().strftime('%Y-%m')
     basic_count = 0
     advanced_count = 0
+    lines_read = 0
+    malformed_lines = 0
 
     if os.path.exists(API_TIER_TRACKING_FILE):
+        logger.debug(
+            f"Reading tier usage from {API_TIER_TRACKING_FILE}"
+        )
         try:
             with open(API_TIER_TRACKING_FILE, "r") as f:
-                for line in f:
+                for line_num, line in enumerate(f, 1):
+                    lines_read += 1
                     parts = line.strip().split(',')
-                    if len(parts) == 3 and parts[0] == month_str:
-                        if parts[1] == 'basic':
-                            basic_count = int(parts[2])
-                        elif parts[1] == 'advanced':
-                            advanced_count = int(parts[2])
+
+                    if len(parts) != 3:
+                        malformed_lines += 1
+                        logger.warning(
+                            f"Malformed line {line_num} in tier tracking: "
+                            f"'{line.strip()}' (expected 3 fields, got "
+                            f"{len(parts)})"
+                        )
+                        continue
+
+                    # Only process current month
+                    if parts[0] == month_str:
+                        try:
+                            if parts[1] == 'basic':
+                                basic_count = int(parts[2])
+                                logger.debug(
+                                    f"Read basic tier: {basic_count}"
+                                )
+                            elif parts[1] == 'advanced':
+                                advanced_count = int(parts[2])
+                                logger.debug(
+                                    f"Read advanced tier: {advanced_count}"
+                                )
+                            else:
+                                logger.warning(
+                                    f"Unknown tier '{parts[1]}' on line "
+                                    f"{line_num}"
+                                )
+                        except ValueError as e:
+                            logger.error(
+                                f"Invalid count value on line {line_num}: "
+                                f"'{parts[2]}' - {e}"
+                            )
+
         except Exception as e:
-            logger.warning(f"Error reading tier usage: {e}")
+            logger.error(f"Error reading tier usage file: {e}")
+    else:
+        logger.debug(
+            f"Tier tracking file not found: {API_TIER_TRACKING_FILE}"
+        )
+
+    if lines_read > 0:
+        logger.debug(
+            f"Tier file read complete: {lines_read} lines, "
+            f"{malformed_lines} malformed"
+        )
+
+    if basic_count == 0 and advanced_count == 0 and lines_read > 0:
+        logger.warning(
+            "Both tier counts are zero despite reading file - "
+            "file may be corrupted or for wrong month"
+        )
+
+    logger.info(
+        f"Current usage: Basic={basic_count:,} Advanced={advanced_count:,} "
+        f"Total={basic_count + advanced_count:,}"
+    )
 
     return {
         'basic': basic_count,
@@ -336,7 +396,6 @@ def get_current_usage_by_tier():
                                   API_MONTHLY_LIMIT_ADVANCED - advanced_count),
         'total': basic_count + advanced_count
     }
-
 
 def calculate_tier_costs(basic_count, advanced_count):
     """
@@ -871,10 +930,36 @@ def validate_local_tracking():
     logger.info(f"Discrepancy:    {discrepancy:,} elements")
     logger.info(f"Estimated cost: ${costs['total_cost']:.2f}")
 
+    if google_count > 0:
+        discrepancy_ratio = discrepancy / google_count
+    else:
+        discrepancy_ratio = 0.0
+
     if discrepancy > MAX_ACCEPTABLE_DISCREPANCY:
-        logger.warning(
-            f"⚠️  Significant discrepancy detected! "
-            f"Consider checking billing reports."
+        if discrepancy_ratio > 0.5:  # More than 50% off
+            logger.error(  # ERROR level for critical issues
+                f"!!! CRITICAL: Local tracking severely out of sync !!!\n"
+                f"Local: {local_total:,} | Google: {google_count:,} | "
+                f"Off by {discrepancy_ratio:.1%} ({discrepancy:,} elements)\n"
+                f"Recommend: Use Google's count as source of truth and "
+                f"investigate tracking file"
+            )
+        elif discrepancy_ratio > 0.1:  # More than 10% off
+            logger.warning(  # WARNING level for significant issues
+                f"!!! Significant discrepancy detected "
+                f"({discrepancy_ratio:.1%}) !!!\n"
+                f"Local: {local_total:,} | Google: {google_count:,}\n"
+                f"Consider checking billing reports and tier tracking file"
+            )
+        else:  # Small discrepancy
+            logger.warning(
+                f"Discrepancy of {discrepancy:,} elements detected. "
+                f"This may be due to timing or API response variations."
+            )
+    else:
+        logger.info(
+            f"Tracking validation passed (discrepancy within "
+            f"{MAX_ACCEPTABLE_DISCREPANCY} elements)"
         )
 
     return {
@@ -883,6 +968,7 @@ def validate_local_tracking():
         'local_total': local_total,
         'google': google_count,
         'discrepancy': discrepancy,
+        'discrepancy_ratio': discrepancy_ratio,
         'costs': costs,
         'tier_usage': tier_usage
     }
