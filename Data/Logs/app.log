@@ -346,3 +346,52 @@ Recommend: Use Google's count as source of truth and investigate tracking file
 2026-02-16 12:31:49 [INFO] utils: Estimated cost: $0.00
 2026-02-16 12:31:49 [WARNING] utils: Discrepancy of 364 elements detected. This may be due to timing or API response variations.
 2026-02-16 12:31:49 [INFO] Commute.collect_commute_data: Commute data collection completed successfully
+2026-02-16 22:21:08 [INFO] Commute.collect_commute_data: ======================================================================
+2026-02-16 22:21:08 [INFO] Commute.collect_commute_data: Starting commute data collection
+2026-02-16 22:21:08 [INFO] Commute.collect_commute_data: ======================================================================
+2026-02-16 22:21:08 [INFO] Commute.collect_commute_data: After noon - collecting afternoon commute data
+2026-02-16 22:21:08 [INFO] Commute.collect_commute_data: Direction: afternoon commute
+2026-02-16 22:21:08 [INFO] Commute.collect_commute_data: Validating current API usage against Google...
+2026-02-16 22:21:08 [INFO] utils: Current usage: Basic=6,159 Advanced=182 Total=6,341
+2026-02-16 22:21:12 [INFO] utils: Google-reported usage: 6,341 elements (Basic tier)
+2026-02-16 22:21:12 [INFO] utils: Free tier limit: 10,000, Remaining: 3,659
+2026-02-16 22:21:12 [INFO] utils: === Usage Validation ===
+2026-02-16 22:21:12 [INFO] utils: Current tier: Basic
+2026-02-16 22:21:12 [INFO] utils: Local tier tracking:
+2026-02-16 22:21:12 [INFO] utils:   Basic:     6,159 / 10,000 ($0.00)
+2026-02-16 22:21:12 [INFO] utils:   Advanced:  182 / 5,000 ($0.00)
+2026-02-16 22:21:12 [INFO] utils:   Total:     6,341
+2026-02-16 22:21:12 [INFO] utils: Google reports: 6,341
+2026-02-16 22:21:12 [INFO] utils: Discrepancy:    0 elements
+2026-02-16 22:21:12 [INFO] utils: Estimated cost: $0.00
+2026-02-16 22:21:12 [INFO] utils: Tracking validation passed (discrepancy within 183 elements)
+2026-02-16 22:21:12 [INFO] Commute.collect_commute_data: Loading zip codes within 40 miles of work...
+2026-02-16 22:21:12 [INFO] utils: Parsing ZIP database: /home/runner/work/house_hunt/house_hunt/Data/Raw/zip_code_database.csv
+2026-02-16 22:21:12 [INFO] utils: Loaded 795 active standard ZIPs for MA, RI, NH
+2026-02-16 22:21:12 [INFO] utils: Loading cached town results from /home/runner/work/house_hunt/house_hunt/Data/Processed/towns_within_40mi.csv
+2026-02-16 22:21:12 [INFO] utils: Loaded 182 cached towns (range: 40mi)
+2026-02-16 22:21:12 [INFO] Commute.collect_commute_data: Found 182 addresses within range
+2026-02-16 22:21:12 [INFO] utils: Current usage: Basic=6,159 Advanced=182 Total=6,341
+2026-02-16 22:21:12 [INFO] utils: Current monthly API usage: 6,341 / 10,000
+2026-02-16 22:21:12 [INFO] Commute.collect_commute_data: Afternoon commute: 123 Main St. Anytown, MA 00000 → 182 locations
+2026-02-16 22:21:15 [INFO] Commute.collect_commute_data: Completed 8 requests, processed 182 elements, collected 182 valid results
+2026-02-16 22:21:15 [INFO] utils: Loaded 182 records from /home/runner/work/house_hunt/house_hunt/Data/Results/commute_stats.csv
+2026-02-16 22:21:15 [INFO] Commute.collect_commute_data: Loaded 182 records from /home/runner/work/house_hunt/house_hunt/Data/Results/commute_stats.csv
+2026-02-16 22:21:15 [INFO] Commute.collect_commute_data: Successfully updated /home/runner/work/house_hunt/house_hunt/Data/Results/commute_stats.csv with 182 records
+2026-02-16 22:21:15 [INFO] utils: Updated tier tracking - This run: 182 (basic), Monthly: Basic=6,341, Advanced=182
+2026-02-16 22:21:15 [INFO] utils: API_USAGE | operation=update_tier_basic | elements=182 | estimated_cost=$0.0000
+2026-02-16 22:21:15 [INFO] Commute.collect_commute_data: Re-validating usage after API calls...
+2026-02-16 22:21:15 [INFO] utils: Current usage: Basic=6,341 Advanced=182 Total=6,523
+2026-02-16 22:21:21 [INFO] utils: Google-reported usage: 6,341 elements (Basic tier)
+2026-02-16 22:21:21 [INFO] utils: Free tier limit: 10,000, Remaining: 3,659
+2026-02-16 22:21:21 [INFO] utils: === Usage Validation ===
+2026-02-16 22:21:21 [INFO] utils: Current tier: Basic
+2026-02-16 22:21:21 [INFO] utils: Local tier tracking:
+2026-02-16 22:21:21 [INFO] utils:   Basic:     6,341 / 10,000 ($0.00)
+2026-02-16 22:21:21 [INFO] utils:   Advanced:  182 / 5,000 ($0.00)
+2026-02-16 22:21:21 [INFO] utils:   Total:     6,523
+2026-02-16 22:21:21 [INFO] utils: Google reports: 6,341
+2026-02-16 22:21:21 [INFO] utils: Discrepancy:    182 elements
+2026-02-16 22:21:21 [INFO] utils: Estimated cost: $0.00
+2026-02-16 22:21:21 [INFO] utils: Tracking validation passed (discrepancy within 183 elements)
+2026-02-16 22:21:21 [INFO] Commute.collect_commute_data: Commute data collection completed successfully
