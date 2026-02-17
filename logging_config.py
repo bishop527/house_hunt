@@ -5,7 +5,13 @@ Provides consistent logger setup across all modules.
 """
 import logging
 import sys
+import time
 from constants import APP_LOG_FILE, LOG_LEVEL
+
+
+class UTCFormatter(logging.Formatter):
+    """Logging formatter that uses UTC time instead of local time."""
+    converter = time.gmtime
 
 
 def setup_logger(
@@ -15,6 +21,8 @@ def setup_logger(
 ) -> logging.Logger:
     """
     Configure and return a logger with consistent formatting.
+
+    All timestamps are in UTC.
 
     Args:
         name: Logger name (typically __name__ of the calling module)
@@ -34,8 +42,8 @@ def setup_logger(
     # File handler (always present)
     file_handler = logging.FileHandler(APP_LOG_FILE)
     file_handler.setLevel(level)
-    file_formatter = logging.Formatter(
-        '%(asctime)s [%(levelname)s] %(name)s: %(message)s',
+    file_formatter = UTCFormatter(
+        '%(asctime)s UTC [%(levelname)s] %(name)s: %(message)s',
         datefmt='%Y-%m-%d %H:%M:%S'
     )
     file_handler.setFormatter(file_formatter)
@@ -45,35 +53,14 @@ def setup_logger(
     if include_console:
         console_handler = logging.StreamHandler(sys.stdout)
         console_handler.setLevel(level)
-        console_formatter = logging.Formatter(
-            '%(asctime)s [%(levelname)s] %(message)s',
+        console_formatter = UTCFormatter(
+            '%(asctime)s UTC [%(levelname)s] %(message)s',
             datefmt='%H:%M:%S'
         )
         console_handler.setFormatter(console_formatter)
         logger.addHandler(console_handler)
 
     return logger
-
-
-def log_api_usage(
-        logger: logging.Logger,
-        operation: str,
-        elements: int,
-        cost_estimate: float = 0.0
-) -> None:
-    """
-    Structured logging for API usage tracking.
-
-    Args:
-        logger: Logger instance to use
-        operation: Name of the operation (e.g., 'distance_matrix')
-        elements: Number of API elements consumed
-        cost_estimate: Estimated cost in dollars
-    """
-    logger.info(
-        f"API_USAGE | operation={operation} | "
-        f"elements={elements} | estimated_cost=${cost_estimate:.4f}"
-    )
 
 
 def silence_verbose_loggers() -> None:

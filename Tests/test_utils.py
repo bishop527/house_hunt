@@ -691,6 +691,7 @@ def test_validate_local_tracking_with_tiers(tmp_path, monkeypatch):
     assert validation['local_total'] == 5000
     assert validation['google'] == 5000
     assert validation['discrepancy'] == 0
+    assert validation['discrepancy_ratio'] == 0.0
     assert 'costs' in validation
     assert 'tier_usage' in validation
 
@@ -802,7 +803,7 @@ def test_zero_counts_warning(tmp_path, caplog, monkeypatch):
 
 
 def test_write_confirmation_logged(tmp_path, caplog, monkeypatch):
-    """Verify write operations are logged at DEBUG level"""
+    """Verify write operations are logged at INFO level"""
     tier_file = tmp_path / "usage.txt"
 
     monkeypatch.setattr('utils.API_TIER_TRACKING_FILE', str(tier_file))
@@ -812,17 +813,12 @@ def test_write_confirmation_logged(tmp_path, caplog, monkeypatch):
         mock_dt.now.return_value = datetime(2026, 2, 13)
         mock_dt.strftime = datetime.strftime  # Keep strftime working
 
-        with caplog.at_level(logging.DEBUG, logger='utils'):
-            basic, advanced, tier = update_api_usage_by_tier(
-                100,
-                use_traffic=False
-            )
+        with caplog.at_level(logging.INFO, logger='utils'):
+            basic, advanced, tier = update_api_usage_by_tier(100, use_traffic=False)
 
     # Check for write confirmation
-    assert "Wrote tier tracking to" in caplog.text
-    assert "basic=100" in caplog.text
-    assert str(tier_file) in caplog.text
-
+    assert "Tier tracking updated:" in caplog.text
+    assert "Basic=100" in caplog.text
 
 def test_moderate_discrepancy_logs_warning(tmp_path, caplog, monkeypatch):
     """Verify moderate discrepancies (10-50%) trigger WARNING logs"""
@@ -839,7 +835,7 @@ def test_moderate_discrepancy_logs_warning(tmp_path, caplog, monkeypatch):
         with caplog.at_level(logging.WARNING, logger='utils'):
             validation = validate_local_tracking()
 
-    assert "Significant discrepancy detected" in caplog.text
+    assert "Significant discrepancy:" in caplog.text
     # Check for percentage in output (could be formatted different ways)
     assert "%" in caplog.text
     assert validation['discrepancy_ratio'] > 0.1
@@ -940,7 +936,7 @@ def test_current_usage_summary_logged(tmp_path, caplog, monkeypatch):
 
     monkeypatch.setattr('utils.API_TIER_TRACKING_FILE', str(tier_file))
 
-    with caplog.at_level(logging.INFO, logger='utils'):
+    with caplog.at_level(logging.DEBUG, logger='utils'):
         usage = get_current_usage_by_tier()
 
     assert "Current usage:" in caplog.text

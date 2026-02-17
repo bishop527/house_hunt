@@ -14,7 +14,7 @@ from datetime import datetime
 from Commute.collect_commute_data import (
     determine_direction,
     fetch_commute_times,
-    process_element,
+    _process_element,
     load_historical_data,
     update_statistics
 )
@@ -126,7 +126,7 @@ def test_process_element_ok_status():
     }
     results = []
 
-    process_element(address, element, results)
+    _process_element(address, element, results)
 
     assert len(results) == 1
     assert results[0]['address'] == address
@@ -147,7 +147,7 @@ def test_process_element_zero_results():
     }
     results = []
 
-    process_element(address, element, results)
+    _process_element(address, element, results)
 
     assert len(results) == 1
     assert results[0]['address'] == address
@@ -168,7 +168,7 @@ def test_process_element_not_found():
     }
     results = []
 
-    process_element(address, element, results)
+    _process_element(address, element, results)
 
     assert len(results) == 1
     assert results[0]['status'] == 'NOT_FOUND'
@@ -189,7 +189,7 @@ def test_process_element_no_traffic_data():
     }
     results = []
 
-    process_element(address, element, results)
+    _process_element(address, element, results)
 
     # Should fall back to regular duration
     assert results[0]['duration_minutes'] == 10.0

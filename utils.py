@@ -12,15 +12,15 @@ Key improvements:
 Created on Nov 4, 2015
 Updated 30 Jan 2026
 """
+
 import sys
-import os
 import googlemaps
 import pandas as pd
 import time
 from tqdm import tqdm
 from datetime import datetime, timedelta, timezone
 from constants import *
-from logging_config import setup_logger, log_api_usage
+from logging_config import setup_logger
 from error_handlers import handle_api_error, handle_file_error
 
 logger = setup_logger(__name__)
@@ -63,7 +63,7 @@ def get_hours_until_first_time_check():
     if target <= now:
         target += timedelta(days=DAYS_PER_WEEK)
     return (target - now).total_seconds() / (
-        SECONDS_PER_MINUTE * MINUTES_PER_HOUR
+            SECONDS_PER_MINUTE * MINUTES_PER_HOUR
     )
 
 
@@ -127,7 +127,7 @@ def get_zip_data(states=None, include_county=False):
         (zip_df['State'].isin(states)) &
         (zip_df['type'] == "STANDARD") &
         (zip_df['decommissioned'] == 0)
-    ].copy()
+        ].copy()
 
     filtered_df = filtered_df.drop(columns=['type', 'decommissioned'])
 
@@ -135,7 +135,7 @@ def get_zip_data(states=None, include_county=False):
         filtered_df['Zip'].isna() | filtered_df['Town'].isna() |
         filtered_df['State'].isna() | filtered_df['Lat'].isna() |
         filtered_df['Long'].isna()
-    ]
+        ]
 
     if len(missing_df) > 0:
         logger.warning(f"Found {len(missing_df)} rows with missing data")
@@ -209,25 +209,17 @@ def check_api_budget(estimated_elements, limit=None):
         limit = (API_MONTHLY_LIMIT_ADVANCED if USE_TRAFFIC
                  else API_MONTHLY_LIMIT_BASIC)
 
-    logger.info(
-        f"Current monthly API usage: {current_usage:,} / {limit:,}"
-    )
-
     if current_usage >= limit:
         logger.critical(
-            f"!!! MONTHLY BUDGET LIMIT REACHED !!!\n"
-            f"Current: {current_usage:,} / {limit:,}\n"
-            f"Aborting to prevent overage charges."
+            f"MONTHLY BUDGET LIMIT REACHED: {current_usage:,} / {limit:,}"
         )
         sys.exit(1)
 
     projected = current_usage + estimated_elements
     if projected > limit:
         logger.warning(
-            f"!!! WARNING: This run may exceed budget !!!\n"
-            f"Current: {current_usage:,}\n"
-            f"Estimated: {estimated_elements:,}\n"
-            f"Projected: {projected:,} / {limit:,}"
+            f"Budget warning: projected={projected:,} exceeds limit={limit:,} "
+            f"(current={current_usage:,} + estimated={estimated_elements:,})"
         )
 
     return True, current_usage
@@ -285,22 +277,17 @@ def update_api_usage_by_tier(elements_used, use_traffic=None):
             f.write(f"{month_str},basic,{basic_count}\n")
             f.write(f"{month_str},advanced,{advanced_count}\n")
 
-        logger.debug(
-            f"Wrote tier tracking to {API_TIER_TRACKING_FILE}: "
-            f"{month_str} basic={basic_count:,} advanced={advanced_count:,}"
-        )
         logger.info(
-            f"Updated tier tracking - This run: {elements_used} "
-            f"({tier}), Monthly: Basic={basic_count:,}, "
-            f"Advanced={advanced_count:,}"
+            f"Tier tracking updated: +{elements_used} ({tier}) | "
+            f"Monthly: Basic={basic_count:,} Advanced={advanced_count:,}"
         )
-        log_api_usage(logger, f"update_tier_{tier}", elements_used)
 
     except IOError as e:
         logger.error(f"Failed to update tier tracking: {e}")
         raise
 
     return basic_count, advanced_count, tier
+
 
 def get_current_usage_by_tier():
     """
@@ -331,6 +318,7 @@ def get_current_usage_by_tier():
                     lines_read += 1
                     parts = line.strip().split(',')
 
+                    # Validate format
                     if len(parts) != 3:
                         malformed_lines += 1
                         logger.warning(
@@ -371,6 +359,7 @@ def get_current_usage_by_tier():
             f"Tier tracking file not found: {API_TIER_TRACKING_FILE}"
         )
 
+    # Validation logging
     if lines_read > 0:
         logger.debug(
             f"Tier file read complete: {lines_read} lines, "
@@ -383,7 +372,7 @@ def get_current_usage_by_tier():
             "file may be corrupted or for wrong month"
         )
 
-    logger.info(
+    logger.debug(
         f"Current usage: Basic={basic_count:,} Advanced={advanced_count:,} "
         f"Total={basic_count + advanced_count:,}"
     )
@@ -396,6 +385,7 @@ def get_current_usage_by_tier():
                                   API_MONTHLY_LIMIT_ADVANCED - advanced_count),
         'total': basic_count + advanced_count
     }
+
 
 def calculate_tier_costs(basic_count, advanced_count):
     """
@@ -520,10 +510,7 @@ def _fetch_distances_from_google(addresses, destination, current_usage):
                     continue
 
             elif response_status == 'OVER_DAILY_LIMIT':
-                logger.critical(
-                    f"!!! DAILY API LIMIT EXCEEDED !!!\n"
-                    f"Cannot continue. Try again tomorrow."
-                )
+                logger.critical("DAILY API LIMIT EXCEEDED - aborting")
                 break
 
             elif response_status != 'OK':
@@ -606,13 +593,12 @@ def get_zips_within_range(destination, zip_data_df, max_range,
     )
 
     if os.path.exists(cache_file) and not force_refresh:
-        logger.info(f"Loading cached results from {cache_file}")
         try:
             cached_df = pd.read_csv(cache_file)
             cached_addresses = cached_df['Full_Address'].tolist()
             logger.info(
                 f"Loaded {len(cached_addresses)} cached addresses "
-                f"(range: {max_range}mi)"
+                f"from {cache_file} (range: {max_range}mi)"
             )
             return cached_addresses
         except Exception as e:
@@ -655,15 +641,12 @@ def get_zips_within_range(destination, zip_data_df, max_range,
     # Update tier-based usage tracking
     update_api_usage_by_tier(elements_processed)
 
-    # Log usage info
+    # Log combined API usage and result
     tier_usage = get_current_usage_by_tier()
     logger.info(
-        f"API usage: {requests_made} requests, "
-        f"{elements_processed} elements processed"
-    )
-    logger.info(
-        f"Monthly totals - Basic: {tier_usage['basic']:,}, "
-        f"Advanced: {tier_usage['advanced']:,}"
+        f"Range check complete: {len(zips_in_range)}/{len(addresses)} within "
+        f"{max_range}mi | requests={requests_made} elements={elements_processed} | "
+        f"Monthly: Basic={tier_usage['basic']:,} Advanced={tier_usage['advanced']:,}"
     )
 
     # Save cache
@@ -681,7 +664,6 @@ def get_zips_within_range(destination, zip_data_df, max_range,
             f"No locations found within {max_range} miles"
         )
 
-    logger.info(f"Returning {len(zips_in_range)} addresses within range")
     return zips_in_range
 
 
@@ -714,7 +696,7 @@ def get_towns_within_range(destination, zip_data_df, max_range,
             cached_towns = cached_df['Full_Address'].tolist()
             logger.info(
                 f"Loaded {len(cached_towns)} cached towns "
-                f"(range: {max_range}mi)"
+                f"from {cache_file} (range: {max_range}mi)"
             )
             return cached_towns
         except Exception as e:
@@ -762,15 +744,12 @@ def get_towns_within_range(destination, zip_data_df, max_range,
     # Update tier-based usage tracking
     update_api_usage_by_tier(elements_processed)
 
-    # Log usage info
+    # Log combined API usage and result
     tier_usage = get_current_usage_by_tier()
     logger.info(
-        f"API usage: {requests_made} requests, "
-        f"{elements_processed} elements processed"
-    )
-    logger.info(
-        f"Monthly totals - Basic: {tier_usage['basic']:,}, "
-        f"Advanced: {tier_usage['advanced']:,}"
+        f"Range check complete: {len(towns_in_range)}/{len(addresses)} within "
+        f"{max_range}mi | requests={requests_made} elements={elements_processed} | "
+        f"Monthly: Basic={tier_usage['basic']:,} Advanced={tier_usage['advanced']:,}"
     )
 
     # Save cache
@@ -784,7 +763,6 @@ def get_towns_within_range(destination, zip_data_df, max_range,
     else:
         logger.warning(f"No towns found within {max_range} miles")
 
-    logger.info(f"Returning {len(towns_in_range)} towns within range")
     return towns_in_range
 
 
@@ -827,7 +805,7 @@ def get_monthly_element_usage_from_google():
         from google.cloud import monitoring_v3
         from google.oauth2 import service_account
 
-        credentials = service_account.Credentials\
+        credentials = service_account.Credentials \
             .from_service_account_file(GCP_MONITOR_KEY)
 
         client = monitoring_v3.MetricServiceClient(credentials=credentials)
@@ -855,7 +833,7 @@ def get_monthly_element_usage_from_google():
                 ),
                 "interval": interval,
                 "view": monitoring_v3.ListTimeSeriesRequest
-                    .TimeSeriesView.FULL
+                .TimeSeriesView.FULL
             }
         )
 
@@ -916,50 +894,44 @@ def validate_local_tracking():
     # Determine current tier for logging
     current_tier = "Advanced" if USE_TRAFFIC else "Basic"
 
-    logger.info(f"=== Usage Validation ===")
-    logger.info(f"Current tier: {current_tier}")
-    logger.info(f"Local tier tracking:")
-    logger.info(f"  Basic:     {tier_usage['basic']:,} / "
-                f"{API_MONTHLY_LIMIT_BASIC:,} "
-                f"(${costs['basic_cost']:.2f})")
-    logger.info(f"  Advanced:  {tier_usage['advanced']:,} / "
-                f"{API_MONTHLY_LIMIT_ADVANCED:,} "
-                f"(${costs['advanced_cost']:.2f})")
-    logger.info(f"  Total:     {local_total:,}")
-    logger.info(f"Google reports: {google_count:,}")
-    logger.info(f"Discrepancy:    {discrepancy:,} elements")
-    logger.info(f"Estimated cost: ${costs['total_cost']:.2f}")
+    logger.info(
+        f"Validation: tier={current_tier} | "
+        f"local={local_total:,} google={google_count:,} "
+        f"delta={discrepancy:,} | "
+        f"Basic={tier_usage['basic']:,}/{API_MONTHLY_LIMIT_BASIC:,} "
+        f"Advanced={tier_usage['advanced']:,}/{API_MONTHLY_LIMIT_ADVANCED:,} | "
+        f"cost=${costs['total_cost']:.2f}"
+    )
 
+    # Enhanced discrepancy analysis
     if google_count > 0:
         discrepancy_ratio = discrepancy / google_count
     else:
         discrepancy_ratio = 0.0
 
     if discrepancy > MAX_ACCEPTABLE_DISCREPANCY:
-        if discrepancy_ratio > 0.5:  # More than 50% off
-            logger.error(  # ERROR level for critical issues
-                f"!!! CRITICAL: Local tracking severely out of sync !!!\n"
-                f"Local: {local_total:,} | Google: {google_count:,} | "
-                f"Off by {discrepancy_ratio:.1%} ({discrepancy:,} elements)\n"
-                f"Recommend: Use Google's count as source of truth and "
-                f"investigate tracking file"
+        if discrepancy_ratio > 0.5:
+            logger.error(
+                f"CRITICAL: Tracking severely out of sync - "
+                f"local={local_total:,} google={google_count:,} "
+                f"off={discrepancy_ratio:.1%} ({discrepancy:,} elements) - "
+                f"check tier tracking file"
             )
-        elif discrepancy_ratio > 0.1:  # More than 10% off
-            logger.warning(  # WARNING level for significant issues
-                f"!!! Significant discrepancy detected "
-                f"({discrepancy_ratio:.1%}) !!!\n"
-                f"Local: {local_total:,} | Google: {google_count:,}\n"
-                f"Consider checking billing reports and tier tracking file"
-            )
-        else:  # Small discrepancy
+        elif discrepancy_ratio > 0.1:
             logger.warning(
-                f"Discrepancy of {discrepancy:,} elements detected. "
-                f"This may be due to timing or API response variations."
+                f"Significant discrepancy: local={local_total:,} "
+                f"google={google_count:,} off={discrepancy_ratio:.1%} - "
+                f"consider checking billing reports"
+            )
+        else:
+            logger.warning(
+                f"Minor discrepancy: {discrepancy:,} elements "
+                f"({discrepancy_ratio:.1%}) - likely timing variation"
             )
     else:
         logger.info(
-            f"Tracking validation passed (discrepancy within "
-            f"{MAX_ACCEPTABLE_DISCREPANCY} elements)"
+            f"Tracking validation passed (delta={discrepancy:,} "
+            f"within {MAX_ACCEPTABLE_DISCREPANCY} tolerance)"
         )
 
     return {
