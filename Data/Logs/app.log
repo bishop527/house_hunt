@@ -43,3 +43,26 @@
 2026-02-18 13:37:38 UTC [WARNING] utils: Minor discrepancy: 364 elements (5.3%) - likely timing variation
 2026-02-18 13:37:38 UTC [INFO] Commute.collect_commute_data: COMPLETED: afternoon | queried=182 ok=182 | elements=182 (basic) | Basic=6,341/10,000 Advanced=182/5,000 | cost=$0.00
 2026-02-18 13:37:38 UTC [WARNING] Commute.collect_commute_data: DISCREPANCY: 364 elements (5.3%)
+2026-02-18 22:21:07 UTC [INFO] Commute.collect_commute_data: STARTED: Commute collection (afternoon)
+2026-02-18 22:21:09 UTC [INFO] utils: Google-reported usage: 7,069 elements (Basic tier)
+2026-02-18 22:21:09 UTC [INFO] utils: Free tier limit: 10,000, Remaining: 2,931
+2026-02-18 22:21:09 UTC [INFO] utils: Validation: tier=Basic | local=6,341 google=7,069 delta=728 | Basic=6,159/10,000 Advanced=182/5,000 | cost=$0.00
+2026-02-18 22:21:09 UTC [WARNING] utils: Significant discrepancy: local=6,341 google=7,069 off=10.3% - consider checking billing reports
+2026-02-18 22:21:09 UTC [INFO] Commute.collect_commute_data: Loading addresses within 40 miles of work...
+2026-02-18 22:21:09 UTC [INFO] utils: Parsing ZIP database: /home/runner/work/house_hunt/house_hunt/Data/Raw/zip_code_database.csv
+2026-02-18 22:21:10 UTC [INFO] utils: Loaded 795 active standard ZIPs for MA, RI, NH
+2026-02-18 22:21:10 UTC [INFO] utils: Loading cached town results from /home/runner/work/house_hunt/house_hunt/Data/Processed/towns_within_40mi.csv
+2026-02-18 22:21:10 UTC [INFO] utils: Loaded 182 cached towns from /home/runner/work/house_hunt/house_hunt/Data/Processed/towns_within_40mi.csv (range: 40mi)
+2026-02-18 22:21:10 UTC [INFO] Commute.collect_commute_data: Found 182 addresses within range
+2026-02-18 22:21:10 UTC [INFO] Commute.collect_commute_data: Afternoon commute: 123 Main St. Anytown, MA 00000 → 182 locations
+2026-02-18 22:21:11 UTC [INFO] Commute.collect_commute_data: Completed 8 requests, processed 182 elements, collected 182 valid results
+2026-02-18 22:21:11 UTC [INFO] utils: Loaded 182 records from /home/runner/work/house_hunt/house_hunt/Data/Results/commute_stats.csv
+2026-02-18 22:21:11 UTC [INFO] Commute.collect_commute_data: Loaded 182 records from /home/runner/work/house_hunt/house_hunt/Data/Results/commute_stats.csv
+2026-02-18 22:21:11 UTC [INFO] Commute.collect_commute_data: Successfully updated /home/runner/work/house_hunt/house_hunt/Data/Results/commute_stats.csv with 182 records
+2026-02-18 22:21:11 UTC [INFO] utils: Tier tracking updated: +182 (basic) | Monthly: Basic=6,341 Advanced=182
+2026-02-18 22:21:12 UTC [INFO] utils: Google-reported usage: 7,069 elements (Basic tier)
+2026-02-18 22:21:12 UTC [INFO] utils: Free tier limit: 10,000, Remaining: 2,931
+2026-02-18 22:21:12 UTC [INFO] utils: Validation: tier=Basic | local=6,523 google=7,069 delta=546 | Basic=6,341/10,000 Advanced=182/5,000 | cost=$0.00
+2026-02-18 22:21:12 UTC [WARNING] utils: Minor discrepancy: 546 elements (7.7%) - likely timing variation
+2026-02-18 22:21:12 UTC [INFO] Commute.collect_commute_data: COMPLETED: afternoon | queried=182 ok=182 | elements=182 (basic) | Basic=6,341/10,000 Advanced=182/5,000 | cost=$0.00
+2026-02-18 22:21:12 UTC [WARNING] Commute.collect_commute_data: DISCREPANCY: 546 elements (7.7%)
