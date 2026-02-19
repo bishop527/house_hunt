@@ -2,41 +2,41 @@ name: Collect Commute Data
 
 on:
   schedule:
-    # Monday & Friday at 7am EST (12am UTC)
+    # Monday-Friday at 7am EST (12pm UTC)
     - cron: '0 12 * * 1-5'
-    # Monday & Friday at 5pm EST (22:00 UTC)
+    # Monday-Friday at 5pm EST (10pm UTC)
     - cron: '0 22 * * 1-5'
-  
+
   workflow_dispatch:  # Allows manual trigger from GitHub UI
 
 jobs:
   collect-commute:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-      
+
       - name: Set up Python 3.9
         uses: actions/setup-python@v5
         with:
           python-version: '3.9'
           cache: 'pip'
-      
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-      
+
       - name: Create directory structure
         run: |
           mkdir -p Data/Raw
           mkdir -p Data/Processed
           mkdir -p Data/Results
           mkdir -p Data/Logs
-      
+
       - name: Setup API credentials
         env:
           GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
@@ -46,40 +46,31 @@ jobs:
           if [ ! -z "$GCP_MONITOR_KEY" ]; then
             echo "$GCP_MONITOR_KEY" > Data/monitor-key.json
           fi
-      
-      - name: Download ZIP database (if needed)
-        run: |
-          if [ ! -f Data/Raw/zip_code_database.csv ]; then
-            echo "ZIP database not in repo, downloading..."
-            # Option 1: Download from your source
-            # wget -O Data/Raw/zip_code_database.csv YOUR_URL
-            
-            # Option 2: Use a cached version from releases
-            # gh release download v1.0 -p zip_code_database.csv -D Data/Raw/
-            
-            echo "Note: Add zip_code_database.csv to repo or releases"
-          fi
-      
+
       - name: Run commute collection
         run: |
           python main.py --commute --quiet
         continue-on-error: true  # Don't fail if API limit hit
-      
-      - name: Commit and push results
+
+      - name: Configure Git
         run: |
-          git config user.name "GitHub Actions Bot"
-          git config user.email "actions@github.com"
-          git add Data/Results/*.csv
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+
+      - name: Commit updated tracking and stats files
+        run: |
+          git add Data/Results/monthly_API_usage_by_tier.txt
+          git add Data/Results/commute_stats.csv
           git add Data/Logs/app.log
           
-          # Check if there are changes to commit
-          if git diff --staged --quiet; then
-            echo "No changes to commit"
-          else
-            git commit -m "Auto: Commute data collection $(date -u +%Y-%m-%d_%H:%M_UTC)"
+          # Only commit if there are changes
+          if ! git diff --staged --quiet; then
+            git commit -m "Auto: Update API tracking and commute stats $(date -u +%Y-%m-%d_%H:%M_UTC)"
             git push
+          else
+            echo "No changes to commit"
           fi
-      
+
       - name: Upload results as artifact
         uses: actions/upload-artifact@v4
         if: always()
