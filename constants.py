@@ -125,7 +125,7 @@ MAX_RANGE = 40  # Maximum distance in miles from work
 # Collection Schedule
 MORNING_TIMES = ['07:00']  # Morning collection times
 AFTERNOON_TIMES = ['17:00']  # Afternoon collection times
-NOON_HOUR = 12
+NOON_HOUR = 17 # 12PM EST/EDT = 17:00 UTC (EST) or 16:00 UTC (EDT)
 
 # Data Grouping
 # LOCATION_GROUPING = 'zip'
@@ -136,6 +136,10 @@ LOCATION_GROUPING = 'town'
 # ========================================
 # Data Sources
 HOUSING_DATA_SOURCE = 'redfin'  # Primary: 'redfin', Fallback: 'hud'
+PROPERTY_TAX_FILE = os.path.join(RAW_DIR, 'property_tax_rates.csv')
+DEFAULT_MA_TAX_RATE = 12.1  # Default rate if town not found (per $1000)
+DEFAULT_RI_TAX_RATE = 12.1  # Default rate if town not found (per $1000)
+DEFAULT_NH_TAX_RATE = 17.6  # Default rate if town not found (per $1000)
 
 # Redfin Configuration
 REDFIN_DOWNLOAD_URL = (
