@@ -202,23 +202,30 @@ def check_api_budget(estimated_elements, limit=None):
     """
     # Get current usage from tier tracking
     tier_usage = get_current_usage_by_tier()
-    current_usage = tier_usage['total']
 
-    # Determine limit based on current tier if not specified
-    if limit is None:
-        limit = (API_MONTHLY_LIMIT_ADVANCED if USE_TRAFFIC
-                 else API_MONTHLY_LIMIT_BASIC)
+    if USE_TRAFFIC:
+        current_usage = tier_usage['advanced']
+        tier_name = 'Advanced'
+        if limit is None:
+            limit = API_MONTHLY_LIMIT_ADVANCED
+    else:
+        current_usage = tier_usage['basic']
+        tier_name = 'Basic'
+        if limit is None:
+            limit = API_MONTHLY_LIMIT_BASIC
 
     if current_usage >= limit:
         logger.critical(
-            f"MONTHLY BUDGET LIMIT REACHED: {current_usage:,} / {limit:,}"
+            f"MONTHLY BUDGET LIMIT REACHED for {tier_name} tier: "
+            f"{current_usage:,} / {limit:,}"
         )
         sys.exit(1)
 
     projected = current_usage + estimated_elements
     if projected > limit:
         logger.warning(
-            f"Budget warning: projected={projected:,} exceeds limit={limit:,} "
+            f"Budget warning ({tier_name} tier): "
+            f"projected={projected:,} exceeds limit={limit:,} "
             f"(current={current_usage:,} + estimated={estimated_elements:,})"
         )
 

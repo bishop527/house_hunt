@@ -459,11 +459,15 @@ def _check_budget_once(estimated_elements):
     """
     # Read local tracking ONCE
     tier_usage = get_current_usage_by_tier()
-    current_usage = tier_usage['total']
 
-    # Determine limit based on current tier
-    limit = (API_MONTHLY_LIMIT_ADVANCED if USE_TRAFFIC
-             else API_MONTHLY_LIMIT_BASIC)
+    if USE_TRAFFIC:
+        current_usage = tier_usage['advanced']
+        limit = API_MONTHLY_LIMIT_ADVANCED
+        tier_name = 'Advanced'
+    else:
+        current_usage = tier_usage['basic']
+        limit = API_MONTHLY_LIMIT_BASIC
+        tier_name = 'Basic'
 
     # Check if already at limit
     if current_usage >= limit:
