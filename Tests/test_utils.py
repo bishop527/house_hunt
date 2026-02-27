@@ -945,5 +945,170 @@ def test_current_usage_summary_logged(tmp_path, caplog, monkeypatch):
     assert "Total=6,912" in caplog.text
 
 
+# Add to Tests/test_utils.py
+
+def test_get_zips_within_range_cache_age_valid(tmp_path, monkeypatch):
+    """Test cache is used when age is within limit"""
+    import time
+
+    cache_file = tmp_path / "zips_within_30mi.csv"
+    cache_df = pd.DataFrame({
+        'Full_Address': ['Lexington, MA 02421'],
+        'Distance_Miles': [5.0]
+    })
+    cache_df.to_csv(cache_file, index=False)
+
+    # Set cache modified time to 10 days ago
+    old_time = time.time() - (10 * 24 * 60 * 60)
+    os.utime(cache_file, (old_time, old_time))
+
+    monkeypatch.setattr('utils.PROCESSED_DIR', str(tmp_path))
+    monkeypatch.setattr('utils.PROXY_ON', False)
+
+    zip_data = pd.DataFrame({
+        'Zip': ['02421'],
+        'Town': ['Lexington'],
+        'State': ['MA'],
+        'Lat': [42.44],
+        'Long': [-71.23]
+    })
+
+    # Should use cache (10 days < 30 day default)
+    with patch('utils.get_google_api_key', return_value='test_key'):
+        with patch('utils.googlemaps.Client') as mock_client:
+            result = get_zips_within_range(
+                "244 Wood St, Lexington, MA",
+                zip_data,
+                max_range=30,
+                max_cache_age_days=30
+            )
+
+    # API should NOT be called
+    mock_client.assert_not_called()
+    assert len(result) == 1
+    assert 'Lexington, MA 02421' in result
+
+
+def test_get_zips_within_range_cache_age_expired(tmp_path, monkeypatch):
+    """Test cache is refreshed when age exceeds limit"""
+    import time
+
+    cache_file = tmp_path / "zips_within_30mi.csv"
+    cache_df = pd.DataFrame({
+        'Full_Address': ['Lexington, MA 02421'],
+        'Distance_Miles': [5.0]
+    })
+    cache_df.to_csv(cache_file, index=False)
+
+    # Set cache modified time to 40 days ago
+    old_time = time.time() - (40 * 24 * 60 * 60)
+    os.utime(cache_file, (old_time, old_time))
+
+    # Setup tier tracking
+    tier_file = tmp_path / "usage_by_tier.txt"
+    month_str = datetime.now().strftime('%Y-%m')
+    tier_file.write_text(f"{month_str},basic,0\n{month_str},advanced,0\n")
+
+    monkeypatch.setattr('utils.PROCESSED_DIR', str(tmp_path))
+    monkeypatch.setattr('utils.API_TIER_TRACKING_FILE', str(tier_file))
+    monkeypatch.setattr('utils.API_MONTHLY_LIMIT_BASIC', 20000)
+    monkeypatch.setattr('utils.USE_TRAFFIC', False)
+    monkeypatch.setattr('utils.PROXY_ON', False)
+    monkeypatch.setattr('utils.CHUNK_SIZE', 25)
+
+    zip_data = pd.DataFrame({
+        'Zip': ['02421'],
+        'Town': ['Lexington'],
+        'State': ['MA'],
+        'Lat': [42.44],
+        'Long': [-71.23]
+    })
+
+    # Mock API
+    mock_instance = MagicMock()
+    mock_instance.distance_matrix.return_value = {
+        'status': 'OK',
+        'rows': [{
+            'elements': [{
+                'status': 'OK',
+                'distance': {'value': 8046},
+                'duration': {'value': 600}
+            }]
+        }]
+    }
+
+    # Should refresh cache (40 days > 30 day limit)
+    # DON'T mock datetime - we need real datetime for cache age calculation
+    with patch('utils.get_google_api_key', return_value='test_key'):
+        with patch('utils.googlemaps.Client', return_value=mock_instance):
+            result = get_zips_within_range(
+                "244 Wood St, Lexington, MA",
+                zip_data,
+                max_range=30,
+                max_cache_age_days=30
+            )
+
+    # API SHOULD be called (cache expired)
+    mock_instance.distance_matrix.assert_called_once()
+    assert len(result) == 1
+
+
+def test_get_zips_within_range_force_refresh(tmp_path, monkeypatch):
+    """Test force_refresh ignores valid cache"""
+    cache_file = tmp_path / "zips_within_30mi.csv"
+    cache_df = pd.DataFrame({
+        'Full_Address': ['Lexington, MA 02421'],
+        'Distance_Miles': [5.0]
+    })
+    cache_df.to_csv(cache_file, index=False)
+
+    # Setup tier tracking
+    tier_file = tmp_path / "usage_by_tier.txt"
+    month_str = datetime.now().strftime('%Y-%m')
+    tier_file.write_text(f"{month_str},basic,0\n{month_str},advanced,0\n")
+
+    monkeypatch.setattr('utils.PROCESSED_DIR', str(tmp_path))
+    monkeypatch.setattr('utils.API_TIER_TRACKING_FILE', str(tier_file))
+    monkeypatch.setattr('utils.API_MONTHLY_LIMIT_BASIC', 20000)
+    monkeypatch.setattr('utils.USE_TRAFFIC', False)
+    monkeypatch.setattr('utils.PROXY_ON', False)
+    monkeypatch.setattr('utils.CHUNK_SIZE', 25)
+
+    zip_data = pd.DataFrame({
+        'Zip': ['02421'],
+        'Town': ['Lexington'],
+        'State': ['MA'],
+        'Lat': [42.44],
+        'Long': [-71.23]
+    })
+
+    # Mock API
+    mock_instance = MagicMock()
+    mock_instance.distance_matrix.return_value = {
+        'status': 'OK',
+        'rows': [{
+            'elements': [{
+                'status': 'OK',
+                'distance': {'value': 8046},
+                'duration': {'value': 600}
+            }]
+        }]
+    }
+
+    # force_refresh=True should bypass cache
+    # DON'T mock datetime - we need real datetime for cache age calculation
+    with patch('utils.get_google_api_key', return_value='test_key'):
+        with patch('utils.googlemaps.Client', return_value=mock_instance):
+            result = get_zips_within_range(
+                "244 Wood St, Lexington, MA",
+                zip_data,
+                max_range=30,
+                force_refresh=True  # Force refresh
+            )
+
+    # API SHOULD be called despite valid cache
+    mock_instance.distance_matrix.assert_called_once()
+    assert len(result) == 1
+    
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])

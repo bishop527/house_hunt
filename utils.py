@@ -570,12 +570,11 @@ def _fetch_distances_from_google(addresses, destination, current_usage):
 # ========================================
 
 def get_zips_within_range(destination, zip_data_df, max_range,
-                          force_refresh=False):
+                          force_refresh=False, max_cache_age_days=30):
     """
-    Get zip codes within specified range of destination.
+    Get zip codes within specified range of destination with cache age check.
 
-    Results are cached. Delete cache or use force_refresh=True
-    to regenerate.
+    OPTIMIZATION: Added cache age validation.
 
     Args:
         destination (str): Destination address
@@ -583,6 +582,7 @@ def get_zips_within_range(destination, zip_data_df, max_range,
                                     Lat, Long columns
         max_range (float): Maximum distance in miles
         force_refresh (bool): Ignore cache and fetch fresh
+        max_cache_age_days (int): Invalidate cache older than this
 
     Returns:
         list: Addresses (Town, State Zip) within range
@@ -592,17 +592,29 @@ def get_zips_within_range(destination, zip_data_df, max_range,
         f"zips_within_{max_range}mi.csv"
     )
 
+    # Check cache with age validation
     if os.path.exists(cache_file) and not force_refresh:
-        try:
-            cached_df = pd.read_csv(cache_file)
-            cached_addresses = cached_df['Full_Address'].tolist()
+        cache_age = datetime.now() - datetime.fromtimestamp(
+            os.path.getmtime(cache_file)
+        )
+
+        if cache_age.days < max_cache_age_days:
+            try:
+                cached_df = pd.read_csv(cache_file)
+                cached_addresses = cached_df['Full_Address'].tolist()
+                logger.info(
+                    f"Loaded {len(cached_addresses)} cached addresses "
+                    f"from {cache_file} ({cache_age.days} days old, "
+                    f"range: {max_range}mi)"
+                )
+                return cached_addresses
+            except Exception as e:
+                logger.warning(f"Failed to read cache: {e}. Fetching fresh.")
+        else:
             logger.info(
-                f"Loaded {len(cached_addresses)} cached addresses "
-                f"from {cache_file} (range: {max_range}mi)"
+                f"Cache expired ({cache_age.days} days old, "
+                f"max: {max_cache_age_days}), refreshing..."
             )
-            return cached_addresses
-        except Exception as e:
-            logger.warning(f"Failed to read cache: {e}. Fetching fresh.")
 
     valid_coords_df = zip_data_df.dropna(subset=['Lat', 'Long'])
 
@@ -668,18 +680,18 @@ def get_zips_within_range(destination, zip_data_df, max_range,
 
 
 def get_towns_within_range(destination, zip_data_df, max_range,
-                           force_refresh=False):
+                           force_refresh=False, max_cache_age_days=30):
     """
-    Get towns within specified range (one entry per town).
+    Get towns within specified range with cache age check.
 
-    Unlike get_zips_within_range which returns one entry per zip,
-    this returns one entry per town.
+    OPTIMIZATION: Added cache age validation.
 
     Args:
         destination (str): Destination address
         zip_data_df (pd.DataFrame): DataFrame with Zip, Town, State
         max_range (float): Maximum distance in miles
         force_refresh (bool): Ignore cache and fetch fresh
+        max_cache_age_days (int): Invalidate cache older than this
 
     Returns:
         list: Town addresses (Town, State Zip) within range
@@ -689,18 +701,30 @@ def get_towns_within_range(destination, zip_data_df, max_range,
         f"towns_within_{max_range}mi.csv"
     )
 
+    # Check cache with age validation
     if os.path.exists(cache_file) and not force_refresh:
-        logger.info(f"Loading cached town results from {cache_file}")
-        try:
-            cached_df = pd.read_csv(cache_file)
-            cached_towns = cached_df['Full_Address'].tolist()
+        cache_age = datetime.now() - datetime.fromtimestamp(
+            os.path.getmtime(cache_file)
+        )
+
+        if cache_age.days < max_cache_age_days:
+            logger.info(f"Loading cached town results from {cache_file}")
+            try:
+                cached_df = pd.read_csv(cache_file)
+                cached_towns = cached_df['Full_Address'].tolist()
+                logger.info(
+                    f"Loaded {len(cached_towns)} cached towns "
+                    f"from {cache_file} ({cache_age.days} days old, "
+                    f"range: {max_range}mi)"
+                )
+                return cached_towns
+            except Exception as e:
+                logger.warning(f"Failed to read cache: {e}. Fetching fresh.")
+        else:
             logger.info(
-                f"Loaded {len(cached_towns)} cached towns "
-                f"from {cache_file} (range: {max_range}mi)"
+                f"Cache expired ({cache_age.days} days old, "
+                f"max: {max_cache_age_days}), refreshing..."
             )
-            return cached_towns
-        except Exception as e:
-            logger.warning(f"Failed to read cache: {e}. Fetching fresh.")
 
     valid_coords_df = zip_data_df.dropna(subset=['Lat', 'Long'])
 
@@ -767,27 +791,33 @@ def get_towns_within_range(destination, zip_data_df, max_range,
 
 
 def get_locations_within_range(destination, zip_data_df, max_range,
-                               group_by='zip', force_refresh=False):
+                               group_by='zip', force_refresh=False,
+                               max_cache_age_days=30):
     """
-    Dispatcher to get zips or towns within range.
+    Dispatcher to get zips or towns within range with intelligent caching.
+
+    OPTIMIZATION: Added cache age validation and force_refresh parameter.
 
     Args:
         destination (str): Destination address
         zip_data_df (pd.DataFrame): DataFrame with location data
         max_range (float): Maximum distance in miles
         group_by (str): 'zip' or 'town'
-        force_refresh (bool): Ignore cache
+        force_refresh (bool): Ignore cache and fetch fresh (default: False)
+        max_cache_age_days (int): Invalidate cache older than this (default: 30)
 
     Returns:
         list: Addresses within range
     """
     if group_by == 'zip':
         return get_zips_within_range(
-            destination, zip_data_df, max_range, force_refresh
+            destination, zip_data_df, max_range, force_refresh,
+            max_cache_age_days
         )
     elif group_by == 'town':
         return get_towns_within_range(
-            destination, zip_data_df, max_range, force_refresh
+            destination, zip_data_df, max_range, force_refresh,
+            max_cache_age_days
         )
     else:
         raise ValueError(

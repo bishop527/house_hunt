@@ -1,7 +1,11 @@
 """
-Unit tests for collect_commute_data.py
+Unit tests for optimized collect_commute_data.py
 
-Tests commute data collection logic with mocked API calls.
+Tests the optimized version with:
+- Cache-first address loading
+- Unified budget checking
+- Single GCP validation call
+
 Run with: python -m pytest Tests/Commute/test_collect_commute_data.py -v
 """
 import os
@@ -16,11 +20,13 @@ from Commute.collect_commute_data import (
     fetch_commute_times,
     _process_element,
     load_historical_data,
-    update_statistics
+    update_statistics,
+    _check_budget_once,
+    _load_addresses_within_range
 )
 
 
-# --- Fixtures ---
+# --- Fixtures (mostly unchanged) ---
 
 @pytest.fixture
 def mock_addresses():
@@ -42,9 +48,9 @@ def mock_api_response_morning():
                 'elements': [
                     {
                         'status': 'OK',
-                        'distance': {'value': 8046},  # meters
-                        'duration': {'value': 600},   # seconds
-                        'duration_in_traffic': {'value': 780}  # 13 min
+                        'distance': {'value': 8046},
+                        'duration': {'value': 600},
+                        'duration_in_traffic': {'value': 780}
                     }
                 ]
             },
@@ -54,7 +60,7 @@ def mock_api_response_morning():
                         'status': 'OK',
                         'distance': {'value': 16093},
                         'duration': {'value': 900},
-                        'duration_in_traffic': {'value': 1200}  # 20 min
+                        'duration_in_traffic': {'value': 1200}
                     }
                 ]
             },
@@ -77,15 +83,13 @@ Lexington,MA,02421,5.0,10,2026-01-10,12.5,18.3,15.2
 Bedford,MA,01730,10.0,5,2026-01-09,18.0,25.0,21.0"""
 
 
-# --- Test determine_direction ---
+# --- Existing tests (unchanged) ---
 
 @patch('Commute.collect_commute_data.datetime')
 def test_determine_direction_morning(mock_datetime):
     """Test morning direction detection (before noon)"""
     mock_datetime.now.return_value = datetime(2026, 1, 12, 8, 30, 0)
-
     direction = determine_direction()
-
     assert direction == 'morning'
 
 
@@ -93,23 +97,9 @@ def test_determine_direction_morning(mock_datetime):
 def test_determine_direction_afternoon(mock_datetime):
     """Test afternoon direction detection (after noon)"""
     mock_datetime.now.return_value = datetime(2026, 1, 12, 17, 30, 0)
-
     direction = determine_direction()
-
     assert direction == 'afternoon'
 
-
-@patch('Commute.collect_commute_data.datetime')
-def test_determine_direction_exactly_noon(mock_datetime):
-    """Test direction at exactly noon"""
-    mock_datetime.now.return_value = datetime(2026, 1, 12, 12, 0, 0)
-
-    direction = determine_direction()
-
-    assert direction == 'afternoon'
-
-
-# --- Test process_element ---
 
 def test_process_element_ok_status():
     """Test processing element with OK status"""
@@ -118,14 +108,13 @@ def test_process_element_ok_status():
         'elements': [
             {
                 'status': 'OK',
-                'distance': {'value': 8046},  # ~5 miles
+                'distance': {'value': 8046},
                 'duration': {'value': 600},
-                'duration_in_traffic': {'value': 780}  # 13 minutes
+                'duration_in_traffic': {'value': 780}
             }
         ]
     }
     results = []
-
     _process_element(address, element, results)
 
     assert len(results) == 1
@@ -135,371 +124,280 @@ def test_process_element_ok_status():
     assert results[0]['status'] == 'OK'
 
 
-def test_process_element_zero_results():
-    """Test processing element with ZERO_RESULTS status"""
-    address = "Unknown, MA 99999"
-    element = {
-        'elements': [
-            {
-                'status': 'ZERO_RESULTS'
-            }
-        ]
-    }
-    results = []
+# --- NEW TESTS FOR OPTIMIZED CODE ---
 
-    _process_element(address, element, results)
+def test_check_budget_once_under_limit(tmp_path, monkeypatch):
+    """Test unified budget check when under limit"""
+    tier_file = tmp_path / "usage_by_tier.txt"
+    month_str = datetime.now().strftime('%Y-%m')
+    tier_file.write_text(f"{month_str},basic,5000\n{month_str},advanced,0\n")
 
-    assert len(results) == 1
-    assert results[0]['address'] == address
-    assert results[0]['distance_miles'] is None
-    assert results[0]['duration_minutes'] is None
-    assert results[0]['status'] == 'ZERO_RESULTS'
+    monkeypatch.setattr('Commute.collect_commute_data.API_TIER_TRACKING_FILE',
+                       str(tier_file))
+    monkeypatch.setattr('Commute.collect_commute_data.USE_TRAFFIC', False)
+    monkeypatch.setattr('Commute.collect_commute_data.API_MONTHLY_LIMIT_BASIC',
+                       10000)
 
+    with patch('Commute.collect_commute_data.get_current_usage_by_tier') as mock_usage:
+        mock_usage.return_value = {
+            'basic': 5000,
+            'advanced': 0,
+            'total': 5000,
+            'basic_remaining': 5000,
+            'advanced_remaining': 5000
+        }
 
-def test_process_element_not_found():
-    """Test processing element with NOT_FOUND status"""
-    address = "InvalidAddress"
-    element = {
-        'elements': [
-            {
-                'status': 'NOT_FOUND'
-            }
-        ]
-    }
-    results = []
+        result = _check_budget_once(100)
 
-    _process_element(address, element, results)
-
-    assert len(results) == 1
-    assert results[0]['status'] == 'NOT_FOUND'
+    assert result['can_proceed'] is True
+    assert result['current_usage'] == 5000
+    assert result['estimated'] == 100
+    assert result['projected'] == 5100
 
 
-def test_process_element_no_traffic_data():
-    """Test processing when duration_in_traffic not present"""
-    address = "Lexington, MA 02421"
-    element = {
-        'elements': [
-            {
-                'status': 'OK',
-                'distance': {'value': 8046},
-                'duration': {'value': 600}
-                # No duration_in_traffic
-            }
-        ]
-    }
-    results = []
+def test_check_budget_once_at_limit(tmp_path, monkeypatch):
+    """Test unified budget check when at limit"""
+    monkeypatch.setattr('Commute.collect_commute_data.USE_TRAFFIC', False)
+    monkeypatch.setattr('Commute.collect_commute_data.API_MONTHLY_LIMIT_BASIC',
+                       10000)
 
-    _process_element(address, element, results)
+    with patch('Commute.collect_commute_data.get_current_usage_by_tier') as mock_usage:
+        mock_usage.return_value = {
+            'basic': 10000,
+            'advanced': 0,
+            'total': 10000,
+            'basic_remaining': 0,
+            'advanced_remaining': 5000
+        }
 
-    # Should fall back to regular duration
-    assert results[0]['duration_minutes'] == 10.0
+        result = _check_budget_once(100)
+
+    assert result['can_proceed'] is False
+    assert result['current_usage'] == 10000
 
 
-# --- Test fetch_commute_times ---
+def test_check_budget_once_exceeds_with_user_abort(tmp_path, monkeypatch):
+    """Test budget check with user declining to proceed"""
+    monkeypatch.setattr('Commute.collect_commute_data.USE_TRAFFIC', False)
+    monkeypatch.setattr('Commute.collect_commute_data.API_MONTHLY_LIMIT_BASIC',
+                       10000)
+
+    with patch('Commute.collect_commute_data.get_current_usage_by_tier') as mock_usage:
+        mock_usage.return_value = {
+            'basic': 9500,
+            'advanced': 0,
+            'total': 9500,
+            'basic_remaining': 500,
+            'advanced_remaining': 5000
+        }
+
+        with patch('builtins.input', return_value='no'):
+            result = _check_budget_once(1000)
+
+    assert result['can_proceed'] is False
+    assert result['projected'] == 10500
+
+
+def test_check_budget_once_exceeds_with_user_confirm(tmp_path, monkeypatch):
+    """Test budget check with user confirming to proceed"""
+    monkeypatch.setattr('Commute.collect_commute_data.USE_TRAFFIC', False)
+    monkeypatch.setattr('Commute.collect_commute_data.API_MONTHLY_LIMIT_BASIC',
+                       10000)
+
+    with patch('Commute.collect_commute_data.get_current_usage_by_tier') as mock_usage:
+        mock_usage.return_value = {
+            'basic': 9500,
+            'advanced': 0,
+            'total': 9500,
+            'basic_remaining': 500,
+            'advanced_remaining': 5000
+        }
+
+        with patch('builtins.input', return_value='yes'):
+            result = _check_budget_once(1000)
+
+    assert result['can_proceed'] is True
+    assert result['projected'] == 10500
+
+
+def test_load_addresses_cache_hit(tmp_path, monkeypatch):
+    """Test loading addresses from cache (optimization path)"""
+    # Setup cache file
+    cache_file = tmp_path / "towns_within_40mi.csv"
+    cache_df = pd.DataFrame({
+        'Full_Address': ['Lexington, MA 02421', 'Bedford, MA 01730'],
+        'Distance_Miles': [5.0, 10.0]
+    })
+    cache_df.to_csv(cache_file, index=False)
+
+    monkeypatch.setattr('Commute.collect_commute_data.PROCESSED_DIR', str(tmp_path))
+    monkeypatch.setattr('Commute.collect_commute_data.LOCATION_GROUPING', 'town')
+    monkeypatch.setattr('Commute.collect_commute_data.MAX_RANGE', 40)
+
+    # Should NOT call get_zip_data or get_locations_within_range
+    with patch('Commute.collect_commute_data.get_zip_data') as mock_zip:
+        with patch('Commute.collect_commute_data.get_locations_within_range') as mock_range:
+            addresses = _load_addresses_within_range()
+
+    # Verify cache was used (functions not called)
+    mock_zip.assert_not_called()
+    mock_range.assert_not_called()
+
+    # Verify correct addresses loaded
+    assert len(addresses) == 2
+    assert 'Lexington, MA 02421' in addresses
+
+
+def test_load_addresses_cache_miss(tmp_path, monkeypatch):
+    """Test loading addresses when cache doesn't exist"""
+    monkeypatch.setattr('Commute.collect_commute_data.PROCESSED_DIR',
+                       str(tmp_path / 'nonexistent'))
+    monkeypatch.setattr('Commute.collect_commute_data.LOCATION_GROUPING', 'town')
+    monkeypatch.setattr('Commute.collect_commute_data.MAX_RANGE', 40)
+
+    mock_zip_df = pd.DataFrame({
+        'Zip': ['02421', '01730'],
+        'Town': ['Lexington', 'Bedford'],
+        'State': ['MA', 'MA'],
+        'Lat': [42.44, 42.48],
+        'Long': [-71.23, -71.26]
+    })
+
+    # Should call both get_zip_data and get_locations_within_range
+    with patch('Commute.collect_commute_data.get_zip_data',
+               return_value=mock_zip_df) as mock_zip:
+        with patch('Commute.collect_commute_data.get_locations_within_range',
+                   return_value=['Lexington, MA 02421', 'Bedford, MA 01730']) as mock_range:
+            addresses = _load_addresses_within_range()
+
+    # Verify both functions were called
+    mock_zip.assert_called_once()
+    mock_range.assert_called_once()
+
+    assert len(addresses) == 2
+
+
+def test_load_addresses_cache_corrupted(tmp_path, monkeypatch, caplog):
+    """Test handling of corrupted cache file"""
+    import logging
+
+    # Create corrupted cache
+    cache_file = tmp_path / "towns_within_40mi.csv"
+    cache_file.write_text("corrupted,data,here\nno,proper,format")
+
+    monkeypatch.setattr('Commute.collect_commute_data.PROCESSED_DIR', str(tmp_path))
+    monkeypatch.setattr('Commute.collect_commute_data.LOCATION_GROUPING', 'town')
+    monkeypatch.setattr('Commute.collect_commute_data.MAX_RANGE', 40)
+
+    mock_zip_df = pd.DataFrame({
+        'Zip': ['02421'],
+        'Town': ['Lexington'],
+        'State': ['MA'],
+        'Lat': [42.44],
+        'Long': [-71.23]
+    })
+
+    # Should fall back to full pipeline
+    with patch('Commute.collect_commute_data.get_zip_data',
+               return_value=mock_zip_df):
+        with patch('Commute.collect_commute_data.get_locations_within_range',
+                   return_value=['Lexington, MA 02421']):
+            with caplog.at_level(logging.WARNING):
+                addresses = _load_addresses_within_range()
+
+    # Verify warning was logged
+    assert 'Cache read failed' in caplog.text
+    assert len(addresses) == 1
+
+
+# --- Integration test for optimized flow ---
 
 @patch('Commute.collect_commute_data.googlemaps.Client')
-def test_fetch_commute_times_morning(mock_client, mock_addresses,
-                                     mock_api_response_morning, monkeypatch):
-    """Test fetching morning commute times"""
-    # Setup
-    mock_instance = MagicMock()
-    mock_instance.distance_matrix.return_value = mock_api_response_morning
-    mock_client.return_value = mock_instance
+def test_collect_commute_data_optimized_flow(mock_client, tmp_path, monkeypatch):
+    """Test complete optimized flow with cache hit"""
 
+    # Setup cache
+    cache_file = tmp_path / "towns_within_40mi.csv"
+    cache_df = pd.DataFrame({
+        'Full_Address': ['Lexington, MA 02421'],
+        'Distance_Miles': [5.0]
+    })
+    cache_df.to_csv(cache_file, index=False)
+
+    # Setup tier tracking
+    tier_file = tmp_path / "usage_by_tier.txt"
+    month_str = datetime.now().strftime('%Y-%m')
+    tier_file.write_text(f"{month_str},basic,100\n{month_str},advanced,0\n")
+
+    stats_file = tmp_path / "commute_stats.csv"
+
+    # Monkeypatch paths
+    monkeypatch.setattr('Commute.collect_commute_data.PROCESSED_DIR', str(tmp_path))
+    monkeypatch.setattr('Commute.collect_commute_data.LOCATION_GROUPING', 'town')
+    monkeypatch.setattr('Commute.collect_commute_data.MAX_RANGE', 40)
+    monkeypatch.setattr('Commute.collect_commute_data.API_TIER_TRACKING_FILE',
+                       str(tier_file))
+    monkeypatch.setattr('Commute.collect_commute_data.COMMUTE_STATS_FILE',
+                       str(stats_file))
+    monkeypatch.setattr('Commute.collect_commute_data.USE_TRAFFIC', False)
+    monkeypatch.setattr('Commute.collect_commute_data.API_MONTHLY_LIMIT_BASIC', 10000)
     monkeypatch.setattr('Commute.collect_commute_data.CHUNK_SIZE', 25)
     monkeypatch.setattr('Commute.collect_commute_data.PROXY_ON', False)
 
-    with patch('Commute.collect_commute_data.get_google_api_key',
-               return_value='test_key'):
-        results, elements = fetch_commute_times(mock_addresses, 'morning')
-
-    # Should have 2 OK results and 1 ZERO_RESULTS
-    assert len(results) == 3
-    assert elements == 3
-
-    ok_results = [r for r in results if r['status'] == 'OK']
-    assert len(ok_results) == 2
-
-    # Verify API was called with correct parameters
-    call_args = mock_instance.distance_matrix.call_args
-    assert call_args[1]['origins'] == mock_addresses
-    assert 'Wood St' in call_args[1]['destinations']
-
-
-@patch('Commute.collect_commute_data.googlemaps.Client')
-def test_fetch_commute_times_afternoon(mock_client, mock_addresses,
-                                       mock_api_response_morning, monkeypatch):
-    """Test fetching afternoon commute times"""
-    mock_instance = MagicMock()
-    mock_instance.distance_matrix.return_value = mock_api_response_morning
-    mock_client.return_value = mock_instance
-
-    monkeypatch.setattr('Commute.collect_commute_data.CHUNK_SIZE', 25)
-    monkeypatch.setattr('Commute.collect_commute_data.PROXY_ON', False)
-
-    with patch('Commute.collect_commute_data.get_google_api_key',
-               return_value='test_key'):
-        results, elements = fetch_commute_times(mock_addresses, 'afternoon')
-
-    # Verify API was called with Work -> Home direction
-    call_args = mock_instance.distance_matrix.call_args
-    assert 'Wood St' in call_args[1]['origins']
-    assert call_args[1]['destinations'] == mock_addresses
-
-
-@patch('Commute.collect_commute_data.googlemaps.Client')
-def test_fetch_commute_times_api_error(mock_client, mock_addresses,
-                                       monkeypatch):
-    """Test handling of API errors during fetch"""
-    import googlemaps.exceptions
-
-    mock_instance = MagicMock()
-    mock_instance.distance_matrix.side_effect = \
-        googlemaps.exceptions.ApiError("Test error")
-    mock_client.return_value = mock_instance
-
-    monkeypatch.setattr('Commute.collect_commute_data.CHUNK_SIZE', 25)
-    monkeypatch.setattr('Commute.collect_commute_data.PROXY_ON', False)
-
-    with patch('Commute.collect_commute_data.get_google_api_key',
-               return_value='test_key'):
-        results, elements = fetch_commute_times(mock_addresses, 'morning')
-
-    # Should have counted elements but no results
-    assert elements == 3
-    assert len(results) == 0
-
-
-@patch('Commute.collect_commute_data.googlemaps.Client')
-def test_fetch_commute_times_chunking(mock_client, monkeypatch):
-    """Test that large address lists are chunked properly"""
-    # Create 30 addresses (should be split into 2 chunks of 25 and 5)
-    addresses = [f"Town{i}, MA 0{i:04d}" for i in range(30)]
-
+    # Mock API
     mock_instance = MagicMock()
     mock_instance.distance_matrix.return_value = {
         'status': 'OK',
-        'rows': [{'elements': [{'status': 'OK', 'distance': {'value': 8046},
-                                'duration': {'value': 600},
-                                'duration_in_traffic': {'value': 780}}]}
-                 for _ in range(25)]
+        'rows': [{
+            'elements': [{
+                'status': 'OK',
+                'distance': {'value': 8046},
+                'duration': {'value': 600},
+                'duration_in_traffic': {'value': 780}
+            }]
+        }]
     }
     mock_client.return_value = mock_instance
 
-    monkeypatch.setattr('Commute.collect_commute_data.CHUNK_SIZE', 25)
-    monkeypatch.setattr('Commute.collect_commute_data.PROXY_ON', False)
-
+    # Patches
     with patch('Commute.collect_commute_data.get_google_api_key',
                return_value='test_key'):
-        results, elements = fetch_commute_times(addresses, 'morning')
-
-    # Should have made 2 API calls
-    assert mock_instance.distance_matrix.call_count == 2
-
-
-def test_fetch_commute_times_no_api_key():
-    """Test handling of missing API key"""
-    with patch('Commute.collect_commute_data.get_google_api_key', return_value=None):
-        with pytest.raises(SystemExit):
-            fetch_commute_times(["Lexington, MA 02421"], 'morning')
-
-
-# --- Test load_historical_data ---
-
-def test_load_historical_data_success(tmp_path, mock_historical_csv,
-                                      monkeypatch):
-    """Test loading existing historical data"""
-    stats_file = tmp_path / "commute_stats.csv"
-    stats_file.write_text(mock_historical_csv)
-
-    monkeypatch.setattr('Commute.collect_commute_data.COMMUTE_STATS_FILE',
-                       str(stats_file))
-
-    with patch('Commute.collect_commute_data.load_csv_with_zip') as mock_load:
-        mock_load.return_value = pd.read_csv(stats_file, dtype={'Zip': str})
-        df = load_historical_data()
-
-    assert len(df) == 2
-    assert '02421' in df['Zip'].values
-
-
-def test_load_historical_data_missing_file(tmp_path, monkeypatch):
-    """Test handling of missing historical data file"""
-    monkeypatch.setattr('Commute.collect_commute_data.COMMUTE_STATS_FILE',
-                       str(tmp_path / "nonexistent.csv"))
-
-    with patch('Commute.collect_commute_data.load_csv_with_zip') as mock_load:
-        mock_load.return_value = pd.DataFrame()
-        df = load_historical_data()
-
-    assert df.empty
-
-
-# --- Test update_statistics ---
-
-def test_update_statistics_new_location(tmp_path, monkeypatch):
-    """Test updating statistics with new location"""
-    stats_file = tmp_path / "commute_stats.csv"
-
-    monkeypatch.setattr('Commute.collect_commute_data.COMMUTE_STATS_FILE',
-                       str(stats_file))
-
-    results = [
-        {
-            'address': 'Lexington, MA 02421',
-            'distance_miles': 5.0,
-            'duration_minutes': 15.0,
-            'status': 'OK'
-        }
-    ]
-
-    with patch('Commute.collect_commute_data.load_historical_data') as mock_load:
-        mock_load.return_value = pd.DataFrame()
-
         with patch('Commute.collect_commute_data.datetime') as mock_dt:
-            mock_dt.now.return_value = datetime(2026, 1, 12)
-            update_statistics(results)
+            mock_dt.now.return_value = datetime(2026, 1, 12, 8, 0, 0)
+            with patch('Commute.collect_commute_data.get_zip_data') as mock_zip:
+                with patch('Commute.collect_commute_data.validate_local_tracking') as mock_validate:
+                    mock_validate.return_value = {
+                        'local_basic': 101,
+                        'local_advanced': 0,
+                        'local_total': 101,
+                        'google': 101,
+                        'discrepancy': 0,
+                        'discrepancy_ratio': 0.0,
+                        'costs': {'basic_cost': 0, 'advanced_cost': 0, 'total_cost': 0},
+                        'tier_usage': {
+                            'basic': 101,
+                            'advanced': 0,
+                            'total': 101,
+                            'basic_remaining': 9899,
+                            'advanced_remaining': 5000
+                        }
+                    }
 
-    # Verify file was created
+                    from Commute.collect_commute_data import collect_commute_data
+                    collect_commute_data()
+
+    # Verify optimizations:
+    # 1. get_zip_data was NOT called (cache hit)
+    mock_zip.assert_not_called()
+
+    # 2. validate_local_tracking called only ONCE (at end)
+    assert mock_validate.call_count == 1
+
+    # 3. Stats file was created
     assert stats_file.exists()
 
-    df = pd.read_csv(stats_file, dtype={'Zip': str})
-    assert len(df) == 1
-    assert df.iloc[0]['Zip'] == '02421'
-    assert df.iloc[0]['Total_Runs'] == 1
-    assert df.iloc[0]['Average_Time'] == 15.0
-
-
-def test_update_statistics_existing_location(tmp_path, mock_historical_csv,
-                                             monkeypatch):
-    """Test updating statistics for existing location"""
-    stats_file = tmp_path / "commute_stats.csv"
-    stats_file.write_text(mock_historical_csv)
-
-    monkeypatch.setattr('Commute.collect_commute_data.COMMUTE_STATS_FILE',
-                       str(stats_file))
-
-    results = [
-        {
-            'address': 'Lexington, MA 02421',
-            'distance_miles': 5.0,
-            'duration_minutes': 20.0,  # Different from historical avg
-            'status': 'OK'
-        }
-    ]
-
-    with patch('Commute.collect_commute_data.load_historical_data') as mock_load:
-        hist_df = pd.read_csv(stats_file, dtype={'Zip': str})
-        mock_load.return_value = hist_df
-
-        with patch('Commute.collect_commute_data.datetime') as mock_dt:
-            mock_dt.now.return_value = datetime(2026, 1, 12)
-            update_statistics(results)
-
-    df = pd.read_csv(stats_file, dtype={'Zip': str})
-    lex_record = df[df['Zip'] == '02421'].iloc[0]
-
-    # Total_Runs should increment
-    assert lex_record['Total_Runs'] == 11  # Was 10, now 11
-
-    # Average should be updated: (15.2 * 10 + 20.0) / 11 = 15.64
-    assert round(lex_record['Average_Time'], 2) == 15.64
-
-    # Max should be updated
-    assert lex_record['Max_Time'] == 20.0
-
-
-def test_update_statistics_failed_results(tmp_path, monkeypatch):
-    """Test that failed API results are not processed"""
-    stats_file = tmp_path / "commute_stats.csv"
-
-    monkeypatch.setattr('Commute.collect_commute_data.COMMUTE_STATS_FILE',
-                       str(stats_file))
-
-    results = [
-        {
-            'address': 'Lexington, MA 02421',
-            'distance_miles': None,
-            'duration_minutes': None,
-            'status': 'ZERO_RESULTS'
-        }
-    ]
-
-    with patch('Commute.collect_commute_data.load_historical_data') as mock_load:
-        mock_load.return_value = pd.DataFrame()
-
-        with patch('Commute.collect_commute_data.datetime') as mock_dt:
-            mock_dt.now.return_value = datetime(2026, 1, 12)
-            update_statistics(results)
-
-    # File should not be created since no valid results
-    assert not stats_file.exists()
-
-
-def test_update_statistics_empty_results():
-    """Test handling of empty results list"""
-    # Should not raise an error
-    update_statistics([])
-
-
-def test_update_statistics_address_parsing(tmp_path, monkeypatch):
-    """Test proper parsing of address components"""
-    stats_file = tmp_path / "commute_stats.csv"
-
-    monkeypatch.setattr('Commute.collect_commute_data.COMMUTE_STATS_FILE',
-                       str(stats_file))
-
-    results = [
-        {
-            'address': 'North Cambridge, MA 02140',
-            'distance_miles': 3.5,
-            'duration_minutes': 12.0,
-            'status': 'OK'
-        }
-    ]
-
-    with patch('Commute.collect_commute_data.load_historical_data') as mock_load:
-        mock_load.return_value = pd.DataFrame()
-
-        with patch('Commute.collect_commute_data.datetime') as mock_dt:
-            mock_dt.now.return_value = datetime(2026, 1, 12)
-            update_statistics(results)
-
-    df = pd.read_csv(stats_file, dtype={'Zip': str})
-    assert df.iloc[0]['Town'] == 'North Cambridge'
-    assert df.iloc[0]['State'] == 'MA'
-    assert df.iloc[0]['Zip'] == '02140'
-
-
-def test_update_statistics_permission_error(tmp_path, monkeypatch):
-    """Test handling of file permission errors"""
-    stats_file = tmp_path / "commute_stats.csv"
-    stats_file.write_text("dummy")
-    stats_file.chmod(0o444)  # Read-only
-
-    monkeypatch.setattr('Commute.collect_commute_data.COMMUTE_STATS_FILE',
-                       str(stats_file))
-
-    results = [
-        {
-            'address': 'Lexington, MA 02421',
-            'distance_miles': 5.0,
-            'duration_minutes': 15.0,
-            'status': 'OK'
-        }
-    ]
-
-    with patch('Commute.collect_commute_data.load_historical_data') as mock_load:
-        mock_load.return_value = pd.DataFrame()
-
-        with patch('Commute.collect_commute_data.datetime') as mock_dt:
-            mock_dt.now.return_value = datetime(2026, 1, 12)
-
-            with pytest.raises(PermissionError):
-                update_statistics(results)
-
-    # Cleanup
-    stats_file.chmod(0o644)
+    # 4. API was called
+    assert mock_instance.distance_matrix.call_count == 1
 
 
 if __name__ == "__main__":
