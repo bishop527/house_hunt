@@ -44,7 +44,7 @@ def setup_logger(
     file_handler.setLevel(level)
     file_formatter = UTCFormatter(
         '%(asctime)s UTC [%(levelname)s] %(name)s: %(message)s',
-        datefmt='%Y-%m-%d %H:%M:%S'
+        datefmt='%Y-%m-%d %H:%M:%S %a'
     )
     file_handler.setFormatter(file_formatter)
     logger.addHandler(file_handler)
@@ -55,7 +55,7 @@ def setup_logger(
         console_handler.setLevel(level)
         console_formatter = UTCFormatter(
             '%(asctime)s UTC [%(levelname)s] %(message)s',
-            datefmt='%H:%M:%S'
+            datefmt='%H:%M:%S %a'
         )
         console_handler.setFormatter(console_formatter)
         logger.addHandler(console_handler)
