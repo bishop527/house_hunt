@@ -16,6 +16,7 @@ from datetime import datetime
 from urllib.request import urlretrieve
 import pandas as pd
 from tqdm import tqdm
+from logging_config import setup_logger, silence_verbose_loggers
 
 from constants import *
 from utils import (
@@ -25,13 +26,11 @@ from utils import (
 )
 
 # Configure logging
-logging.basicConfig(
-    level=LOG_LEVEL,
-    filename=APP_LOG_FILE,
-    format='%(asctime)s [%(levelname)s] %(message)s',
-    datefmt='%Y-%m-%d %H:%M:%S'
-)
-logger = logging.getLogger(__name__)
+logger = setup_logger(__name__)
+silence_verbose_loggers()
+
+# Module-level cache for property tax rates
+_property_tax_cache = None
 
 
 def download_redfin_data():
@@ -169,7 +168,7 @@ def get_redfin_data(zip_code):
         )
 
         # Filter for this zip code
-        # REGION_TYPE should be 'zip' (lowercase in data)
+        # REGION_TYPE is 'zip code' (not 'zip')
         # REGION format is "Zip Code: 02421"
         target_region = f"Zip Code: {zip_code.zfill(5)}"
 
@@ -273,6 +272,218 @@ def get_hud_fmr_data(zip_code, state):
     return None
 
 
+def load_property_tax_rates():
+    """
+    Load property tax rates from CSV.
+
+    Uses caching to avoid re-reading file multiple times per run.
+
+    Returns:
+        pd.DataFrame: Tax rates by town and state
+    """
+    global _property_tax_cache
+
+    if _property_tax_cache is not None:
+        return _property_tax_cache
+
+    if os.path.exists(PROPERTY_TAX_FILE):
+        try:
+            _property_tax_cache = pd.read_csv(PROPERTY_TAX_FILE)
+            logger.info(
+                f"Loaded {len(_property_tax_cache)} property tax rates"
+            )
+            return _property_tax_cache
+        except Exception as e:
+            logger.error(f"Failed to load property tax rates: {e}")
+            _property_tax_cache = pd.DataFrame()
+            return _property_tax_cache
+    else:
+        logger.warning(
+            f"Property tax file not found: {PROPERTY_TAX_FILE}"
+        )
+        _property_tax_cache = pd.DataFrame()
+        return _property_tax_cache
+
+
+def get_property_tax_rate(town, state):
+    """
+    Get property tax rate for a specific town.
+
+    Uses state-specific defaults when town not found in database.
+
+    Args:
+        town (str): Town name (case insensitive)
+        state (str): State abbreviation (MA, RI, NH)
+
+    Returns:
+        dict: Tax information (always returns a value)
+        {
+            'tax_rate_per_1000': float,
+            'fiscal_year': str,
+            'tax_data_source': str  # 'database' or 'state_default'
+        }
+    """
+    tax_df = load_property_tax_rates()
+
+    # Try to find in database first (case-insensitive)
+    if not tax_df.empty:
+        tax_row = tax_df[
+            (tax_df['Town'].str.lower() == town.lower()) &
+            (tax_df['State'] == state)
+        ]
+
+        if len(tax_row) > 0:
+            row = tax_row.iloc[0]
+            return {
+                'tax_rate_per_1000': row['Tax_Rate_Per_1000'],
+                'fiscal_year': row['Fiscal_Year'],
+                'tax_data_source': 'database'
+            }
+
+    # Not found in database - use state default
+    logger.warning(
+        f"No tax rate found for {town}, {state} - "
+        f"using state default"
+    )
+
+    # Determine default based on state
+    if state == 'MA':
+        default_rate = DEFAULT_MA_TAX_RATE
+    elif state == 'RI':
+        default_rate = DEFAULT_RI_TAX_RATE
+    elif state == 'NH':
+        default_rate = DEFAULT_NH_TAX_RATE
+    else:
+        # Fallback for unexpected states
+        default_rate = DEFAULT_MA_TAX_RATE
+        logger.warning(
+            f"Unknown state '{state}', using MA default rate"
+        )
+
+    return {
+        'tax_rate_per_1000': default_rate,
+        'fiscal_year': 'N/A (default)',
+        'tax_data_source': f'{state}_default'
+    }
+
+
+def enrich_with_property_tax(data):
+    """
+    Add property tax information to housing data.
+
+    Always adds tax data - uses state defaults when town not in database.
+
+    Args:
+        data (dict): Housing data dictionary
+
+    Returns:
+        dict: Enriched with tax_rate, estimated_annual_tax, etc.
+    """
+    town = data.get('town')
+    state = data.get('state')
+
+    if not town or not state:
+        logger.warning(
+            "Missing town or state in data - cannot calculate tax"
+        )
+        return data
+
+    # Get tax info (always returns a value)
+    tax_info = get_property_tax_rate(town, state)
+
+    data['tax_rate_per_1000'] = tax_info['tax_rate_per_1000']
+    data['tax_fiscal_year'] = tax_info['fiscal_year']
+    data['tax_data_source'] = tax_info['tax_data_source']
+
+    # Calculate estimated annual property tax
+    median_price = data.get('median_sale_price')
+    if median_price and not pd.isna(median_price):
+        data['estimated_annual_tax'] = round(
+            (median_price * tax_info['tax_rate_per_1000']) / 1000,
+            2
+        )
+        # Monthly tax
+        data['estimated_monthly_tax'] = round(
+            data['estimated_annual_tax'] / 12,
+            2
+        )
+
+    return data
+
+
+def get_historical_redfin_data(zip_code, months=12):
+    """
+    Get historical monthly data from Redfin for min/max/avg calculation.
+
+    Args:
+        zip_code (str): 5-digit zip code
+        months (int): Number of months to look back
+
+    Returns:
+        dict or None: Historical statistics
+        {
+            'min_monthly_price': float,
+            'max_monthly_price': float,
+            'avg_monthly_price': float,
+            'months_of_data': int,
+            'price_trend': str  # 'increasing', 'decreasing', 'stable'
+        }
+    """
+    if not os.path.exists(REDFIN_DATA_FILE):
+        return None
+
+    try:
+        df = pd.read_csv(
+            REDFIN_DATA_FILE,
+            sep='\t',
+            dtype={'REGION': str},
+            low_memory=False
+        )
+
+        target_region = f"Zip Code: {zip_code.zfill(5)}"
+
+        zip_data = df[
+            (df['REGION_TYPE'] == 'zip code') &
+            (df['REGION'] == target_region)
+        ].sort_values('PERIOD_END', ascending=False).head(months)
+
+        if len(zip_data) == 0:
+            return None
+
+        prices = zip_data['MEDIAN_SALE_PRICE'].dropna()
+
+        if len(prices) == 0:
+            return None
+
+        # Calculate trend (compare first and last month)
+        if len(prices) >= 2:
+            recent_price = prices.iloc[0]
+            old_price = prices.iloc[-1]
+
+            if recent_price > old_price * 1.05:  # 5% increase
+                trend = 'increasing'
+            elif recent_price < old_price * 0.95:  # 5% decrease
+                trend = 'decreasing'
+            else:
+                trend = 'stable'
+        else:
+            trend = 'insufficient_data'
+
+        return {
+            'min_monthly_price': float(prices.min()),
+            'max_monthly_price': float(prices.max()),
+            'avg_monthly_price': float(prices.mean()),
+            'months_of_data': len(prices),
+            'price_trend': trend
+        }
+
+    except Exception as e:
+        logger.error(
+            f"Error reading historical Redfin data for {zip_code}: {e}"
+        )
+        return None
+
+
 def fetch_housing_data(addresses):
     """
     Fetch housing data for list of addresses.
@@ -310,6 +521,15 @@ def fetch_housing_data(addresses):
                 # Add town and state to result
                 data['town'] = town
                 data['state'] = state
+
+                # Enrich with property tax data
+                data = enrich_with_property_tax(data)
+
+                # Get historical monthly statistics
+                historical = get_historical_redfin_data(zip_code, months=12)
+                if historical:
+                    data.update(historical)
+
                 results.append(data)
             else:
                 logger.warning(
@@ -353,6 +573,7 @@ def update_statistics(results):
     - Total number of data points collected
     - Last update date
     - Min/Max/Average prices
+    - Monthly price tracking (hybrid approach)
 
     Args:
         results (list): List of housing data dicts from fetch_housing_data()
@@ -367,8 +588,9 @@ def update_statistics(results):
     # Load historical data
     df_hist = load_historical_data()
 
-    # Get today's date
+    # Get today's date and month
     today = datetime.now().strftime('%Y-%m-%d')
+    month_str = datetime.now().strftime('%Y-%m')
 
     # Process each result
     updated_records = []
@@ -391,7 +613,7 @@ def update_statistics(results):
             rec['Total_Runs'] += 1
             rec['Last_Run_Date'] = today
 
-            # Update price statistics
+            # Update price statistics (all-time min/max/avg)
             if 'median_sale_price' in row and pd.notna(
                 row['median_sale_price']
             ):
@@ -415,6 +637,19 @@ def update_statistics(results):
             rec['Latest_Homes_Sold'] = row.get('homes_sold')
             rec['Latest_Inventory'] = row.get('inventory')
 
+            # Update property tax info
+            rec['Tax_Rate_Per_1000'] = row.get('tax_rate_per_1000')
+            rec['Tax_Data_Source'] = row.get('tax_data_source')
+            rec['Estimated_Annual_Tax'] = row.get('estimated_annual_tax')
+            rec['Estimated_Monthly_Tax'] = row.get('estimated_monthly_tax')
+
+            # Update historical monthly stats (from Redfin historical data)
+            rec['Min_Monthly_Price'] = row.get('min_monthly_price')
+            rec['Max_Monthly_Price'] = row.get('max_monthly_price')
+            rec['Avg_Monthly_Price'] = row.get('avg_monthly_price')
+            rec['Months_Of_Data'] = row.get('months_of_data')
+            rec['Price_Trend'] = row.get('price_trend')
+
         else:
             # Create new record
             price = row.get('median_sale_price')
@@ -433,7 +668,16 @@ def update_statistics(results):
                 'Latest_PPSF': row.get('median_ppsf'),
                 'Latest_Homes_Sold': row.get('homes_sold'),
                 'Latest_Inventory': row.get('inventory'),
-                'Data_Source': row.get('source', 'redfin')
+                'Data_Source': row.get('source', 'redfin'),
+                'Tax_Rate_Per_1000': row.get('tax_rate_per_1000'),
+                'Tax_Data_Source': row.get('tax_data_source'),
+                'Estimated_Annual_Tax': row.get('estimated_annual_tax'),
+                'Estimated_Monthly_Tax': row.get('estimated_monthly_tax'),
+                'Min_Monthly_Price': row.get('min_monthly_price'),
+                'Max_Monthly_Price': row.get('max_monthly_price'),
+                'Avg_Monthly_Price': row.get('avg_monthly_price'),
+                'Months_Of_Data': row.get('months_of_data'),
+                'Price_Trend': row.get('price_trend')
             }
 
         updated_records.append(rec)
@@ -464,9 +708,8 @@ def update_statistics(results):
         )
     except PermissionError:
         logger.critical(
-            f"!!! PERMISSION ERROR !!!\n"
-            f"Cannot write to {HOUSING_STATS_FILE}.\n"
-            f"Please close the file if open in another program."
+            f"Permission denied writing to {HOUSING_STATS_FILE} - "
+            f"file may be open in another program"
         )
         raise
     except IOError as e:
@@ -484,12 +727,9 @@ def collect_housing_data():
     3. Fetches housing data for each zip
     4. Updates historical statistics
     """
-    logger.info("=" * 70)
-    logger.info("Starting housing data collection")
-    logger.info("=" * 70)
+    logger.info("STARTED: Housing data collection")
 
     # Download/verify Redfin data
-    logger.info("Checking Redfin data availability...")
     if not download_redfin_data():
         logger.error("Failed to obtain Redfin data. Aborting.")
         return
@@ -513,20 +753,13 @@ def collect_housing_data():
     # Update statistics
     if results:
         update_statistics(results)
-
-        # Print summary
-        print("\n" + "=" * 70)
-        print("HOUSING DATA COLLECTION COMPLETE")
-        print("-" * 70)
-        print(f"Addresses queried:     {len(addresses)}")
-        print(f"Successful results:    {len(results)}")
-        print(f"Data source:           Redfin (free)")
-        print(f"API cost:              $0.00")
-        print("=" * 70 + "\n")
+        logger.info(
+            f"COMPLETED: Housing collection | "
+            f"queried={len(addresses)} collected={len(results)} | "
+            f"source=Redfin cost=$0.00"
+        )
     else:
         logger.warning("No housing data collected.")
-
-    logger.info("Housing data collection completed successfully")
 
 
 if __name__ == "__main__":
@@ -534,8 +767,6 @@ if __name__ == "__main__":
         collect_housing_data()
     except KeyboardInterrupt:
         logger.info("Collection interrupted by user")
-        print("\nCollection interrupted by user.")
     except Exception as e:
         logger.critical(f"Fatal error: {type(e).__name__}: {e}")
-        print(f"\nFatal error occurred. Check logs at {APP_LOG_FILE}")
         raise
