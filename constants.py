@@ -94,7 +94,7 @@ UNITS = 'imperial'
 AVOID = 'highways'  # Options: None, 'highways', 'tolls'
 
 # Traffic Configuration
-USE_TRAFFIC = False  # Set to True for Advanced tier (with traffic data)
+USE_TRAFFIC = True  # Set to True for Advanced tier (with traffic data)
 TRAFFIC_MODEL = 'best_guess'  # Used when USE_TRAFFIC=True
 
 # ========================================
