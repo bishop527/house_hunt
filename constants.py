@@ -50,6 +50,8 @@ API_TIER_TRACKING_FILE = os.path.join(RESULTS_DIR, "monthly_API_usage_by_tier.tx
 # DATA FILES - LOGS
 # ========================================
 APP_LOG_FILE = os.path.join(LOGS_DIR, "app.log")
+COMMUTE_LOG_FILE = os.path.join(LOGS_DIR, 'commute.log')
+HOUSING_LOG_FILE = os.path.join(LOGS_DIR, 'housing.log')
 
 # ========================================
 # LOGGING CONFIGURATION
