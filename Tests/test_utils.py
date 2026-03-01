@@ -724,12 +724,13 @@ def test_update_api_usage_by_tier_corrupted_file(tmp_path, monkeypatch):
 
     monkeypatch.setattr('utils.API_TIER_TRACKING_FILE', str(tier_file))
     monkeypatch.setattr('utils.TRAFFIC_MODEL', None)
+    monkeypatch.setattr('utils.USE_TRAFFIC', False)
+    #
+    # with patch('utils.datetime') as mock_dt:
+    #     mock_dt.now.return_value = datetime(2026, 1, 15)
 
-    with patch('utils.datetime') as mock_dt:
-        mock_dt.now.return_value = datetime(2026, 1, 15)
-
-        # Should handle corruption gracefully and start fresh
-        basic, advanced, tier = update_api_usage_by_tier(100)
+    # Should handle corruption gracefully and start fresh
+    basic, advanced, tier = update_api_usage_by_tier(100)
 
     assert basic == 100
     assert advanced == 0

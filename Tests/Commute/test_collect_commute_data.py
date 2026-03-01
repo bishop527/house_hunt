@@ -124,8 +124,6 @@ def test_process_element_ok_status():
     assert results[0]['status'] == 'OK'
 
 
-# --- NEW TESTS FOR OPTIMIZED CODE ---
-
 def test_check_budget_once_under_limit(tmp_path, monkeypatch):
     """Test unified budget check when under limit"""
     tier_file = tmp_path / "usage_by_tier.txt"
