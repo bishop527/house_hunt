@@ -29,7 +29,7 @@ from logging_config import setup_logger, silence_verbose_loggers
 from error_handlers import handle_api_error, handle_file_error
 
 # Configure logging
-logger = setup_logger(__name__)
+logger = setup_logger(__name__, log_file=COMMUTE_LOG_FILE)
 silence_verbose_loggers()
 
 

@@ -17,7 +17,8 @@ class UTCFormatter(logging.Formatter):
 def setup_logger(
         name: str,
         level: int = LOG_LEVEL,
-        include_console: bool = False
+        include_console: bool = False,
+        log_file: str = None
 ) -> logging.Logger:
     """
     Configure and return a logger with consistent formatting.
@@ -28,6 +29,7 @@ def setup_logger(
         name: Logger name (typically __name__ of the calling module)
         level: Logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
         include_console: If True, also log to console (stdout)
+        log_file: Path to log file (defaults to APP_LOG_FILE for shared logging)
 
     Returns:
         Configured logger instance
@@ -38,6 +40,10 @@ def setup_logger(
     # Avoid duplicate handlers
     if logger.handlers:
         return logger
+
+    # Use default log file if not specified
+    if log_file is None:
+        log_file = APP_LOG_FILE
 
     # File handler (always present)
     file_handler = logging.FileHandler(APP_LOG_FILE)

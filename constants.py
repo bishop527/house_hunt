@@ -10,6 +10,22 @@ import os
 import logging
 import holidays
 
+
+# ========================================
+# GENERAL CONFIGURATION
+# ========================================
+# LOG_LEVEL = logging.DEBUG
+LOG_LEVEL = logging.INFO
+# Traffic Configuration
+USE_TRAFFIC = True  # Set to True for Advanced tier (with traffic data)
+TRAFFIC_MODEL = 'best_guess'  # Used when USE_TRAFFIC=True
+# Route Preferences (can only use 1 at a time due to library bug)
+AVOID = 'None'  # Options: None, 'highways', 'tolls'
+# Monthly Limits (free tier)
+API_MONTHLY_LIMIT_BASIC = 10000  # Basic tier (no traffic)
+API_MONTHLY_LIMIT_ADVANCED = 5000  # Advanced tier (with traffic)
+API_MONTHLY_LIMIT = API_MONTHLY_LIMIT_BASIC  # Current project limit
+
 # ========================================
 # PATHS AND DIRECTORIES
 # ========================================
@@ -47,21 +63,13 @@ HOUSING_STATS_FILE = os.path.join(RESULTS_DIR, "historical_housing_stats.csv")
 API_TIER_TRACKING_FILE = os.path.join(RESULTS_DIR, "monthly_API_usage_by_tier.txt")
 
 # ========================================
-# DATA FILES - LOGS
+# LOGS
 # ========================================
 APP_LOG_FILE = os.path.join(LOGS_DIR, "app.log")
 COMMUTE_LOG_FILE = os.path.join(LOGS_DIR, 'commute.log')
 HOUSING_LOG_FILE = os.path.join(LOGS_DIR, 'housing.log')
 
-# ========================================
-# LOGGING CONFIGURATION
-# ========================================
-# LOG_LEVEL = logging.DEBUG
-LOG_LEVEL = logging.INFO
 
-# ========================================
-# GENERAL CONFIGURATION
-# ========================================
 US_HOLIDAYS = holidays.country_holidays('US')
 PROXY_ON = False
 PROXY = 'http://localhost:8080'
@@ -92,21 +100,10 @@ MODE = 'driving'
 LANGUAGE = 'en'
 UNITS = 'imperial'
 
-# Route Preferences (can only use 1 at a time due to library bug)
-AVOID = 'highways'  # Options: None, 'highways', 'tolls'
-
-# Traffic Configuration
-USE_TRAFFIC = True  # Set to True for Advanced tier (with traffic data)
-TRAFFIC_MODEL = 'best_guess'  # Used when USE_TRAFFIC=True
 
 # ========================================
 # API RATE LIMITING & BUDGET
 # ========================================
-# Monthly Limits (free tier)
-API_MONTHLY_LIMIT_BASIC = 10000  # Basic tier (no traffic)
-API_MONTHLY_LIMIT_ADVANCED = 5000  # Advanced tier (with traffic)
-API_MONTHLY_LIMIT = API_MONTHLY_LIMIT_BASIC  # Current project limit
-
 # Rate Limiting
 RATE_LIMIT_WAIT_SECONDS = 2  # Wait time when hitting rate limits
 MAX_API_RETRIES = 3  # Maximum retry attempts for failed requests

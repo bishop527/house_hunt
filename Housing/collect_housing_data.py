@@ -26,7 +26,7 @@ from utils import (
 )
 
 # Configure logging
-logger = setup_logger(__name__)
+logger = setup_logger(__name__, log_file=HOUSING_LOG_FILE)
 silence_verbose_loggers()
 
 # Module-level cache for property tax rates
