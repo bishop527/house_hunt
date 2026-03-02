@@ -16,23 +16,18 @@ import holidays
 # ========================================
 # LOG_LEVEL = logging.DEBUG
 LOG_LEVEL = logging.INFO
-# Traffic Configuration
 USE_TRAFFIC = True  # Set to True for Advanced tier (with traffic data)
 TRAFFIC_MODEL = 'best_guess'  # Used when USE_TRAFFIC=True
-# Route Preferences (can only use 1 at a time due to library bug)
-AVOID = 'None'  # Options: None, 'highways', 'tolls'
-# Monthly Limits (free tier)
+AVOID = None  # Options: None, 'highways', 'tolls'
 API_MONTHLY_LIMIT_BASIC = 10000  # Basic tier (no traffic)
 API_MONTHLY_LIMIT_ADVANCED = 5000  # Advanced tier (with traffic)
 API_MONTHLY_LIMIT = API_MONTHLY_LIMIT_BASIC  # Current project limit
 
 # ========================================
-# PATHS AND DIRECTORIES
+# Main Data Directory and Subdirectories
 # ========================================
 # Use location of this file to determine root directory
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-
-# Main Data Directory and Subdirectories
 DATA_DIR = os.path.join(BASE_DIR, 'Data')
 RAW_DIR = os.path.join(DATA_DIR, 'Raw')
 PROCESSED_DIR = os.path.join(DATA_DIR, 'Processed')
@@ -53,14 +48,14 @@ REDFIN_DATA_FILE = os.path.join(RAW_DIR, 'reduced-redfin_market_data.csv')
 # ========================================
 # DATA FILES - PROCESSED
 # ========================================
-HOUSING_LOOKUP_FILE = os.path.join(PROCESSED_DIR, "housing_lookup.csv")
+# HOUSING_LOOKUP_FILE = os.path.join(PROCESSED_DIR, "housing_lookup.csv")
 
 # ========================================
 # DATA FILES - RESULTS
 # ========================================
 COMMUTE_STATS_FILE = os.path.join(RESULTS_DIR, "commute_stats.csv")
 HOUSING_STATS_FILE = os.path.join(RESULTS_DIR, "historical_housing_stats.csv")
-API_TIER_TRACKING_FILE = os.path.join(RESULTS_DIR, "monthly_API_usage_by_tier.txt")
+API_TIER_TRACKING_FILE = os.path.join(LOGS_DIR, "monthly_API_usage_by_tier.txt")
 
 # ========================================
 # LOGS
@@ -68,7 +63,6 @@ API_TIER_TRACKING_FILE = os.path.join(RESULTS_DIR, "monthly_API_usage_by_tier.tx
 APP_LOG_FILE = os.path.join(LOGS_DIR, "app.log")
 COMMUTE_LOG_FILE = os.path.join(LOGS_DIR, 'commute.log')
 HOUSING_LOG_FILE = os.path.join(LOGS_DIR, 'housing.log')
-
 
 US_HOLIDAYS = holidays.country_holidays('US')
 PROXY_ON = False
@@ -100,19 +94,15 @@ MODE = 'driving'
 LANGUAGE = 'en'
 UNITS = 'imperial'
 
-
 # ========================================
 # API RATE LIMITING & BUDGET
 # ========================================
-# Rate Limiting
 RATE_LIMIT_WAIT_SECONDS = 2  # Wait time when hitting rate limits
 MAX_API_RETRIES = 3  # Maximum retry attempts for failed requests
-
-# Usage Validation
 MAX_ACCEPTABLE_DISCREPANCY = 183  # Elements between local/Google count
 
 # ========================================
-# COMMUTE COLLECTION PARAMETERS
+# COMMUTE DATA COLLECTION PARAMETERS
 # ========================================
 # Work Location
 WORK_ADDR = "123 Main St. Anytown, MA 00000"
@@ -131,7 +121,7 @@ NOON_HOUR = 17 # 12PM EST/EDT = 17:00 UTC (EST) or 16:00 UTC (EDT)
 LOCATION_GROUPING = 'town'
 
 # ========================================
-# HOUSING DATA PARAMETERS
+# HOUSING DATA COLLECTION PARAMETERS
 # ========================================
 # Data Sources
 HOUSING_DATA_SOURCE = 'redfin'  # Primary: 'redfin', Fallback: 'hud'
@@ -149,10 +139,7 @@ REDFIN_DATA_MAX_AGE_DAYS = 30  # Refresh if older than this
 
 # HUD Fair Market Rent API (backup/supplementary)
 HUD_FMR_API_URL = 'https://www.huduser.gov/hudapi/public/fmr/listcounties'
-HUD_FMR_YEAR = '2024'  # Update annually
+HUD_FMR_YEAR = '2025'  # Update annually
 
-# Data Quality Thresholds
-MIN_SAMPLE_SIZE = 5  # Minimum homes sold to consider data reliable
-
-# Property Type Filters
-PROPERTY_TYPES = ['Single Family', 'Condo', 'Townhouse']
+MIN_SAMPLE_SIZE = 1  # Minimum homes sold
+PROPERTY_TYPES = ['Single Family', 'Condo', 'Townhouse'] # Property Type Filters

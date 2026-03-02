@@ -37,16 +37,29 @@ def setup_logger(
     logger = logging.getLogger(name)
     logger.setLevel(level)
 
-    # Avoid duplicate handlers
-    if logger.handlers:
-        return logger
-
     # Use default log file if not specified
     if log_file is None:
         log_file = APP_LOG_FILE
 
+    # Disable propagation if using a non-default log file
+    # This prevents duplicate logs in parent/root loggers
+    # Must be set BEFORE checking handlers, so it applies even if logger exists
+    if log_file != APP_LOG_FILE:
+        logger.propagate = False
+
+        # ALSO disable propagation on all parent loggers to prevent contamination
+        parent = logger.parent
+        while parent and parent.name:  # Walk up the hierarchy
+            parent.propagate = False
+            parent = parent.parent
+
+    # Avoid duplicate handlers
+    if logger.handlers:
+        return logger
+
+
     # File handler (always present)
-    file_handler = logging.FileHandler(APP_LOG_FILE)
+    file_handler = logging.FileHandler(log_file)
     file_handler.setLevel(level)
     file_formatter = UTCFormatter(
         '%(asctime)s UTC [%(levelname)s] %(name)s: %(message)s',

@@ -18,17 +18,18 @@ from datetime import datetime
 
 # Import project modules
 from Commute.collect_commute_data import collect_commute_data
+from Housing.collect_housing_data import collect_housing_data
 from constants import APP_LOG_FILE
 from logging_config import setup_logger
 
 
 def run_commute_collection(logger):
     """Run commute data collection module"""
-    logger.info("STARTED: Commute collection (via main.py)")
+    logger.info("STARTED: Commute data collection")
 
     try:
         collect_commute_data()
-        logger.info("COMPLETED: Commute collection")
+        logger.info("COMPLETED: Commute data collection")
         return True
     except KeyboardInterrupt:
         logger.warning("Commute collection interrupted by user")
@@ -49,11 +50,18 @@ def run_school_analysis(logger):
 
 def run_housing_analysis(logger):
     """Run housing data analysis module (placeholder)"""
-    logger.info("STARTED: Housing analysis")
+    logger.info("STARTED: Housing data collection")
 
-    # TODO: Implement when housing module is ready
-    logger.warning("Housing analysis module not yet implemented")
-    return True
+    try:
+        collect_housing_data()
+        logger.info("COMPLETED: Housing data collection")
+        return True
+    except KeyboardInterrupt:
+        logger.warning("Housing data collection interrupted by user")
+        return False
+    except Exception as e:
+        logger.error(f"Housing data collection failed: {e}", exc_info=True)
+        return False
 
 
 def main():
@@ -66,6 +74,7 @@ def main():
         epilog="""
 Examples:
   python main.py --commute              Run commute collection
+  python main.py --housing              Run housing collection
   python main.py --all                  Run all modules
   python main.py --commute --schools    Run commute and schools
   python main.py --quite                Suppresses console output
