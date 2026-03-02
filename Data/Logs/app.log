@@ -371,3 +371,15 @@
 2026-02-27 22:12:32 Fri UTC [INFO] Commute.collect_commute_data: Loading addresses from cache: /home/runner/work/house_hunt/house_hunt/Data/Processed/towns_within_40mi.csv
 2026-02-27 22:12:32 Fri UTC [INFO] Commute.collect_commute_data: Found 182 cached addresses (skipped zip database parsing)
 2026-02-27 22:12:32 Fri UTC [WARNING] Commute.collect_commute_data: Budget warning: projected=10,163 exceeds limit=10,000 (current=9,981 + estimated=182)
+2026-03-02 14:50:03 Mon UTC [INFO] __main__: STARTED: House Hunt execution
+2026-03-02 14:50:03 Mon UTC [INFO] __main__: STARTED: Commute data collection
+2026-03-02 14:50:05 Mon UTC [INFO] utils: File not found: /home/runner/work/house_hunt/house_hunt/Data/Results/commute_stats.csv
+2026-03-02 14:50:05 Mon UTC [INFO] utils: Tier tracking updated: +182 (advanced) | Monthly: Basic=0 Advanced=977
+2026-03-02 14:50:07 Mon UTC [INFO] utils: Google-reported usage: 977 elements (Advanced tier)
+2026-03-02 14:50:07 Mon UTC [INFO] utils: Free tier limit: 5,000, Remaining: 4,023
+2026-03-02 14:50:07 Mon UTC [INFO] utils: Validation: tier=Advanced | local=977 google=977 delta=0 | Basic=0/10,000 Advanced=977/5,000 | cost=$0.00
+2026-03-02 14:50:07 Mon UTC [INFO] utils: Tracking validation passed (delta=0 within 183 tolerance)
+2026-03-02 14:50:07 Mon UTC [INFO] __main__: COMPLETED: Commute data collection
+2026-03-02 14:50:07 Mon UTC [INFO] __main__: EXECUTION SUMMARY:
+2026-03-02 14:50:07 Mon UTC [INFO] __main__:   COMMUTE: SUCCESS
+2026-03-02 14:50:07 Mon UTC [INFO] __main__: COMPLETED: House Hunt | 1/1 modules successful
