@@ -59,13 +59,12 @@ jobs:
 
       - name: Commit updated tracking and stats files
         run: |
-          git add Data/Results/monthly_API_usage_by_tier.txt
-          git add Data/Results/commute_stats.csv
-          git add Data/Logs/app.log
+          git add Data/Logs/*
+          git add Data/Results/*
           
           # Only commit if there are changes
           if ! git diff --staged --quiet; then
-            git commit -m "Auto: Update API tracking and commute stats $(date -u +%Y-%m-%d_%H:%M_UTC)"
+            git commit -m "Auto: Ran Commute module $(date -u +%Y-%m-%d_%H:%M_%a_UTC)"
             git push
           else
             echo "No changes to commit"
