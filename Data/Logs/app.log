@@ -214,3 +214,15 @@
 2026-03-12 22:13:56 Thu UTC [INFO] __main__: EXECUTION SUMMARY:
 2026-03-12 22:13:56 Thu UTC [INFO] __main__:   COMMUTE: SUCCESS
 2026-03-12 22:13:56 Thu UTC [INFO] __main__: COMPLETED: House Hunt | 1/1 modules successful
+2026-03-13 12:42:32 Fri UTC [INFO] __main__: STARTED: House Hunt execution
+2026-03-13 12:42:32 Fri UTC [INFO] __main__: STARTED: Commute data collection
+2026-03-13 12:42:35 Fri UTC [INFO] utils: Loaded 182 records from /home/runner/work/house_hunt/house_hunt/Data/Results/commute_stats.csv
+2026-03-13 12:42:35 Fri UTC [INFO] utils: Tier tracking updated: +182 (advanced) | Monthly: Basic=0 Advanced=4,253
+2026-03-13 12:42:36 Fri UTC [INFO] utils: Google-reported usage: 4,253 elements (Advanced tier)
+2026-03-13 12:42:36 Fri UTC [INFO] utils: Free tier limit: 5,000, Remaining: 747
+2026-03-13 12:42:36 Fri UTC [INFO] utils: Validation: tier=Advanced | local=4,253 google=4,253 delta=0 | Basic=0/10,000 Advanced=4,253/5,000 | cost=$0.00
+2026-03-13 12:42:36 Fri UTC [INFO] utils: Tracking validation passed (delta=0 within 183 tolerance)
+2026-03-13 12:42:36 Fri UTC [INFO] __main__: COMPLETED: Commute data collection
+2026-03-13 12:42:36 Fri UTC [INFO] __main__: EXECUTION SUMMARY:
+2026-03-13 12:42:36 Fri UTC [INFO] __main__:   COMMUTE: SUCCESS
+2026-03-13 12:42:36 Fri UTC [INFO] __main__: COMPLETED: House Hunt | 1/1 modules successful
