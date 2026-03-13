@@ -23,7 +23,8 @@ from utils import (
     load_csv_with_zip,
     update_api_usage_by_tier,
     validate_local_tracking,
-    get_current_usage_by_tier
+    get_current_usage_by_tier,
+    determine_optimal_tier
 )
 from logging_config import setup_logger, silence_verbose_loggers
 from error_handlers import handle_api_error, handle_file_error
@@ -588,8 +589,36 @@ def collect_commute_data():
     7. Validates against Google (once, at end)
     8. Logs final summary
     """
+    # Determine which tier to use
+    global USE_TRAFFIC
     direction = determine_direction()
     logger.info(f"STARTED: Commute collection ({direction})")
+
+    if AUTO_TIER_SELECTION:
+        USE_TRAFFIC, tier_reason = determine_optimal_tier()
+        logger.info(f"Auto tier selection: {tier_reason}")
+
+        # Check if both tiers exhausted
+        if "exhausted" in tier_reason.lower():
+            logger.critical("Cannot proceed - monthly API budget exhausted")
+            logger.info("Wait until next month or manually adjust limits")
+    else:
+        tier_name = "Advanced (with traffic)" if USE_TRAFFIC else "Basic (no traffic)"
+        logger.info(f"Manual tier selection: {tier_name}")
+
+        # Still check if selected tier has budget
+        tier_usage = get_current_usage_by_tier()
+        if USE_TRAFFIC:
+            current = tier_usage['advanced']
+            limit = API_MONTHLY_LIMIT_ADVANCED
+        else:
+            current = tier_usage['basic']
+            limit = API_MONTHLY_LIMIT_BASIC
+
+        if current >= limit:
+            logger.critical(
+                f"Selected tier exhausted: {current:,}/{limit:,} used"
+            )
 
     # OPTIMIZATION: Load addresses (cache-first, skip zip DB if possible)
     addresses = _load_addresses_within_range()

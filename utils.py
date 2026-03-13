@@ -394,6 +394,112 @@ def get_current_usage_by_tier():
     }
 
 
+def determine_optimal_tier():
+    """
+    Automatically determine which tier to use based on current usage.
+
+    Strategy:
+    - Use Advanced (traffic) tier while under 2,500/month free limit
+    - Switch to Basic tier once Advanced free tier exhausted
+
+    Returns:
+        tuple: (use_traffic: bool, reason: str)
+    """
+    tier_usage = get_current_usage_by_tier()
+    advanced_used = tier_usage['advanced']
+    basic_used = tier_usage['basic']
+
+    # If we haven't hit the advanced free tier limit, use it
+    if advanced_used < API_MONTHLY_LIMIT_ADVANCED:
+        remaining = API_MONTHLY_LIMIT_ADVANCED - advanced_used
+        logger.info(
+            f"Using ADVANCED tier (traffic data enabled) - "
+            f"{remaining:,} free calls remaining this month"
+        )
+        return True, f"Advanced tier free quota available ({remaining:,} remaining)"
+
+    # Advanced tier exhausted, check if basic tier still available
+    if basic_used < API_MONTHLY_LIMIT_BASIC:
+        remaining = API_MONTHLY_LIMIT_BASIC - basic_used
+        logger.info(
+            f"Switching to BASIC tier (no traffic data) - "
+            f"Advanced free tier exhausted, {remaining:,} basic calls remaining"
+        )
+        return False, f"Advanced tier exhausted, using Basic ({remaining:,} remaining)"
+
+    # Both tiers exhausted
+    logger.critical(
+        f"BOTH TIERS EXHAUSTED - Advanced: {advanced_used:,}/{API_MONTHLY_LIMIT_ADVANCED} "
+        f"Basic: {basic_used:,}/{API_MONTHLY_LIMIT_BASIC}"
+    )
+    return False, "Both tiers exhausted"
+
+
+def display_tier_status():
+    """
+    Display current tier usage and recommendations.
+    Useful for manual checks or debugging.
+    """
+    tier_usage = get_current_usage_by_tier()
+    advanced_used = tier_usage['advanced']
+    basic_used = tier_usage['basic']
+
+    print("=" * 70)
+    print("API TIER USAGE STATUS")
+    print("=" * 70)
+
+    # Advanced tier status
+    advanced_free_remaining = API_MONTHLY_LIMIT_ADVANCED - advanced_used
+    print(f"Advanced Tier (traffic data):")
+    print(f"  Used:      {advanced_used:,} / {API_MONTHLY_LIMIT_ADVANCED:,} free")
+    print(f"  Remaining: {advanced_free_remaining:,} free calls")
+
+    if advanced_free_remaining > 0:
+        print(f"  Status:    ✓ FREE tier available")
+    else:
+        print(f"  Status:    ✗ Free tier exhausted")
+        over_free = advanced_used - API_MONTHLY_LIMIT_ADVANCED
+        if over_free > 0:
+            print(f"  Overage:   {over_free:,} paid calls used")
+
+    print()
+
+    # Basic tier status
+    basic_remaining = API_MONTHLY_LIMIT_BASIC - basic_used
+    print(f"Basic Tier (no traffic):")
+    print(f"  Used:      {basic_used:,} / {API_MONTHLY_LIMIT_BASIC:,}")
+    print(f"  Remaining: {basic_remaining:,} calls")
+
+    if basic_remaining > 0:
+        print(f"  Status:    ✓ Available")
+    else:
+        print(f"  Status:    ✗ Exhausted")
+
+    print("=" * 70)
+
+    # Current configuration
+    print(f"Current Config:")
+    print(f"  AUTO_TIER_SELECTION: {AUTO_TIER_SELECTION}")
+    print(f"  USE_TRAFFIC:         {USE_TRAFFIC}")
+    print()
+
+    # Recommendation
+    if AUTO_TIER_SELECTION:
+        use_traffic, reason = determine_optimal_tier()
+        print(f"Auto-selected tier: {'ADVANCED (traffic)' if use_traffic else 'BASIC (no traffic)'}")
+        print(f"Reason: {reason}")
+    else:
+        print("Manual mode - tier set by USE_TRAFFIC constant")
+        if advanced_free_remaining > 0:
+            print("RECOMMENDATION: Set USE_TRAFFIC = True (free tier available)")
+        elif basic_remaining > 0:
+            print("RECOMMENDATION: Set USE_TRAFFIC = False (switch to basic tier)")
+        else:
+            print("WARNING: Both tiers exhausted - wait for next month")
+
+    print("=" * 70)
+
+
 def calculate_tier_costs(basic_count, advanced_count):
     """
     Calculate costs for each tier based on usage.
