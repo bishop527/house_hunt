@@ -526,7 +526,7 @@ class LocationScorer:
         }
 
 
-def calculate_scores(config_file=None):
+def calculate_scores(config_file=SCORE_CONFIG_FILE):
     """
     Main function to calculate and save location scores.
 

@@ -62,7 +62,7 @@ def run_scoring(logger, config_file=None):
     logger.info("STARTED: Scoring (via main.py)")
 
     try:
-        success = calculate_scores(config_file)
+        success = calculate_scores()
 
         if success:
             logger.info("Generating HTML report...")
@@ -150,7 +150,7 @@ Examples:
         results['housing'] = run_housing_collection(logger)
 
     if args.all or args.score:
-        results['score'] = run_scoring(logger, args.config)
+        results['score'] = run_scoring(logger)
 
     # Summary
     success_count = sum(1 for v in results.values() if v)
