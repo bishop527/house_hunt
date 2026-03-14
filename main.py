@@ -19,7 +19,8 @@ from datetime import datetime
 # Import project modules
 from Commute.collect_commute_data import collect_commute_data
 from Housing.collect_housing_data import collect_housing_data
-from constants import APP_LOG_FILE
+from constants import APP_LOG_FILE, SCORED_LOCATIONS_FILE, SCORE_REPORT_FILE
+from utils import load_csv_with_zip
 from logging_config import setup_logger
 from Score.calculate_scores import calculate_scores
 from Score.generate_report import generate_html_report
@@ -86,8 +87,9 @@ def main():
 Examples:
   python main.py --commute              Run commute collection
   python main.py --housing              Run housing collection
+  python main.py --score                Run score module
   python main.py --all                  Run all modules
-  python main.py --commute --schools    Run commute and schools
+  python main.py --commute --housing    Run commute and schools
   python main.py --quite                Suppresses console output
         """
     )
