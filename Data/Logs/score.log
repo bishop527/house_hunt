@@ -1,0 +1,45 @@
+2026-03-13 16:27:23 [INFO] ======================================================================
+2026-03-13 16:27:23 [INFO] Starting location scoring
+2026-03-13 16:27:23 [INFO] ======================================================================
+2026-03-13 16:27:23 [INFO] Loaded config from C:\Users\aedwa\workspace\house_hunt\Data\Raw\score_config.json
+2026-03-13 16:27:23 [INFO] Loading commute and housing data...
+2026-03-13 16:27:23 [INFO] Loaded 182 records from C:\Users\aedwa\workspace\house_hunt\Data\Results\commute_stats.csv
+2026-03-13 16:27:23 [INFO] Loaded 182 commute records
+2026-03-13 16:27:23 [INFO] Loaded 224 records from C:\Users\aedwa\workspace\house_hunt\Data\Results\historical_housing_stats.csv
+2026-03-13 16:27:23 [INFO] Loaded 224 housing records
+2026-03-13 16:27:23 [INFO] Scoring all locations...
+2026-03-13 16:27:23 [INFO] Found 153 locations with both commute and housing data
+2026-03-13 16:27:23 [INFO] Filtered 11 locations exceeding max commute time
+2026-03-13 16:27:23 [INFO] Filtered 59 locations exceeding max price
+2026-03-13 16:27:23 [INFO] Scored 83 locations
+2026-03-13 16:27:23 [ERROR] Failed to save results: Cannot save file into a non-existent directory: 'Data\Results'
+2026-03-13 16:27:23 [ERROR] Failed to save results.
+2026-03-13 16:31:24 [INFO] ======================================================================
+2026-03-13 16:31:24 [INFO] Starting location scoring
+2026-03-13 16:31:24 [INFO] ======================================================================
+2026-03-13 16:31:24 [INFO] Loaded config from C:\Users\aedwa\workspace\house_hunt\Data\Raw\score_config.json
+2026-03-13 16:31:24 [INFO] Loading commute and housing data...
+2026-03-13 16:31:24 [INFO] Loaded 182 records from C:\Users\aedwa\workspace\house_hunt\Data\Results\commute_stats.csv
+2026-03-13 16:31:24 [INFO] Loaded 182 commute records
+2026-03-13 16:31:24 [INFO] Loaded 224 records from C:\Users\aedwa\workspace\house_hunt\Data\Results\historical_housing_stats.csv
+2026-03-13 16:31:24 [INFO] Loaded 224 housing records
+2026-03-13 16:31:24 [INFO] Scoring all locations...
+2026-03-13 16:31:24 [INFO] Found 153 locations with both commute and housing data
+2026-03-13 16:31:24 [INFO] Filtered 11 locations exceeding max commute time
+2026-03-13 16:31:24 [INFO] Filtered 59 locations exceeding max price
+2026-03-13 16:31:24 [INFO] Scored 83 locations
+2026-03-13 16:31:24 [INFO] Saved 83 scored locations to C:\Users\aedwa\workspace\house_hunt\Data\Results\scored_locations.csv
+2026-03-13 16:31:24 [INFO] Location scoring completed successfully
+2026-03-13 16:32:40 [INFO] ======================================================================
+2026-03-13 16:32:41 [INFO] Starting location scoring
+2026-03-13 16:32:41 [INFO] ======================================================================
+2026-03-13 16:32:47 [INFO] Loaded config from C:\Users\aedwa\workspace\house_hunt\Data\Raw\score_config.json
+2026-03-13 16:32:55 [INFO] Loading commute and housing data...
+2026-03-13 16:32:55 [INFO] Loaded 182 records from C:\Users\aedwa\workspace\house_hunt\Data\Results\commute_stats.csv
+2026-03-13 16:32:55 [INFO] Loaded 182 commute records
+2026-03-13 16:32:55 [INFO] Loaded 224 records from C:\Users\aedwa\workspace\house_hunt\Data\Results\historical_housing_stats.csv
+2026-03-13 16:32:55 [INFO] Loaded 224 housing records
+2026-03-13 16:33:09 [INFO] Scoring all locations...
+2026-03-13 16:33:50 [INFO] Found 153 locations with both commute and housing data
+2026-03-13 16:34:50 [INFO] Filtered 11 locations exceeding max commute time
+2026-03-13 16:35:07 [INFO] Filtered 59 locations exceeding max price

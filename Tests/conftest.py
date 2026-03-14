@@ -154,6 +154,18 @@ def pytest_collection_modifyitems(config, items):
                       for mark in item.iter_markers()):
                 item.add_marker(pytest.mark.unit)
 
+        # Auto-mark Housing tests
+        if "Housing" in str(item.fspath):
+            if not any(mark.name in ['integration', 'slow']
+                       for mark in item.iter_markers()):
+                item.add_marker(pytest.mark.unit)
+
+        # Auto-mark Score tests
+        if "Score" in str(item.fspath):
+            if not any(mark.name in ['integration', 'slow']
+                       for mark in item.iter_markers()):
+                item.add_marker(pytest.mark.unit)
+
         # Auto-mark API-related tests
         if "api" in item.name.lower() or "google" in item.name.lower():
             item.add_marker(pytest.mark.api)

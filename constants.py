@@ -56,8 +56,10 @@ REDFIN_DATA_FILE = os.path.join(RAW_DIR, 'reduced-redfin_market_data.csv')
 # DATA FILES - RESULTS
 # ========================================
 COMMUTE_STATS_FILE = os.path.join(RESULTS_DIR, "commute_stats.csv")
-HOUSING_STATS_FILE = os.path.join(RESULTS_DIR, "historical_housing_stats.csv")
+HOUSING_STATS_FILE = os.path.join(RESULTS_DIR, "housing_stats.csv")
 API_TIER_TRACKING_FILE = os.path.join(LOGS_DIR, "monthly_API_usage_by_tier.txt")
+SCORED_LOCATIONS_FILE = os.path.join(RESULTS_DIR, "scored_locations.csv")
+SCORE_REPORT_FILE = os.path.join(RESULTS_DIR, "score_report.html")
 
 # ========================================
 # LOGS
@@ -65,6 +67,7 @@ API_TIER_TRACKING_FILE = os.path.join(LOGS_DIR, "monthly_API_usage_by_tier.txt")
 APP_LOG_FILE = os.path.join(LOGS_DIR, "app.log")
 COMMUTE_LOG_FILE = os.path.join(LOGS_DIR, 'commute.log')
 HOUSING_LOG_FILE = os.path.join(LOGS_DIR, 'housing.log')
+SCORE_LOG_FILE = os.path.join(LOGS_DIR, 'score.log')
 
 US_HOLIDAYS = holidays.country_holidays('US')
 PROXY_ON = False
@@ -145,3 +148,17 @@ HUD_FMR_YEAR = '2025'  # Update annually
 
 MIN_SAMPLE_SIZE = 1  # Minimum homes sold
 PROPERTY_TYPES = ['Single Family', 'Condo', 'Townhouse'] # Property Type Filters
+
+# SCORE MODULE CONSTANTS
+# ========================================
+SCORE_CONFIG_FILE = os.path.join(DATA_DIR, 'score_config.json')
+
+DEFAULT_COMMUTE_WEIGHT = 0.60
+DEFAULT_HOUSING_WEIGHT = 0.40
+
+TIER_THRESHOLDS = {
+    'A+': 95, 'A': 90, 'A-': 85,
+    'B+': 80, 'B': 75, 'B-': 70,
+    'C+': 65, 'C': 60, 'C-': 55,
+    'D': 50, 'F': 0
+}

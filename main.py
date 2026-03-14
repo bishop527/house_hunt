@@ -21,7 +21,8 @@ from Commute.collect_commute_data import collect_commute_data
 from Housing.collect_housing_data import collect_housing_data
 from constants import APP_LOG_FILE
 from logging_config import setup_logger
-
+from Score.calculate_scores import calculate_scores
+from Score.generate_report import generate_html_report
 
 def run_commute_collection(logger):
     """Run commute data collection module"""
@@ -39,15 +40,6 @@ def run_commute_collection(logger):
         return False
 
 
-def run_school_analysis(logger):
-    """Run school data analysis module (placeholder)"""
-    logger.info("STARTED: School analysis")
-
-    # TODO: Implement when school module is ready
-    logger.warning("School analysis module not yet implemented")
-    return True
-
-
 def run_housing_analysis(logger):
     """Run housing data analysis module (placeholder)"""
     logger.info("STARTED: Housing data collection")
@@ -61,6 +53,25 @@ def run_housing_analysis(logger):
         return False
     except Exception as e:
         logger.error(f"Housing data collection failed: {e}", exc_info=True)
+        return False
+
+
+def run_scoring(logger, config_file=None):
+    """Run location scoring module"""
+    logger.info("STARTED: Scoring (via main.py)")
+
+    try:
+        success = calculate_scores(config_file)
+
+        if success:
+            logger.info("Generating HTML report...")
+            scored_df = load_csv_with_zip(SCORED_LOCATIONS_FILE)
+            generate_html_report(scored_df, SCORE_REPORT_FILE)
+
+        logger.info("COMPLETED: Scoring")
+        return success
+    except Exception as e:
+        logger.error(f"Scoring failed: {e}", exc_info=True)
         return False
 
 
@@ -88,16 +99,15 @@ Examples:
     )
 
     parser.add_argument(
-        '--schools',
-        action='store_true',
-        help='Analyze school data'
-    )
-
-    parser.add_argument(
         '--housing',
         action='store_true',
         help='Analyze housing data'
     )
+
+    parser.add_argument(
+        '--score',
+        action='store_true',
+        help='Score locations and generate report')
 
     parser.add_argument(
         '--all',
@@ -134,11 +144,11 @@ Examples:
     if args.all or args.commute:
         results['commute'] = run_commute_collection(logger)
 
-    if args.all or args.schools:
-        results['schools'] = run_school_analysis(logger)
-
     if args.all or args.housing:
         results['housing'] = run_housing_analysis(logger)
+
+    if args.all or args.score:
+        results['score'] = run_scoring(logger, args.config)
 
     # Summary
     success_count = sum(1 for v in results.values() if v)
