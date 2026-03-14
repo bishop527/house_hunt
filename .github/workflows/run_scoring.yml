@@ -35,8 +35,8 @@ jobs:
           echo "Error: commute_stats.csv not found"
           exit 1
         fi
-        if [ ! -f "Data/Results/historical_housing_stats.csv" ]; then
-          echo "Error: historical_housing_stats.csv not found"
+        if [ ! -f "Data/Results/housing_stats.csv" ]; then
+          echo "Error: housing_stats.csv not found"
           exit 1
         fi
         if [ ! -f "Data/score_config.json" ]; then
