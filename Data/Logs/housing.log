@@ -34,3 +34,22 @@
 2026-03-13 23:55:04 Fri UTC [INFO] __main__: No historical housing data found. Starting fresh.
 2026-03-13 23:55:04 Fri UTC [INFO] __main__: Successfully updated C:\Users\aedwa\workspace\house_hunt\Data\Results\housing_stats.csv with 224 records
 2026-03-13 23:55:04 Fri UTC [INFO] __main__: COMPLETED: Housing collection | queried=229 collected=224 | source=Redfin cost=$0.00
+2026-03-14 14:11:18 Sat UTC [INFO] Housing.collect_housing_data: STARTED: Housing data collection
+2026-03-14 14:11:18 Sat UTC [INFO] Housing.collect_housing_data: Downloading Redfin market data (this may take time)...
+2026-03-14 14:11:18 Sat UTC [INFO] Housing.collect_housing_data: URL: https://redfin-public-data.s3.us-west-2.amazonaws.com/redfin_market_tracker/zip_code_market_tracker.tsv000.gz
+2026-03-14 14:11:46 Sat UTC [INFO] Housing.collect_housing_data: Download complete. Decompressing and filtering...
+2026-03-14 14:13:10 Sat UTC [INFO] Housing.collect_housing_data: Saved 31,676 filtered records to /home/runner/work/house_hunt/house_hunt/Data/Raw/reduced-redfin_market_data.csv
+2026-03-14 14:13:10 Sat UTC [INFO] Housing.collect_housing_data: Successfully processed Redfin data
+2026-03-14 14:13:10 Sat UTC [INFO] Housing.collect_housing_data: Loading zip codes within 40 miles of work...
+2026-03-14 14:13:10 Sat UTC [INFO] Housing.collect_housing_data: Found 229 addresses within range
+2026-03-14 14:13:10 Sat UTC [INFO] Housing.collect_housing_data: Fetching housing data for 229 zip codes
+2026-03-14 14:13:11 Sat UTC [INFO] Housing.collect_housing_data: Loaded 489 property tax rates
+2026-03-14 14:13:20 Sat UTC [WARNING] Housing.collect_housing_data: No housing data available for Boston, MA 02133
+2026-03-14 14:13:20 Sat UTC [WARNING] Housing.collect_housing_data: No housing data available for Boston, MA 02163
+2026-03-14 14:13:20 Sat UTC [WARNING] Housing.collect_housing_data: No housing data available for Boston, MA 02203
+2026-03-14 14:13:21 Sat UTC [WARNING] Housing.collect_housing_data: No housing data available for Boston, MA 02222
+2026-03-14 14:13:37 Sat UTC [WARNING] Housing.collect_housing_data: No housing data available for Hanscom AFB, MA 01731
+2026-03-14 14:14:23 Sat UTC [INFO] Housing.collect_housing_data: Successfully collected data for 224 out of 229 zip codes
+2026-03-14 14:14:23 Sat UTC [INFO] Housing.collect_housing_data: Loaded 224 records from /home/runner/work/house_hunt/house_hunt/Data/Results/housing_stats.csv
+2026-03-14 14:14:24 Sat UTC [INFO] Housing.collect_housing_data: Successfully updated /home/runner/work/house_hunt/house_hunt/Data/Results/housing_stats.csv with 224 records
+2026-03-14 14:14:24 Sat UTC [INFO] Housing.collect_housing_data: COMPLETED: Housing collection | queried=229 collected=224 | source=Redfin cost=$0.00
