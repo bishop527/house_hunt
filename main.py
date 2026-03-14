@@ -41,8 +41,8 @@ def run_commute_collection(logger):
         return False
 
 
-def run_housing_analysis(logger):
-    """Run housing data analysis module (placeholder)"""
+def run_housing_collection(logger):
+    """Run housing data collection module"""
     logger.info("STARTED: Housing data collection")
 
     try:
@@ -126,7 +126,7 @@ Examples:
     args = parser.parse_args()
 
     # If no arguments, show help
-    if not any([args.commute, args.schools, args.housing, args.all]):
+    if not any([args.commute, args.score, args.housing, args.all]):
         parser.print_help()
         sys.exit(0)
 
@@ -147,7 +147,7 @@ Examples:
         results['commute'] = run_commute_collection(logger)
 
     if args.all or args.housing:
-        results['housing'] = run_housing_analysis(logger)
+        results['housing'] = run_housing_collection(logger)
 
     if args.all or args.score:
         results['score'] = run_scoring(logger, args.config)
