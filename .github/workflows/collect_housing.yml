@@ -1,0 +1,46 @@
+name: Collect Housing Data
+
+on:
+  schedule:
+    - cron: '0 12 1 * *'  # 1st of every month at 12:00 UTC (8am EST)
+  workflow_dispatch:        # Allows manual trigger from GitHub UI
+
+jobs:
+  collect-housing-data:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Create directory structure
+        run: |
+          mkdir -p Data/Raw
+          mkdir -p Data/Processed
+          mkdir -p Data/Results
+          mkdir -p Data/Logs
+
+      - name: Run housing collection
+        run: python main.py --housing --quiet
+
+      - name: Commit updated data files
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add Data/Logs/*
+          git add Data/Results/*
+          # Only commit if there are changes
+          if ! git diff --staged --quiet; then
+            git commit -m "Auto: housing data update $(date +'%Y-%m')"
+            git push
+          else
+            echo "No changes to commit"
+          fi
