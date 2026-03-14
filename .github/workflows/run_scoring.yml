@@ -1,0 +1,87 @@
+name: Score Locations
+
+on:
+  # Run on schedule (e.g., weekly on Mondays at 8 AM UTC)
+  schedule:
+    - cron: '0 8 * * 1'
+
+  workflow_dispatch:        # Allows manual trigger from GitHub UI
+
+jobs:
+  score-locations:
+    runs-on: ubuntu-latest
+
+    # Only run if previous workflow succeeded (when triggered by workflow_run)
+    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+        cache: 'pip'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Verify required data files exist
+      run: |
+        if [ ! -f "Data/Results/commute_stats.csv" ]; then
+          echo "Error: commute_stats.csv not found"
+          exit 1
+        fi
+        if [ ! -f "Data/Results/historical_housing_stats.csv" ]; then
+          echo "Error: historical_housing_stats.csv not found"
+          exit 1
+        fi
+        if [ ! -f "Data/score_config.json" ]; then
+          echo "Error: score_config.json not found"
+          exit 1
+        fi
+        echo "All required data files found"
+
+    - name: Run location scoring
+      run: |
+        CONFIG_FILE="${{ github.event.inputs.config_file || 'Data/score_config.json' }}"
+        python main.py --score --config "$CONFIG_FILE"
+
+    - name: Verify output files
+      run: |
+        if [ ! -f "Data/Results/scored_locations.csv" ]; then
+          echo "Error: scored_locations.csv was not created"
+          exit 1
+        fi
+        if [ ! -f "Data/Results/score_report.html" ]; then
+          echo "Error: score_report.html was not created"
+          exit 1
+        fi
+
+    - name: Upload scoring results
+      uses: actions/upload-artifact@v4
+      with:
+        name: scoring-results-${{ github.run_number }}
+        path: |
+          Data/Results/scored_locations.csv
+          Data/Results/score_report.html
+        retention-days: 90
+
+    - name: Commit and push results
+      run: |
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+        
+        git add Data/Logs/*
+        git add Data/Results/*
+        
+        # Only commit if there are changes
+        if ! git diff --staged --quiet; then
+          git commit -m "Update scoring results - $(date +'%Y-%m-%d %H:%M')"
+          git push
+        else
+          echo "No changes to commit"
+        fi
