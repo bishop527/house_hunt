@@ -1,0 +1,36 @@
+2026-03-13 19:01:00 Fri UTC [INFO] Housing.collect_housing_data: STARTED: Housing data collection
+2026-03-13 19:01:00 Fri UTC [INFO] Housing.collect_housing_data: Using existing Redfin data (12 days old)
+2026-03-13 19:01:00 Fri UTC [INFO] Housing.collect_housing_data: Loading zip codes within 40 miles of work...
+2026-03-13 19:01:00 Fri UTC [INFO] Housing.collect_housing_data: Found 229 addresses within range
+2026-03-13 19:01:00 Fri UTC [INFO] Housing.collect_housing_data: Fetching housing data for 229 zip codes
+2026-03-13 19:01:01 Fri UTC [INFO] Housing.collect_housing_data: Loaded 489 property tax rates
+2026-03-13 19:01:07 Fri UTC [WARNING] Housing.collect_housing_data: No housing data available for Boston, MA 02133
+2026-03-13 19:01:08 Fri UTC [WARNING] Housing.collect_housing_data: No housing data available for Boston, MA 02163
+2026-03-13 19:01:08 Fri UTC [WARNING] Housing.collect_housing_data: No housing data available for Boston, MA 02203
+2026-03-13 19:01:09 Fri UTC [WARNING] Housing.collect_housing_data: No housing data available for Boston, MA 02222
+2026-03-13 19:01:21 Fri UTC [WARNING] Housing.collect_housing_data: No housing data available for Hanscom AFB, MA 01731
+2026-03-13 19:02:02 Fri UTC [INFO] Housing.collect_housing_data: Successfully collected data for 224 out of 229 zip codes
+2026-03-13 19:02:02 Fri UTC [INFO] Housing.collect_housing_data: Loaded 224 records from C:\Users\aedwa\workspace\house_hunt\Data\Results\historical_housing_stats.csv
+2026-03-13 19:02:02 Fri UTC [INFO] Housing.collect_housing_data: Successfully updated C:\Users\aedwa\workspace\house_hunt\Data\Results\historical_housing_stats.csv with 224 records
+2026-03-13 19:02:02 Fri UTC [INFO] Housing.collect_housing_data: COMPLETED: Housing collection | queried=229 collected=224 | source=Redfin cost=$0.00
+2026-03-13 23:48:17 Fri UTC [INFO] __main__: STARTED: Housing data collection
+2026-03-13 23:48:17 Fri UTC [INFO] __main__: Using existing Redfin data (12 days old)
+2026-03-13 23:48:17 Fri UTC [INFO] __main__: Loading zip codes within 40 miles of work...
+2026-03-13 23:48:18 Fri UTC [INFO] __main__: Found 229 addresses within range
+2026-03-13 23:48:18 Fri UTC [INFO] __main__: Fetching housing data for 229 zip codes
+2026-03-13 23:51:33 Fri UTC [INFO] __main__: Collection interrupted by user
+2026-03-13 23:54:00 Fri UTC [INFO] __main__: STARTED: Housing data collection
+2026-03-13 23:54:00 Fri UTC [INFO] __main__: Using existing Redfin data (12 days old)
+2026-03-13 23:54:00 Fri UTC [INFO] __main__: Loading zip codes within 40 miles of work...
+2026-03-13 23:54:00 Fri UTC [INFO] __main__: Found 229 addresses within range
+2026-03-13 23:54:00 Fri UTC [INFO] __main__: Fetching housing data for 229 zip codes
+2026-03-13 23:54:00 Fri UTC [INFO] __main__: Loaded 489 property tax rates
+2026-03-13 23:54:07 Fri UTC [WARNING] __main__: No housing data available for Boston, MA 02133
+2026-03-13 23:54:08 Fri UTC [WARNING] __main__: No housing data available for Boston, MA 02163
+2026-03-13 23:54:08 Fri UTC [WARNING] __main__: No housing data available for Boston, MA 02203
+2026-03-13 23:54:09 Fri UTC [WARNING] __main__: No housing data available for Boston, MA 02222
+2026-03-13 23:54:22 Fri UTC [WARNING] __main__: No housing data available for Hanscom AFB, MA 01731
+2026-03-13 23:55:04 Fri UTC [INFO] __main__: Successfully collected data for 224 out of 229 zip codes
+2026-03-13 23:55:04 Fri UTC [INFO] __main__: No historical housing data found. Starting fresh.
+2026-03-13 23:55:04 Fri UTC [INFO] __main__: Successfully updated C:\Users\aedwa\workspace\house_hunt\Data\Results\housing_stats.csv with 224 records
+2026-03-13 23:55:04 Fri UTC [INFO] __main__: COMPLETED: Housing collection | queried=229 collected=224 | source=Redfin cost=$0.00
