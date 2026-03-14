@@ -47,8 +47,7 @@ jobs:
 
     - name: Run location scoring
       run: |
-        CONFIG_FILE="${{ github.event.inputs.config_file || 'Data/score_config.json' }}"
-        python main.py --score --config "$CONFIG_FILE"
+        python main.py --score
 
     - name: Verify output files
       run: |
