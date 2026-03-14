@@ -259,3 +259,39 @@
 2026-03-14 14:14:24 [INFO]   HOUSING: SUCCESS
 2026-03-14 14:14:24 Sat UTC [INFO] __main__: COMPLETED: House Hunt | 1/1 modules successful
 2026-03-14 14:14:24 [INFO] COMPLETED: House Hunt | 1/1 modules successful
+2026-03-14 14:39:52 Sat UTC [INFO] __main__: STARTED: House Hunt execution
+2026-03-14 14:39:52 [INFO] STARTED: House Hunt execution
+2026-03-14 14:39:52 Sat UTC [INFO] __main__: STARTED: Scoring (via main.py)
+2026-03-14 14:39:52 [INFO] STARTED: Scoring (via main.py)
+2026-03-14 14:39:52 [INFO] ======================================================================
+2026-03-14 14:39:52 [INFO] Starting location scoring
+2026-03-14 14:39:52 [INFO] ======================================================================
+2026-03-14 14:39:52 [INFO] Loaded config from /home/runner/work/house_hunt/house_hunt/Data/score_config.json
+2026-03-14 14:39:52 [INFO] Loading commute and housing data...
+2026-03-14 14:39:52 Sat UTC [INFO] utils: Loaded 182 records from /home/runner/work/house_hunt/house_hunt/Data/Results/commute_stats.csv
+2026-03-14 14:39:52 [INFO] Loaded 182 records from /home/runner/work/house_hunt/house_hunt/Data/Results/commute_stats.csv
+2026-03-14 14:39:52 [INFO] Loaded 182 commute records
+2026-03-14 14:39:52 Sat UTC [INFO] utils: Loaded 224 records from /home/runner/work/house_hunt/house_hunt/Data/Results/housing_stats.csv
+2026-03-14 14:39:52 [INFO] Loaded 224 records from /home/runner/work/house_hunt/house_hunt/Data/Results/housing_stats.csv
+2026-03-14 14:39:52 [INFO] Loaded 224 housing records
+2026-03-14 14:39:52 [INFO] Scoring all locations...
+2026-03-14 14:39:52 [INFO] Found 153 locations with both commute and housing data
+2026-03-14 14:39:52 [INFO] Filtered 9 locations exceeding max commute time
+2026-03-14 14:39:52 [INFO] Filtered 45 locations exceeding max price
+2026-03-14 14:39:52 [INFO] Scored 99 locations
+2026-03-14 14:39:52 [INFO] Saved 99 scored locations to /home/runner/work/house_hunt/house_hunt/Data/Results/scored_locations.csv
+2026-03-14 14:39:52 [INFO] Location scoring completed successfully
+2026-03-14 14:39:52 Sat UTC [INFO] __main__: Generating HTML report...
+2026-03-14 14:39:52 [INFO] Generating HTML report...
+2026-03-14 14:39:52 Sat UTC [INFO] utils: Loaded 99 records from /home/runner/work/house_hunt/house_hunt/Data/Results/scored_locations.csv
+2026-03-14 14:39:52 [INFO] Loaded 99 records from /home/runner/work/house_hunt/house_hunt/Data/Results/scored_locations.csv
+2026-03-14 14:39:52 [INFO] Generating HTML report for 99 locations
+2026-03-14 14:39:52 [INFO] HTML report generated: /home/runner/work/house_hunt/house_hunt/Data/Results/score_report.html
+2026-03-14 14:39:52 Sat UTC [INFO] __main__: COMPLETED: Scoring
+2026-03-14 14:39:52 [INFO] COMPLETED: Scoring
+2026-03-14 14:39:52 Sat UTC [INFO] __main__: EXECUTION SUMMARY:
+2026-03-14 14:39:52 [INFO] EXECUTION SUMMARY:
+2026-03-14 14:39:52 Sat UTC [INFO] __main__:   SCORE: SUCCESS
+2026-03-14 14:39:52 [INFO]   SCORE: SUCCESS
+2026-03-14 14:39:52 Sat UTC [INFO] __main__: COMPLETED: House Hunt | 1/1 modules successful
+2026-03-14 14:39:52 [INFO] COMPLETED: House Hunt | 1/1 modules successful
