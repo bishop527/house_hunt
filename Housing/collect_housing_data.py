@@ -143,7 +143,7 @@ def get_redfin_data(zip_code):
             'zip': str,
             'median_sale_price': float,
             'median_list_price': float,
-            'median_ppsf': float,  # Price per square foot
+            'median_ppsf': int,  # Price per square foot
             'homes_sold': int,
             'inventory': int,
             'months_of_supply': float,
@@ -216,7 +216,7 @@ def get_redfin_data(zip_code):
                 else None
             ),
             'median_ppsf': (
-                zip_data.get('MEDIAN_PPSF')
+                int(zip_data.get('MEDIAN_PPSF'))
                 if not pd.isna(zip_data.get('MEDIAN_PPSF'))
                 else None
             ),
@@ -470,9 +470,9 @@ def get_historical_redfin_data(zip_code, months=12):
             trend = 'insufficient_data'
 
         return {
-            'min_monthly_price': float(prices.min()),
-            'max_monthly_price': float(prices.max()),
-            'avg_monthly_price': float(prices.mean()),
+            'min_monthly_price': int(prices.min()),
+            'max_monthly_price': int(prices.max()),
+            'avg_monthly_price': int(prices.mean()),
             'months_of_data': len(prices),
             'price_trend': trend
         }
