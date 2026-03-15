@@ -3,10 +3,15 @@ Generate interactive HTML report from scored location data.
 
 Creates a standalone HTML file with:
 - Summary statistics
-- Interactive data table
-- Charts and visualizations
+- Interactive data table with clickable row detail modal
+- Collapsed section showing locations filtered out and why
 - Filtering and sorting capabilities
+
+Updated:
+- Added row detail modal, NaN fix for PPSF, json import
+- Added filtered_df parameter; renders collapsed filtered-out section
 """
+import json
 import os
 import logging
 import pandas as pd
@@ -44,7 +49,122 @@ def get_tier_color(tier):
         return '#6b7280'  # Gray
 
 
-def generate_html_report(scored_df, output_file, config=None):
+def _build_row_details(row):
+    """
+    Build the details dict embedded in each table row as a data attribute.
+
+    Args:
+        row (pd.Series): A scored locations row
+
+    Returns:
+        str: HTML-safe JSON string
+    """
+    def safe_int(val):
+        return int(val) if pd.notna(val) else None
+
+    def safe_float(val):
+        return float(val) if pd.notna(val) else None
+
+    details = {
+        'rank':          safe_int(row.get('Rank')),
+        'total_score':   safe_float(row.get('Total_Score')),
+        'tier':          str(row.get('Tier', '')),
+        'commute_score': safe_float(row.get('Commute_Score')),
+        'housing_score': safe_float(row.get('Housing_Score')),
+        'price_score':   safe_float(row.get('Price_Score')),
+        'tax_score':     safe_float(row.get('Tax_Score')),
+        'avg_commute':   safe_float(row.get('Avg_Commute_Min')),
+        'min_commute':   safe_float(row.get('Min_Commute_Min')),
+        'max_commute':   safe_float(row.get('Max_Commute_Min')),
+        'distance':      safe_float(row.get('Distance_Miles')),
+        'median_price':  safe_int(row.get('Median_Price')),
+        'ppsf':          safe_float(row.get('Price_Per_SqFt')),
+        'homes_sold':    safe_int(row.get('Homes_Sold')),
+        'inventory':     safe_int(row.get('Inventory')),
+        'tax_rate':      safe_float(row.get('Tax_Rate_Per_1000')),
+        'monthly_tax':   safe_float(row.get('Est_Monthly_Tax')),
+        'price_trend':   str(row.get('Price_Trend') or 'N/A'),
+        'min_monthly':   safe_int(row.get('Min_Monthly_Price')),
+        'max_monthly':   safe_int(row.get('Max_Monthly_Price')),
+        'commute_runs':  safe_int(row.get('Commute_Runs')),
+        'last_updated':  str(row.get('Last_Updated') or 'N/A'),
+    }
+
+    return (
+        json.dumps(details)
+        .replace('"', '&quot;')
+        .replace("'", '&#39;')
+    )
+
+
+def _build_filtered_section(filtered_df):
+    """
+    Build the collapsed HTML section listing filtered-out locations.
+
+    Rendered as a <details> element beneath the main table so it is
+    hidden by default and does not clutter the primary results.
+
+    Args:
+        filtered_df (pd.DataFrame): Rows dropped during scoring filters.
+            Expected columns: Town, State, Zip, Filter_Reason,
+            Avg_Commute_Min, Distance_Miles, Median_Price, Price_Per_SqFt.
+
+    Returns:
+        str: HTML string, or empty string if filtered_df is None/empty.
+    """
+    if filtered_df is None or len(filtered_df) == 0:
+        return ""
+
+    rows_html = ""
+    for _, row in filtered_df.iterrows():
+        rows_html += f"""
+                    <tr>
+                        <td><strong>{row.get('Town', 'N/A')}</strong></td>
+                        <td>{row.get('State', 'N/A')}</td>
+                        <td>{row.get('Zip', 'N/A')}</td>
+                        <td style="color:#ef4444; font-weight:500;">
+                            {row.get('Filter_Reason', 'N/A')}
+                        </td>
+                        <td>{format_number(row.get('Avg_Commute_Min'))} min</td>
+                        <td>{format_number(row.get('Distance_Miles'))} mi</td>
+                        <td>{format_currency(row.get('Median_Price'))}</td>
+                        <td>{format_currency(row.get('Price_Per_SqFt'))}</td>
+                    </tr>"""
+
+    return f"""
+        <details class="filtered-section">
+            <summary class="filtered-summary">
+                <span class="filtered-count">
+                    &#x26A0; {len(filtered_df)} location(s) filtered out
+                </span>
+                <span class="filtered-hint">click to expand</span>
+            </summary>
+            <div class="filtered-body">
+                <p class="filtered-description">
+                    These locations were excluded before scoring based on
+                    the limits set in your config file.
+                </p>
+                <table class="filtered-table">
+                    <thead>
+                        <tr>
+                            <th>Town</th>
+                            <th>State</th>
+                            <th>ZIP</th>
+                            <th>Reason Filtered</th>
+                            <th>Avg Commute</th>
+                            <th>Distance</th>
+                            <th>Median Price</th>
+                            <th>$/sqft</th>
+                        </tr>
+                    </thead>
+                    <tbody>{rows_html}</tbody>
+                </table>
+            </div>
+        </details>"""
+
+
+def generate_html_report(scored_df, output_file, config=None,
+                         filtered_df=None):
     """
     Generate interactive HTML report.
 
@@ -52,6 +172,8 @@ def generate_html_report(scored_df, output_file, config=None):
         scored_df (pd.DataFrame): Scored locations DataFrame
         output_file (str): Path to output HTML file
         config (dict): Scoring configuration (optional)
+        filtered_df (pd.DataFrame): Locations dropped by filters (optional).
+            If provided, rendered in a collapsed section below the main table.
 
     Returns:
         bool: True if successful
@@ -61,15 +183,20 @@ def generate_html_report(scored_df, output_file, config=None):
         return False
 
     logger.info(f"Generating HTML report for {len(scored_df)} locations")
+    if filtered_df is not None and len(filtered_df) > 0:
+        logger.info(
+            f"Including {len(filtered_df)} filtered locations in report"
+        )
 
     # Calculate summary stats
     stats = {
-        'total': len(scored_df),
-        'avg_score': scored_df['Total_Score'].mean(),
+        'total':       len(scored_df),
+        'avg_score':   scored_df['Total_Score'].mean(),
         'avg_commute': scored_df['Avg_Commute_Min'].mean(),
-        'avg_price': scored_df['Median_Price'].mean(),
+        'avg_price':   scored_df['Median_Price'].mean(),
         'tier_counts': scored_df['Tier'].value_counts().to_dict(),
-        'generated': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        'generated':   datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+        'filtered':    len(filtered_df) if filtered_df is not None else 0,
     }
 
     # Build HTML
@@ -87,7 +214,7 @@ def generate_html_report(scored_df, output_file, config=None):
         }}
 
         body {{
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI',
                          Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             padding: 2rem;
@@ -241,8 +368,13 @@ def generate_html_report(scored_df, output_file, config=None):
             color: #1e293b;
         }}
 
-        tr:hover {{
-            background: #f8fafc;
+        tbody tr {{
+            cursor: pointer;
+            transition: background 0.15s;
+        }}
+
+        tbody tr:hover {{
+            background: #eef2ff !important;
         }}
 
         .rank {{
@@ -298,18 +430,194 @@ def generate_html_report(scored_df, output_file, config=None):
         .hidden {{
             display: none !important;
         }}
+
+        /* ── Filtered section ───────────────────────────────────────────── */
+        .filtered-section {{
+            margin: 0 2rem 2rem;
+            border: 1px solid #fde68a;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #fffbeb;
+        }}
+
+        .filtered-summary {{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.85rem 1.25rem;
+            cursor: pointer;
+            list-style: none;
+            user-select: none;
+        }}
+
+        /* Remove default <details> triangle in all browsers */
+        .filtered-summary::-webkit-details-marker {{ display: none; }}
+
+        .filtered-summary:hover {{ background: #fef3c7; }}
+
+        .filtered-count {{
+            color: #92400e;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }}
+
+        .filtered-hint {{
+            color: #b45309;
+            font-size: 0.8rem;
+            font-style: italic;
+        }}
+
+        details[open] .filtered-hint {{ display: none; }}
+
+        .filtered-body {{
+            padding: 1rem 1.25rem 1.25rem;
+            border-top: 1px solid #fde68a;
+        }}
+
+        .filtered-description {{
+            color: #78350f;
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+        }}
+
+        .filtered-table {{
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.88rem;
+        }}
+
+        .filtered-table th {{
+            background: #fef3c7;
+            color: #78350f;
+            font-weight: 600;
+            padding: 0.6rem 0.75rem;
+            border-bottom: 1px solid #fde68a;
+            cursor: default;
+            text-align: left;
+        }}
+
+        .filtered-table th:hover {{ background: #fef3c7; }}
+
+        .filtered-table td {{
+            padding: 0.6rem 0.75rem;
+            border-bottom: 1px solid #fde68a;
+            color: #78350f;
+            opacity: 0.8;
+            text-decoration: line-through;
+            text-decoration-color: #d97706;
+        }}
+
+        /* Reason column — no strikethrough so it reads clearly */
+        .filtered-table td:nth-child(4) {{
+            text-decoration: none;
+            opacity: 1;
+            font-size: 0.85rem;
+        }}
+
+        .filtered-table tr:last-child td {{ border-bottom: none; }}
+
+        /* ── Modal ──────────────────────────────────────────────────────── */
+        .modal-overlay {{
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }}
+        .modal-overlay.open {{ display: flex; }}
+
+        .modal {{
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            max-width: 700px;
+            width: 90%;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 25px 80px rgba(0,0,0,0.4);
+            position: relative;
+        }}
+        .modal-header {{
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 1rem;
+        }}
+        .modal-title {{ font-size: 1.4rem; font-weight: 700; color: #1e293b; }}
+        .modal-subtitle {{ color: #64748b; font-size: 0.9rem; margin-top: 0.25rem; }}
+        .modal-close {{
+            background: none; border: none;
+            font-size: 1.5rem; cursor: pointer;
+            color: #94a3b8; line-height: 1;
+            padding: 0.25rem;
+        }}
+        .modal-close:hover {{ color: #1e293b; }}
+
+        .detail-section {{ margin-bottom: 1.5rem; }}
+        .detail-section-title {{
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #64748b;
+            margin-bottom: 0.75rem;
+        }}
+        .score-row {{
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+        }}
+        .score-label {{ flex: 1; color: #475569; font-size: 0.95rem; }}
+        .score-pill {{
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: white;
+            min-width: 60px;
+            text-align: center;
+        }}
+        .score-bar-wrap {{
+            flex: 2;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+        }}
+        .score-bar-fill {{
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 4px;
+        }}
+        .detail-grid {{
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem 2rem;
+        }}
+        .detail-item {{ display: flex; justify-content: space-between; }}
+        .detail-key {{ color: #64748b; font-size: 0.9rem; }}
+        .detail-val {{ font-weight: 600; color: #1e293b; font-size: 0.9rem; }}
+        .trend-up    {{ color: #22c55e; }}
+        .trend-down  {{ color: #ef4444; }}
+        .trend-stable {{ color: #f59e0b; }}
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>🏡 House Hunt Scoring Report</h1>
+            <h1>&#x1F3E1; House Hunt Scoring Report</h1>
             <p>Ranked locations based on commute and housing preferences</p>
         </div>
 
         <div class="stats-grid">
             <div class="stat-card">
-                <div class="stat-label">Total Locations</div>
+                <div class="stat-label">Scored</div>
                 <div class="stat-value">{stats['total']}</div>
             </div>
             <div class="stat-card">
@@ -324,11 +632,17 @@ def generate_html_report(scored_df, output_file, config=None):
                 <div class="stat-label">Avg Price</div>
                 <div class="stat-value">${stats['avg_price'] / 1000:.0f}k</div>
             </div>
+            <div class="stat-card">
+                <div class="stat-label">Filtered Out</div>
+                <div class="stat-value" style="color:#d97706;">
+                    {stats['filtered']}
+                </div>
+            </div>
         </div>
 
         <div class="controls">
             <div class="search-box">
-                <input type="text" id="searchInput" 
+                <input type="text" id="searchInput"
                        placeholder="Search by town or zip code...">
             </div>
             <div class="filter-group">
@@ -359,19 +673,22 @@ def generate_html_report(scored_df, output_file, config=None):
                 <tbody id="tableBody">
 """
 
-    # Add table rows
+    # Add scored table rows
     for _, row in scored_df.iterrows():
         tier_color = get_tier_color(row['Tier'])
+        details_json = _build_row_details(row)
 
         html += f"""
-                    <tr data-tier="{row['Tier'][0]}" 
-                        data-town="{row['Town'].lower()}" 
-                        data-zip="{row['Zip']}">
+                    <tr data-tier="{row['Tier'][0]}"
+                        data-town="{row['Town'].lower()}"
+                        data-zip="{row['Zip']}"
+                        data-details="{details_json}"
+                        onclick="openModal(this)">
                         <td class="rank">#{row['Rank']}</td>
                         <td><strong>{row['Town']}</strong></td>
                         <td>{row['Zip']}</td>
                         <td>
-                            <span class="tier-badge" 
+                            <span class="tier-badge"
                                   style="background: {tier_color}">
                                 {row['Tier']}
                             </span>
@@ -382,7 +699,7 @@ def generate_html_report(scored_df, output_file, config=None):
                                     {row['Total_Score']:.1f}
                                 </span>
                                 <div class="bar">
-                                    <div class="bar-fill" 
+                                    <div class="bar-fill"
                                          style="width: {row['Total_Score']}%">
                                     </div>
                                 </div>
@@ -390,73 +707,89 @@ def generate_html_report(scored_df, output_file, config=None):
                         </td>
                         <td>{row['Avg_Commute_Min']:.1f} min</td>
                         <td>{row['Distance_Miles']:.1f} mi</td>
-                        <td>{format_currency(row['Median_Price'])}</td>
-                        <td>${row['Price_Per_SqFt']:.0f}</td>
+                        <td>{format_currency(row.get('Median_Price'))}</td>
+                        <td>{format_currency(row.get('Price_Per_SqFt'))}</td>
                     </tr>
 """
 
-    # Close HTML
+    # Build filtered section (empty string if no filtered locations)
+    filtered_section_html = _build_filtered_section(filtered_df)
+
     html += f"""
                 </tbody>
             </table>
         </div>
 
+        {filtered_section_html}
+
+        <!-- Row detail modal -->
+        <div class="modal-overlay" id="detailModal">
+            <div class="modal">
+                <div class="modal-header">
+                    <div>
+                        <div class="modal-title" id="modalTitle"></div>
+                        <div class="modal-subtitle" id="modalSubtitle"></div>
+                    </div>
+                    <button class="modal-close" id="modalClose">&#x2715;</button>
+                </div>
+                <div id="modalBody"></div>
+            </div>
+        </div>
+
         <div class="footer">
             <p>Generated on {stats['generated']}</p>
             <p>Data sources: Google Maps API (commute), Redfin (housing)</p>
+            <p style="margin-top:0.5rem; font-size:0.8rem; color:#94a3b8;">
+                Click any row to see full scoring details
+            </p>
         </div>
     </div>
 
     <script>
-        // Search functionality
+        // ── Search ──────────────────────────────────────────────────────────
         const searchInput = document.getElementById('searchInput');
-        const tableBody = document.getElementById('tableBody');
-        const rows = tableBody.getElementsByTagName('tr');
+        const tableBody   = document.getElementById('tableBody');
+        const rows        = tableBody.getElementsByTagName('tr');
 
         searchInput.addEventListener('input', function() {{
             const searchTerm = this.value.toLowerCase();
-
             for (let row of rows) {{
                 const town = row.dataset.town;
-                const zip = row.dataset.zip;
-                const matches = town.includes(searchTerm) || 
-                               zip.includes(searchTerm);
-                row.classList.toggle('hidden', !matches);
+                const zip  = row.dataset.zip;
+                row.classList.toggle(
+                    'hidden',
+                    !town.includes(searchTerm) && !zip.includes(searchTerm)
+                );
             }}
         }});
 
-        // Filter by tier
+        // ── Tier filter ─────────────────────────────────────────────────────
         const filterBtns = document.querySelectorAll('.filter-btn');
 
         filterBtns.forEach(btn => {{
             btn.addEventListener('click', function() {{
-                // Update active state
                 filterBtns.forEach(b => b.classList.remove('active'));
                 this.classList.add('active');
-
                 const tier = this.dataset.tier;
-
                 for (let row of rows) {{
                     if (tier === 'all') {{
                         row.classList.remove('hidden');
                     }} else {{
-                        const rowTier = row.dataset.tier;
-                        row.classList.toggle('hidden', rowTier !== tier);
+                        row.classList.toggle('hidden', row.dataset.tier !== tier);
                     }}
                 }}
             }});
         }});
 
-        // Sortable columns
+        // ── Sortable columns ─────────────────────────────────────────────────
         const headers = document.querySelectorAll('th[data-sort]');
         let currentSort = {{ column: 'rank', ascending: true }};
 
         headers.forEach(header => {{
             header.addEventListener('click', function() {{
-                const column = this.dataset.sort;
-                const ascending = currentSort.column === column ? 
-                                !currentSort.ascending : true;
-
+                const column    = this.dataset.sort;
+                const ascending = currentSort.column === column
+                                  ? !currentSort.ascending : true;
                 currentSort = {{ column, ascending }};
                 sortTable(column, ascending);
             }});
@@ -467,7 +800,6 @@ def generate_html_report(scored_df, output_file, config=None):
 
             rowsArray.sort((a, b) => {{
                 let aVal, bVal;
-
                 switch(column) {{
                     case 'rank':
                         aVal = parseInt(a.cells[0].textContent.slice(1));
@@ -487,12 +819,10 @@ def generate_html_report(scored_df, output_file, config=None):
                         break;
                     case 'score':
                         aVal = parseFloat(
-                            a.cells[4].querySelector('.score-value')
-                             .textContent
+                            a.cells[4].querySelector('.score-value').textContent
                         );
                         bVal = parseFloat(
-                            b.cells[4].querySelector('.score-value')
-                             .textContent
+                            b.cells[4].querySelector('.score-value').textContent
                         );
                         break;
                     case 'commute':
@@ -506,33 +836,241 @@ def generate_html_report(scored_df, output_file, config=None):
                     case 'price':
                         aVal = parseFloat(
                             a.cells[7].textContent.replace(/[$,]/g, '')
-                        );
+                        ) || 0;
                         bVal = parseFloat(
                             b.cells[7].textContent.replace(/[$,]/g, '')
-                        );
+                        ) || 0;
                         break;
                     case 'ppsf':
                         aVal = parseFloat(
-                            a.cells[8].textContent.replace('$', '')
-                        );
+                            a.cells[8].textContent.replace(/[$,]/g, '')
+                        ) || 0;
                         bVal = parseFloat(
-                            b.cells[8].textContent.replace('$', '')
-                        );
+                            b.cells[8].textContent.replace(/[$,]/g, '')
+                        ) || 0;
                         break;
                 }}
 
                 if (typeof aVal === 'string') {{
-                    return ascending ? 
-                           aVal.localeCompare(bVal) : 
-                           bVal.localeCompare(aVal);
-                }} else {{
-                    return ascending ? aVal - bVal : bVal - aVal;
+                    return ascending
+                           ? aVal.localeCompare(bVal)
+                           : bVal.localeCompare(aVal);
                 }}
+                return ascending ? aVal - bVal : bVal - aVal;
             }});
 
-            // Re-append sorted rows
             rowsArray.forEach(row => tableBody.appendChild(row));
         }}
+
+        // ── Modal ────────────────────────────────────────────────────────────
+        const modal      = document.getElementById('detailModal');
+        const modalClose = document.getElementById('modalClose');
+
+        function fmt(val, prefix='', suffix='', fallback='N/A') {{
+            return (val !== null && val !== undefined)
+                ? prefix + Number(val).toLocaleString() + suffix
+                : fallback;
+        }}
+
+        function scoreColor(score, max) {{
+            max = max || 100;
+            const pct = score / max;
+            if (pct >= 0.8) return '#22c55e';
+            if (pct >= 0.6) return '#3b82f6';
+            if (pct >= 0.4) return '#f59e0b';
+            return '#ef4444';
+        }}
+
+        function trendClass(trend) {{
+            if (!trend || trend === 'N/A') return '';
+            if (trend === 'increasing') return 'trend-up';
+            if (trend === 'decreasing') return 'trend-down';
+            return 'trend-stable';
+        }}
+
+        function openModal(row) {{
+            const raw = row.dataset.details
+                .replace(/&quot;/g, '"')
+                .replace(/&#39;/g, "'");
+            const d    = JSON.parse(raw);
+            const town = row.querySelector('td:nth-child(2)').textContent.trim();
+
+            document.getElementById('modalTitle').textContent = town;
+            document.getElementById('modalSubtitle').textContent =
+                'ZIP: ' + row.dataset.zip +
+                ' \u00b7 Rank #' + d.rank +
+                ' \u00b7 ' + d.tier + ' Tier';
+
+            const trendLabel = d.price_trend === 'increasing' ? '\u2191 Increasing'
+                             : d.price_trend === 'decreasing' ? '\u2193 Decreasing'
+                             : d.price_trend === 'stable'     ? '\u2192 Stable'
+                             : 'N/A';
+
+            const taxRateStr = d.tax_rate !== null
+                ? d.tax_rate.toFixed(2) + ' per $1k'
+                : 'N/A';
+
+            const monthlyTaxStr = d.monthly_tax !== null
+                ? '$' + Math.round(d.monthly_tax).toLocaleString()
+                : 'N/A';
+
+            const priceRangeStr =
+                (d.min_monthly !== null && d.max_monthly !== null)
+                ? '$' + d.min_monthly.toLocaleString() +
+                  ' \u2013 $' + d.max_monthly.toLocaleString()
+                : 'N/A';
+
+            document.getElementById('modalBody').innerHTML = `
+                <div class="detail-section">
+                    <div class="detail-section-title">Overall Score</div>
+                    <div class="score-row">
+                        <span class="score-label">Total Score</span>
+                        <span class="score-pill"
+                              style="background:${{scoreColor(d.total_score)}}">
+                            ${{d.total_score}}
+                        </span>
+                        <div class="score-bar-wrap">
+                            <div class="score-bar-fill"
+                                 style="width:${{d.total_score}}%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="detail-section">
+                    <div class="detail-section-title">
+                        Commute &mdash; ${{d.commute_score}}/100
+                    </div>
+                    <div class="score-row">
+                        <span class="score-label">Commute Score</span>
+                        <span class="score-pill"
+                              style="background:${{scoreColor(d.commute_score)}}">
+                            ${{d.commute_score}}
+                        </span>
+                        <div class="score-bar-wrap">
+                            <div class="score-bar-fill"
+                                 style="width:${{d.commute_score}}%"></div>
+                        </div>
+                    </div>
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <span class="detail-key">Avg Time</span>
+                            <span class="detail-val">
+                                ${{d.avg_commute !== null
+                                    ? d.avg_commute.toFixed(1) + ' min' : 'N/A'}}
+                            </span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-key">Distance</span>
+                            <span class="detail-val">
+                                ${{d.distance !== null
+                                    ? d.distance.toFixed(1) + ' mi' : 'N/A'}}
+                            </span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-key">Best Time</span>
+                            <span class="detail-val">
+                                ${{d.min_commute !== null
+                                    ? d.min_commute + ' min' : 'N/A'}}
+                            </span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-key">Worst Time</span>
+                            <span class="detail-val">
+                                ${{d.max_commute !== null
+                                    ? d.max_commute + ' min' : 'N/A'}}
+                            </span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-key">Data Runs</span>
+                            <span class="detail-val">${{fmt(d.commute_runs)}}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-key">Last Updated</span>
+                            <span class="detail-val">${{d.last_updated}}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="detail-section">
+                    <div class="detail-section-title">
+                        Housing &mdash; ${{d.housing_score}}/100
+                    </div>
+                    <div class="score-row">
+                        <span class="score-label">Price Score</span>
+                        <span class="score-pill"
+                              style="background:${{scoreColor(d.price_score, 50)}}">
+                            ${{d.price_score}}/50
+                        </span>
+                        <div class="score-bar-wrap">
+                            <div class="score-bar-fill"
+                                 style="width:${{d.price_score * 2}}%"></div>
+                        </div>
+                    </div>
+                    <div class="score-row">
+                        <span class="score-label">Tax Score</span>
+                        <span class="score-pill"
+                              style="background:${{scoreColor(d.tax_score, 50)}}">
+                            ${{d.tax_score}}/50
+                        </span>
+                        <div class="score-bar-wrap">
+                            <div class="score-bar-fill"
+                                 style="width:${{d.tax_score * 2}}%"></div>
+                        </div>
+                    </div>
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <span class="detail-key">Median Price</span>
+                            <span class="detail-val">${{fmt(d.median_price, '$')}}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-key">Price/SqFt</span>
+                            <span class="detail-val">
+                                ${{d.ppsf !== null
+                                    ? '$' + d.ppsf.toFixed(0) : 'N/A'}}
+                            </span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-key">Tax Rate</span>
+                            <span class="detail-val">${{taxRateStr}}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-key">Est. Monthly Tax</span>
+                            <span class="detail-val">${{monthlyTaxStr}}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-key">Homes Sold</span>
+                            <span class="detail-val">${{fmt(d.homes_sold)}}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-key">Inventory</span>
+                            <span class="detail-val">${{fmt(d.inventory)}}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-key">12-Mo Range</span>
+                            <span class="detail-val">${{priceRangeStr}}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-key">Price Trend</span>
+                            <span class="detail-val ${{trendClass(d.price_trend)}}">
+                                ${{trendLabel}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            modal.classList.add('open');
+        }}
+
+        modalClose.addEventListener('click', () =>
+            modal.classList.remove('open')
+        );
+        modal.addEventListener('click', e => {{
+            if (e.target === modal) modal.classList.remove('open');
+        }});
+        document.addEventListener('keydown', e => {{
+            if (e.key === 'Escape') modal.classList.remove('open');
+        }});
     </script>
 </body>
 </html>
@@ -550,7 +1088,6 @@ def generate_html_report(scored_df, output_file, config=None):
 
 
 if __name__ == "__main__":
-    # Test with sample data
     import sys
 
     sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))

@@ -25,6 +25,7 @@ from logging_config import setup_logger
 from Score.calculate_scores import calculate_scores
 from Score.generate_report import generate_html_report
 
+
 def run_commute_collection(logger):
     """Run commute data collection module"""
     logger.info("STARTED: Commute data collection")
@@ -58,17 +59,14 @@ def run_housing_collection(logger):
 
 
 def run_scoring(logger, config_file=None):
-    """Run location scoring module"""
     logger.info("STARTED: Scoring (via main.py)")
-
     try:
-        success = calculate_scores()
-
+        success, filtered_df = calculate_scores()
         if success:
             logger.info("Generating HTML report...")
             scored_df = load_csv_with_zip(SCORED_LOCATIONS_FILE)
-            generate_html_report(scored_df, SCORE_REPORT_FILE)
-
+            generate_html_report(scored_df, SCORE_REPORT_FILE,
+                                 filtered_df=filtered_df)
         logger.info("COMPLETED: Scoring")
         return success
     except Exception as e:
