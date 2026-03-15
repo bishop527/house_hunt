@@ -404,11 +404,11 @@ class LocationScorer:
         filtered_rows = []
 
         if filters.get('max_commute_time'):
-            mask = merged['Average_Time'] > filters['max_commute_time']
+            max_time = filters['max_commute_time']
+            mask = merged['Average_Time'] > max_time
             dropped = merged[mask].copy()
-            dropped['Filter_Reason'] = (
-                f"Commute > {filters['max_commute_time']} min "
-                f"(actual: {dropped['Average_Time'].round(1)} min)"
+            dropped['Filter_Reason'] = dropped['Average_Time'].apply(
+                lambda t: f"Commute > {max_time} min (actual: {t:.1f} min)"
             )
             filtered_rows.append(dropped)
             merged = merged[~mask]
@@ -418,11 +418,12 @@ class LocationScorer:
             )
 
         if filters.get('max_price'):
-            mask = merged['Latest_Median_Sale'] > filters['max_price']
+            max_price = filters['max_price']
+            mask = merged['Latest_Median_Sale'] > max_price
             dropped = merged[mask].copy()
-            dropped['Filter_Reason'] = (
-                f"Price > ${filters['max_price']:,} "
-                f"(actual: ${dropped['Latest_Median_Sale'].round(0).astype(int)})"
+            dropped['Filter_Reason'] = dropped['Latest_Median_Sale'].apply(
+                lambda p: f"Price > ${max_price:,} (actual: ${int(p):,})"
+                if pd.notna(p) else f"Price > ${max_price:,} (actual: N/A)"
             )
             filtered_rows.append(dropped)
             merged = merged[~mask]
