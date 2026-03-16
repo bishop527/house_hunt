@@ -116,15 +116,13 @@ def _build_filtered_section(filtered_df):
         return ""
 
     rows_html = ""
-    for _, row in filtered_df.iterrows():
+    for _, row in filtered_df.sort_values('Town').iterrows():
         rows_html += f"""
                     <tr>
                         <td><strong>{row.get('Town', 'N/A')}</strong></td>
                         <td>{row.get('State', 'N/A')}</td>
                         <td>{row.get('Zip', 'N/A')}</td>
-                        <td style="color:#ef4444; font-weight:500;">
-                            {row.get('Filter_Reason', 'N/A')}
-                        </td>
+                        <td style="color:#ef4444; font-weight:500;">{row.get('Filter_Reason', 'N/A')}</td>
                         <td>{format_number(row.get('Avg_Commute_Min'))} min</td>
                         <td>{format_number(row.get('Distance_Miles'))} mi</td>
                         <td>{format_currency(row.get('Median_Price'))}</td>
@@ -141,8 +139,7 @@ def _build_filtered_section(filtered_df):
             </summary>
             <div class="filtered-body">
                 <p class="filtered-description">
-                    These locations were excluded before scoring based on
-                    the limits set in your config file.
+                    These locations were excluded before scoring based on the limits set in your config file.
                 </p>
                 <table class="filtered-table">
                     <thead>
@@ -163,8 +160,7 @@ def _build_filtered_section(filtered_df):
         </details>"""
 
 
-def generate_html_report(scored_df, output_file, config=None,
-                         filtered_df=None):
+def generate_html_report(scored_df, output_file, config=None, filtered_df=None):
     """
     Generate interactive HTML report.
 
@@ -214,8 +210,7 @@ def generate_html_report(scored_df, output_file, config=None,
         }}
 
         body {{
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI',
-                         Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             padding: 2rem;
             min-height: 100vh;
@@ -503,15 +498,6 @@ def generate_html_report(scored_df, output_file, config=None,
             border-bottom: 1px solid #fde68a;
             color: #78350f;
             opacity: 0.8;
-            text-decoration: line-through;
-            text-decoration-color: #d97706;
-        }}
-
-        /* Reason column — no strikethrough so it reads clearly */
-        .filtered-table td:nth-child(4) {{
-            text-decoration: none;
-            opacity: 1;
-            font-size: 0.85rem;
         }}
 
         .filtered-table tr:last-child td {{ border-bottom: none; }}
