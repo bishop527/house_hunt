@@ -17,8 +17,8 @@ import holidays
 # LOG_LEVEL = logging.DEBUG
 LOG_LEVEL = logging.INFO
 # Tier selection strategy
-AUTO_TIER_SELECTION = True  # If True, automatically choose optimal tier
-USE_TRAFFIC = True           # Used when AUTO_TIER_SELECTION = False, Set to True for Advanced tier (with traffic data)
+AUTO_TIER_SELECTION = False  # If True, automatically choose optimal tier
+USE_TRAFFIC = False           # Used when AUTO_TIER_SELECTION = False, Set to True for Advanced tier (with traffic data)
 TRAFFIC_MODEL = 'best_guess'  # Used when USE_TRAFFIC=True
 AVOID = None  # Options: None, 'highways', 'tolls'
 API_MONTHLY_LIMIT_BASIC = 10000  # Basic tier (no traffic)
