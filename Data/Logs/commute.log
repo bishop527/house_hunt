@@ -224,3 +224,13 @@
 2026-03-18 12:56:34 Wed UTC [INFO] Commute.collect_commute_data: Loaded 182 records from /home/runner/work/house_hunt/house_hunt/Data/Results/commute_stats.csv
 2026-03-18 12:56:34 Wed UTC [INFO] Commute.collect_commute_data: Successfully updated /home/runner/work/house_hunt/house_hunt/Data/Results/commute_stats.csv with 182 records
 2026-03-18 12:56:36 Wed UTC [INFO] Commute.collect_commute_data: COMPLETED: morning | queried=182 ok=182 | elements=182 (basic) | Basic=182/10,000 Advanced=4,981/5,000 | cost=$0.00
+2026-03-18 22:21:09 Wed UTC [INFO] Commute.collect_commute_data: STARTED: Commute collection (afternoon)
+2026-03-18 22:21:09 Wed UTC [INFO] Commute.collect_commute_data: Manual tier selection: Basic (no traffic)
+2026-03-18 22:21:09 Wed UTC [INFO] Commute.collect_commute_data: Loading addresses from cache: /home/runner/work/house_hunt/house_hunt/Data/Processed/towns_within_40mi.csv
+2026-03-18 22:21:09 Wed UTC [INFO] Commute.collect_commute_data: Found 182 cached addresses (skipped zip database parsing)
+2026-03-18 22:21:09 Wed UTC [INFO] Commute.collect_commute_data: Budget check passed: 364/10,000 (current=182 + estimated=182)
+2026-03-18 22:21:09 Wed UTC [INFO] Commute.collect_commute_data: Afternoon commute: 123 Main St. Anytown, MA 00000 -> 182 locations
+2026-03-18 22:21:10 Wed UTC [INFO] Commute.collect_commute_data: Completed 8 requests, processed 182 elements, collected 182 valid results
+2026-03-18 22:21:10 Wed UTC [INFO] Commute.collect_commute_data: Loaded 182 records from /home/runner/work/house_hunt/house_hunt/Data/Results/commute_stats.csv
+2026-03-18 22:21:10 Wed UTC [INFO] Commute.collect_commute_data: Successfully updated /home/runner/work/house_hunt/house_hunt/Data/Results/commute_stats.csv with 182 records
+2026-03-18 22:21:12 Wed UTC [INFO] Commute.collect_commute_data: COMPLETED: afternoon | queried=182 ok=182 | elements=182 (basic) | Basic=364/10,000 Advanced=4,981/5,000 | cost=$0.00
