@@ -26,14 +26,17 @@ from Score.calculate_scores import calculate_scores
 from Score.generate_report import generate_html_report
 
 
-def run_commute_collection(logger):
+def run_commute_collection(logger, limit=None, dry_run=False):
     """Run commute data collection module"""
     logger.info("STARTED: Commute data collection")
 
     try:
-        collect_commute_data()
-        logger.info("COMPLETED: Commute data collection")
-        return True
+        success = collect_commute_data(limit=limit, dry_run=dry_run)
+        if success:
+            logger.info("COMPLETED: Commute data collection")
+        else:
+            logger.error("FAILED: Commute data collection")
+        return success
     except KeyboardInterrupt:
         logger.warning("Commute collection interrupted by user")
         return False
@@ -42,14 +45,17 @@ def run_commute_collection(logger):
         return False
 
 
-def run_housing_collection(logger):
+def run_housing_collection(logger, limit=None, dry_run=False):
     """Run housing data collection module"""
     logger.info("STARTED: Housing data collection")
 
     try:
-        collect_housing_data()
-        logger.info("COMPLETED: Housing data collection")
-        return True
+        success = collect_housing_data(limit=limit, dry_run=dry_run)
+        if success:
+            logger.info("COMPLETED: Housing data collection")
+        else:
+            logger.error("FAILED: Housing data collection")
+        return success
     except KeyboardInterrupt:
         logger.warning("Housing data collection interrupted by user")
         return False
@@ -121,6 +127,19 @@ Examples:
         help='Suppress console output (log to file only)'
     )
 
+    parser.add_argument(
+        '--limit',
+        type=int,
+        default=None,
+        help='Limit the number of locations processed'
+    )
+
+    parser.add_argument(
+        '--dry-run',
+        action='store_true',
+        help='Skip actual API calls and just log what would happen'
+    )
+
     args = parser.parse_args()
 
     # If no arguments, show help
@@ -142,10 +161,14 @@ Examples:
 
     # Run requested modules
     if args.all or args.commute:
-        results['commute'] = run_commute_collection(logger)
+        results['commute'] = run_commute_collection(
+            logger, limit=args.limit, dry_run=args.dry_run
+        )
 
     if args.all or args.housing:
-        results['housing'] = run_housing_collection(logger)
+        results['housing'] = run_housing_collection(
+            logger, limit=args.limit, dry_run=args.dry_run
+        )
 
     if args.all or args.score:
         results['score'] = run_scoring(logger)

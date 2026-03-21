@@ -1009,7 +1009,7 @@ def get_monthly_element_usage_from_google():
 
     except Exception as e:
         logger.error(f"Failed to query Google Cloud Monitoring: {e}")
-        return 0, 0, 0
+        return None, None, None
 
 
 def validate_local_tracking():
@@ -1029,6 +1029,15 @@ def validate_local_tracking():
         tier_usage['basic'],
         tier_usage['advanced']
     )
+
+    if google_count is None:
+        logger.warning("Could not perform tracking validation - Google data unavailable")
+        return {
+            'success': False,
+            'local_total': tier_usage['total'],
+            'tier_usage': tier_usage,
+            'costs': costs
+        }
 
     # Compare
     local_total = tier_usage['total']
@@ -1078,6 +1087,7 @@ def validate_local_tracking():
         )
 
     return {
+        'success': True,
         'local_basic': tier_usage['basic'],
         'local_advanced': tier_usage['advanced'],
         'local_total': local_total,

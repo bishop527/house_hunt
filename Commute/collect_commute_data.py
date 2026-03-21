@@ -569,7 +569,7 @@ def _load_addresses_within_range():
 # MAIN COLLECTION FUNCTION (OPTIMIZED)
 # ========================================
 
-def collect_commute_data():
+def collect_commute_data(limit=None, dry_run=False):
     """
     Main function to collect and store commute data - OPTIMIZED VERSION.
 
@@ -602,6 +602,7 @@ def collect_commute_data():
         if "exhausted" in tier_reason.lower():
             logger.critical("Cannot proceed - monthly API budget exhausted")
             logger.info("Wait until next month or manually adjust limits")
+            return False
     else:
         tier_name = "Advanced (with traffic)" if USE_TRAFFIC else "Basic (no traffic)"
         logger.info(f"Manual tier selection: {tier_name}")
@@ -623,25 +624,55 @@ def collect_commute_data():
     # OPTIMIZATION: Load addresses (cache-first, skip zip DB if possible)
     addresses = _load_addresses_within_range()
     if not addresses:
-        return
+        return False
+
+    # Apply limit if requested
+    if limit:
+        logger.info(f"Limiting processing to first {limit} addresses")
+        addresses = addresses[:limit]
 
     # OPTIMIZATION: Single unified budget check (no GCP call yet)
     budget_info = _check_budget_once(len(addresses))
     if not budget_info['can_proceed']:
-        return
+        return False
 
     # Fetch commute times
-    results, elements_used = fetch_commute_times(addresses, direction)
+    if dry_run:
+        logger.info(f"DRY RUN: Would have requested commute data for {len(addresses)} locations")
+        results = [
+            {
+                'address': addr,
+                'distance_miles': 10.0,
+                'duration_minutes': 15.0,
+                'status': 'OK'
+            } for addr in addresses
+        ]
+        elements_used = len(addresses)
+    else:
+        results, elements_used = fetch_commute_times(addresses, direction)
 
     # Update statistics
     if results:
         update_statistics(results)
 
     # Update tier-specific tracking
-    basic_count, advanced_count, tier = update_api_usage_by_tier(elements_used)
+    if not dry_run:
+        basic_count, advanced_count, tier = update_api_usage_by_tier(elements_used)
+        # OPTIMIZATION: Validate usage ONCE at end (single GCP call)
+        final_validation = validate_local_tracking()
+    else:
+        logger.info("DRY RUN: Skipping API usage tracking and GCP validation")
+        final_validation = {
+            'success': True,
+            'tier_usage': get_current_usage_by_tier(),
+            'costs': {'total_cost': 0.0},
+            'discrepancy': 0,
+            'discrepancy_ratio': 0.0
+        }
+        tier = "dry-run"
 
-    # OPTIMIZATION: Validate usage ONCE at end (single GCP call)
-    final_validation = validate_local_tracking()
+    validation_success = final_validation.get('success', False)
+    
     tier_usage = final_validation['tier_usage']
     costs = final_validation['costs']
 
@@ -655,11 +686,20 @@ def collect_commute_data():
         f"cost=${costs['total_cost']:.2f}"
     )
 
+    if not validation_success:
+        logger.error("Validation failed during commute collection")
+        return False
+
     if final_validation['discrepancy'] > MAX_ACCEPTABLE_DISCREPANCY:
         logger.warning(
             f"DISCREPANCY: {final_validation['discrepancy']:,} elements "
             f"({final_validation['discrepancy_ratio']:.1%})"
         )
+    
+    if dry_run:
+        logger.info("DRY RUN COMPLETED SUCCESSFULLY")
+        
+    return True
 
 
 if __name__ == "__main__":

@@ -130,105 +130,92 @@ def download_redfin_data():
         return False
 
 
-def get_redfin_data(zip_code):
+def get_redfin_data(zip_code, redfin_df):
     """
     Get housing data from Redfin CSV for a specific zip code.
 
     Args:
         zip_code (str): 5-digit zip code (zero-padded)
+        redfin_df (pd.DataFrame): The pre-loaded Redfin DataFrame
 
     Returns:
         dict or None: Housing data if found, None otherwise
-        {
-            'zip': str,
-            'median_sale_price': float,
-            'median_list_price': float,
-            'median_ppsf': int,  # Price per square foot
-            'homes_sold': int,
-            'inventory': int,
-            'months_of_supply': float,
-            'source': 'redfin',
-            'period_end': str  # YYYY-MM-DD
-        }
     """
-    if not os.path.exists(REDFIN_DATA_FILE):
-        logger.warning("Redfin data file not found. Downloading...")
-        if not download_redfin_data():
-            return None
-
     try:
-        # Read Redfin TSV
-        # Columns are in ALL CAPS
-        # REGION format: "Zip Code: 02421"
-        df = pd.read_csv(
-            REDFIN_DATA_FILE,
-            sep='\t',
-            dtype={'REGION': str},
-            low_memory=False
-        )
-
-        # Filter for this zip code
-        # REGION_TYPE is 'zip code' (not 'zip')
-        # REGION format is "Zip Code: 02421"
         target_region = f"Zip Code: {zip_code.zfill(5)}"
 
-        zip_data = df[
-            (df['REGION_TYPE'] == 'zip code') &
-            (df['REGION'] == target_region)
+        zip_data = redfin_df[
+            (redfin_df['REGION_TYPE'] == 'zip code') &
+            (redfin_df['REGION'] == target_region)
         ]
 
         if len(zip_data) == 0:
             logger.debug(f"No Redfin data found for zip {zip_code}")
             return None
 
-        # Get most recent period
-        zip_data = zip_data.sort_values('PERIOD_END',
-                                         ascending=False).iloc[0]
+        prop_type_mapping = {
+            'Single Family': 'Single Family Residential',
+            'Condo': 'Condo/Co-op',
+            'Townhouse': 'Townhouse'
+        }
+        allowed = [prop_type_mapping[pt] for pt in PROPERTY_TYPES if pt in prop_type_mapping]
+        if not allowed:
+            allowed = ['All Residential']
 
-        # Check minimum sample size
-        # Handle NaN for HOMES_SOLD
-        homes_sold = zip_data.get('HOMES_SOLD')
-        if pd.isna(homes_sold) or homes_sold < MIN_SAMPLE_SIZE:
-            logger.warning(
-                f"Insufficient data for {zip_code}: "
-                f"only {homes_sold} homes sold"
-            )
+        filtered_zip_data = zip_data[zip_data['PROPERTY_TYPE'].isin(allowed)]
+
+        if len(filtered_zip_data) == 0:
+             logger.debug(f"No specified property types found for zip {zip_code}, checking 'All Residential'")
+             filtered_zip_data = zip_data[zip_data['PROPERTY_TYPE'] == 'All Residential']
+
+        if len(filtered_zip_data) == 0:
             return None
 
-        # Handle NaN values for INVENTORY
-        # Using .get() with default prevents KeyError if column missing
-        # Then check for NaN and convert to 0
-        inventory_val = zip_data.get('INVENTORY')
-        if pd.isna(inventory_val):
-            inventory_val = 0
+        # Sort by PERIOD_END descending to find latest month
+        filtered_zip_data = filtered_zip_data.sort_values('PERIOD_END', ascending=False)
+        latest_period = filtered_zip_data.iloc[0]['PERIOD_END']
+        
+        # Get all records matching the latest month (could be different property types)
+        latest_data = filtered_zip_data[filtered_zip_data['PERIOD_END'] == latest_period]
 
-        # Extract values, handling NaN
+        total_homes_sold = latest_data['HOMES_SOLD'].sum()
+        if pd.isna(total_homes_sold) or total_homes_sold < MIN_SAMPLE_SIZE:
+             logger.warning(
+                 f"Insufficient data for {zip_code}: "
+                 f"only {total_homes_sold} homes sold for requested property types"
+             )
+             return None
+
+        # Weighted aggregate calculation
+        if len(latest_data) == 1:
+             median_sale = latest_data.iloc[0]['MEDIAN_SALE_PRICE']
+             median_list = latest_data.iloc[0]['MEDIAN_LIST_PRICE']
+             median_ppsf = latest_data.iloc[0]['MEDIAN_PPSF']
+             months_supply = latest_data.iloc[0]['MONTHS_OF_SUPPLY']
+             inventory_val = latest_data.iloc[0].get('INVENTORY', 0)
+        else:
+             weights = latest_data['HOMES_SOLD'] / total_homes_sold
+             weights = weights.fillna(0)
+             median_sale = (latest_data['MEDIAN_SALE_PRICE'] * weights).sum()
+             median_list = (latest_data['MEDIAN_LIST_PRICE'] * weights).sum()
+             median_ppsf = (latest_data['MEDIAN_PPSF'] * weights).sum()
+             months_supply_series = latest_data['MONTHS_OF_SUPPLY'].dropna()
+             months_supply = months_supply_series.mean() if len(months_supply_series) > 0 else None
+             inventory_val = latest_data['INVENTORY'].sum(skipna=True)
+
+        if pd.isna(inventory_val):
+             inventory_val = 0
+
         return {
             'zip': zip_code,
-            'median_sale_price': (
-                zip_data.get('MEDIAN_SALE_PRICE')
-                if not pd.isna(zip_data.get('MEDIAN_SALE_PRICE'))
-                else None
-            ),
-            'median_list_price': (
-                zip_data.get('MEDIAN_LIST_PRICE')
-                if not pd.isna(zip_data.get('MEDIAN_LIST_PRICE'))
-                else None
-            ),
-            'median_ppsf': (
-                int(zip_data.get('MEDIAN_PPSF'))
-                if not pd.isna(zip_data.get('MEDIAN_PPSF'))
-                else None
-            ),
-            'homes_sold': int(homes_sold),
+            'median_sale_price': float(median_sale) if pd.notna(median_sale) else None,
+            'median_list_price': float(median_list) if pd.notna(median_list) else None,
+            'median_ppsf': int(median_ppsf) if pd.notna(median_ppsf) else None,
+            'homes_sold': int(total_homes_sold),
             'inventory': int(inventory_val),
-            'months_of_supply': (
-                zip_data.get('MONTHS_OF_SUPPLY')
-                if not pd.isna(zip_data.get('MONTHS_OF_SUPPLY'))
-                else None
-            ),
+            'months_of_supply': float(months_supply) if pd.notna(months_supply) else None,
             'source': 'redfin',
-            'period_end': zip_data.get('PERIOD_END')
+            'period_end': latest_period
         }
 
     except Exception as e:
@@ -411,55 +398,64 @@ def enrich_with_property_tax(data):
     return data
 
 
-def get_historical_redfin_data(zip_code, months=12):
+def get_historical_redfin_data(zip_code, redfin_df, months=12):
     """
     Get historical monthly data from Redfin for min/max/avg calculation.
 
     Args:
         zip_code (str): 5-digit zip code
+        redfin_df (pd.DataFrame): The pre-loaded Redfin DataFrame
         months (int): Number of months to look back
 
     Returns:
         dict or None: Historical statistics
-        {
-            'min_monthly_price': float,
-            'max_monthly_price': float,
-            'avg_monthly_price': float,
-            'months_of_data': int,
-            'price_trend': str  # 'increasing', 'decreasing', 'stable'
-        }
     """
-    if not os.path.exists(REDFIN_DATA_FILE):
-        return None
-
     try:
-        df = pd.read_csv(
-            REDFIN_DATA_FILE,
-            sep='\t',
-            dtype={'REGION': str},
-            low_memory=False
-        )
-
         target_region = f"Zip Code: {zip_code.zfill(5)}"
 
-        zip_data = df[
-            (df['REGION_TYPE'] == 'zip code') &
-            (df['REGION'] == target_region)
-        ].sort_values('PERIOD_END', ascending=False).head(months)
+        zip_data = redfin_df[
+            (redfin_df['REGION_TYPE'] == 'zip code') &
+            (redfin_df['REGION'] == target_region)
+        ]
 
         if len(zip_data) == 0:
             return None
 
-        prices = zip_data['MEDIAN_SALE_PRICE'].dropna()
+        prop_type_mapping = {
+            'Single Family': 'Single Family Residential',
+            'Condo': 'Condo/Co-op',
+            'Townhouse': 'Townhouse'
+        }
+        allowed = [prop_type_mapping[pt] for pt in PROPERTY_TYPES if pt in prop_type_mapping]
+        if not allowed:
+            allowed = ['All Residential']
+
+        filtered_zip_data = zip_data[zip_data['PROPERTY_TYPE'].isin(allowed)]
+
+        if len(filtered_zip_data) == 0:
+             filtered_zip_data = zip_data[zip_data['PROPERTY_TYPE'] == 'All Residential']
+
+        if len(filtered_zip_data) == 0:
+            return None
+
+        # Group by PERIOD_END to summarize multiple property types in a single month
+        def weighted_avg_price(x):
+            total_sold = x['HOMES_SOLD'].sum()
+            if total_sold > 0:
+                return (x['MEDIAN_SALE_PRICE'] * x['HOMES_SOLD']).sum() / total_sold
+            return x['MEDIAN_SALE_PRICE'].mean()
+
+        monthly_avg = filtered_zip_data.groupby('PERIOD_END').apply(weighted_avg_price).reset_index(name='MEDIAN_SALE_PRICE')
+        monthly_avg = monthly_avg.sort_values('PERIOD_END', ascending=False).head(months)
+
+        prices = monthly_avg['MEDIAN_SALE_PRICE'].dropna()
 
         if len(prices) == 0:
             return None
 
-        # Calculate trend (compare first and last month)
         if len(prices) >= 2:
             recent_price = prices.iloc[0]
             old_price = prices.iloc[-1]
-
             if recent_price > old_price * 1.05:  # 5% increase
                 trend = 'increasing'
             elif recent_price < old_price * 0.95:  # 5% decrease
@@ -478,9 +474,7 @@ def get_historical_redfin_data(zip_code, months=12):
         }
 
     except Exception as e:
-        logger.error(
-            f"Error reading historical Redfin data for {zip_code}: {e}"
-        )
+        logger.error(f"Error reading historical Redfin data for {zip_code}: {e}")
         return None
 
 
@@ -497,6 +491,19 @@ def fetch_housing_data(addresses):
     results = []
 
     logger.info(f"Fetching housing data for {len(addresses)} zip codes")
+    
+    # Load Redfin TSV into memory exactly once to prevent O(N) disk reads
+    redfin_df = None
+    if os.path.exists(REDFIN_DATA_FILE):
+        logger.info(f"Loading {REDFIN_DATA_FILE} TSV into memory...")
+        redfin_df = pd.read_csv(
+            REDFIN_DATA_FILE,
+            sep='\t',
+            dtype={'REGION': str},
+            low_memory=False
+        )
+    else:
+        logger.warning(f"Redfin data file not found at {REDFIN_DATA_FILE}")
 
     for address in tqdm(addresses,
                         desc="Collecting housing data",
@@ -510,8 +517,9 @@ def fetch_housing_data(addresses):
             state = state_zip[0]
             zip_code = state_zip[1]
 
-            # Try Redfin first
-            data = get_redfin_data(zip_code)
+            data = None
+            if redfin_df is not None:
+                 data = get_redfin_data(zip_code, redfin_df)
 
             # Fall back to HUD if Redfin unavailable
             if data is None:
@@ -526,9 +534,10 @@ def fetch_housing_data(addresses):
                 data = enrich_with_property_tax(data)
 
                 # Get historical monthly statistics
-                historical = get_historical_redfin_data(zip_code, months=12)
-                if historical:
-                    data.update(historical)
+                if redfin_df is not None:
+                    historical = get_historical_redfin_data(zip_code, redfin_df, months=12)
+                    if historical:
+                        data.update(historical)
 
                 results.append(data)
             else:
@@ -717,7 +726,7 @@ def update_statistics(results):
         raise
 
 
-def collect_housing_data():
+def collect_housing_data(limit=None, dry_run=False):
     """
     Main function to collect and store housing data.
 
@@ -732,7 +741,7 @@ def collect_housing_data():
     # Download/verify Redfin data
     if not download_redfin_data():
         logger.error("Failed to obtain Redfin data. Aborting.")
-        return
+        return False
 
     # Get zip codes within range
     logger.info(
@@ -743,12 +752,35 @@ def collect_housing_data():
 
     if not addresses:
         logger.error("No addresses found within range. Aborting.")
-        return
+        return False
+
+    if limit:
+        logger.info(f"Limiting processing to first {limit} addresses")
+        addresses = addresses[:limit]
 
     logger.info(f"Found {len(addresses)} addresses within range")
 
     # Fetch housing data
-    results = fetch_housing_data(addresses)
+    if dry_run:
+        logger.info(f"DRY RUN: Would have requested housing data for {len(addresses)} locations")
+        results = [
+            {
+                'zip': addr.split()[-1],
+                'town': addr.split(',')[0],
+                'state': addr.split(',')[1].strip().split()[0],
+                'median_sale_price': 500000.0,
+                'median_list_price': 525000.0,
+                'median_ppsf': 300,
+                'homes_sold': 5,
+                'inventory': 10,
+                'source': 'dry-run',
+                'tax_rate_per_1000': 12.0,
+                'estimated_annual_tax': 6000.0,
+                'estimated_monthly_tax': 500.0
+            } for addr in addresses
+        ]
+    else:
+        results = fetch_housing_data(addresses)
 
     # Update statistics
     if results:
@@ -758,8 +790,10 @@ def collect_housing_data():
             f"queried={len(addresses)} collected={len(results)} | "
             f"source=Redfin cost=$0.00"
         )
+        return True
     else:
         logger.warning("No housing data collected.")
+        return False
 
 
 if __name__ == "__main__":
