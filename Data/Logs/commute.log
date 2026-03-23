@@ -286,3 +286,15 @@
 2026-03-23 12:52:31 Mon UTC [INFO] Commute.collect_commute_data: Successfully updated /home/runner/work/house_hunt/house_hunt/Data/Results/commute_stats.csv with 182 records
 2026-03-23 12:52:33 Mon UTC [INFO] Commute.collect_commute_data: COMPLETED: morning | queried=182 ok=182 | elements=182 (basic) | Basic=1,274/10,000 Advanced=4,981/5,000 | cost=$0.00
 2026-03-23 12:52:33 Mon UTC [WARNING] Commute.collect_commute_data: DISCREPANCY: 1,092 elements (14.9%)
+2026-03-23 22:19:07 Mon UTC [INFO] Commute.collect_commute_data: STARTED: Commute collection (afternoon)
+2026-03-23 22:19:07 Mon UTC [INFO] Commute.collect_commute_data: Manual tier selection: Basic (no traffic)
+2026-03-23 22:19:07 Mon UTC [INFO] Commute.collect_commute_data: Loading addresses from cache: /home/runner/work/house_hunt/house_hunt/Data/Processed/towns_within_40mi.csv
+2026-03-23 22:19:07 Mon UTC [INFO] Commute.collect_commute_data: Found 182 cached addresses (skipped zip database parsing)
+2026-03-23 22:19:07 Mon UTC [INFO] Commute.collect_commute_data: Limiting processing to first 10000 addresses
+2026-03-23 22:19:07 Mon UTC [INFO] Commute.collect_commute_data: Budget check passed: 1,456/10,000 (current=1,274 + estimated=182)
+2026-03-23 22:19:07 Mon UTC [INFO] Commute.collect_commute_data: Afternoon commute: 123 Main St. Anytown, MA 00000 -> 182 locations
+2026-03-23 22:19:09 Mon UTC [INFO] Commute.collect_commute_data: Completed 8 requests, processed 182 elements, collected 182 valid results
+2026-03-23 22:19:09 Mon UTC [INFO] Commute.collect_commute_data: Loaded 182 records from /home/runner/work/house_hunt/house_hunt/Data/Results/commute_stats.csv
+2026-03-23 22:19:09 Mon UTC [INFO] Commute.collect_commute_data: Successfully updated /home/runner/work/house_hunt/house_hunt/Data/Results/commute_stats.csv with 182 records
+2026-03-23 22:19:10 Mon UTC [INFO] Commute.collect_commute_data: COMPLETED: afternoon | queried=182 ok=182 | elements=182 (basic) | Basic=1,456/10,000 Advanced=4,981/5,000 | cost=$0.00
+2026-03-23 22:19:10 Mon UTC [WARNING] Commute.collect_commute_data: DISCREPANCY: 1,092 elements (14.5%)
