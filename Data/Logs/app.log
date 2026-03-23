@@ -469,3 +469,27 @@ EOFError: EOF when reading a line
 2026-03-20 22:15:37 Fri UTC [INFO] __main__: EXECUTION SUMMARY:
 2026-03-20 22:15:37 Fri UTC [INFO] __main__:   COMMUTE: SUCCESS
 2026-03-20 22:15:37 Fri UTC [INFO] __main__: COMPLETED: House Hunt | 1/1 modules successful
+2026-03-23 09:07:18 Mon UTC [INFO] __main__: STARTED: House Hunt execution
+2026-03-23 09:07:18 Mon UTC [INFO] __main__: STARTED: Scoring (via main.py)
+2026-03-23 09:07:18 Mon UTC [INFO] Score.calculate_scores: ======================================================================
+2026-03-23 09:07:18 Mon UTC [INFO] Score.calculate_scores: Starting location scoring
+2026-03-23 09:07:18 Mon UTC [INFO] Score.calculate_scores: ======================================================================
+2026-03-23 09:07:18 Mon UTC [INFO] Score.calculate_scores: Loaded config from /home/runner/work/house_hunt/house_hunt/Data/score_config.json
+2026-03-23 09:07:18 Mon UTC [INFO] Score.calculate_scores: Loading commute and housing data...
+2026-03-23 09:07:18 Mon UTC [INFO] utils: Loaded 182 records from /home/runner/work/house_hunt/house_hunt/Data/Results/commute_stats.csv
+2026-03-23 09:07:18 Mon UTC [INFO] Score.calculate_scores: Loaded 182 commute records
+2026-03-23 09:07:18 Mon UTC [INFO] utils: Loaded 224 records from /home/runner/work/house_hunt/house_hunt/Data/Results/housing_stats.csv
+2026-03-23 09:07:18 Mon UTC [INFO] Score.calculate_scores: Loaded 224 housing records
+2026-03-23 09:07:18 Mon UTC [INFO] Score.calculate_scores: Scoring all locations...
+2026-03-23 09:07:18 Mon UTC [INFO] Score.calculate_scores: Town-grouping merge on Town+State: 182 commute towns x 224 housing zips -> 213 rows
+2026-03-23 09:07:18 Mon UTC [INFO] Score.calculate_scores: Commute filter: removed 3 locations exceeding 60 min
+2026-03-23 09:07:18 Mon UTC [INFO] Score.calculate_scores: Price filter: removed 71 locations exceeding $900,000
+2026-03-23 09:07:18 Mon UTC [INFO] Score.calculate_scores: Scored 139 locations
+2026-03-23 09:07:18 Mon UTC [INFO] Score.calculate_scores: Saved 139 scored locations to /home/runner/work/house_hunt/house_hunt/Data/Results/scored_locations.csv
+2026-03-23 09:07:18 Mon UTC [INFO] Score.calculate_scores: Location scoring completed successfully
+2026-03-23 09:07:18 Mon UTC [INFO] __main__: Generating HTML report...
+2026-03-23 09:07:18 Mon UTC [INFO] utils: Loaded 139 records from /home/runner/work/house_hunt/house_hunt/Data/Results/scored_locations.csv
+2026-03-23 09:07:18 Mon UTC [INFO] __main__: COMPLETED: Scoring
+2026-03-23 09:07:18 Mon UTC [INFO] __main__: EXECUTION SUMMARY:
+2026-03-23 09:07:18 Mon UTC [INFO] __main__:   SCORE: SUCCESS
+2026-03-23 09:07:18 Mon UTC [INFO] __main__: COMPLETED: House Hunt | 1/1 modules successful
