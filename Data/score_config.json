@@ -12,7 +12,15 @@
     "budget_max": 800000,
     "budget_ideal": 600000,
     "ideal_tax_rate": 12.1,
-    "max_acceptable_tax_rate": 20.0
+    "max_acceptable_tax_rate": 20.0,
+    "housing_weights": {
+      "price": 0.5,
+      "tax": 0.5
+    }
+  },
+  "scoring_behavior": {
+    "worst_commute_multiplier": 2.0,
+    "worst_tax_rate_per_1000": 30.0
   },
   "filters": {
     "max_commute_time": 60,

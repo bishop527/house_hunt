@@ -46,24 +46,32 @@ def download_redfin_data():
     Returns:
         bool: True if download successful or file exists
     """
-    # Check if we already have recent data (less than 30 days old)
-    if os.path.exists(REDFIN_DATA_FILE):
-        file_age_days = (
-            datetime.now() -
-            datetime.fromtimestamp(os.path.getmtime(REDFIN_DATA_FILE))
-        ).days
-
-        if file_age_days < 30:
-            logger.info(
-                f"Using existing Redfin data "
-                f"({file_age_days} days old)"
-            )
-            return True
-        else:
-            logger.info(
-                f"Redfin data is {file_age_days} days old, "
-                f"downloading fresh copy..."
-            )
+    # Check if we already have recent data based on tracker file
+    cache_tracker_file = os.path.join(os.path.dirname(REDFIN_DATA_FILE), '.redfin_last_downloaded')
+    if os.path.exists(REDFIN_DATA_FILE) and os.path.exists(cache_tracker_file):
+        try:
+            with open(cache_tracker_file, 'r') as f:
+                last_download_str = f.read().strip()
+                last_download_date = datetime.fromisoformat(last_download_str)
+                
+            file_age_days = (datetime.now() - last_download_date).days
+            
+            if file_age_days < REDFIN_DATA_MAX_AGE_DAYS:
+                logger.info(
+                    f"Using existing Redfin data "
+                    f"({file_age_days} days old)"
+                )
+                return True
+            else:
+                logger.info(
+                    f"Redfin data is {file_age_days} days old, "
+                    f"downloading fresh copy..."
+                )
+        except Exception as e:
+            logger.warning(f"Failed to read cache tracker: {e}. Re-downloading...")
+            
+    else:
+        logger.info(f"Redfin data or cache tracker not found, downloading fresh copy...")
 
     try:
         logger.info("Downloading Redfin market data (this may take time)...")
@@ -89,13 +97,17 @@ def download_redfin_data():
                 low_memory=False
             )
 
+            current_year = str(datetime.now().year)
+            previous_year = str(datetime.now().year - 1)
+            
             for chunk in tqdm(chunk_iter,
                             desc="Filtering data",
                             unit="chunk"):
-                # Filter for 2025 data and target states
+                # Filter for current and previous year data and target states
                 # PERIOD_END format: YYYY-MM-DD
                 filtered = chunk[
-                    (chunk['PERIOD_END'].str.startswith('2025')) &
+                    (chunk['PERIOD_END'].str.startswith(current_year) |
+                     chunk['PERIOD_END'].str.startswith(previous_year)) &
                     (chunk['STATE'].isin(['Massachusetts',
                                          'Rhode Island',
                                          'New Hampshire']))
@@ -121,6 +133,14 @@ def download_redfin_data():
 
         # Clean up compressed file
         os.remove(gz_file)
+        
+        # Update cache tracker
+        try:
+            cache_tracker_file = os.path.join(os.path.dirname(REDFIN_DATA_FILE), '.redfin_last_downloaded')
+            with open(cache_tracker_file, 'w') as f:
+                f.write(datetime.now().isoformat())
+        except Exception as e:
+            logger.warning(f"Failed to update cache tracker: {e}")
 
         logger.info("Successfully processed Redfin data")
         return True

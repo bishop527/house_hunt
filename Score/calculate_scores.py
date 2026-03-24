@@ -44,8 +44,6 @@ WORST_COMMUTE_TIME_MULTIPLIER = 2.0  # Worst case is 2x max acceptable
 HOUSING_SCORE_MAX = 100
 PRICE_SCORE_MAX = 50
 TAX_SCORE_MAX = 50
-WORST_TAX_RATE = 3.0        # 3% effective rate considered very high
-TAX_PER_1000_TO_PCT = 10.0  # Divide Tax_Rate_Per_1000 by this to get %
                              # e.g. 12.1 per $1k -> 1.21%
 
 
@@ -164,7 +162,9 @@ class LocationScorer:
             return COMMUTE_SCORE_MAX - (ratio * (COMMUTE_SCORE_MAX / 2))
         else:
             # Linear scale from 50 down to 0
-            worst = max_acceptable * WORST_COMMUTE_TIME_MULTIPLIER
+            behavior = self.config.get('scoring_behavior', {})
+            multiplier = behavior.get('worst_commute_multiplier', 2.0)
+            worst = max_acceptable * multiplier
             if avg_time >= worst:
                 return MIN_SCORE
             ratio = (avg_time - max_acceptable) / (worst - max_acceptable)
@@ -223,45 +223,41 @@ class LocationScorer:
             penalty = (overage_ratio ** 1.5) * penalty_multiplier
             return max(MIN_SCORE, max_score_over_budget - penalty)
 
-    def _score_housing_tax(self, tax_rate_pct):
+    def _score_housing_tax(self, tax_rate):
         """
         Score property tax effective rate (0-50 points).
 
         Args:
-            tax_rate_pct (float): Effective tax rate as a percentage
-                                  (e.g. 1.21 for 1.21%).
-                                  Caller must convert from per-$1000 first.
+            tax_rate (float): Effective tax rate per $1000.
 
         Returns:
             float: Score 0-50
         """
-        if pd.isna(tax_rate_pct):
+        if pd.isna(tax_rate):
             return NEUTRAL_SCORE / 2  # Neutral (25) if data missing
 
         prefs = self.config['housing_preferences']
-        ideal          = prefs.get('ideal_tax_rate', 1.0)
-        max_acceptable = prefs.get('max_acceptable_tax_rate', 1.5)
+        ideal          = prefs.get('ideal_tax_rate', 12.1)
+        max_acceptable = prefs.get('max_acceptable_tax_rate', 20.0)
 
-        if tax_rate_pct <= ideal:
+        if tax_rate <= ideal:
             return TAX_SCORE_MAX
-        elif tax_rate_pct <= max_acceptable:
-            ratio = (tax_rate_pct - ideal) / (max_acceptable - ideal)
+        elif tax_rate <= max_acceptable:
+            ratio = (tax_rate - ideal) / (max_acceptable - ideal)
             return TAX_SCORE_MAX - (ratio * 25.0)
         else:
-            if tax_rate_pct >= WORST_TAX_RATE:
+            behavior = self.config.get('scoring_behavior', {})
+            worst_tax = behavior.get('worst_tax_rate_per_1000', 30.0)
+            if tax_rate >= worst_tax:
                 return MIN_SCORE
-            ratio = (tax_rate_pct - max_acceptable) / (
-                WORST_TAX_RATE - max_acceptable
+            ratio = (tax_rate - max_acceptable) / (
+                worst_tax - max_acceptable
             )
             return 25.0 - (ratio * 25.0)
 
     def calculate_housing_score(self, row):
         """
         Calculate total housing score (0-100).
-
-        Converts Tax_Rate_Per_1000 -> percentage before scoring.
-        Previously used non-existent 'Tax_Rate' column, so all tax
-        scores were returning the neutral fallback (25). Fixed.
 
         Args:
             row (pd.Series): Merged data row
@@ -277,16 +273,14 @@ class LocationScorer:
             row.get('Latest_Median_Sale')
         )
 
-        # Convert Tax_Rate_Per_1000 to an effective percentage for scoring.
-        # e.g. 12.1 per $1k / 10 = 1.21%
-        raw_tax = row.get('Tax_Rate_Per_1000')
-        tax_rate_pct = (
-            raw_tax / TAX_PER_1000_TO_PCT
-            if pd.notna(raw_tax) else None
-        )
-        tax_score = self._score_housing_tax(tax_rate_pct)
+        tax_score = self._score_housing_tax(row.get('Tax_Rate_Per_1000'))
 
-        housing_score = price_score + tax_score
+        prefs = self.config.get('housing_preferences', {})
+        weights = prefs.get('housing_weights', {'price': 0.5, 'tax': 0.5})
+        price_weight = weights.get('price', 0.5)
+        tax_weight = weights.get('tax', 0.5)
+
+        housing_score = (price_score * price_weight * 2) + (tax_score * tax_weight * 2)
 
         return {
             'housing_score': round(housing_score, 1),
