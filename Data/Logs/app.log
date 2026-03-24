@@ -529,3 +529,15 @@ EOFError: EOF when reading a line
 2026-03-24 12:57:52 Tue UTC [INFO] __main__: EXECUTION SUMMARY:
 2026-03-24 12:57:52 Tue UTC [INFO] __main__:   COMMUTE: SUCCESS
 2026-03-24 12:57:52 Tue UTC [INFO] __main__: COMPLETED: House Hunt | 1/1 modules successful
+2026-03-24 22:18:52 Tue UTC [INFO] __main__: STARTED: House Hunt execution
+2026-03-24 22:18:52 Tue UTC [INFO] __main__: STARTED: Commute data collection
+2026-03-24 22:18:54 Tue UTC [INFO] utils: Loaded 182 records from /home/runner/work/house_hunt/house_hunt/Data/Results/commute_stats.csv
+2026-03-24 22:18:54 Tue UTC [INFO] utils: Tier tracking updated: +182 (basic) | Monthly: Basic=1,820 Advanced=4,981
+2026-03-24 22:18:56 Tue UTC [INFO] utils: Google-reported usage: 7,893 elements (Basic tier)
+2026-03-24 22:18:56 Tue UTC [INFO] utils: Free tier limit: 10,000, Remaining: 2,107
+2026-03-24 22:18:56 Tue UTC [INFO] utils: Validation: tier=Basic | local=6,801 google=7,893 delta=1,092 | Basic=1,820/10,000 Advanced=4,981/5,000 | cost=$0.00
+2026-03-24 22:18:56 Tue UTC [WARNING] utils: Significant discrepancy: local=6,801 google=7,893 off=13.8% - consider checking billing reports
+2026-03-24 22:18:56 Tue UTC [INFO] __main__: COMPLETED: Commute data collection
+2026-03-24 22:18:56 Tue UTC [INFO] __main__: EXECUTION SUMMARY:
+2026-03-24 22:18:56 Tue UTC [INFO] __main__:   COMMUTE: SUCCESS
+2026-03-24 22:18:56 Tue UTC [INFO] __main__: COMPLETED: House Hunt | 1/1 modules successful
