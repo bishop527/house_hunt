@@ -37,12 +37,12 @@ Manchester,NH,21.34,2025,2025-01-15"""
 @pytest.fixture
 def mock_redfin_csv():
     """Sample Redfin CSV data with CAPS columns"""
-    return """PERIOD_END\tREGION_TYPE\tREGION\tSTATE\tMEDIAN_SALE_PRICE\tMEDIAN_LIST_PRICE\tMEDIAN_PPSF\tHOMES_SOLD\tINVENTORY\tMONTHS_OF_SUPPLY
-2025-01-31\tzip code\tZip Code: 02421\tMassachusetts\t850000\t875000\t425\t12\t8\t2.5
-2025-01-31\tzip code\tZip Code: 01730\tMassachusetts\t675000\t699000\t380\t8\t5\t3.1
-2025-01-31\tzip code\tZip Code: 99999\tMassachusetts\t500000\t525000\t350\t2\t1\t1.5
-2024-12-31\tzip code\tZip Code: 02421\tMassachusetts\t825000\t850000\t420\t10\t7\t2.3
-2024-11-30\tzip code\tZip Code: 02421\tMassachusetts\t800000\t825000\t415\t9\t6\t2.1"""
+    return """PERIOD_END\tREGION_TYPE\tREGION\tSTATE\tPROPERTY_TYPE\tMEDIAN_SALE_PRICE\tMEDIAN_LIST_PRICE\tMEDIAN_PPSF\tHOMES_SOLD\tINVENTORY\tMONTHS_OF_SUPPLY
+2025-01-31\tzip code\tZip Code: 02421\tMassachusetts\tSingle Family Residential\t850000\t875000\t425\t12\t8\t2.5
+2025-01-31\tzip code\tZip Code: 01730\tMassachusetts\tSingle Family Residential\t675000\t699000\t380\t8\t5\t3.1
+2025-01-31\tzip code\tZip Code: 99999\tMassachusetts\tSingle Family Residential\t500000\t525000\t350\t2\t1\t1.5
+2024-12-31\tzip code\tZip Code: 02421\tMassachusetts\tSingle Family Residential\t825000\t850000\t420\t10\t7\t2.3
+2024-11-30\tzip code\tZip Code: 02421\tMassachusetts\tSingle Family Residential\t800000\t825000\t415\t9\t6\t2.1"""
 
 
 @pytest.fixture
@@ -398,7 +398,8 @@ def test_get_redfin_data_success(tmp_path, mock_redfin_csv, monkeypatch):
         5
     )
 
-    result = get_redfin_data('02421')
+    redfin_df = pd.read_csv(str(redfin_file), sep='\t')
+    result = get_redfin_data('02421', redfin_df)
 
     assert result is not None
     assert result['zip'] == '02421'
@@ -423,8 +424,9 @@ def test_get_redfin_data_insufficient_sample(tmp_path, mock_redfin_csv,
         5
     )
 
+    redfin_df = pd.read_csv(str(redfin_file), sep='\t')
     # Zip 99999 has only 2 homes sold
-    result = get_redfin_data('99999')
+    result = get_redfin_data('99999', redfin_df)
 
     assert result is None
 
@@ -439,15 +441,16 @@ def test_get_redfin_data_not_found(tmp_path, mock_redfin_csv, monkeypatch):
         str(redfin_file)
     )
 
-    result = get_redfin_data('00000')
+    redfin_df = pd.read_csv(str(redfin_file), sep='\t')
+    result = get_redfin_data('00000', redfin_df)
 
     assert result is None
 
 
 def test_get_redfin_data_nan_inventory(tmp_path, monkeypatch):
     """Test handling of NaN inventory value"""
-    csv_with_nan = """PERIOD_END\tREGION_TYPE\tREGION\tSTATE\tMEDIAN_SALE_PRICE\tMEDIAN_LIST_PRICE\tMEDIAN_PPSF\tHOMES_SOLD\tINVENTORY\tMONTHS_OF_SUPPLY
-2025-01-31\tzip code\tZip Code: 02421\tMassachusetts\t850000\t875000\t425\t12\tnan\t2.5"""
+    csv_with_nan = """PERIOD_END\tREGION_TYPE\tREGION\tSTATE\tPROPERTY_TYPE\tMEDIAN_SALE_PRICE\tMEDIAN_LIST_PRICE\tMEDIAN_PPSF\tHOMES_SOLD\tINVENTORY\tMONTHS_OF_SUPPLY
+2025-01-31\tzip code\tZip Code: 02421\tMassachusetts\tSingle Family Residential\t850000\t875000\t425\t12\tnan\t2.5"""
 
     redfin_file = tmp_path / "redfin_market_data.csv"
     redfin_file.write_text(csv_with_nan)
@@ -461,7 +464,8 @@ def test_get_redfin_data_nan_inventory(tmp_path, monkeypatch):
         5
     )
 
-    result = get_redfin_data('02421')
+    redfin_df = pd.read_csv(str(redfin_file), sep='\t')
+    result = get_redfin_data('02421', redfin_df)
 
     assert result is not None
     assert result['inventory'] == 0  # NaN converted to 0
@@ -480,7 +484,8 @@ def test_get_historical_redfin_data_success(tmp_path, mock_redfin_csv,
         str(redfin_file)
     )
 
-    result = get_historical_redfin_data('02421', months=3)
+    redfin_df = pd.read_csv(str(redfin_file), sep='\t')
+    result = get_historical_redfin_data('02421', redfin_df, months=3)
 
     assert result is not None
     assert result['months_of_data'] == 3
@@ -501,7 +506,8 @@ def test_get_historical_redfin_data_trend_increasing(tmp_path,
         str(redfin_file)
     )
 
-    result = get_historical_redfin_data('02421', months=3)
+    redfin_df = pd.read_csv(str(redfin_file), sep='\t')
+    result = get_historical_redfin_data('02421', redfin_df, months=3)
 
     # 850000 > 800000 * 1.05 = increasing
     assert result['price_trend'] == 'increasing'
@@ -518,7 +524,8 @@ def test_get_historical_redfin_data_not_found(tmp_path, mock_redfin_csv,
         str(redfin_file)
     )
 
-    result = get_historical_redfin_data('00000', months=12)
+    redfin_df = pd.read_csv(str(redfin_file), sep='\t')
+    result = get_historical_redfin_data('00000', redfin_df, months=12)
 
     assert result is None
 

@@ -34,8 +34,8 @@ def sample_config():
             "budget_max": 600000,
             "budget_ideal": 500000,
             "over_budget_penalty_scale": "exponential",
-            "ideal_tax_rate": 1.0,
-            "max_acceptable_tax_rate": 1.5
+            "ideal_tax_rate": 10.0,
+            "max_acceptable_tax_rate": 15.0
         },
         "filters": {
             "max_commute_time": 60,
@@ -79,7 +79,7 @@ def sample_housing_data():
         'Latest_Homes_Sold': [8, 10, 5, 6],
         'Latest_Inventory': [12, 15, 8, 7],
         'Months_Of_Supply': [4.2, 5.5, 3.8, 2.9],
-        'Tax_Rate': [1.076, 1.798, 1.123, 1.352]  # Tax rates as percentages
+        'Tax_Rate_Per_1000': [10.76, 17.98, 11.23, 13.52]  # Tax rates per 1000
     })
 
 
