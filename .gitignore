@@ -23,6 +23,7 @@ ENV/
 .vscode/
 *.swp
 *.swo
+house_hunt.code-workspace
 
 # Data files (keep structure, ignore data)
 Data/Raw/*.csv
@@ -33,3 +34,5 @@ monitor-key.json
 
 activate
 Archive/
+
+*.docx
