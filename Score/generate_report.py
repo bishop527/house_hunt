@@ -65,8 +65,16 @@ def _build_row_details(row):
     def safe_float(val):
         return float(val) if pd.notna(val) else None
 
+    # Handle rank change which can be float/int or 'New'
+    rc = row.get('Rank_Change')
+    if pd.isna(rc):
+        rc_val = 'New'
+    else:
+        rc_val = rc if isinstance(rc, str) else safe_int(rc)
+
     details = {
         'rank':          safe_int(row.get('Rank')),
+        'rank_change':   rc_val,
         'total_score':   safe_float(row.get('Total_Score')),
         'tier':          str(row.get('Tier', '')),
         'commute_score': safe_float(row.get('Commute_Score')),
@@ -178,11 +186,26 @@ def generate_html_report(scored_df, output_file, config=None, filtered_df=None):
         logger.error("No data to generate report")
         return False
 
+    # Load config if not provided
+    if config is None:
+        try:
+            with open(SCORE_CONFIG_FILE, 'r') as f:
+                 config = json.load(f)
+            logger.info(f"Loaded config from {SCORE_CONFIG_FILE}")
+        except Exception as e:
+            logger.error(f"Failed to load config in generate_html_report: {e}")
+
     logger.info(f"Generating HTML report for {len(scored_df)} locations")
     if filtered_df is not None and len(filtered_df) > 0:
         logger.info(
             f"Including {len(filtered_df)} filtered locations in report"
         )
+        
+    # Extract housing weights for dynamic score maximums
+    prefs = config.get('housing_preferences', {}) if config else {}
+    weights = prefs.get('housing_weights', {'price': 0.5, 'tax': 0.5})
+    max_price_score = int(weights.get('price', 0.5) * 100)
+    max_tax_score = int(weights.get('tax', 0.5) * 100)
 
     # Calculate summary stats
     stats = {
@@ -367,15 +390,28 @@ def generate_html_report(scored_df, output_file, config=None, filtered_df=None):
             cursor: pointer;
             transition: background 0.15s;
         }}
-
         tbody tr:hover {{
             background: #eef2ff !important;
         }}
 
-        .rank {{
+        .rank-cell {{
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }}
+
+        .rank-number {{
             font-weight: 700;
             color: #667eea;
             font-size: 1.1rem;
+        }}
+
+        .rank-change {{
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 0.1rem 0.3rem;
+            border-radius: 4px;
+            background: #f8fafc;
         }}
 
         .tier-badge {{
@@ -589,9 +625,9 @@ def generate_html_report(scored_df, output_file, config=None, filtered_df=None):
         .detail-item {{ display: flex; justify-content: space-between; }}
         .detail-key {{ color: #64748b; font-size: 0.9rem; }}
         .detail-val {{ font-weight: 600; color: #1e293b; font-size: 0.9rem; }}
-        .trend-up    {{ color: #22c55e; }}
-        .trend-down  {{ color: #ef4444; }}
-        .trend-stable {{ color: #f59e0b; }}
+        .trend-up    {{ color: #059669; }}
+        .trend-down  {{ color: #dc2626; }}
+        .trend-stable {{ color: #94a3b8; }}
     </style>
 </head>
 <body>
@@ -664,13 +700,33 @@ def generate_html_report(scored_df, output_file, config=None, filtered_df=None):
         tier_color = get_tier_color(row['Tier'])
         details_json = _build_row_details(row)
 
+        rank_change = row.get('Rank_Change', 'New')
+        if pd.isna(rank_change) or rank_change == 'New':
+            change_html = '<span class="rank-change trend-stable">New</span>'
+        else:
+            try:
+                change_val = int(rank_change)
+                if change_val > 0:
+                    change_html = f'<span class="rank-change trend-up">&#9650; {change_val}</span>'
+                elif change_val < 0:
+                    change_html = f'<span class="rank-change trend-down">&#9660; {abs(change_val)}</span>'
+                else:
+                    change_html = '<span class="rank-change trend-stable">-</span>'
+            except ValueError:
+                change_html = f'<span class="rank-change trend-stable">{rank_change}</span>'
+
         html += f"""
                     <tr data-tier="{row['Tier'][0]}"
                         data-town="{row['Town'].lower()}"
                         data-zip="{row['Zip']}"
                         data-details="{details_json}"
                         onclick="openModal(this)">
-                        <td class="rank">#{row['Rank']}</td>
+                        <td>
+                            <div class="rank-cell">
+                                <span class="rank-number">#{row['Rank']}</span>
+                                {change_html}
+                            </div>
+                        </td>
                         <td><strong>{row['Town']}</strong></td>
                         <td>{row['Zip']}</td>
                         <td>
@@ -984,23 +1040,23 @@ def generate_html_report(scored_df, output_file, config=None, filtered_df=None):
                     <div class="score-row">
                         <span class="score-label">Price Score</span>
                         <span class="score-pill"
-                              style="background:${{scoreColor(d.price_score, 50)}}">
-                            ${{d.price_score}}/50
+                              style="background:${{scoreColor(d.price_score, {max_price_score})}}">
+                            ${{d.price_score}}/{max_price_score}
                         </span>
                         <div class="score-bar-wrap">
                             <div class="score-bar-fill"
-                                 style="width:${{d.price_score * 2}}%"></div>
+                                 style="width:${{d.price_score / {max_price_score} * 100}}%"></div>
                         </div>
                     </div>
                     <div class="score-row">
                         <span class="score-label">Tax Score</span>
                         <span class="score-pill"
-                              style="background:${{scoreColor(d.tax_score, 50)}}">
-                            ${{d.tax_score}}/50
+                              style="background:${{scoreColor(d.tax_score, {max_tax_score})}}">
+                            ${{d.tax_score}}/{max_tax_score}
                         </span>
                         <div class="score-bar-wrap">
                             <div class="score-bar-fill"
-                                 style="width:${{d.tax_score * 2}}%"></div>
+                                 style="width:${{d.tax_score / {max_tax_score} * 100}}%"></div>
                         </div>
                     </div>
                     <div class="detail-grid">

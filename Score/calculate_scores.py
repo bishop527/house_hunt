@@ -68,6 +68,7 @@ class LocationScorer:
         self.commute_data = None
         self.housing_data = None
         self.scored_locations = None
+        self.prev_ranks = {}
 
     def _load_config(self, config_file):
         """
@@ -125,6 +126,17 @@ class LocationScorer:
             bool: True if data loaded successfully
         """
         logger.info("Loading commute and housing data...")
+
+        # Load previous ranks to calculate rank changes
+        if os.path.exists(SCORED_LOCATIONS_FILE):
+            try:
+                prev_df = pd.read_csv(SCORED_LOCATIONS_FILE, dtype={'Zip': str})
+                if 'Rank' in prev_df.columns and 'Zip' in prev_df.columns:
+                    prev_df['Zip'] = prev_df['Zip'].astype(str).str.zfill(5)
+                    self.prev_ranks = prev_df.set_index('Zip')['Rank'].to_dict()
+                    logger.info(f"Loaded previous ranks for {len(self.prev_ranks)} locations")
+            except Exception as e:
+                logger.error(f"Error loading previous scored locations: {e}")
 
         self.commute_data = load_csv_with_zip(COMMUTE_STATS_FILE)
         if self.commute_data.empty:
@@ -280,12 +292,15 @@ class LocationScorer:
         price_weight = weights.get('price', 0.5)
         tax_weight = weights.get('tax', 0.5)
 
-        housing_score = (price_score * price_weight * 2) + (tax_score * tax_weight * 2)
+        weighted_price_score = price_score * price_weight * 2
+        weighted_tax_score = tax_score * tax_weight * 2
+        
+        housing_score = weighted_price_score + weighted_tax_score
 
         return {
             'housing_score': round(housing_score, 1),
-            'price_score':   round(price_score, 1),
-            'tax_score':     round(tax_score, 1)
+            'price_score':   round(weighted_price_score, 1),
+            'tax_score':     round(weighted_tax_score, 1)
         }
 
     def _assign_tier(self, total_score):
@@ -515,13 +530,22 @@ class LocationScorer:
 
         self.scored_locations = pd.DataFrame(results)
 
+        # Sort by Total_Score descending, then Town ascending alphabetically for tie-breaking
         self.scored_locations = self.scored_locations.sort_values(
-            'Total_Score', ascending=False
+            ['Total_Score', 'Town'], ascending=[False, True]
         ).reset_index(drop=True)
 
         self.scored_locations.insert(
             0, 'Rank', range(1, len(self.scored_locations) + 1)
         )
+
+        # Calculate Rank Change
+        def get_rank_change(row):
+            if row['Zip'] in self.prev_ranks:
+                return self.prev_ranks[row['Zip']] - row['Rank']
+            return 'New'
+            
+        self.scored_locations['Rank_Change'] = self.scored_locations.apply(get_rank_change, axis=1)
 
         logger.info(f"Scored {len(self.scored_locations)} locations")
         return self.scored_locations
@@ -630,7 +654,7 @@ def calculate_scores(config_file=SCORE_CONFIG_FILE):
     print("=" * 70 + "\n")
 
     logger.info("Location scoring completed successfully")
-    return True, scorer.filtered_locations
+    return True, scorer.filtered_locations, scorer.config
 
 
 if __name__ == "__main__":
