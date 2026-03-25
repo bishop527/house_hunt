@@ -185,11 +185,8 @@ def get_redfin_data(zip_code, redfin_df):
         filtered_zip_data = zip_data[zip_data['PROPERTY_TYPE'].isin(allowed)]
 
         if len(filtered_zip_data) == 0:
-             logger.debug(f"No specified property types found for zip {zip_code}, checking 'All Residential'")
-             filtered_zip_data = zip_data[zip_data['PROPERTY_TYPE'] == 'All Residential']
-
-        if len(filtered_zip_data) == 0:
-            return None
+             logger.debug(f"No '{PROPERTY_TYPES}' property type data found for zip {zip_code}")
+             return None
 
         # Sort by PERIOD_END descending to find latest month
         filtered_zip_data = filtered_zip_data.sort_values('PERIOD_END', ascending=False)
@@ -453,10 +450,8 @@ def get_historical_redfin_data(zip_code, redfin_df, months=12):
         filtered_zip_data = zip_data[zip_data['PROPERTY_TYPE'].isin(allowed)]
 
         if len(filtered_zip_data) == 0:
-             filtered_zip_data = zip_data[zip_data['PROPERTY_TYPE'] == 'All Residential']
-
-        if len(filtered_zip_data) == 0:
-            return None
+             logger.debug(f"No '{PROPERTY_TYPES}' property type data found for zip {zip_code}")
+             return None
 
         # Group by PERIOD_END to summarize multiple property types in a single month
         def weighted_avg_price(x):
@@ -465,7 +460,8 @@ def get_historical_redfin_data(zip_code, redfin_df, months=12):
                 return (x['MEDIAN_SALE_PRICE'] * x['HOMES_SOLD']).sum() / total_sold
             return x['MEDIAN_SALE_PRICE'].mean()
 
-        monthly_avg = filtered_zip_data.groupby('PERIOD_END').apply(weighted_avg_price).reset_index(name='MEDIAN_SALE_PRICE')
+        monthly_avg = filtered_zip_data.groupby('PERIOD_END', as_index=False).apply(weighted_avg_price, include_groups=False).rename(columns={None: 'MEDIAN_SALE_PRICE'})
+
         monthly_avg = monthly_avg.sort_values('PERIOD_END', ascending=False).head(months)
 
         prices = monthly_avg['MEDIAN_SALE_PRICE'].dropna()
@@ -506,9 +502,12 @@ def fetch_housing_data(addresses):
         addresses (list): List of "Town, State Zip" formatted addresses
 
     Returns:
-        list: List of housing data dictionaries
+        tuple: (results: list, failed_zips: list)
+            - results: List of housing data dictionaries with valid data
+            - failed_zips: List of dicts for zips with no property type data
     """
     results = []
+    failed_zips = []  # Track zips with no property type data
 
     logger.info(f"Fetching housing data for {len(addresses)} zip codes")
     
@@ -561,9 +560,19 @@ def fetch_housing_data(addresses):
 
                 results.append(data)
             else:
+                # Track zips with no property type data for filtered report
                 logger.warning(
                     f"No housing data available for {address}"
                 )
+                # Format property types nicely for display
+                prop_types_str = ', '.join(PROPERTY_TYPES) if PROPERTY_TYPES else 'N/A'
+                failed_zips.append({
+                    'Town': town,
+                    'State': state,
+                    'Zip': zip_code,
+                    'Filter_Reason': f'No {prop_types_str} data available',
+                    'Property_Types_Requested': prop_types_str
+                })
 
         except Exception as e:
             logger.error(f"Error processing {address}: {e}")
@@ -574,7 +583,12 @@ def fetch_housing_data(addresses):
         f"out of {len(addresses)} zip codes"
     )
 
-    return results
+    if failed_zips:
+        logger.info(
+            f"{len(failed_zips)} zip codes excluded due to missing property type data"
+        )
+
+    return results, failed_zips
 
 
 def load_historical_data():
@@ -594,7 +608,7 @@ def load_historical_data():
     return df
 
 
-def update_statistics(results):
+def update_statistics(results, force_refresh=False, queried_addresses=None):
     """
     Update housing statistics with new results.
 
@@ -606,6 +620,8 @@ def update_statistics(results):
 
     Args:
         results (list): List of housing data dicts from fetch_housing_data()
+        force_refresh (bool): If True, remove historical data for queried zips
+        queried_addresses (list): List of addresses that were queried this run
     """
     if not results:
         logger.warning("No results to update statistics with.")
@@ -616,6 +632,18 @@ def update_statistics(results):
 
     # Load historical data
     df_hist = load_historical_data()
+
+    # If force_refresh, remove historical data for all queried zips
+    if force_refresh and queried_addresses and not df_hist.empty:
+        queried_zips = set([addr.split()[-1] for addr in queried_addresses])
+        original_count = len(df_hist)
+        df_hist = df_hist[~df_hist['Zip'].isin(queried_zips)]
+        removed_count = original_count - len(df_hist)
+        if removed_count > 0:
+            logger.info(
+                f"Force refresh: Removed {removed_count} historical records "
+                f"for queried zips"
+            )
 
     # Get today's date and month
     today = datetime.now().strftime('%Y-%m-%d')
@@ -746,7 +774,7 @@ def update_statistics(results):
         raise
 
 
-def collect_housing_data(limit=None, dry_run=False):
+def collect_housing_data(limit=None, dry_run=False, force_refresh=False):
     """
     Main function to collect and store housing data.
 
@@ -755,6 +783,12 @@ def collect_housing_data(limit=None, dry_run=False):
     2. Downloads/updates Redfin data if needed
     3. Fetches housing data for each zip
     4. Updates historical statistics
+
+    Args:
+        limit (int, optional): Limit processing to first N addresses
+        dry_run (bool): If True, simulate collection without real API calls
+        force_refresh (bool): If True, remove historical data for all queried zips
+                             before updating (useful after changing filters)
     """
     logger.info("STARTED: Housing data collection")
 
@@ -800,14 +834,24 @@ def collect_housing_data(limit=None, dry_run=False):
             } for addr in addresses
         ]
     else:
-        results = fetch_housing_data(addresses)
+        results, failed_zips = fetch_housing_data(addresses)
+
+    # Save failed zips to CSV for scoring module
+    if not dry_run and failed_zips:
+        failed_df = pd.DataFrame(failed_zips)
+        failed_file = os.path.join(RESULTS_DIR, 'housing_filtered_zips.csv')
+        try:
+            failed_df.to_csv(failed_file, index=False)
+            logger.info(f"Saved {len(failed_zips)} filtered zips to {failed_file}")
+        except Exception as e:
+            logger.warning(f"Failed to save filtered zips: {e}")
 
     # Update statistics
     if results:
-        update_statistics(results)
+        update_statistics(results, force_refresh=force_refresh, queried_addresses=addresses)
         logger.info(
             f"COMPLETED: Housing collection | "
-            f"queried={len(addresses)} collected={len(results)} | "
+            f"queried={len(addresses)} collected={len(results)} excluded={len(failed_zips)} | "
             f"source=Redfin cost=$0.00"
         )
         return True

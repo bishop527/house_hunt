@@ -24,7 +24,7 @@ import pandas as pd
 from constants import (
     LOG_LEVEL, APP_LOG_FILE,
     SCORE_CONFIG_FILE, COMMUTE_STATS_FILE, HOUSING_STATS_FILE,
-    SCORED_LOCATIONS_FILE, LOCATION_GROUPING
+    SCORED_LOCATIONS_FILE, LOCATION_GROUPING, RESULTS_DIR
 )
 from utils import load_csv_with_zip
 from logging_config import setup_logger
@@ -149,6 +149,21 @@ class LocationScorer:
             logger.error(f"No housing data found at {HOUSING_STATS_FILE}")
             return False
         logger.info(f"Loaded {len(self.housing_data)} housing records")
+
+        # Load zips filtered out during housing collection (no property type data)
+        housing_filtered_file = os.path.join(RESULTS_DIR, 'housing_filtered_zips.csv')
+        if os.path.exists(housing_filtered_file):
+            try:
+                housing_filtered_df = pd.read_csv(housing_filtered_file, dtype={'Zip': str})
+                if 'Zip' in housing_filtered_df.columns:
+                    housing_filtered_df['Zip'] = housing_filtered_df['Zip'].str.zfill(5)
+                logger.info(f"Loaded {len(housing_filtered_df)} housing-filtered zips")
+                self.housing_filtered = housing_filtered_df
+            except Exception as e:
+                logger.warning(f"Failed to load housing filtered zips: {e}")
+                self.housing_filtered = pd.DataFrame()
+        else:
+            self.housing_filtered = pd.DataFrame()
 
         return True
 
@@ -445,6 +460,9 @@ class LocationScorer:
             logger.error("No locations remain after filtering.")
             return None
 
+        # Combine filter-based exclusions with housing property type exclusions
+        all_filtered = []
+
         if filtered_rows:
             filtered_combined = pd.concat(filtered_rows, ignore_index=True)
             # Resolve Town/State the same way as scored rows
@@ -456,7 +474,7 @@ class LocationScorer:
                 lambda r: self._resolve(r, 'State', 'State_commute', 'State_housing'),
                 axis=1
             )
-            self.filtered_locations = filtered_combined[[
+            filtered_standardized = filtered_combined[[
                 'Town', 'State', 'Zip', 'Filter_Reason',
                 'Average_Time', 'Distance', 'Latest_Median_Sale',
                 'Latest_PPSF', 'Tax_Rate_Per_1000'
@@ -466,6 +484,31 @@ class LocationScorer:
                 'Latest_Median_Sale': 'Median_Price',
                 'Latest_PPSF': 'Price_Per_SqFt',
             })
+            all_filtered.append(filtered_standardized)
+
+        # Add housing-filtered zips (no property type data)
+        if hasattr(self, 'housing_filtered') and not self.housing_filtered.empty:
+            # These zips have commute data but no housing data
+            housing_only_filtered = self.housing_filtered.copy()
+            # Add empty columns to match the structure
+            housing_only_filtered['Avg_Commute_Min'] = None
+            housing_only_filtered['Distance_Miles'] = None
+            housing_only_filtered['Median_Price'] = None
+            housing_only_filtered['Price_Per_SqFt'] = None
+            housing_only_filtered['Tax_Rate_Per_1000'] = None
+
+            all_filtered.append(housing_only_filtered[[
+                'Town', 'State', 'Zip', 'Filter_Reason',
+                'Avg_Commute_Min', 'Distance_Miles', 'Median_Price',
+                'Price_Per_SqFt', 'Tax_Rate_Per_1000'
+            ]])
+
+            logger.info(
+                f"Added {len(housing_only_filtered)} zips filtered for missing property type data"
+            )
+
+        if all_filtered:
+            self.filtered_locations = pd.concat(all_filtered, ignore_index=True)
         else:
             self.filtered_locations = pd.DataFrame()
 

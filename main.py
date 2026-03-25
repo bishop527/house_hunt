@@ -45,12 +45,15 @@ def run_commute_collection(logger, limit=None, dry_run=False):
         return False
 
 
-def run_housing_collection(logger, limit=None, dry_run=False):
+def run_housing_collection(logger, limit=None, dry_run=False, force_refresh=False):
     """Run housing data collection module"""
     logger.info("STARTED: Housing data collection")
 
+    if force_refresh:
+        logger.info("Force refresh enabled: Will clear historical data for queried zips")
+
     try:
-        success = collect_housing_data(limit=limit, dry_run=dry_run)
+        success = collect_housing_data(limit=limit, dry_run=dry_run, force_refresh=force_refresh)
         if success:
             logger.info("COMPLETED: Housing data collection")
         else:
@@ -140,6 +143,12 @@ Examples:
         help='Skip actual API calls and just log what would happen'
     )
 
+    parser.add_argument(
+        '--force-refresh',
+        action='store_true',
+        help='Force refresh: clear historical data for queried zips before updating (housing only)'
+    )
+
     args = parser.parse_args()
 
     # If no arguments, show help
@@ -167,7 +176,7 @@ Examples:
 
     if args.all or args.housing:
         results['housing'] = run_housing_collection(
-            logger, limit=args.limit, dry_run=args.dry_run
+            logger, limit=args.limit, dry_run=args.dry_run, force_refresh=args.force_refresh
         )
 
     if args.all or args.score:
