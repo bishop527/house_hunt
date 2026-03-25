@@ -14,8 +14,8 @@
     "ideal_tax_rate": 12.1,
     "max_acceptable_tax_rate": 20.0,
     "housing_weights": {
-      "price": 0.5,
-      "tax": 0.5
+      "price": 0.9,
+      "tax": 0.1
     }
   },
   "scoring_behavior": {
