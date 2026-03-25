@@ -1,9 +1,11 @@
 name: Score Locations
 
 on:
-  # Run on schedule (e.g., weekly on Mondays at 8 AM UTC)
-  schedule:
-    - cron: '0 8 * * 1'
+  # Trigger automatically when the Housing Collection workflow completes
+  workflow_run:
+    workflows: ["Collect Housing Data"]
+    types:
+      - completed
 
   workflow_dispatch:        # Allows manual trigger from GitHub UI
 
@@ -68,6 +70,11 @@ jobs:
           Data/Results/scored_locations.csv
           Data/Results/score_report.html
         retention-days: 90
+
+    - name: Archive monthly report
+      run: |
+        MONTH_YEAR=$(date +'%B%Y')
+        cp Data/Results/score_report.html "Data/Results/score_report-${MONTH_YEAR}.html"
 
     - name: Commit and push results
       run: |
