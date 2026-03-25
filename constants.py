@@ -111,6 +111,7 @@ MAX_ACCEPTABLE_DISCREPANCY = 183  # Elements between local/Google count
 # ========================================
 # Work Location
 WORK_ADDR = "123 Main St. Anytown, MA 00000"
+DENISE_WORK = "200 Chauncy St. Mansfield, MA 02048"
 
 # Geographic Scope
 TARGET_STATES = ['MA', 'RI', 'NH']
