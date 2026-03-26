@@ -308,24 +308,26 @@ def test_score_all_locations_missing_data():
 def test_save_results(tmp_path, sample_config, sample_commute_data,
                       sample_housing_data, monkeypatch):
     """Test saving results to CSV"""
-    # Temporarily override the constant for testing
-    test_output = tmp_path / "test_results.csv"
-    monkeypatch.setattr('Score.calculate_scores.SCORED_LOCATIONS_FILE',
-                        str(test_output))
+    # Force property type and results dir for predictable filename
+    monkeypatch.setattr('Score.calculate_scores.PROPERTY_TYPES', ['TestType'])
+    monkeypatch.setattr('Score.calculate_scores.RESULTS_DIR', str(tmp_path))
 
     scorer = LocationScorer(None)
     scorer.config = sample_config
     scorer.commute_data = sample_commute_data
     scorer.housing_data = sample_housing_data
 
+    # Expected dynamic filename: scored_locations_TestType.csv
+    expected_file = tmp_path / "scored_locations_TestType.csv"
+
     scorer.score_all_locations()
     success = scorer.save_results()
 
     assert success
-    assert test_output.exists()
+    assert expected_file.exists()
 
     # Verify CSV can be read back
-    df = pd.read_csv(test_output)
+    df = pd.read_csv(expected_file)
     assert len(df) > 0
     assert 'Total_Score' in df.columns
 
@@ -363,10 +365,25 @@ def test_calculate_scores_main_function(mock_load, tmp_path,
     with open(config_file, 'w') as f:
         json.dump(sample_config, f)
 
-    # Override output file constant for testing
-    test_output = tmp_path / "results.csv"
-    monkeypatch.setattr('Score.calculate_scores.SCORED_LOCATIONS_FILE',
-                        str(test_output))
+    # Force property type and results dir for predictable filename
+    monkeypatch.setattr('Score.calculate_scores.PROPERTY_TYPES', ['MainTest'])
+    monkeypatch.setattr('Score.calculate_scores.RESULTS_DIR', str(tmp_path))
+    
+    # Expected output file
+    expected_file = tmp_path / "scored_locations_MainTest.csv"
+
+    # Mock housing data re-derivation to return sample data
+    # (The function normally returns a DataFrame formatted for scorer)
+    def mock_derive(self):
+        df = sample_housing_data.copy()
+        # Ensure column names match what scorer expects from housing stats
+        df = df.rename(columns={
+            'Latest_Median_Sale': 'Latest_Median_Sale', # already matches
+            'Average_Price': 'Avg_Monthly_Price'
+        })
+        return df
+    
+    monkeypatch.setattr(LocationScorer, '_derive_housing_from_redfin', mock_derive)
 
     # Mock CSV loading
     def mock_load_side_effect(filepath):
@@ -379,10 +396,11 @@ def test_calculate_scores_main_function(mock_load, tmp_path,
     mock_load.side_effect = mock_load_side_effect
 
     # Run main function
-    success = calculate_scores(str(config_file))
+    success, _, _, _ = calculate_scores(str(config_file))
 
     assert success
-    assert test_output.exists()
+    assert expected_file.exists()
+
 
 
 if __name__ == "__main__":

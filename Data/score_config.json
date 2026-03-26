@@ -13,8 +13,11 @@
     "budget_ideal": 600000,
     "ideal_tax_rate": 12.1,
     "max_acceptable_tax_rate": 20.0,
+    "ideal_ppsf": 300,
+    "max_acceptable_ppsf": 500,
     "housing_weights": {
-      "price": 0.9,
+      "price": 0.6,
+      "ppsf": 0.3,
       "tax": 0.1
     }
   },

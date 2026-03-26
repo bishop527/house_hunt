@@ -152,7 +152,11 @@ MIN_SAMPLE_SIZE = 1  # Minimum homes sold
 # Single Family
 # Condo
 # Townhouse
+# All (will use all residential property types)
 PROPERTY_TYPES = ['Single Family']
+# PROPERTY_TYPES = ['Condo']
+# PROPERTY_TYPES = ['Townhouse']
+# PROPERTY_TYPES = ['All']
 
 # SCORE MODULE CONSTANTS
 # ========================================

@@ -70,10 +70,10 @@ def run_housing_collection(logger, limit=None, dry_run=False, force_refresh=Fals
 def run_scoring(logger, config_file=None):
     logger.info("STARTED: Scoring (via main.py)")
     try:
-        success, filtered_df, config = calculate_scores()
+        success, scored_file, filtered_df, config = calculate_scores()
         if success:
-            logger.info("Generating HTML report...")
-            scored_df = load_csv_with_zip(SCORED_LOCATIONS_FILE)
+            logger.info(f"Generating HTML report from {scored_file}...")
+            scored_df = load_csv_with_zip(scored_file)
             generate_html_report(scored_df, SCORE_REPORT_FILE,
                                  config=config, filtered_df=filtered_df)
         logger.info("COMPLETED: Scoring")

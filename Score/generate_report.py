@@ -80,6 +80,7 @@ def _build_row_details(row):
         'commute_score': safe_float(row.get('Commute_Score')),
         'housing_score': safe_float(row.get('Housing_Score')),
         'price_score':   safe_float(row.get('Price_Score')),
+        'ppsf_score':    safe_float(row.get('PPSF_Score')),
         'tax_score':     safe_float(row.get('Tax_Score')),
         'avg_commute':   safe_float(row.get('Avg_Commute_Min')),
         'min_commute':   safe_float(row.get('Min_Commute_Min')),
@@ -186,6 +187,22 @@ def generate_html_report(scored_df, output_file, config=None, filtered_df=None):
         logger.error("No data to generate report")
         return False
 
+    # Derive filename from active PROPERTY_TYPES (e.g. score_report_SingleFamily.html)
+    prop_suffix = "_".join(pt.replace(" ", "") for pt in PROPERTY_TYPES)
+    base, ext = os.path.splitext(output_file)
+    output_file = f"{base}_{prop_suffix}{ext}"
+
+    # Determine Zillow URL path component based on PROPERTY_TYPES
+    zillow_path = ""
+    if len(PROPERTY_TYPES) == 1:
+        pt = PROPERTY_TYPES[0]
+        if pt == 'Single Family':
+            zillow_path = "houses/"
+        elif pt == 'Condo':
+            zillow_path = "condos/"
+        elif pt == 'Townhouse':
+            zillow_path = "townhomes/"
+
     # Load config if not provided
     if config is None:
         try:
@@ -203,9 +220,10 @@ def generate_html_report(scored_df, output_file, config=None, filtered_df=None):
         
     # Extract housing weights for dynamic score maximums
     prefs = config.get('housing_preferences', {}) if config else {}
-    weights = prefs.get('housing_weights', {'price': 0.5, 'tax': 0.5})
-    max_price_score = int(weights.get('price', 0.5) * 100)
-    max_tax_score = int(weights.get('tax', 0.5) * 100)
+    weights = prefs.get('housing_weights', {'price': 0.6, 'ppsf': 0.3, 'tax': 0.1})
+    max_price_score = int(weights.get('price', 0.6) * 100)
+    max_ppsf_score  = int(weights.get('ppsf', 0.3) * 100)
+    max_tax_score   = int(weights.get('tax', 0.1) * 100)
 
     # Calculate summary stats
     stats = {
@@ -224,7 +242,7 @@ def generate_html_report(scored_df, output_file, config=None, filtered_df=None):
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>House Hunt - Scored Locations Report</title>
+    <title>House Hunt - {prop_suffix} Scoring Report</title>
     <style>
         * {{
             margin: 0;
@@ -571,6 +589,15 @@ def generate_html_report(scored_df, output_file, config=None, filtered_df=None):
             padding-bottom: 1rem;
         }}
         .modal-title {{ font-size: 1.4rem; font-weight: 700; color: #1e293b; }}
+        .modal-title a {{
+            color: inherit;
+            text-decoration: none;
+            transition: color 0.15s;
+        }}
+        .modal-title a:hover {{
+            color: #3b82f6;
+            text-decoration: underline;
+        }}
         .modal-subtitle {{ color: #64748b; font-size: 0.9rem; margin-top: 0.25rem; }}
         .modal-close {{
             background: none; border: none;
@@ -633,7 +660,7 @@ def generate_html_report(scored_df, output_file, config=None, filtered_df=None):
 <body>
     <div class="container">
         <div class="header">
-            <h1>&#x1F3E1; House Hunt Scoring Report</h1>
+            <h1>&#x1F3E1; House Hunt &mdash; {prop_suffix} Scoring Report</h1>
             <p>Ranked locations based on commute and housing preferences</p>
         </div>
 
@@ -937,7 +964,15 @@ def generate_html_report(scored_df, output_file, config=None, filtered_df=None):
             const d    = JSON.parse(raw);
             const town = row.querySelector('td:nth-child(2)').textContent.trim();
 
-            document.getElementById('modalTitle').textContent = town;
+            let zillowUrl = '';
+            const zPath = '{zillow_path}';
+            if (zPath) {{
+                zillowUrl = 'https://www.zillow.com/' + row.dataset.zip + '/' + zPath;
+            }} else {{
+                zillowUrl = 'https://www.zillow.com/homes/' + row.dataset.zip + '_rb/';
+            }}
+            document.getElementById('modalTitle').innerHTML = 
+                `<a href="${{zillowUrl}}" target="_blank" title="View on Zillow">${{town}} &#x2197;</a>`;
             document.getElementById('modalSubtitle').textContent =
                 'ZIP: ' + row.dataset.zip +
                 ' \u00b7 Rank #' + d.rank +
@@ -1046,6 +1081,17 @@ def generate_html_report(scored_df, output_file, config=None, filtered_df=None):
                         <div class="score-bar-wrap">
                             <div class="score-bar-fill"
                                  style="width:${{d.price_score / {max_price_score} * 100}}%"></div>
+                        </div>
+                    </div>
+                    <div class="score-row">
+                        <span class="score-label">PPSF Score</span>
+                        <span class="score-pill"
+                              style="background:${{scoreColor(d.ppsf_score, {max_ppsf_score})}}">
+                            ${{d.ppsf_score}}/{max_ppsf_score}
+                        </span>
+                        <div class="score-bar-wrap">
+                            <div class="score-bar-fill"
+                                 style="width:${{d.ppsf_score / {max_ppsf_score} * 100}}%"></div>
                         </div>
                     </div>
                     <div class="score-row">

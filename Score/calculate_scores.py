@@ -24,7 +24,8 @@ import pandas as pd
 from constants import (
     LOG_LEVEL, APP_LOG_FILE,
     SCORE_CONFIG_FILE, COMMUTE_STATS_FILE, HOUSING_STATS_FILE,
-    SCORED_LOCATIONS_FILE, LOCATION_GROUPING, RESULTS_DIR
+    SCORED_LOCATIONS_FILE, LOCATION_GROUPING, RESULTS_DIR,
+    REDFIN_DATA_FILE, PROCESSED_DIR, MAX_RANGE, PROPERTY_TYPES
 )
 from utils import load_csv_with_zip
 from logging_config import setup_logger
@@ -69,6 +70,80 @@ class LocationScorer:
         self.housing_data = None
         self.scored_locations = None
         self.prev_ranks = {}
+        
+        # Compute dynamic filename for scored locations based on PROPERTY_TYPES
+        _prop_type_suffix = "_".join(pt.replace(" ", "") for pt in PROPERTY_TYPES)
+        self.scored_locations_file = os.path.join(
+            RESULTS_DIR, f"scored_locations_{_prop_type_suffix}.csv"
+        )
+
+    def _derive_housing_from_redfin(self):
+        """
+        Re-derive housing stats from the local Redfin CSV using the current
+        PROPERTY_TYPES constant — no download required.
+
+        Reads the zip-within-range cache to get the address list, then calls
+        fetch_housing_data() which filters the local Redfin file by
+        PROPERTY_TYPES and enriches each zip with property tax data.
+
+        Returns:
+            pd.DataFrame | None: Housing data in housing_stats column format,
+                                 or None if the zip cache or Redfin file is missing.
+        """
+        # Import here to avoid circular imports at module level
+        from Housing.collect_housing_data import fetch_housing_data
+
+        zip_cache = os.path.join(PROCESSED_DIR, f"zips_within_{MAX_RANGE}mi.csv")
+        if not os.path.exists(zip_cache):
+            logger.warning(
+                f"Zip cache not found ({zip_cache}). "
+                f"Run --housing first to build it, then re-score."
+            )
+            return None
+
+        try:
+            addresses = pd.read_csv(zip_cache)['Full_Address'].tolist()
+        except Exception as e:
+            logger.warning(f"Failed to read zip cache: {e}")
+            return None
+
+        logger.info(
+            f"Re-deriving housing data from local Redfin CSV "
+            f"for {len(addresses)} zips | PROPERTY_TYPES={PROPERTY_TYPES}"
+        )
+
+        results, _ = fetch_housing_data(addresses)
+        if not results:
+            logger.warning("No housing results re-derived from Redfin.")
+            return None
+
+        # Map raw result keys → housing_stats column names expected by scorer
+        records = []
+        for r in results:
+            records.append({
+                'Town':                r.get('town'),
+                'State':               r.get('state'),
+                'Zip':                 str(r.get('zip', '')).zfill(5),
+                'Latest_Median_Sale':  r.get('median_sale_price'),
+                'Latest_Median_List':  r.get('median_list_price'),
+                'Latest_PPSF':         r.get('median_ppsf'),
+                'Latest_Homes_Sold':   r.get('homes_sold'),
+                'Latest_Inventory':    r.get('inventory'),
+                'Tax_Rate_Per_1000':   r.get('tax_rate_per_1000'),
+                'Estimated_Monthly_Tax': r.get('estimated_monthly_tax'),
+                'Price_Trend':         r.get('price_trend'),
+                'Min_Monthly_Price':   r.get('min_monthly_price'),
+                'Max_Monthly_Price':   r.get('max_monthly_price'),
+                'Avg_Monthly_Price':   r.get('avg_monthly_price'),
+            })
+
+        df = pd.DataFrame(records)
+        df['Zip'] = df['Zip'].str.zfill(5)
+        logger.info(
+            f"Re-derived {len(df)} housing records from Redfin "
+            f"(PROPERTY_TYPES={PROPERTY_TYPES})"
+        )
+        return df
 
     def _load_config(self, config_file):
         """
@@ -128,13 +203,17 @@ class LocationScorer:
         logger.info("Loading commute and housing data...")
 
         # Load previous ranks to calculate rank changes
-        if os.path.exists(SCORED_LOCATIONS_FILE):
+        # Load previous ranks to calculate rank changes
+        if os.path.exists(self.scored_locations_file):
             try:
-                prev_df = pd.read_csv(SCORED_LOCATIONS_FILE, dtype={'Zip': str})
+                prev_df = pd.read_csv(self.scored_locations_file, dtype={'Zip': str})
                 if 'Rank' in prev_df.columns and 'Zip' in prev_df.columns:
                     prev_df['Zip'] = prev_df['Zip'].astype(str).str.zfill(5)
                     self.prev_ranks = prev_df.set_index('Zip')['Rank'].to_dict()
-                    logger.info(f"Loaded previous ranks for {len(self.prev_ranks)} locations")
+                    logger.info(
+                        f"Loaded previous ranks for {len(self.prev_ranks)} locations "
+                        f"from {os.path.basename(self.scored_locations_file)}"
+                    )
             except Exception as e:
                 logger.error(f"Error loading previous scored locations: {e}")
 
@@ -144,7 +223,22 @@ class LocationScorer:
             return False
         logger.info(f"Loaded {len(self.commute_data)} commute records")
 
-        self.housing_data = load_csv_with_zip(HOUSING_STATS_FILE)
+        # Re-derive housing from local Redfin CSV if available, so PROPERTY_TYPES
+        # changes take effect immediately without re-running --housing.
+        if os.path.exists(REDFIN_DATA_FILE):
+            self.housing_data = self._derive_housing_from_redfin()
+            if self.housing_data is None or self.housing_data.empty:
+                logger.warning(
+                    "Re-derivation from Redfin failed — "
+                    "falling back to housing_stats.csv"
+                )
+                self.housing_data = load_csv_with_zip(HOUSING_STATS_FILE)
+        else:
+            logger.info(
+                "Redfin data file not found — loading housing_stats.csv"
+            )
+            self.housing_data = load_csv_with_zip(HOUSING_STATS_FILE)
+
         if self.housing_data.empty:
             logger.error(f"No housing data found at {HOUSING_STATS_FILE}")
             return False
@@ -282,6 +376,36 @@ class LocationScorer:
             )
             return 25.0 - (ratio * 25.0)
 
+    def _score_housing_ppsf(self, ppsf):
+        """
+        Score housing price per square foot (0-50 points).
+
+        Args:
+            ppsf (float): Price per square foot
+
+        Returns:
+            float: Score 0-50
+        """
+        if pd.isna(ppsf):
+            return NEUTRAL_SCORE / 2  # Neutral (25) if data missing
+
+        prefs = self.config['housing_preferences']
+        ideal          = prefs.get('ideal_ppsf', 300)
+        max_acceptable = prefs.get('max_acceptable_ppsf', 500)
+
+        if ppsf <= ideal:
+            return TAX_SCORE_MAX
+        elif ppsf <= max_acceptable:
+            ratio = (ppsf - ideal) / (max_acceptable - ideal)
+            return TAX_SCORE_MAX - (ratio * 25.0)
+        else:
+            behavior = self.config.get('scoring_behavior', {})
+            worst = behavior.get('worst_ppsf', 800.0)
+            if ppsf >= worst:
+                return MIN_SCORE
+            ratio = (ppsf - max_acceptable) / (worst - max_acceptable)
+            return 25.0 - (ratio * 25.0)
+
     def calculate_housing_score(self, row):
         """
         Calculate total housing score (0-100).
@@ -301,20 +425,25 @@ class LocationScorer:
         )
 
         tax_score = self._score_housing_tax(row.get('Tax_Rate_Per_1000'))
+        
+        ppsf_score = self._score_housing_ppsf(row.get('Latest_PPSF'))
 
         prefs = self.config.get('housing_preferences', {})
-        weights = prefs.get('housing_weights', {'price': 0.5, 'tax': 0.5})
-        price_weight = weights.get('price', 0.5)
-        tax_weight = weights.get('tax', 0.5)
+        weights = prefs.get('housing_weights', {'price': 0.6, 'ppsf': 0.3, 'tax': 0.1})
+        price_weight = weights.get('price', 0.6)
+        ppsf_weight  = weights.get('ppsf', 0.3)
+        tax_weight   = weights.get('tax', 0.1)
 
         weighted_price_score = price_score * price_weight * 2
-        weighted_tax_score = tax_score * tax_weight * 2
+        weighted_ppsf_score  = ppsf_score * ppsf_weight * 2
+        weighted_tax_score   = tax_score * tax_weight * 2
         
-        housing_score = weighted_price_score + weighted_tax_score
+        housing_score = weighted_price_score + weighted_ppsf_score + weighted_tax_score
 
         return {
             'housing_score': round(housing_score, 1),
             'price_score':   round(weighted_price_score, 1),
+            'ppsf_score':    round(weighted_ppsf_score, 1),
             'tax_score':     round(weighted_tax_score, 1)
         }
 
@@ -541,6 +670,7 @@ class LocationScorer:
                 'Commute_Score':     commute_scores['commute_score'],
                 'Housing_Score':     housing_scores['housing_score'],
                 'Price_Score':       housing_scores['price_score'],
+                'PPSF_Score':        housing_scores['ppsf_score'],
                 'Tax_Score':         housing_scores['tax_score'],
                 # Commute detail
                 'Avg_Commute_Min':   row['Average_Time'],
@@ -605,10 +735,10 @@ class LocationScorer:
             return False
 
         try:
-            self.scored_locations.to_csv(SCORED_LOCATIONS_FILE, index=False)
+            self.scored_locations.to_csv(self.scored_locations_file, index=False)
             logger.info(
                 f"Saved {len(self.scored_locations)} scored locations "
-                f"to {SCORED_LOCATIONS_FILE}"
+                f"to {self.scored_locations_file}"
             )
             return True
         except Exception as e:
@@ -662,17 +792,17 @@ def calculate_scores(config_file=SCORE_CONFIG_FILE):
 
     if not scorer.load_data():
         logger.error("Failed to load data. Aborting.")
-        return False, pd.DataFrame()
+        return False, pd.DataFrame(), scorer.config
 
     results = scorer.score_all_locations()
 
     if results is None or len(results) == 0:
         logger.error("No locations scored. Aborting.")
-        return False, pd.DataFrame()
+        return False, pd.DataFrame(), scorer.config
 
     if not scorer.save_results():
         logger.error("Failed to save results.")
-        return False, pd.DataFrame()
+        return False, pd.DataFrame(), scorer.config
 
     stats = scorer.get_summary_stats()
 
@@ -697,7 +827,7 @@ def calculate_scores(config_file=SCORE_CONFIG_FILE):
     print("=" * 70 + "\n")
 
     logger.info("Location scoring completed successfully")
-    return True, scorer.filtered_locations, scorer.config
+    return True, scorer.scored_locations_file, scorer.filtered_locations, scorer.config
 
 
 if __name__ == "__main__":

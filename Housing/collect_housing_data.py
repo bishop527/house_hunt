@@ -176,11 +176,10 @@ def get_redfin_data(zip_code, redfin_df):
         prop_type_mapping = {
             'Single Family': 'Single Family Residential',
             'Condo': 'Condo/Co-op',
-            'Townhouse': 'Townhouse'
+            'Townhouse': 'Townhouse',
+            'All': 'All Residential'
         }
         allowed = [prop_type_mapping[pt] for pt in PROPERTY_TYPES if pt in prop_type_mapping]
-        if not allowed:
-            allowed = ['All Residential']
 
         filtered_zip_data = zip_data[zip_data['PROPERTY_TYPE'].isin(allowed)]
 
@@ -441,11 +440,10 @@ def get_historical_redfin_data(zip_code, redfin_df, months=12):
         prop_type_mapping = {
             'Single Family': 'Single Family Residential',
             'Condo': 'Condo/Co-op',
-            'Townhouse': 'Townhouse'
+            'Townhouse': 'Townhouse',
+            'All': 'All Residential'
         }
         allowed = [prop_type_mapping[pt] for pt in PROPERTY_TYPES if pt in prop_type_mapping]
-        if not allowed:
-            allowed = ['All Residential']
 
         filtered_zip_data = zip_data[zip_data['PROPERTY_TYPE'].isin(allowed)]
 
