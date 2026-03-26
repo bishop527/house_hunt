@@ -344,3 +344,8 @@
 2026-03-26 12:59:45 Thu UTC [INFO] Commute.collect_commute_data: Loading addresses from cache: /home/runner/work/house_hunt/house_hunt/Data/Processed/towns_within_40mi.csv
 2026-03-26 12:59:45 Thu UTC [INFO] Commute.collect_commute_data: Found 182 cached addresses (skipped zip database parsing)
 2026-03-26 12:59:45 Thu UTC [WARNING] Commute.collect_commute_data: Budget warning: projected=5,163 exceeds limit=5,000 (current=4,981 + estimated=182)
+2026-03-26 22:16:12 Thu UTC [INFO] Commute.collect_commute_data: STARTED: Commute collection (afternoon)
+2026-03-26 22:16:12 Thu UTC [INFO] Commute.collect_commute_data: Auto tier selection: Advanced tier free quota available (19 remaining)
+2026-03-26 22:16:12 Thu UTC [INFO] Commute.collect_commute_data: Loading addresses from cache: /home/runner/work/house_hunt/house_hunt/Data/Processed/towns_within_40mi.csv
+2026-03-26 22:16:12 Thu UTC [INFO] Commute.collect_commute_data: Found 182 cached addresses (skipped zip database parsing)
+2026-03-26 22:16:12 Thu UTC [WARNING] Commute.collect_commute_data: Budget warning: projected=5,163 exceeds limit=5,000 (current=4,981 + estimated=182)
