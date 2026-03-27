@@ -14,7 +14,6 @@ Usage:
 import sys
 import logging
 import argparse
-from datetime import datetime
 
 # Import project modules
 from Commute.collect_commute_data import collect_commute_data

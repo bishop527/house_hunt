@@ -13,15 +13,12 @@ Updated:
 """
 import json
 import os
-import logging
 import pandas as pd
 from datetime import datetime
 from constants import *
-
 from logging_config import setup_logger
 
 logger = setup_logger(__name__, log_file=SCORE_LOG_FILE)
-
 
 def format_currency(value):
     """Format value as currency."""

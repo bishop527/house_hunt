@@ -11,7 +11,6 @@ Data sources:
 import os
 import logging
 import gzip
-import shutil
 from datetime import datetime
 from urllib.request import urlretrieve
 import pandas as pd
