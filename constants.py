@@ -154,9 +154,6 @@ PROPERTY_TYPES = ['Single Family', 'All']
 # ========================================
 SCORE_CONFIG_FILE = os.path.join(DATA_DIR, 'score_config.json')
 
-DEFAULT_COMMUTE_WEIGHT = 0.60
-DEFAULT_HOUSING_WEIGHT = 0.40
-
 TIER_THRESHOLDS = {
     'A+': 95, 'A': 90, 'A-': 85,
     'B+': 80, 'B': 75, 'B-': 70,
