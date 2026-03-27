@@ -115,6 +115,21 @@ DENISE_WORK = "200 Chauncy St. Mansfield, MA 02048"
 
 # Geographic Scope
 TARGET_STATES = ['MA', 'RI', 'NH']
+
+STATE_ABBR_TO_NAME = {
+    'AK': 'Alaska', 'AL': 'Alabama', 'AR': 'Arkansas', 'AZ': 'Arizona', 'CA': 'California',
+    'CO': 'Colorado', 'CT': 'Connecticut', 'DC': 'District of Columbia', 'DE': 'Delaware',
+    'FL': 'Florida', 'GA': 'Georgia', 'HI': 'Hawaii', 'IA': 'Iowa', 'ID': 'Idaho',
+    'IL': 'Illinois', 'IN': 'Indiana', 'KS': 'Kansas', 'KY': 'Kentucky', 'LA': 'Louisiana',
+    'MA': 'Massachusetts', 'MD': 'Maryland', 'ME': 'Maine', 'MI': 'Michigan', 'MN': 'Minnesota',
+    'MO': 'Missouri', 'MS': 'Mississippi', 'MT': 'Montana', 'NC': 'North Carolina', 'ND': 'North Dakota',
+    'NE': 'Nebraska', 'NH': 'New Hampshire', 'NJ': 'New Jersey', 'NM': 'New Mexico', 'NV': 'Nevada',
+    'NY': 'New York', 'OH': 'Ohio', 'OK': 'Oklahoma', 'OR': 'Oregon', 'PA': 'Pennsylvania',
+    'RI': 'Rhode Island', 'SC': 'South Carolina', 'SD': 'South Dakota', 'TN': 'Tennessee',
+    'TX': 'Texas', 'UT': 'Utah', 'VA': 'Virginia', 'VT': 'Vermont', 'WA': 'Washington',
+    'WI': 'Wisconsin', 'WV': 'West Virginia', 'WY': 'Wyoming'
+}
+
 MAX_RANGE = 40  # Maximum distance in miles from work
 
 # Collection Schedule
@@ -148,7 +163,15 @@ HUD_FMR_API_URL = 'https://www.huduser.gov/hudapi/public/fmr/listcounties'
 HUD_FMR_YEAR = '2025'  # Update annually
 
 MIN_SAMPLE_SIZE = 1  # Minimum homes sold
-PROPERTY_TYPES = ['Single Family', 'All']
+# Property Type Filter - select 1 or more of the following options
+# Single Family
+# Condo
+# Townhouse
+# All (will use all residential property types)
+# PROPERTY_TYPES = ['Single Family']
+# PROPERTY_TYPES = ['Condo']
+# PROPERTY_TYPES = ['Townhouse']
+PROPERTY_TYPES = ['All']
 
 # SCORE MODULE CONSTANTS
 # ========================================

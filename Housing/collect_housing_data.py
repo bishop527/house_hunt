@@ -99,6 +99,9 @@ def download_redfin_data():
             current_year = str(datetime.now().year)
             previous_year = str(datetime.now().year - 1)
             
+            # Derive full state names from target abbreviations
+            target_state_names = [STATE_ABBR_TO_NAME.get(abbr) for abbr in TARGET_STATES if STATE_ABBR_TO_NAME.get(abbr)]
+
             for chunk in tqdm(chunk_iter,
                             desc="Filtering data",
                             unit="chunk"):
@@ -107,9 +110,7 @@ def download_redfin_data():
                 filtered = chunk[
                     (chunk['PERIOD_END'].str.startswith(current_year) |
                      chunk['PERIOD_END'].str.startswith(previous_year)) &
-                    (chunk['STATE'].isin(['Massachusetts',
-                                         'Rhode Island',
-                                         'New Hampshire']))
+                    (chunk['STATE'].isin(target_state_names))
                 ].copy()
 
                 if len(filtered) > 0:

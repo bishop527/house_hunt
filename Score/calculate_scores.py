@@ -25,7 +25,8 @@ from constants import (
     LOG_LEVEL, APP_LOG_FILE, SCORE_LOG_FILE,
     SCORE_CONFIG_FILE, COMMUTE_STATS_FILE, HOUSING_STATS_FILE,
     SCORED_LOCATIONS_FILE, LOCATION_GROUPING, RESULTS_DIR,
-    REDFIN_DATA_FILE, PROCESSED_DIR, MAX_RANGE, PROPERTY_TYPES
+    REDFIN_DATA_FILE, PROCESSED_DIR, MAX_RANGE, PROPERTY_TYPES,
+    TIER_THRESHOLDS
 )
 from utils import load_csv_with_zip
 from logging_config import setup_logger
@@ -476,17 +477,10 @@ class LocationScorer:
         Returns:
             str: Tier (A+, A, A-, B+, B, B-, C+, C, C-, D, F)
         """
-        if total_score >= 95:  return 'A+'
-        elif total_score >= 90: return 'A'
-        elif total_score >= 85: return 'A-'
-        elif total_score >= 80: return 'B+'
-        elif total_score >= 75: return 'B'
-        elif total_score >= 70: return 'B-'
-        elif total_score >= 65: return 'C+'
-        elif total_score >= 60: return 'C'
-        elif total_score >= 55: return 'C-'
-        elif total_score >= 50: return 'D'
-        else:                   return 'F'
+        for tier, threshold in TIER_THRESHOLDS.items():
+            if total_score >= threshold:
+                return tier
+        return 'F'
 
     def _merge_datasets(self):
         """

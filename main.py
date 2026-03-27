@@ -25,12 +25,12 @@ from Score.calculate_scores import calculate_scores
 from Score.generate_report import generate_html_report
 
 
-def run_commute_collection(logger, limit=None, dry_run=False):
+def run_commute_collection(logger, limit=None, dry_run=False, force=False):
     """Run commute data collection module"""
     logger.info("STARTED: Commute data collection")
 
     try:
-        success = collect_commute_data(limit=limit, dry_run=dry_run)
+        success = collect_commute_data(limit=limit, dry_run=dry_run, force=force)
         if success:
             logger.info("COMPLETED: Commute data collection")
         else:
@@ -150,6 +150,12 @@ Examples:
         help='Force refresh: clear historical data for queried zips before updating (housing only)'
     )
 
+    parser.add_argument(
+        '--force',
+        action='store_true',
+        help='Skip all interactive prompts (useful for GitHub Actions/CI)'
+    )
+
     args = parser.parse_args()
 
     # If no arguments, show help
@@ -175,7 +181,7 @@ Examples:
     # Run commute collection (independent of property types)
     if args.all or args.commute:
         success = run_commute_collection(
-            logger, limit=args.limit, dry_run=args.dry_run
+            logger, limit=args.limit, dry_run=args.dry_run, force=args.force
         )
         module_success['commute'] = success
     else:

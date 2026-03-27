@@ -439,7 +439,7 @@ def _update_location_record(row, historical_df, today):
 # OPTIMIZED BUDGET CHECKING
 # ========================================
 
-def _check_budget_once(estimated_elements):
+def _check_budget_once(estimated_elements, force=False):
     """
     Unified budget check - replaces multiple redundant checks.
 
@@ -492,6 +492,16 @@ def _check_budget_once(estimated_elements):
             f"Budget warning: projected={projected:,} exceeds limit={limit:,} "
             f"(current={current_usage:,} + estimated={estimated_elements:,})"
         )
+        if force:
+            logger.warning("FORCING collection despite budget warning (--force active)")
+            return {
+                'can_proceed': True,
+                'current_usage': current_usage,
+                'estimated': estimated_elements,
+                'projected': projected,
+                'tier_usage': tier_usage
+            }
+
         response = input("Continue anyway? (yes/no): ").lower()
         if response != 'yes':
             logger.info("User aborted to prevent exceeding budget")
@@ -569,7 +579,7 @@ def _load_addresses_within_range():
 # MAIN COLLECTION FUNCTION (OPTIMIZED)
 # ========================================
 
-def collect_commute_data(limit=None, dry_run=False):
+def collect_commute_data(limit=None, dry_run=False, force=False):
     """
     Main function to collect and store commute data - OPTIMIZED VERSION.
 
@@ -632,7 +642,7 @@ def collect_commute_data(limit=None, dry_run=False):
         addresses = addresses[:limit]
 
     # OPTIMIZATION: Single unified budget check (no GCP call yet)
-    budget_info = _check_budget_once(len(addresses))
+    budget_info = _check_budget_once(len(addresses), force=force)
     if not budget_info['can_proceed']:
         return False
 
