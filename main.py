@@ -45,17 +45,18 @@ def run_commute_collection(logger, limit=None, dry_run=False):
         return False
 
 
-def run_housing_collection(logger, limit=None, dry_run=False, force_refresh=False):
+def run_housing_collection(logger, limit=None, dry_run=False, force_refresh=False, property_types=None):
     """Run housing data collection module"""
-    logger.info("STARTED: Housing data collection")
+    pt_str = ", ".join(property_types) if property_types else "All"
+    logger.info(f"STARTED: Housing data collection ({pt_str})")
 
     if force_refresh:
         logger.info("Force refresh enabled: Will clear historical data for queried zips")
 
     try:
-        success = collect_housing_data(limit=limit, dry_run=dry_run, force_refresh=force_refresh)
+        success = collect_housing_data(limit=limit, dry_run=dry_run, force_refresh=force_refresh, property_types=property_types)
         if success:
-            logger.info("COMPLETED: Housing data collection")
+            logger.info(f"COMPLETED: Housing data collection ({pt_str})")
         else:
             logger.error("FAILED: Housing data collection")
         return success
@@ -67,16 +68,17 @@ def run_housing_collection(logger, limit=None, dry_run=False, force_refresh=Fals
         return False
 
 
-def run_scoring(logger, config_file=None):
-    logger.info("STARTED: Scoring (via main.py)")
+def run_scoring(logger, config=None, property_types=None):
+    pt_str = ", ".join(property_types) if property_types else "All"
+    logger.info(f"STARTED: Scoring via main.py ({pt_str})")
     try:
-        success, scored_file, filtered_df, config = calculate_scores()
+        success, scored_file, filtered_df, config_out = calculate_scores(property_types=property_types)
         if success:
             logger.info(f"Generating HTML report from {scored_file}...")
             scored_df = load_csv_with_zip(scored_file)
             generate_html_report(scored_df, SCORE_REPORT_FILE,
-                                 config=config, filtered_df=filtered_df)
-        logger.info("COMPLETED: Scoring")
+                                 config=config_out, filtered_df=filtered_df, property_types=property_types)
+        logger.info(f"COMPLETED: Scoring ({pt_str})")
         return success
     except Exception as e:
         logger.error(f"Scoring failed: {e}", exc_info=True)
@@ -165,29 +167,41 @@ Examples:
 
     logger.info(f"STARTED: House Hunt execution")
 
-    # Track module success
-    results = {}
+    # Import here to avoid circular imports / missing references
+    from constants import PROPERTY_TYPES
+    
+    # Track module success across all property types
+    module_success = {'commute': True, 'housing': True, 'score': True}
 
-    # Run requested modules
+    # Run commute collection (independent of property types)
     if args.all or args.commute:
-        results['commute'] = run_commute_collection(
+        success = run_commute_collection(
             logger, limit=args.limit, dry_run=args.dry_run
         )
+        module_success['commute'] = success
+    else:
+        module_success.pop('commute')
 
-    if args.all or args.housing:
-        results['housing'] = run_housing_collection(
-            logger, limit=args.limit, dry_run=args.dry_run, force_refresh=args.force_refresh
-        )
+    # Run housing/scoring iteratively for EACH property type
+    if args.all or args.housing or args.score:
+        for pt in PROPERTY_TYPES:
+            logger.info(f"=== Starting execution for Property Type: {pt} ===")
+            if args.all or args.housing:
+                success = run_housing_collection(
+                    logger, limit=args.limit, dry_run=args.dry_run, force_refresh=args.force_refresh, property_types=[pt]
+                )
+                module_success['housing'] = module_success.get('housing', True) and success
 
-    if args.all or args.score:
-        results['score'] = run_scoring(logger)
+            if args.all or args.score:
+                success = run_scoring(logger, property_types=[pt])
+                module_success['score'] = module_success.get('score', True) and success
 
     # Summary
-    success_count = sum(1 for v in results.values() if v)
-    total_count = len(results)
+    success_count = sum(1 for v in module_success.values() if v)
+    total_count = len(module_success)
 
     logger.info("EXECUTION SUMMARY:")
-    for module, success in results.items():
+    for module, success in module_success.items():
         status = "SUCCESS" if success else "FAILED"
         logger.info(f"  {module.upper()}: {status}")
 

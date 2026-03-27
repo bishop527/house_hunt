@@ -148,15 +148,7 @@ HUD_FMR_API_URL = 'https://www.huduser.gov/hudapi/public/fmr/listcounties'
 HUD_FMR_YEAR = '2025'  # Update annually
 
 MIN_SAMPLE_SIZE = 1  # Minimum homes sold
-# Property Type Filter - select 1 or more of the following options
-# Single Family
-# Condo
-# Townhouse
-# All (will use all residential property types)
-PROPERTY_TYPES = ['Single Family']
-# PROPERTY_TYPES = ['Condo']
-# PROPERTY_TYPES = ['Townhouse']
-# PROPERTY_TYPES = ['All']
+PROPERTY_TYPES = ['Single Family', 'All']
 
 # SCORE MODULE CONSTANTS
 # ========================================

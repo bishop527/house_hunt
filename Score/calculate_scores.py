@@ -22,7 +22,7 @@ import sys
 import json
 import pandas as pd
 from constants import (
-    LOG_LEVEL, APP_LOG_FILE,
+    LOG_LEVEL, APP_LOG_FILE, SCORE_LOG_FILE,
     SCORE_CONFIG_FILE, COMMUTE_STATS_FILE, HOUSING_STATS_FILE,
     SCORED_LOCATIONS_FILE, LOCATION_GROUPING, RESULTS_DIR,
     REDFIN_DATA_FILE, PROCESSED_DIR, MAX_RANGE, PROPERTY_TYPES
@@ -30,7 +30,7 @@ from constants import (
 from utils import load_csv_with_zip
 from logging_config import setup_logger
 
-logger = setup_logger(__name__, log_file=APP_LOG_FILE)
+logger = setup_logger(__name__, log_file=SCORE_LOG_FILE)
 
 # Scoring constants (avoid magic numbers)
 MAX_SCORE = 100
@@ -56,13 +56,14 @@ class LocationScorer:
     for each location, then ranks and assigns tiers.
     """
 
-    def __init__(self, config_file=None):
+    def __init__(self, config_file=None, property_types=None):
         """
         Initialize scorer with configuration.
 
         Args:
             config_file (str): Path to JSON config file. If None,
                              uses default config.
+            property_types (list, optional): Property types to use for execution.
         """
         self.filtered_locations = None
         self.config = self._load_config(config_file)
@@ -70,11 +71,12 @@ class LocationScorer:
         self.housing_data = None
         self.scored_locations = None
         self.prev_ranks = {}
+        self.property_types = property_types if property_types is not None else PROPERTY_TYPES
         
         # Compute dynamic filename for scored locations based on PROPERTY_TYPES
-        _prop_type_suffix = "_".join(pt.replace(" ", "") for pt in PROPERTY_TYPES)
+        _prop_type_suffix = "_".join(pt.replace(" ", "_") for pt in self.property_types) if self.property_types else "All"
         self.scored_locations_file = os.path.join(
-            RESULTS_DIR, f"scored_locations_{_prop_type_suffix}.csv"
+            RESULTS_DIR, f"scored_locations-{_prop_type_suffix}.csv"
         )
 
     def _derive_housing_from_redfin(self):
@@ -109,12 +111,25 @@ class LocationScorer:
 
         logger.info(
             f"Re-deriving housing data from local Redfin CSV "
-            f"for {len(addresses)} zips | PROPERTY_TYPES={PROPERTY_TYPES}"
+            f"for {len(addresses)} zips | PROPERTY_TYPES={self.property_types}"
         )
 
-        results, _ = fetch_housing_data(addresses)
+        results, failed_zips = fetch_housing_data(addresses, property_types=self.property_types)
+        if not results and not failed_zips:
+            logger.warning("No housing results or filtered zips re-derived from Redfin.")
+            return None
+
+        # Convert failed_zips to a standardized DataFrame for scoring module
+        if failed_zips:
+            self.housing_filtered = pd.DataFrame(failed_zips)
+            # Ensure columns match expected score_all_locations format
+            if 'Zip' in self.housing_filtered.columns:
+                self.housing_filtered['Zip'] = self.housing_filtered['Zip'].astype(str).str.zfill(5)
+            logger.info(f"Captured {len(failed_zips)} zips missing {self.property_types} data via re-derivation")
+        else:
+            self.housing_filtered = pd.DataFrame()
+        
         if not results:
-            logger.warning("No housing results re-derived from Redfin.")
             return None
 
         # Map raw result keys → housing_stats column names expected by scorer
@@ -141,7 +156,7 @@ class LocationScorer:
         df['Zip'] = df['Zip'].str.zfill(5)
         logger.info(
             f"Re-derived {len(df)} housing records from Redfin "
-            f"(PROPERTY_TYPES={PROPERTY_TYPES})"
+            f"(PROPERTY_TYPES={self.property_types})"
         )
         return df
 
@@ -237,7 +252,9 @@ class LocationScorer:
             logger.info(
                 "Redfin data file not found — loading housing_stats.csv"
             )
-            self.housing_data = load_csv_with_zip(HOUSING_STATS_FILE)
+            _prop_type_suffix = "_".join(pt.replace(" ", "_") for pt in self.property_types) if self.property_types else "All"
+            housing_stats_file = HOUSING_STATS_FILE.replace(".csv", f"_{_prop_type_suffix}.csv")
+            self.housing_data = load_csv_with_zip(housing_stats_file)
 
         if self.housing_data.empty:
             logger.error(f"No housing data found at {HOUSING_STATS_FILE}")
@@ -245,7 +262,9 @@ class LocationScorer:
         logger.info(f"Loaded {len(self.housing_data)} housing records")
 
         # Load zips filtered out during housing collection (no property type data)
-        housing_filtered_file = os.path.join(RESULTS_DIR, 'housing_filtered_zips.csv')
+        _prop_type_suffix = "_".join(pt.replace(" ", "_") for pt in self.property_types) if self.property_types else "All"
+        housing_filtered_file = os.path.join(RESULTS_DIR, f'housing_filtered_zips-{_prop_type_suffix}.csv')
+        
         if os.path.exists(housing_filtered_file):
             try:
                 housing_filtered_df = pd.read_csv(housing_filtered_file, dtype={'Zip': str})
@@ -774,12 +793,13 @@ class LocationScorer:
         }
 
 
-def calculate_scores(config_file=SCORE_CONFIG_FILE):
+def calculate_scores(config_file=SCORE_CONFIG_FILE, property_types=None):
     """
     Main function to calculate and save location scores.
 
     Args:
         config_file (str): Path to JSON config file
+        property_types (list, optional): Property types to use for execution.
 
     Returns:
         bool: True if successful
@@ -788,7 +808,7 @@ def calculate_scores(config_file=SCORE_CONFIG_FILE):
     logger.info("Starting location scoring")
     logger.info("=" * 70)
 
-    scorer = LocationScorer(config_file)
+    scorer = LocationScorer(config_file, property_types=property_types)
 
     if not scorer.load_data():
         logger.error("Failed to load data. Aborting.")

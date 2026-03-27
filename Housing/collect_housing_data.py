@@ -150,13 +150,14 @@ def download_redfin_data():
         return False
 
 
-def get_redfin_data(zip_code, redfin_df):
+def get_redfin_data(zip_code, redfin_df, property_types=None):
     """
     Get housing data from Redfin CSV for a specific zip code.
 
     Args:
         zip_code (str): 5-digit zip code (zero-padded)
         redfin_df (pd.DataFrame): The pre-loaded Redfin DataFrame
+        property_types (list): List of property types to query
 
     Returns:
         dict or None: Housing data if found, None otherwise
@@ -179,12 +180,13 @@ def get_redfin_data(zip_code, redfin_df):
             'Townhouse': 'Townhouse',
             'All': 'All Residential'
         }
-        allowed = [prop_type_mapping[pt] for pt in PROPERTY_TYPES if pt in prop_type_mapping]
+        active_property_types = property_types if property_types is not None else PROPERTY_TYPES
+        allowed = [prop_type_mapping[pt] for pt in active_property_types if pt in prop_type_mapping]
 
         filtered_zip_data = zip_data[zip_data['PROPERTY_TYPE'].isin(allowed)]
 
         if len(filtered_zip_data) == 0:
-             logger.debug(f"No '{PROPERTY_TYPES}' property type data found for zip {zip_code}")
+             logger.debug(f"No '{active_property_types}' property type data found for zip {zip_code}")
              return None
 
         # Sort by PERIOD_END descending to find latest month
@@ -414,7 +416,7 @@ def enrich_with_property_tax(data):
     return data
 
 
-def get_historical_redfin_data(zip_code, redfin_df, months=12):
+def get_historical_redfin_data(zip_code, redfin_df, months=12, property_types=None):
     """
     Get historical monthly data from Redfin for min/max/avg calculation.
 
@@ -422,6 +424,7 @@ def get_historical_redfin_data(zip_code, redfin_df, months=12):
         zip_code (str): 5-digit zip code
         redfin_df (pd.DataFrame): The pre-loaded Redfin DataFrame
         months (int): Number of months to look back
+        property_types (list): List of property types to query
 
     Returns:
         dict or None: Historical statistics
@@ -443,12 +446,13 @@ def get_historical_redfin_data(zip_code, redfin_df, months=12):
             'Townhouse': 'Townhouse',
             'All': 'All Residential'
         }
-        allowed = [prop_type_mapping[pt] for pt in PROPERTY_TYPES if pt in prop_type_mapping]
+        active_property_types = property_types if property_types is not None else PROPERTY_TYPES
+        allowed = [prop_type_mapping[pt] for pt in active_property_types if pt in prop_type_mapping]
 
         filtered_zip_data = zip_data[zip_data['PROPERTY_TYPE'].isin(allowed)]
 
         if len(filtered_zip_data) == 0:
-             logger.debug(f"No '{PROPERTY_TYPES}' property type data found for zip {zip_code}")
+             logger.debug(f"No '{active_property_types}' property type data found for zip {zip_code}")
              return None
 
         # Group by PERIOD_END to summarize multiple property types in a single month
@@ -492,12 +496,13 @@ def get_historical_redfin_data(zip_code, redfin_df, months=12):
         return None
 
 
-def fetch_housing_data(addresses):
+def fetch_housing_data(addresses, property_types=None):
     """
     Fetch housing data for list of addresses.
 
     Args:
         addresses (list): List of "Town, State Zip" formatted addresses
+        property_types (list): List of property types
 
     Returns:
         tuple: (results: list, failed_zips: list)
@@ -536,7 +541,7 @@ def fetch_housing_data(addresses):
 
             data = None
             if redfin_df is not None:
-                 data = get_redfin_data(zip_code, redfin_df)
+                 data = get_redfin_data(zip_code, redfin_df, property_types=property_types)
 
             # Fall back to HUD if Redfin unavailable
             if data is None:
@@ -552,7 +557,7 @@ def fetch_housing_data(addresses):
 
                 # Get historical monthly statistics
                 if redfin_df is not None:
-                    historical = get_historical_redfin_data(zip_code, redfin_df, months=12)
+                    historical = get_historical_redfin_data(zip_code, redfin_df, months=12, property_types=property_types)
                     if historical:
                         data.update(historical)
 
@@ -563,7 +568,8 @@ def fetch_housing_data(addresses):
                     f"No housing data available for {address}"
                 )
                 # Format property types nicely for display
-                prop_types_str = ', '.join(PROPERTY_TYPES) if PROPERTY_TYPES else 'N/A'
+                active_property_types = property_types if property_types is not None else PROPERTY_TYPES
+                prop_types_str = ', '.join(active_property_types) if active_property_types else 'N/A'
                 failed_zips.append({
                     'Town': town,
                     'State': state,
@@ -589,24 +595,31 @@ def fetch_housing_data(addresses):
     return results, failed_zips
 
 
-def load_historical_data():
+def load_historical_data(property_types=None):
     """
     Load historical housing statistics from CSV.
+
+    Args:
+        property_types (list): Property types list for distinguishing files.
 
     Returns:
         pd.DataFrame: Historical data, or empty DataFrame if doesn't exist
     """
-    df = load_csv_with_zip(HOUSING_STATS_FILE)
+    active_property_types = property_types if property_types is not None else PROPERTY_TYPES
+    _prop_type_suffix = "_".join(pt.replace(" ", "_") for pt in active_property_types) if active_property_types else "All"
+    housing_stats_file = HOUSING_STATS_FILE.replace(".csv", f"_{_prop_type_suffix}.csv")
+
+    df = load_csv_with_zip(housing_stats_file)
     if not df.empty:
         logger.info(
-            f"Loaded {len(df)} records from {HOUSING_STATS_FILE}"
+            f"Loaded {len(df)} records from {housing_stats_file}"
         )
     else:
-        logger.info("No historical housing data found. Starting fresh.")
+        logger.info(f"No historical housing data found at {housing_stats_file}. Starting fresh.")
     return df
 
 
-def update_statistics(results, force_refresh=False, queried_addresses=None):
+def update_statistics(results, force_refresh=False, queried_addresses=None, property_types=None):
     """
     Update housing statistics with new results.
 
@@ -620,6 +633,7 @@ def update_statistics(results, force_refresh=False, queried_addresses=None):
         results (list): List of housing data dicts from fetch_housing_data()
         force_refresh (bool): If True, remove historical data for queried zips
         queried_addresses (list): List of addresses that were queried this run
+        property_types (list): Property types to suffix the stats file
     """
     if not results:
         logger.warning("No results to update statistics with.")
@@ -629,7 +643,7 @@ def update_statistics(results, force_refresh=False, queried_addresses=None):
     df_today = pd.DataFrame(results)
 
     # Load historical data
-    df_hist = load_historical_data()
+    df_hist = load_historical_data(property_types=property_types)
 
     # If force_refresh, remove historical data for all queried zips
     if force_refresh and queried_addresses and not df_hist.empty:
@@ -756,14 +770,18 @@ def update_statistics(results, force_refresh=False, queried_addresses=None):
 
     # Save to CSV
     try:
-        df_final.to_csv(HOUSING_STATS_FILE, index=False)
+        active_property_types = property_types if property_types is not None else PROPERTY_TYPES
+        _prop_type_suffix = "_".join(pt.replace(" ", "_") for pt in active_property_types) if active_property_types else "All"
+        housing_stats_file = HOUSING_STATS_FILE.replace(".csv", f"_{_prop_type_suffix}.csv")
+
+        df_final.to_csv(housing_stats_file, index=False)
         logger.info(
-            f"Successfully updated {HOUSING_STATS_FILE} with "
+            f"Successfully updated {housing_stats_file} with "
             f"{len(df_updated)} records"
         )
     except PermissionError:
         logger.critical(
-            f"Permission denied writing to {HOUSING_STATS_FILE} - "
+            f"Permission denied writing to {housing_stats_file} - "
             f"file may be open in another program"
         )
         raise
@@ -772,7 +790,7 @@ def update_statistics(results, force_refresh=False, queried_addresses=None):
         raise
 
 
-def collect_housing_data(limit=None, dry_run=False, force_refresh=False):
+def collect_housing_data(limit=None, dry_run=False, force_refresh=False, property_types=None):
     """
     Main function to collect and store housing data.
 
@@ -787,6 +805,7 @@ def collect_housing_data(limit=None, dry_run=False, force_refresh=False):
         dry_run (bool): If True, simulate collection without real API calls
         force_refresh (bool): If True, remove historical data for all queried zips
                              before updating (useful after changing filters)
+        property_types (list): Property types to suffix the stats file and filter records
     """
     logger.info("STARTED: Housing data collection")
 
@@ -832,17 +851,21 @@ def collect_housing_data(limit=None, dry_run=False, force_refresh=False):
             } for addr in addresses
         ]
     else:
-        results, failed_zips = fetch_housing_data(addresses)
+        results, failed_zips = fetch_housing_data(addresses, property_types=property_types)
 
-    # Save failed zips to CSV for scoring module
+    # Save failed zips to CSV for scoring module (scoped by property types)
     if not dry_run and failed_zips:
         failed_df = pd.DataFrame(failed_zips)
-        failed_file = os.path.join(RESULTS_DIR, 'housing_filtered_zips.csv')
+        active_property_types = property_types if property_types is not None else PROPERTY_TYPES
+        _prop_type_suffix = "_".join(pt.replace(" ", "_") for pt in active_property_types) if active_property_types else "All"
+        failed_file = os.path.join(RESULTS_DIR, f'housing_filtered_zips-{_prop_type_suffix}.csv')
         try:
             failed_df.to_csv(failed_file, index=False)
             logger.info(f"Saved {len(failed_zips)} filtered zips to {failed_file}")
         except Exception as e:
             logger.warning(f"Failed to save filtered zips: {e}")
+    else:
+        failed_zips = [] # Ensure initialized for logger below
 
     # Update statistics
     if results:

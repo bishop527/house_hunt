@@ -18,7 +18,9 @@ import pandas as pd
 from datetime import datetime
 from constants import *
 
-logger = logging.getLogger(__name__)
+from logging_config import setup_logger
+
+logger = setup_logger(__name__, log_file=SCORE_LOG_FILE)
 
 
 def format_currency(value):
@@ -169,7 +171,7 @@ def _build_filtered_section(filtered_df):
         </details>"""
 
 
-def generate_html_report(scored_df, output_file, config=None, filtered_df=None):
+def generate_html_report(scored_df, output_file, config=None, filtered_df=None, property_types=None):
     """
     Generate interactive HTML report.
 
@@ -179,6 +181,7 @@ def generate_html_report(scored_df, output_file, config=None, filtered_df=None):
         config (dict): Scoring configuration (optional)
         filtered_df (pd.DataFrame): Locations dropped by filters (optional).
             If provided, rendered in a collapsed section below the main table.
+        property_types (list): Property types currently generating.
 
     Returns:
         bool: True if successful
@@ -187,15 +190,16 @@ def generate_html_report(scored_df, output_file, config=None, filtered_df=None):
         logger.error("No data to generate report")
         return False
 
-    # Derive filename from active PROPERTY_TYPES (e.g. score_report_SingleFamily.html)
-    prop_suffix = "_".join(pt.replace(" ", "") for pt in PROPERTY_TYPES)
+    # Derive filename from active PROPERTY_TYPES (e.g. score_report-Single_Family.html)
+    active_property_types = property_types if property_types is not None else PROPERTY_TYPES
+    prop_suffix = "_".join(pt.replace(" ", "_") for pt in active_property_types) if active_property_types else "All"
     base, ext = os.path.splitext(output_file)
-    output_file = f"{base}_{prop_suffix}{ext}"
+    output_file = f"{base}-{prop_suffix}{ext}"
 
     # Determine Zillow URL path component based on PROPERTY_TYPES
     zillow_path = ""
-    if len(PROPERTY_TYPES) == 1:
-        pt = PROPERTY_TYPES[0]
+    if len(active_property_types) == 1:
+        pt = active_property_types[0]
         if pt == 'Single Family':
             zillow_path = "houses/"
         elif pt == 'Condo':

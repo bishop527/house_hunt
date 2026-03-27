@@ -317,8 +317,8 @@ def test_save_results(tmp_path, sample_config, sample_commute_data,
     scorer.commute_data = sample_commute_data
     scorer.housing_data = sample_housing_data
 
-    # Expected dynamic filename: scored_locations_TestType.csv
-    expected_file = tmp_path / "scored_locations_TestType.csv"
+    # Expected dynamic filename: scored_locations-TestType.csv
+    expected_file = tmp_path / "scored_locations-TestType.csv"
 
     scorer.score_all_locations()
     success = scorer.save_results()
@@ -370,7 +370,7 @@ def test_calculate_scores_main_function(mock_load, tmp_path,
     monkeypatch.setattr('Score.calculate_scores.RESULTS_DIR', str(tmp_path))
     
     # Expected output file
-    expected_file = tmp_path / "scored_locations_MainTest.csv"
+    expected_file = tmp_path / "scored_locations-MainTest.csv"
 
     # Mock housing data re-derivation to return sample data
     # (The function normally returns a DataFrame formatted for scorer)
