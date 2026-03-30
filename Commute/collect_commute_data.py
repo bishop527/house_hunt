@@ -11,6 +11,7 @@ This module fetches real-time commute data from Google Maps API and
 maintains running history of commute statistics for each zip code.
 """
 
+import sys
 from datetime import datetime
 import pandas as pd
 import googlemaps
@@ -488,6 +489,26 @@ def _check_budget_once(estimated_elements, force=False):
 
     # Warn if would exceed
     if projected > limit:
+        if AUTO_TIER_SELECTION and USE_TRAFFIC:
+            logger.info(f"Projected advanced tier usage ({projected}) exceeds budget ({limit}). Auto-downgrading to Basic tier.")
+            global USE_TRAFFIC
+            USE_TRAFFIC = False
+            # Recalculate for Basic tier
+            current_usage = tier_usage['basic']
+            limit = API_MONTHLY_LIMIT_BASIC
+            tier_name = 'Basic'
+            projected = current_usage + estimated_elements
+            
+            if projected <= limit:
+                logger.info("Basic tier budget is sufficient for this run.")
+                return {
+                    'can_proceed': True,
+                    'current_usage': current_usage,
+                    'estimated': estimated_elements,
+                    'projected': projected,
+                    'tier_usage': tier_usage
+                }
+
         logger.warning(
             f"Budget warning: projected={projected:,} exceeds limit={limit:,} "
             f"(current={current_usage:,} + estimated={estimated_elements:,})"
@@ -496,6 +517,16 @@ def _check_budget_once(estimated_elements, force=False):
             logger.warning("FORCING collection despite budget warning (--force active)")
             return {
                 'can_proceed': True,
+                'current_usage': current_usage,
+                'estimated': estimated_elements,
+                'projected': projected,
+                'tier_usage': tier_usage
+            }
+
+        if not sys.stdin.isatty():
+            logger.warning("Non-interactive environment detected. Aborting to prevent exceeding budget.")
+            return {
+                'can_proceed': False,
                 'current_usage': current_usage,
                 'estimated': estimated_elements,
                 'projected': projected,
@@ -667,7 +698,7 @@ def collect_commute_data(limit=None, dry_run=False, force=False):
 
     # Update tier-specific tracking
     if not dry_run:
-        basic_count, advanced_count, tier = update_api_usage_by_tier(elements_used)
+        basic_count, advanced_count, tier = update_api_usage_by_tier(elements_used, use_traffic=USE_TRAFFIC)
         # OPTIMIZATION: Validate usage ONCE at end (single GCP call)
         final_validation = validate_local_tracking()
     else:
