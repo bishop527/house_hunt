@@ -36,3 +36,5 @@ activate
 Archive/
 
 *.docx
+*.xls
+*.xlsx
