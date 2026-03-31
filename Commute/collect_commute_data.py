@@ -459,6 +459,7 @@ def _check_budget_once(estimated_elements, force=False):
             'tier_usage': dict
         }
     """
+    global USE_TRAFFIC
     # Read local tracking ONCE
     tier_usage = get_current_usage_by_tier()
 
@@ -491,7 +492,6 @@ def _check_budget_once(estimated_elements, force=False):
     if projected > limit:
         if AUTO_TIER_SELECTION and USE_TRAFFIC:
             logger.info(f"Projected advanced tier usage ({projected}) exceeds budget ({limit}). Auto-downgrading to Basic tier.")
-            global USE_TRAFFIC
             USE_TRAFFIC = False
             # Recalculate for Basic tier
             current_usage = tier_usage['basic']

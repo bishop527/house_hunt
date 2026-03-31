@@ -22,8 +22,9 @@ def sample_config():
     """Sample scoring configuration"""
     return {
         "weights": {
-            "commute": 0.60,
-            "housing": 0.40
+            "commute": 0.50,
+            "housing": 0.35,
+            "crime": 0.15
         },
         "commute_preferences": {
             "ideal_time_minutes": 20,
@@ -82,6 +83,17 @@ def sample_housing_data():
         'Tax_Rate_Per_1000': [10.76, 17.98, 11.23, 13.52]  # Tax rates per 1000
     })
 
+@pytest.fixture
+def sample_crime_data():
+    """Sample crime statistics"""
+    return pd.DataFrame({
+        'Town': ['Lexington', 'Bedford', 'Concord'],
+        'Crime_Score': [95.0, 85.0, 90.0],
+        'Crime_Rate_Per_1000': [2.5, 4.0, 3.2],
+        'Total_Crime_Weight': [50, 60, 55],
+        '2024': [20000, 15000, 17000]
+    })
+
 
 # --- Test LocationScorer initialization ---
 
@@ -93,8 +105,9 @@ def test_scorer_init_with_config(tmp_path, sample_config):
 
     scorer = LocationScorer(str(config_file))
 
-    assert scorer.config['weights']['commute'] == 0.60
-    assert scorer.config['weights']['housing'] == 0.40
+    assert scorer.config['weights']['commute'] == 0.50
+    assert scorer.config['weights']['housing'] == 0.35
+    assert scorer.config['weights']['crime'] == 0.15
 
 
 def test_scorer_init_without_config():
@@ -258,12 +271,13 @@ def test_assign_tier_f(sample_config):
 # --- Test full scoring pipeline ---
 
 def test_score_all_locations(sample_config, sample_commute_data,
-                             sample_housing_data):
+                             sample_housing_data, sample_crime_data):
     """Test scoring all locations end-to-end"""
     scorer = LocationScorer(None)
     scorer.config = sample_config
     scorer.commute_data = sample_commute_data
     scorer.housing_data = sample_housing_data
+    scorer.crime_data = sample_crime_data
 
     results = scorer.score_all_locations()
 
@@ -279,13 +293,15 @@ def test_score_all_locations(sample_config, sample_commute_data,
 
 def test_score_all_locations_with_filters(sample_config,
                                           sample_commute_data,
-                                          sample_housing_data):
+                                          sample_housing_data,
+                                          sample_crime_data):
     """Test filtering during scoring"""
     scorer = LocationScorer(None)
     scorer.config = sample_config
     scorer.config['filters']['max_commute_time'] = 20  # Very strict
     scorer.commute_data = sample_commute_data
     scorer.housing_data = sample_housing_data
+    scorer.crime_data = sample_crime_data
 
     results = scorer.score_all_locations()
 
@@ -298,6 +314,7 @@ def test_score_all_locations_missing_data():
     scorer = LocationScorer(None)
     scorer.commute_data = None
     scorer.housing_data = None
+    scorer.crime_data = None
 
     results = scorer.score_all_locations()
 
@@ -306,7 +323,7 @@ def test_score_all_locations_missing_data():
 
 @pytest.mark.unit
 def test_save_results(tmp_path, sample_config, sample_commute_data,
-                      sample_housing_data, monkeypatch):
+                      sample_housing_data, sample_crime_data, monkeypatch):
     """Test saving results to CSV"""
     # Force property type and results dir for predictable filename
     monkeypatch.setattr('Score.calculate_scores.PROPERTY_TYPES', ['TestType'])
@@ -316,6 +333,7 @@ def test_save_results(tmp_path, sample_config, sample_commute_data,
     scorer.config = sample_config
     scorer.commute_data = sample_commute_data
     scorer.housing_data = sample_housing_data
+    scorer.crime_data = sample_crime_data
 
     # Expected dynamic filename: scored_locations-TestType.csv
     expected_file = tmp_path / "scored_locations-TestType.csv"
@@ -333,12 +351,13 @@ def test_save_results(tmp_path, sample_config, sample_commute_data,
 
 
 def test_get_summary_stats(sample_config, sample_commute_data,
-                           sample_housing_data):
+                           sample_housing_data, sample_crime_data):
     """Test summary statistics generation"""
     scorer = LocationScorer(None)
     scorer.config = sample_config
     scorer.commute_data = sample_commute_data
     scorer.housing_data = sample_housing_data
+    scorer.crime_data = sample_crime_data
 
     scorer.score_all_locations()
     stats = scorer.get_summary_stats()
@@ -358,6 +377,7 @@ def test_calculate_scores_main_function(mock_load, tmp_path,
                                         sample_config,
                                         sample_commute_data,
                                         sample_housing_data,
+                                        sample_crime_data,
                                         monkeypatch):
     """Test main calculate_scores() function"""
     # Setup config file
@@ -391,6 +411,8 @@ def test_calculate_scores_main_function(mock_load, tmp_path,
             return sample_commute_data
         elif 'housing' in filepath:
             return sample_housing_data
+        elif 'crime' in filepath:
+            return sample_crime_data
         return pd.DataFrame()
 
     mock_load.side_effect = mock_load_side_effect
