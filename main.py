@@ -189,7 +189,11 @@ Examples:
 
     # Run housing/scoring iteratively for EACH property type
     if args.all or args.housing or args.score:
-        for pt in PROPERTY_TYPES:
+        active_property_types = PROPERTY_TYPES
+        if 'All' in active_property_types:
+            active_property_types = ['Single Family', 'Condo', 'Townhouse']
+
+        for pt in active_property_types:
             logger.info(f"=== Starting execution for Property Type: {pt} ===")
             if args.all or args.housing:
                 success = run_housing_collection(
