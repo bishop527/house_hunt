@@ -25,7 +25,7 @@ def handle_api_error(error, context, reraise=False):
         Exception: If reraise=True
     """
     error_type = type(error).__name__
-    logger.error(f"API Error in {context}: {error_type}: {error}")
+    logger.error(f"API Error in {context}: {error_type}: {error}", exc_info=True)
 
     # Provide specific guidance based on error type
     if isinstance(error, googlemaps.exceptions.ApiError):
@@ -72,7 +72,7 @@ def handle_file_error(error, filepath, operation, reraise=True):
     """
     error_type = type(error).__name__
     logger.error(
-        f"File Error during {operation}: {error_type}: {error}"
+        f"File Error during {operation}: {error_type}: {error}", exc_info=True
     )
     logger.error(f"File path: {filepath}")
 
@@ -117,7 +117,7 @@ def handle_data_error(error, context, reraise=False):
         Exception: If reraise=True
     """
     error_type = type(error).__name__
-    logger.error(f"Data Error in {context}: {error_type}: {error}")
+    logger.error(f"Data Error in {context}: {error_type}: {error}", exc_info=True)
 
     # Provide specific guidance based on error type
     if isinstance(error, KeyError):

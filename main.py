@@ -27,14 +27,14 @@ from Score.generate_report import generate_html_report
 
 def run_commute_collection(logger, limit=None, dry_run=False, force=False):
     """Run commute data collection module"""
-    logger.info("STARTED: Commute data collection")
+    logger.info("STARTED: Commute Data Collection")
 
     try:
         success = collect_commute_data(limit=limit, dry_run=dry_run, force=force)
         if success:
-            logger.info("COMPLETED: Commute data collection")
+            logger.info("COMPLETED: Commute Data Collection")
         else:
-            logger.error("FAILED: Commute data collection")
+            logger.error("FAILED: Commute Data Collection")
         return success
     except KeyboardInterrupt:
         logger.warning("Commute collection interrupted by user")
@@ -47,7 +47,7 @@ def run_commute_collection(logger, limit=None, dry_run=False, force=False):
 def run_housing_collection(logger, limit=None, dry_run=False, force_refresh=False, property_types=None):
     """Run housing data collection module"""
     pt_str = ", ".join(property_types) if property_types else "All"
-    logger.info(f"STARTED: Housing data collection ({pt_str})")
+    logger.info(f"STARTED: Housing Data Collection ({pt_str})")
 
     if force_refresh:
         logger.info("Force refresh enabled: Will clear historical data for queried zips")
@@ -55,9 +55,9 @@ def run_housing_collection(logger, limit=None, dry_run=False, force_refresh=Fals
     try:
         success = collect_housing_data(limit=limit, dry_run=dry_run, force_refresh=force_refresh, property_types=property_types)
         if success:
-            logger.info(f"COMPLETED: Housing data collection ({pt_str})")
+            logger.info(f"COMPLETED: Housing Data Collection ({pt_str})")
         else:
-            logger.error("FAILED: Housing data collection")
+            logger.error(f"FAILED: Housing Data Collection ({pt_str})")
         return success
     except KeyboardInterrupt:
         logger.warning("Housing data collection interrupted by user")
@@ -69,7 +69,7 @@ def run_housing_collection(logger, limit=None, dry_run=False, force_refresh=Fals
 
 def run_scoring(logger, config=None, property_types=None):
     pt_str = ", ".join(property_types) if property_types else "All"
-    logger.info(f"STARTED: Scoring via main.py ({pt_str})")
+    logger.info(f"STARTED: Scoring ({pt_str})")
     try:
         success, scored_file, filtered_df, config_out = calculate_scores(property_types=property_types)
         if success:
@@ -170,7 +170,7 @@ Examples:
         include_console=not args.quiet
     )
 
-    logger.info(f"STARTED: House Hunt execution")
+    logger.info("STARTED: House Hunt Execution")
 
     # Import here to avoid circular imports / missing references
     from constants import PROPERTY_TYPES

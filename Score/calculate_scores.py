@@ -231,7 +231,7 @@ class LocationScorer:
                         f"from {os.path.basename(self.scored_locations_file)}"
                     )
             except Exception as e:
-                logger.error(f"Error loading previous scored locations: {e}")
+                logger.error(f"Error loading previous scored locations: {e}", exc_info=True)
 
         self.commute_data = load_csv_with_zip(COMMUTE_STATS_FILE)
         if self.commute_data.empty:
@@ -285,7 +285,7 @@ class LocationScorer:
                 self.crime_data = pd.read_csv(CRIME_SCORES_FILE)
                 logger.info(f"Loaded {len(self.crime_data)} crime records")
             except Exception as e:
-                logger.warning(f"Failed to load crime data: {e}")
+                logger.warning(f"Failed to load crime data: {e}", exc_info=True)
 
         return True
 
@@ -789,7 +789,7 @@ class LocationScorer:
             )
             return True
         except Exception as e:
-            logger.error(f"Failed to save results: {e}")
+            logger.error(f"Failed to save results: {e}", exc_info=True)
             return False
 
     def get_summary_stats(self):
@@ -833,9 +833,8 @@ def calculate_scores(config_file=SCORE_CONFIG_FILE, property_types=None):
     Returns:
         bool: True if successful
     """
-    logger.info("=" * 70)
-    logger.info("Starting location scoring")
-    logger.info("=" * 70)
+    pt_str = ", ".join(property_types) if property_types else "All"
+    logger.info(f"STARTED: Scoring ({pt_str})")
 
     scorer = LocationScorer(config_file, property_types=property_types)
 
@@ -875,7 +874,7 @@ def calculate_scores(config_file=SCORE_CONFIG_FILE, property_types=None):
         )
     print("=" * 70 + "\n")
 
-    logger.info("Location scoring completed successfully")
+    logger.info(f"COMPLETED: Scoring ({pt_str}) | scored={stats['total_locations']} avg={stats['avg_total_score']}")
     return True, scorer.scored_locations_file, scorer.filtered_locations, scorer.config
 
 
@@ -886,6 +885,6 @@ if __name__ == "__main__":
         logger.info("Scoring interrupted by user")
         print("\nScoring interrupted by user.")
     except Exception as e:
-        logger.critical(f"Fatal error: {type(e).__name__}: {e}")
+        logger.critical(f"Fatal error: {type(e).__name__}: {e}", exc_info=True)
         print(f"\nFatal error occurred. Check logs at {APP_LOG_FILE}")
         raise

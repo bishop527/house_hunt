@@ -192,7 +192,7 @@ def fetch_commute_times(addresses, direction):
         except googlemaps.exceptions.Timeout as e:
             handle_api_error(e, "fetch_commute_times_timeout", reraise=False)
         except Exception as e:
-            logger.error(f"Unexpected error: {type(e).__name__}: {e}")
+            logger.error(f"Unexpected error: {type(e).__name__}: {e}", exc_info=True)
 
     logger.info(
         f"Completed {requests_made} requests, "
@@ -633,7 +633,7 @@ def collect_commute_data(limit=None, dry_run=False, force=False):
     # Determine which tier to use
     global USE_TRAFFIC
     direction = determine_direction()
-    logger.info(f"STARTED: Commute collection ({direction})")
+    logger.info(f"STARTED: Commute Data Collection ({direction})")
 
     if AUTO_TIER_SELECTION:
         USE_TRAFFIC, tier_reason = determine_optimal_tier()
@@ -719,7 +719,7 @@ def collect_commute_data(limit=None, dry_run=False, force=False):
 
     ok_count = len([r for r in results if r['status'] == 'OK'])
     logger.info(
-        f"COMPLETED: {direction} | "
+        f"COMPLETED: Commute Data Collection ({direction}) | "
         f"queried={len(addresses)} ok={ok_count} | "
         f"elements={elements_used} ({tier}) | "
         f"Basic={tier_usage['basic']:,}/{API_MONTHLY_LIMIT_BASIC:,} "
@@ -749,5 +749,5 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         logger.info("Collection interrupted by user")
     except Exception as e:
-        logger.critical(f"Fatal error: {type(e).__name__}: {e}")
+        logger.critical(f"Fatal error: {type(e).__name__}: {e}", exc_info=True)
         raise

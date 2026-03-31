@@ -42,7 +42,7 @@ def get_google_api_key(key_loc=KEY_LOC, key_file=KEY_FILE):
         logger.error(f"API key file not found: {path}")
         return None
     except Exception as e:
-        logger.error(f"Failed to read API key: {e}")
+        logger.error(f"Failed to read API key: {e}", exc_info=True)
         return None
 
 
@@ -108,10 +108,10 @@ def get_zip_data(states=None, include_county=False):
         logger.critical(f"ZIP database not found: {ZIP_DATA_FILE}")
         sys.exit(1)
     except pd.errors.ParserError as e:
-        logger.critical(f"CSV parsing error: {e}")
+        logger.critical(f"CSV parsing error: {e}", exc_info=True)
         sys.exit(1)
     except ValueError as e:
-        logger.critical(f"Column mismatch: {e}")
+        logger.critical(f"Column mismatch: {e}", exc_info=True)
         sys.exit(1)
 
     rename_dict = {
@@ -267,7 +267,7 @@ def update_api_usage_by_tier(elements_used, use_traffic=None):
                         elif parts[1] == 'advanced':
                             advanced_count = int(parts[2])
         except (ValueError, IndexError) as e:
-            logger.warning(f"Error reading tier tracking file: {e}")
+            logger.warning(f"Error reading tier tracking file: {e}", exc_info=True)
             # Reset to zero on error
             basic_count = 0
             advanced_count = 0
@@ -360,7 +360,7 @@ def get_current_usage_by_tier():
                             )
 
         except Exception as e:
-            logger.error(f"Error reading tier usage file: {e}")
+            logger.error(f"Error reading tier usage file: {e}", exc_info=True)
     else:
         logger.debug(
             f"Tier tracking file not found: {API_TIER_TRACKING_FILE}"
@@ -673,7 +673,8 @@ def _fetch_distances_from_google(addresses, destination, current_usage):
             logger.error(f"Unexpected response structure: Missing {e}")
             elements_processed += len(chunk)
         except Exception as e:
-            logger.error(f"Unexpected error: {type(e).__name__}: {e}")
+            logger.error(f"Unexpected error: {type(e).__name__}: {e}", exc_info=True)
+            elements_processed += len(chunk)
 
     return results_list, elements_processed, requests_made
 
@@ -700,6 +701,7 @@ def get_zips_within_range(destination, zip_data_df, max_range,
     Returns:
         list: Addresses (Town, State Zip) within range
     """
+    logger.info(f"STARTED: Zip Range Check ({max_range}mi)")
     cache_file = os.path.join(
         PROCESSED_DIR,
         f"zips_within_{max_range}mi.csv"
@@ -769,7 +771,7 @@ def get_zips_within_range(destination, zip_data_df, max_range,
     # Log combined API usage and result
     tier_usage = get_current_usage_by_tier()
     logger.info(
-        f"Range check complete: {len(zips_in_range)}/{len(addresses)} within "
+        f"COMPLETED: Zip Range Check | {len(zips_in_range)}/{len(addresses)} within "
         f"{max_range}mi | requests={requests_made} elements={elements_processed} | "
         f"Monthly: Basic={tier_usage['basic']:,} Advanced={tier_usage['advanced']:,}"
     )
@@ -809,6 +811,7 @@ def get_towns_within_range(destination, zip_data_df, max_range,
     Returns:
         list: Town addresses (Town, State Zip) within range
     """
+    logger.info(f"STARTED: Town Range Check ({max_range}mi)")
     cache_file = os.path.join(
         PROCESSED_DIR,
         f"towns_within_{max_range}mi.csv"
@@ -884,7 +887,7 @@ def get_towns_within_range(destination, zip_data_df, max_range,
     # Log combined API usage and result
     tier_usage = get_current_usage_by_tier()
     logger.info(
-        f"Range check complete: {len(towns_in_range)}/{len(addresses)} within "
+        f"COMPLETED: Town Range Check | {len(towns_in_range)}/{len(addresses)} within "
         f"{max_range}mi | requests={requests_made} elements={elements_processed} | "
         f"Monthly: Basic={tier_usage['basic']:,} Advanced={tier_usage['advanced']:,}"
     )
@@ -944,6 +947,7 @@ def get_locations_within_range(destination, zip_data_df, max_range,
 
 def get_monthly_element_usage_from_google():
     """Query Google Cloud Monitoring for actual billable usage."""
+    logger.info("STARTED: Google Usage Check")
     try:
         from google.cloud import monitoring_v3
         from google.oauth2 import service_account
@@ -1004,11 +1008,12 @@ def get_monthly_element_usage_from_google():
             f"Free tier limit: {free_tier:,}, "
             f"Remaining: {max(0, free_tier - total_elements):,}"
         )
+        logger.info("COMPLETED: Google Usage Check")
 
         return basic_elements, advanced_elements, total_elements
 
     except Exception as e:
-        logger.error(f"Failed to query Google Cloud Monitoring: {e}")
+        logger.error(f"Failed to query Google Cloud Monitoring: {e}", exc_info=True)
         return None, None, None
 
 
@@ -1017,6 +1022,7 @@ def validate_local_tracking():
     Compare local element tracking vs Google's actual count.
     Shows both overall and tier-specific breakdowns.
     """
+    logger.info("STARTED: Tracking Validation")
     # Get local tier-specific counts
     tier_usage = get_current_usage_by_tier()
 
@@ -1047,7 +1053,7 @@ def validate_local_tracking():
     current_tier = "Advanced" if USE_TRAFFIC else "Basic"
 
     logger.info(
-        f"Validation: tier={current_tier} | "
+        f"COMPLETED: Tracking Validation | tier={current_tier} | "
         f"local={local_total:,} google={google_count:,} "
         f"delta={discrepancy:,} | "
         f"Basic={tier_usage['basic']:,}/{API_MONTHLY_LIMIT_BASIC:,} "

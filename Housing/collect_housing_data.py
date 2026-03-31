@@ -146,7 +146,7 @@ def download_redfin_data():
         return True
 
     except Exception as e:
-        logger.error(f"Failed to download Redfin data: {e}")
+        logger.error(f"Failed to download Redfin data: {e}", exc_info=True)
         return False
 
 
@@ -237,7 +237,7 @@ def get_redfin_data(zip_code, redfin_df, property_types=None):
         }
 
     except Exception as e:
-        logger.error(f"Error reading Redfin data for {zip_code}: {e}")
+        logger.error(f"Error reading Redfin data for {zip_code}: {e}", exc_info=True)
         return None
 
 
@@ -299,7 +299,7 @@ def load_property_tax_rates():
             )
             return _property_tax_cache
         except Exception as e:
-            logger.error(f"Failed to load property tax rates: {e}")
+            logger.error(f"Failed to load property tax rates: {e}", exc_info=True)
             _property_tax_cache = pd.DataFrame()
             return _property_tax_cache
     else:
@@ -492,7 +492,7 @@ def get_historical_redfin_data(zip_code, redfin_df, months=12, property_types=No
         }
 
     except Exception as e:
-        logger.error(f"Error reading historical Redfin data for {zip_code}: {e}")
+        logger.error(f"Error reading historical Redfin data for {zip_code}: {e}", exc_info=True)
         return None
 
 
@@ -579,7 +579,7 @@ def fetch_housing_data(addresses, property_types=None):
                 })
 
         except Exception as e:
-            logger.error(f"Error processing {address}: {e}")
+            logger.error(f"Error processing {address}: {e}", exc_info=True)
             continue
 
     logger.info(
@@ -807,7 +807,8 @@ def collect_housing_data(limit=None, dry_run=False, force_refresh=False, propert
                              before updating (useful after changing filters)
         property_types (list): Property types to suffix the stats file and filter records
     """
-    logger.info("STARTED: Housing data collection")
+    pt_str = ", ".join(property_types) if property_types else "All"
+    logger.info(f"STARTED: Housing Data Collection ({pt_str})")
 
     # Download/verify Redfin data
     if not download_redfin_data():
@@ -871,9 +872,9 @@ def collect_housing_data(limit=None, dry_run=False, force_refresh=False, propert
     if results:
         update_statistics(results, force_refresh=force_refresh, queried_addresses=addresses, property_types=property_types)
         logger.info(
-            f"COMPLETED: Housing collection | "
-            f"queried={len(addresses)} collected={len(results)} excluded={len(failed_zips)} | "
-            f"source=Redfin cost=$0.00"
+            f"COMPLETED: Housing Data Collection ({pt_str}) | "
+            f"queried={len(addresses)} ok={len(results)} failed={len(failed_zips)} | "
+            f"source=Redfin"
         )
         return True
     else:

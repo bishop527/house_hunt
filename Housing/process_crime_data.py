@@ -2,13 +2,14 @@ import os
 import pandas as pd
 from constants import (
     CRIME_DATA_FILE, POPULATION_DATA_FILE, CRIME_SCORES_FILE,
-    CRIME_SEVERITY_WEIGHTS
+    CRIME_SEVERITY_WEIGHTS, HOUSING_LOG_FILE
 )
 from logging_config import setup_logger
 
-logger = setup_logger(__name__)
+logger = setup_logger(__name__, log_file=HOUSING_LOG_FILE)
 
 def process_crime_scores():
+    logger.info("STARTED: Crime Data Processing")
     if not os.path.exists(CRIME_DATA_FILE) or not os.path.exists(POPULATION_DATA_FILE):
         logger.error("Missing crime or population raw data files.")
         return False
@@ -17,14 +18,14 @@ def process_crime_scores():
     try:
         crime_df = pd.read_csv(CRIME_DATA_FILE)
     except Exception as e:
-        logger.error(f"Failed to load crime data: {e}")
+        logger.error(f"Failed to load crime data: {e}", exc_info=True)
         return False
 
     logger.info("Loading population data...")
     try:
         pop_df = pd.read_csv(POPULATION_DATA_FILE)
     except Exception as e:
-        logger.error(f"Failed to load population data: {e}")
+        logger.error(f"Failed to load population data: {e}", exc_info=True)
         return False
 
     # Clean population data (remove commas and convert to int)
@@ -87,8 +88,10 @@ def process_crime_scores():
         logger.info(f"Successfully processed crime data and saved to {CRIME_SCORES_FILE}")
         return True
     except Exception as e:
-        logger.error(f"Failed to save crime scores: {e}")
+        logger.error(f"Failed to save crime scores: {e}", exc_info=True)
         return False
+    finally:
+        logger.info("COMPLETED: Crime Data Processing")
 
 if __name__ == "__main__":
     process_crime_scores()
