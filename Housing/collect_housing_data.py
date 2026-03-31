@@ -869,7 +869,7 @@ def collect_housing_data(limit=None, dry_run=False, force_refresh=False, propert
 
     # Update statistics
     if results:
-        update_statistics(results, force_refresh=force_refresh, queried_addresses=addresses)
+        update_statistics(results, force_refresh=force_refresh, queried_addresses=addresses, property_types=property_types)
         logger.info(
             f"COMPLETED: Housing collection | "
             f"queried={len(addresses)} collected={len(results)} excluded={len(failed_zips)} | "

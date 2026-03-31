@@ -78,6 +78,7 @@ def _build_row_details(row):
         'tier':          str(row.get('Tier', '')),
         'commute_score': safe_float(row.get('Commute_Score')),
         'housing_score': safe_float(row.get('Housing_Score')),
+        'crime_score':   safe_float(row.get('Crime_Score')),
         'price_score':   safe_float(row.get('Price_Score')),
         'ppsf_score':    safe_float(row.get('PPSF_Score')),
         'tax_score':     safe_float(row.get('Tax_Score')),
@@ -96,6 +97,10 @@ def _build_row_details(row):
         'max_monthly':   safe_int(row.get('Max_Monthly_Price')),
         'commute_runs':  safe_int(row.get('Commute_Runs')),
         'last_updated':  str(row.get('Last_Updated') or 'N/A'),
+        'high_severity_score': safe_float(row.get('High_Severity_Score')),
+        'medium_severity_score': safe_float(row.get('Medium_Severity_Score')),
+        'low_severity_score': safe_float(row.get('Low_Severity_Score')),
+        'population':    safe_int(row.get('Population')),
     }
 
     return (
@@ -154,7 +159,7 @@ def _build_filtered_section(filtered_df):
                         <tr>
                             <th>Town</th>
                             <th>State</th>
-                            <th>ZIP</th>
+                            <th>Zip</th>
                             <th>Reason Filtered</th>
                             <th>Avg Commute</th>
                             <th>Distance</th>
@@ -711,10 +716,11 @@ def generate_html_report(scored_df, output_file, config=None, filtered_df=None, 
                     <tr>
                         <th data-sort="rank">Rank</th>
                         <th data-sort="town">Town</th>
-                        <th data-sort="zip">ZIP</th>
+                        <th data-sort="zip">Zip</th>
                         <th data-sort="tier">Tier</th>
                         <th data-sort="score">Score</th>
                         <th data-sort="commute">Commute</th>
+                        <th data-sort="crime">Crime</th>
                         <th data-sort="distance">Distance</th>
                         <th data-sort="price">Median Price</th>
                         <th data-sort="ppsf">$/sqft</th>
@@ -776,6 +782,7 @@ def generate_html_report(scored_df, output_file, config=None, filtered_df=None, 
                             </div>
                         </td>
                         <td>{row['Avg_Commute_Min']:.1f} min</td>
+                        <td>{f"{row.get('Crime_Score'):.1f}/100" if pd.notna(row.get('Crime_Score')) else "N/A"}</td>
                         <td>{row['Distance_Miles']:.1f} mi</td>
                         <td>{format_currency(row.get('Median_Price'))}</td>
                         <td>{format_currency(row.get('Price_Per_SqFt'))}</td>
@@ -899,24 +906,28 @@ def generate_html_report(scored_df, output_file, config=None, filtered_df=None, 
                         aVal = parseFloat(a.cells[5].textContent);
                         bVal = parseFloat(b.cells[5].textContent);
                         break;
+                    case 'crime':
+                        aVal = parseFloat(a.cells[6].textContent) || 0;
+                        bVal = parseFloat(b.cells[6].textContent) || 0;
+                        break;
                     case 'distance':
-                        aVal = parseFloat(a.cells[6].textContent);
-                        bVal = parseFloat(b.cells[6].textContent);
+                        aVal = parseFloat(a.cells[7].textContent);
+                        bVal = parseFloat(b.cells[7].textContent);
                         break;
                     case 'price':
-                        aVal = parseFloat(
-                            a.cells[7].textContent.replace(/[$,]/g, '')
-                        ) || 0;
-                        bVal = parseFloat(
-                            b.cells[7].textContent.replace(/[$,]/g, '')
-                        ) || 0;
-                        break;
-                    case 'ppsf':
                         aVal = parseFloat(
                             a.cells[8].textContent.replace(/[$,]/g, '')
                         ) || 0;
                         bVal = parseFloat(
                             b.cells[8].textContent.replace(/[$,]/g, '')
+                        ) || 0;
+                        break;
+                    case 'ppsf':
+                        aVal = parseFloat(
+                            a.cells[9].textContent.replace(/[$,]/g, '')
+                        ) || 0;
+                        bVal = parseFloat(
+                            b.cells[9].textContent.replace(/[$,]/g, '')
                         ) || 0;
                         break;
                 }}
@@ -974,10 +985,12 @@ def generate_html_report(scored_df, output_file, config=None, filtered_df=None, 
             }}
             document.getElementById('modalTitle').innerHTML = 
                 `<a href="${{zillowUrl}}" target="_blank" title="View on Zillow">${{town}} &#x2197;</a>`;
-            document.getElementById('modalSubtitle').textContent =
-                'ZIP: ' + row.dataset.zip +
+            const popStr = d.population !== null ? 'Population: ' + d.population.toLocaleString() : 'Unknown Population';
+            document.getElementById('modalSubtitle').innerHTML =
+                'Zip: ' + row.dataset.zip +
                 ' \u00b7 Rank #' + d.rank +
-                ' \u00b7 ' + d.tier + ' Tier';
+                ' \u00b7 ' + d.tier + ' Tier' +
+                '<br><span style="font-size:0.85rem; color:#64748b;">' + popStr + '</span>';
 
             const trendLabel = d.price_trend === 'increasing' ? '\u2191 Increasing'
                              : d.price_trend === 'decreasing' ? '\u2193 Decreasing'
@@ -1065,6 +1078,37 @@ def generate_html_report(scored_df, output_file, config=None, filtered_df=None, 
                         <div class="detail-item">
                             <span class="detail-key">Last Updated</span>
                             <span class="detail-val">${{d.last_updated}}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="detail-section">
+                    <div class="detail-section-title">
+                        Crime &mdash; ${{d.crime_score !== null ? d.crime_score + '/100' : 'N/A'}}
+                    </div>
+                    <div class="score-row">
+                        <span class="score-label">Crime Score</span>
+                        <span class="score-pill"
+                              style="background:${{d.crime_score !== null ? scoreColor(d.crime_score) : '#94a3b8'}}">
+                            ${{d.crime_score !== null ? d.crime_score : 'N/A'}}
+                        </span>
+                        <div class="score-bar-wrap">
+                            <div class="score-bar-fill"
+                                 style="width:${{d.crime_score !== null ? d.crime_score : 0}}%"></div>
+                        </div>
+                    </div>
+                    <div class="detail-grid" style="margin-top:0.75rem;">
+                        <div class="detail-item" style="grid-column: span 2;">
+                            <span class="detail-key">High Severity Safety Score</span>
+                            <span class="detail-val">${{d.high_severity_score !== null ? d.high_severity_score.toFixed(1) + '/100' : 'N/A'}}</span>
+                        </div>
+                        <div class="detail-item" style="grid-column: span 2;">
+                            <span class="detail-key">Medium Severity Safety Score</span>
+                            <span class="detail-val">${{d.medium_severity_score !== null ? d.medium_severity_score.toFixed(1) + '/100' : 'N/A'}}</span>
+                        </div>
+                        <div class="detail-item" style="grid-column: span 2;">
+                            <span class="detail-key">Low Severity Safety Score</span>
+                            <span class="detail-val">${{d.low_severity_score !== null ? d.low_severity_score.toFixed(1) + '/100' : 'N/A'}}</span>
                         </div>
                     </div>
                 </div>

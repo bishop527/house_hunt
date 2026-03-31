@@ -1,7 +1,8 @@
 {
   "weights": {
-    "commute": 0.60,
-    "housing": 0.40
+    "commute": 0.50,
+    "housing": 0.35,
+    "crime": 0.15
   },
   "commute_preferences": {
     "ideal_time_minutes": 30,

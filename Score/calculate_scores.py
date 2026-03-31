@@ -23,7 +23,7 @@ import json
 import pandas as pd
 from constants import (
     LOG_LEVEL, APP_LOG_FILE, SCORE_LOG_FILE,
-    SCORE_CONFIG_FILE, COMMUTE_STATS_FILE, HOUSING_STATS_FILE,
+    SCORE_CONFIG_FILE, COMMUTE_STATS_FILE, HOUSING_STATS_FILE, CRIME_SCORES_FILE,
     SCORED_LOCATIONS_FILE, LOCATION_GROUPING, RESULTS_DIR,
     REDFIN_DATA_FILE, PROCESSED_DIR, MAX_RANGE, PROPERTY_TYPES,
     TIER_THRESHOLDS
@@ -278,6 +278,14 @@ class LocationScorer:
                 self.housing_filtered = pd.DataFrame()
         else:
             self.housing_filtered = pd.DataFrame()
+
+        self.crime_data = None
+        if os.path.exists(CRIME_SCORES_FILE):
+            try:
+                self.crime_data = pd.read_csv(CRIME_SCORES_FILE)
+                logger.info(f"Loaded {len(self.crime_data)} crime records")
+            except Exception as e:
+                logger.warning(f"Failed to load crime data: {e}")
 
         return True
 
@@ -564,6 +572,11 @@ class LocationScorer:
             logger.error("No matching records between datasets after merge.")
             return None
 
+        merged['Resolved_Town'] = merged.apply(lambda r: self._resolve(r, 'Town', 'Town_commute', 'Town_housing'), axis=1)
+        if self.crime_data is not None and not self.crime_data.empty:
+            merged = pd.merge(merged, self.crime_data, left_on='Resolved_Town', right_on='Town', how='left')
+            logger.info("Joined crime scores.")
+
         # Apply filters
         filters = self.config.get('filters', {})
 
@@ -609,11 +622,11 @@ class LocationScorer:
             filtered_combined = pd.concat(filtered_rows, ignore_index=True)
             # Resolve Town/State the same way as scored rows
             filtered_combined['Town'] = filtered_combined.apply(
-                lambda r: self._resolve(r, 'Town', 'Town_commute', 'Town_housing'),
+                lambda r: self._resolve(r, 'Resolved_Town', 'Town', 'Town_x', 'Town_y', 'Town_commute', 'Town_housing'),
                 axis=1
             )
             filtered_combined['State'] = filtered_combined.apply(
-                lambda r: self._resolve(r, 'State', 'State_commute', 'State_housing'),
+                lambda r: self._resolve(r, 'State', 'State_commute', 'State_housing', 'State_x', 'State_y'),
                 axis=1
             )
             filtered_standardized = filtered_combined[[
@@ -662,16 +675,32 @@ class LocationScorer:
             commute_scores = self.calculate_commute_score(row)
             housing_scores = self.calculate_housing_score(row)
 
-            total_score = (
-                commute_scores['commute_score'] * weights['commute'] +
-                housing_scores['housing_score'] * weights['housing']
-            )
+            crime_score_val = row.get('Crime_Score')
+            c_w = weights.get('commute', 0.5)
+            h_w = weights.get('housing', 0.35)
+            cr_w = weights.get('crime', 0.15)
+            
+            if pd.isna(crime_score_val):
+                norm = c_w + h_w
+                total_score = (
+                    commute_scores['commute_score'] * (c_w / norm) +
+                    housing_scores['housing_score'] * (h_w / norm)
+                )
+                crime_score_val = None
+            else:
+                total_score = (
+                    commute_scores['commute_score'] * c_w +
+                    housing_scores['housing_score'] * h_w +
+                    crime_score_val * cr_w
+                )
 
             tier = self._assign_tier(total_score)
 
             # Resolve Town/State — column names differ by merge mode
-            town  = self._resolve(row, 'Town', 'Town_commute', 'Town_housing')
-            state = self._resolve(row, 'State', 'State_commute', 'State_housing')
+            town  = self._resolve(row, 'Resolved_Town', 'Town', 'Town_x', 'Town_y', 'Town_commute', 'Town_housing')
+            if not isinstance(town, str):
+                town = "Unknown"
+            state = self._resolve(row, 'State', 'State_commute', 'State_housing', 'State_x', 'State_y')
 
             result = {
                 'Town':              town,
@@ -682,6 +711,11 @@ class LocationScorer:
                 # Scores
                 'Commute_Score':     commute_scores['commute_score'],
                 'Housing_Score':     housing_scores['housing_score'],
+                'Crime_Score':       crime_score_val,
+                'High_Severity_Score': row.get('High_Severity_Score'),
+                'Medium_Severity_Score': row.get('Medium_Severity_Score'),
+                'Low_Severity_Score': row.get('Low_Severity_Score'),
+                'Population':        row.get('Population'),
                 'Price_Score':       housing_scores['price_score'],
                 'PPSF_Score':        housing_scores['ppsf_score'],
                 'Tax_Score':         housing_scores['tax_score'],
@@ -776,6 +810,7 @@ class LocationScorer:
             'avg_total_score':   round(df['Total_Score'].mean(), 1),
             'avg_commute_score': round(df['Commute_Score'].mean(), 1),
             'avg_housing_score': round(df['Housing_Score'].mean(), 1),
+            'avg_crime_score':   round(df['Crime_Score'].mean(), 1) if 'Crime_Score' in df and not df['Crime_Score'].isnull().all() else None,
             'tier_counts':       df['Tier'].value_counts().to_dict(),
             'top_location': {
                 'town':  df.iloc[0]['Town'],

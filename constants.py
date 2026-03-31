@@ -46,11 +46,14 @@ for folder in [RAW_DIR, PROCESSED_DIR, RESULTS_DIR, LOGS_DIR]:
 # ZIP_DATA_FILE = os.path.join(RAW_DIR, 'small-zip_code_database.csv')
 ZIP_DATA_FILE = os.path.join(RAW_DIR, 'zip_code_database.csv')
 REDFIN_DATA_FILE = os.path.join(RAW_DIR, 'reduced-redfin_market_data.csv')
+CRIME_DATA_FILE = os.path.join(RAW_DIR, 'MA-Crime_Data-2025.csv')
+POPULATION_DATA_FILE = os.path.join(RAW_DIR, 'MA-Town_Population-2024.csv')
 
 # ========================================
 # DATA FILES - PROCESSED
 # ========================================
 # HOUSING_LOOKUP_FILE = os.path.join(PROCESSED_DIR, "housing_lookup.csv")
+CRIME_SCORES_FILE = os.path.join(PROCESSED_DIR, "crime_scores_by_town.csv")
 
 # ========================================
 # DATA FILES - RESULTS
@@ -182,4 +185,61 @@ TIER_THRESHOLDS = {
     'B+': 80, 'B': 75, 'B-': 70,
     'C+': 65, 'C': 60, 'C-': 55,
     'D': 50, 'F': 0
+}
+
+CRIME_SEVERITY_WEIGHTS = {
+    # Massachusetts Crime Categories
+    'Murder and Nonnegligent Manslaughter': 5,
+    'Aggravated Assault': 5,
+    'Robbery': 5,
+    'Statutory Rape': 5,
+    'Rape': 5,
+    'Sodomy': 5,
+    'Criminal Sexual Contact': 5,
+    'Incest': 5,
+    'Human Trafficking, Commercial Sex Acts': 5,
+    'Human Trafficking, Involuntary Servitude': 5,
+    'Negligent Manslaughter': 5,
+    'Kidnapping/Abduction': 5,
+
+    'Burglary/Breaking & Entering': 3,
+    'Motor Vehicle Theft': 3,
+    'Simple Assault': 3,
+    'Arson': 3,
+    'Weapon Law Violations': 3,
+    'Animal Cruelty': 3,
+    'Purse-snatching': 3,
+    #'Assisting or Promoting Prostitution': 3,
+    #'Embezzlement': 3,
+    #'Wire Fraud': 3,
+    #'Intimidation': 3,
+    #'Extortion/Blackmail': 3,
+
+    'Driving Under the Influence': 1,
+    'Disorderly Conduct': 1,
+    'Drug/Narcotic Violations': 1,
+    'Trespass of Real Property': 1,
+    'Stolen Property Offenses': 1,
+    'Counterfeiting/Forgery': 1,
+    'Credit Card/Automatic Teller Fraud': 1,
+    'All Other Larceny': 1,
+    'Destruction/Damage/Vandalism of Property': 1,    
+    'Theft From Building': 1,
+    'Theft From Motor Vehicle': 1,
+    'Theft of Motor Vehicle Parts/Accessories': 1,
+    'Pocket-picking': 1,
+    'Drug Equipment Violations': 1,
+    'Impersonation': 1,
+    #'All Other Offenses': 1,
+    #'False Pretenses/Swindle/Confidence Game': 1,
+    #'Family Offenses (Nonviolent)': 1,
+    #'Liquor Law Violations': 1,
+    #'Pornography/Obscene Material': 1,
+    #'Shoplifting': 1,
+    #'Identity Theft': 1,
+    #'Purchasing Prostitution': 1,
+    #'Prostitution': 1,
+    #'Curfew/Loitering/Vagrancy Violations': 1,
+    #'Operating/Promoting/Assisting Gambling': 1,
+    #'Welfare Fraud': 1,
 }
