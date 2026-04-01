@@ -97,3 +97,75 @@
 2026-04-01 12:52:38 Wed UTC [INFO] Score.generate_report: Generating HTML report for 141 locations
 2026-04-01 12:52:38 Wed UTC [INFO] Score.generate_report: Including 78 filtered locations in report
 2026-04-01 12:52:38 Wed UTC [INFO] Score.generate_report: HTML report generated: /home/runner/work/house_hunt/house_hunt/Data/Results/score_report-Townhouse.html
+2026-04-01 22:50:35 Wed UTC [INFO] Score.calculate_scores: STARTED: Scoring (Single Family)
+2026-04-01 22:50:35 Wed UTC [INFO] Score.calculate_scores: Loaded config from /home/runner/work/house_hunt/house_hunt/Data/score_config.json
+2026-04-01 22:50:35 Wed UTC [INFO] Score.calculate_scores: Loading commute and housing data...
+2026-04-01 22:50:35 Wed UTC [INFO] Score.calculate_scores: Loaded previous ranks for 134 locations from scored_locations-Single_Family.csv
+2026-04-01 22:50:35 Wed UTC [INFO] Score.calculate_scores: Loaded 182 commute records (Work Address 1)
+2026-04-01 22:50:35 Wed UTC [INFO] Score.calculate_scores: Loaded 179 Work Address 2 distance records
+2026-04-01 22:50:35 Wed UTC [INFO] Score.calculate_scores: Redfin data file not found — loading housing_stats.csv
+2026-04-01 22:50:35 Wed UTC [INFO] Score.calculate_scores: Loaded 218 housing records
+2026-04-01 22:50:35 Wed UTC [INFO] Score.calculate_scores: Loaded 12 housing-filtered zips
+2026-04-01 22:50:35 Wed UTC [INFO] Score.calculate_scores: Scoring all locations...
+2026-04-01 22:50:35 Wed UTC [INFO] Score.calculate_scores: Town-grouping merge on Town+State: 182 commute towns x 218 housing zips -> 207 rows
+2026-04-01 22:50:35 Wed UTC [INFO] Score.calculate_scores: Merged Work Address 2 data: 117 locations have Work2 data
+2026-04-01 22:50:35 Wed UTC [WARNING] Score.calculate_scores: Crime data not available - crime scores will be excluded from total score calculation
+2026-04-01 22:50:35 Wed UTC [INFO] Score.calculate_scores: Work Address 1 distance filter: removed 2 locations exceeding 40 mi
+2026-04-01 22:50:35 Wed UTC [INFO] Score.calculate_scores: Work Address 2 distance filter: removed 90 locations exceeding 40 mi or missing Work2 data
+2026-04-01 22:50:35 Wed UTC [INFO] Score.calculate_scores: Commute filter: removed 2 locations exceeding 60 min
+2026-04-01 22:50:35 Wed UTC [INFO] Score.calculate_scores: Price filter: removed 52 locations exceeding $900,000
+2026-04-01 22:50:35 Wed UTC [INFO] Score.calculate_scores: Added 12 zips filtered for missing property type data
+2026-04-01 22:50:35 Wed UTC [INFO] Score.calculate_scores: Scored 61 locations
+2026-04-01 22:50:35 Wed UTC [INFO] Score.calculate_scores: Saved 61 scored locations to /home/runner/work/house_hunt/house_hunt/Data/Results/scored_locations-Single_Family.csv
+2026-04-01 22:50:35 Wed UTC [INFO] Score.calculate_scores: COMPLETED: Scoring (Single Family) | scored=61 avg=66.0
+2026-04-01 22:50:35 Wed UTC [INFO] Score.generate_report: Generating HTML report for 61 locations
+2026-04-01 22:50:35 Wed UTC [INFO] Score.generate_report: Including 158 filtered locations in report
+2026-04-01 22:50:35 Wed UTC [INFO] Score.generate_report: HTML report generated: /home/runner/work/house_hunt/house_hunt/Data/Results/score_report-Single_Family.html
+2026-04-01 22:50:35 Wed UTC [INFO] Score.calculate_scores: STARTED: Scoring (Condo)
+2026-04-01 22:50:35 Wed UTC [INFO] Score.calculate_scores: Loaded config from /home/runner/work/house_hunt/house_hunt/Data/score_config.json
+2026-04-01 22:50:35 Wed UTC [INFO] Score.calculate_scores: Loading commute and housing data...
+2026-04-01 22:50:35 Wed UTC [INFO] Score.calculate_scores: Loaded previous ranks for 175 locations from scored_locations-Condo.csv
+2026-04-01 22:50:35 Wed UTC [INFO] Score.calculate_scores: Loaded 182 commute records (Work Address 1)
+2026-04-01 22:50:36 Wed UTC [INFO] Score.calculate_scores: Loaded 179 Work Address 2 distance records
+2026-04-01 22:50:36 Wed UTC [INFO] Score.calculate_scores: Redfin data file not found — loading housing_stats.csv
+2026-04-01 22:50:36 Wed UTC [INFO] Score.calculate_scores: Loaded 217 housing records
+2026-04-01 22:50:36 Wed UTC [INFO] Score.calculate_scores: Loaded 13 housing-filtered zips
+2026-04-01 22:50:36 Wed UTC [INFO] Score.calculate_scores: Scoring all locations...
+2026-04-01 22:50:36 Wed UTC [INFO] Score.calculate_scores: Town-grouping merge on Town+State: 182 commute towns x 217 housing zips -> 206 rows
+2026-04-01 22:50:36 Wed UTC [INFO] Score.calculate_scores: Merged Work Address 2 data: 120 locations have Work2 data
+2026-04-01 22:50:36 Wed UTC [WARNING] Score.calculate_scores: Crime data not available - crime scores will be excluded from total score calculation
+2026-04-01 22:50:36 Wed UTC [INFO] Score.calculate_scores: Work Address 1 distance filter: removed 1 locations exceeding 40 mi
+2026-04-01 22:50:36 Wed UTC [INFO] Score.calculate_scores: Work Address 2 distance filter: removed 86 locations exceeding 40 mi or missing Work2 data
+2026-04-01 22:50:36 Wed UTC [INFO] Score.calculate_scores: Commute filter: removed 2 locations exceeding 60 min
+2026-04-01 22:50:36 Wed UTC [INFO] Score.calculate_scores: Price filter: removed 26 locations exceeding $900,000
+2026-04-01 22:50:36 Wed UTC [INFO] Score.calculate_scores: Added 13 zips filtered for missing property type data
+2026-04-01 22:50:36 Wed UTC [INFO] Score.calculate_scores: Scored 91 locations
+2026-04-01 22:50:36 Wed UTC [INFO] Score.calculate_scores: Saved 91 scored locations to /home/runner/work/house_hunt/house_hunt/Data/Results/scored_locations-Condo.csv
+2026-04-01 22:50:36 Wed UTC [INFO] Score.calculate_scores: COMPLETED: Scoring (Condo) | scored=91 avg=73.4
+2026-04-01 22:50:36 Wed UTC [INFO] Score.generate_report: Generating HTML report for 91 locations
+2026-04-01 22:50:36 Wed UTC [INFO] Score.generate_report: Including 128 filtered locations in report
+2026-04-01 22:50:36 Wed UTC [INFO] Score.generate_report: HTML report generated: /home/runner/work/house_hunt/house_hunt/Data/Results/score_report-Condo.html
+2026-04-01 22:50:36 Wed UTC [INFO] Score.calculate_scores: STARTED: Scoring (Townhouse)
+2026-04-01 22:50:36 Wed UTC [INFO] Score.calculate_scores: Loaded config from /home/runner/work/house_hunt/house_hunt/Data/score_config.json
+2026-04-01 22:50:36 Wed UTC [INFO] Score.calculate_scores: Loading commute and housing data...
+2026-04-01 22:50:36 Wed UTC [INFO] Score.calculate_scores: Loaded previous ranks for 141 locations from scored_locations-Townhouse.csv
+2026-04-01 22:50:36 Wed UTC [INFO] Score.calculate_scores: Loaded 182 commute records (Work Address 1)
+2026-04-01 22:50:36 Wed UTC [INFO] Score.calculate_scores: Loaded 179 Work Address 2 distance records
+2026-04-01 22:50:36 Wed UTC [INFO] Score.calculate_scores: Redfin data file not found — loading housing_stats.csv
+2026-04-01 22:50:36 Wed UTC [INFO] Score.calculate_scores: Loaded 202 housing records
+2026-04-01 22:50:36 Wed UTC [INFO] Score.calculate_scores: Loaded 28 housing-filtered zips
+2026-04-01 22:50:36 Wed UTC [INFO] Score.calculate_scores: Scoring all locations...
+2026-04-01 22:50:36 Wed UTC [INFO] Score.calculate_scores: Town-grouping merge on Town+State: 182 commute towns x 202 housing zips -> 191 rows
+2026-04-01 22:50:36 Wed UTC [INFO] Score.calculate_scores: Merged Work Address 2 data: 109 locations have Work2 data
+2026-04-01 22:50:36 Wed UTC [WARNING] Score.calculate_scores: Crime data not available - crime scores will be excluded from total score calculation
+2026-04-01 22:50:36 Wed UTC [INFO] Score.calculate_scores: Work Address 1 distance filter: removed 1 locations exceeding 40 mi
+2026-04-01 22:50:36 Wed UTC [INFO] Score.calculate_scores: Work Address 2 distance filter: removed 82 locations exceeding 40 mi or missing Work2 data
+2026-04-01 22:50:36 Wed UTC [INFO] Score.calculate_scores: Commute filter: removed 2 locations exceeding 60 min
+2026-04-01 22:50:36 Wed UTC [INFO] Score.calculate_scores: Price filter: removed 38 locations exceeding $900,000
+2026-04-01 22:50:36 Wed UTC [INFO] Score.calculate_scores: Added 28 zips filtered for missing property type data
+2026-04-01 22:50:36 Wed UTC [INFO] Score.calculate_scores: Scored 68 locations
+2026-04-01 22:50:36 Wed UTC [INFO] Score.calculate_scores: Saved 68 scored locations to /home/runner/work/house_hunt/house_hunt/Data/Results/scored_locations-Townhouse.csv
+2026-04-01 22:50:36 Wed UTC [INFO] Score.calculate_scores: COMPLETED: Scoring (Townhouse) | scored=68 avg=70.3
+2026-04-01 22:50:36 Wed UTC [INFO] Score.generate_report: Generating HTML report for 68 locations
+2026-04-01 22:50:36 Wed UTC [INFO] Score.generate_report: Including 151 filtered locations in report
+2026-04-01 22:50:36 Wed UTC [INFO] Score.generate_report: HTML report generated: /home/runner/work/house_hunt/house_hunt/Data/Results/score_report-Townhouse.html
