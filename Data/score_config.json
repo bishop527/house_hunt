@@ -4,10 +4,15 @@
     "housing": 0.35,
     "crime": 0.15
   },
-  "commute_preferences": {
+  "work_address_1": {
+    "max_distance_miles": 40,
     "ideal_time_minutes": 30,
     "max_acceptable_time": 45
   },
+    "work_address_2": {
+    "max_distance_miles": 40
+  },
+  
   "housing_preferences": {
     "budget_min": 500000,
     "budget_max": 800000,
@@ -29,6 +34,7 @@
   "filters": {
     "max_commute_time": 60,
     "max_price": 900000,
-    "require_both_datasets": true
+    "require_both_datasets": true,
+    "require_dual_accessibility": true
   }
 }

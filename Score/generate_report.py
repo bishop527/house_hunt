@@ -71,7 +71,7 @@ def _build_row_details(row):
     else:
         rc_val = rc if isinstance(rc, str) else safe_int(rc)
 
-    details = {
+        details = {
         'rank':          safe_int(row.get('Rank')),
         'rank_change':   rc_val,
         'total_score':   safe_float(row.get('Total_Score')),
@@ -86,6 +86,10 @@ def _build_row_details(row):
         'min_commute':   safe_float(row.get('Min_Commute_Min')),
         'max_commute':   safe_float(row.get('Max_Commute_Min')),
         'distance':      safe_float(row.get('Distance_Miles')),
+        'work2_distance': safe_float(row.get('Work2_Distance')),
+        'work2_avg_time': safe_float(row.get('Work2_Avg_Time')),
+        'work2_min_time': safe_float(row.get('Work2_Min_Time')),
+        'work2_max_time': safe_float(row.get('Work2_Max_Time')),
         'median_price':  safe_int(row.get('Median_Price')),
         'ppsf':          safe_float(row.get('Price_Per_SqFt')),
         'homes_sold':    safe_int(row.get('Homes_Sold')),
@@ -1027,22 +1031,23 @@ def generate_html_report(scored_df, output_file, config=None, filtered_df=None, 
                     </div>
                 </div>
 
-                <div class="detail-section">
-                    <div class="detail-section-title">
-                        Commute &mdash; ${{d.commute_score}}/100
-                    </div>
-                    <div class="score-row">
-                        <span class="score-label">Commute Score</span>
-                        <span class="score-pill"
-                              style="background:${{scoreColor(d.commute_score)}}">
-                            ${{d.commute_score}}
-                        </span>
-                        <div class="score-bar-wrap">
-                            <div class="score-bar-fill"
-                                 style="width:${{d.commute_score}}%"></div>
-                        </div>
-                    </div>
-                    <div class="detail-grid">
+                                <div class="detail-section">
+                                    <div class="detail-section-title">
+                                        Commute Score &mdash; ${{d.commute_score}}/100
+                                    </div>
+                                    <div class="score-row">
+                                        <span class="score-label">Commute Score</span>
+                                        <span class="score-pill"
+                                              style="background:${{scoreColor(d.commute_score)}}">
+                                            ${{d.commute_score}}
+                                        </span>
+                                        <div class="score-bar-wrap">
+                                            <div class="score-bar-fill"
+                                                 style="width:${{d.commute_score}}%"></div>
+                                        </div>
+                                    </div>
+                                    <div style="font-size: 0.85rem; font-weight: 600; color: #64748b; margin: 1rem 0 0.5rem 0; text-transform: uppercase; letter-spacing: 0.5px;">Work Address 1</div>
+                                    <div class="detail-grid">
                         <div class="detail-item">
                             <span class="detail-key">Avg Time</span>
                             <span class="detail-val">
@@ -1081,6 +1086,41 @@ def generate_html_report(scored_df, output_file, config=None, filtered_df=None, 
                         </div>
                     </div>
                 </div>
+
+                                ${{d.work2_distance !== null ? `
+                                <div class="detail-section">
+                                    <div style="font-size: 0.85rem; font-weight: 600; color: #64748b; margin: 1rem 0 0.5rem 0; text-transform: uppercase; letter-spacing: 0.5px;">Work Address 2</div>
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <span class="detail-key">Avg Time</span>
+                            <span class="detail-val">
+                                ${{d.work2_avg_time !== null
+                                    ? d.work2_avg_time.toFixed(1) + ' min' : 'N/A'}}
+                            </span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-key">Distance</span>
+                            <span class="detail-val">
+                                ${{d.work2_distance.toFixed(1)}} mi
+                            </span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-key">Best Time</span>
+                            <span class="detail-val">
+                                ${{d.work2_min_time !== null
+                                    ? d.work2_min_time.toFixed(0) + ' min' : 'N/A'}}
+                            </span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-key">Worst Time</span>
+                            <span class="detail-val">
+                                ${{d.work2_max_time !== null
+                                    ? d.work2_max_time.toFixed(0) + ' min' : 'N/A'}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                ` : ''}}
 
                 <div class="detail-section">
                     <div class="detail-section-title">

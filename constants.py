@@ -14,10 +14,11 @@ import holidays
 # ========================================
 # GENERAL CONFIGURATION
 # ========================================
-# LOG_LEVEL = logging.DEBUG
-LOG_LEVEL = logging.INFO
+LOG_LEVEL = logging.DEBUG
+# LOG_LEVEL = logging.INFO
+
 # Tier selection strategy
-AUTO_TIER_SELECTION = True  # If True, automatically choose optimal tier
+AUTO_TIER_SELECTION = False  # If True, automatically choose optimal tier
 USE_TRAFFIC = False           # Used when AUTO_TIER_SELECTION = False, Set to True for Advanced tier (with traffic data)
 TRAFFIC_MODEL = 'best_guess'  # Used when USE_TRAFFIC=True
 AVOID = None  # Options: None, 'highways', 'tolls'
@@ -37,6 +38,7 @@ RESULTS_DIR = os.path.join(DATA_DIR, 'Results')
 LOGS_DIR = os.path.join(DATA_DIR, 'Logs')
 
 # Automatic Data Folder Creation
+# TODO: Does this belong in constants?
 for folder in [RAW_DIR, PROCESSED_DIR, RESULTS_DIR, LOGS_DIR]:
     os.makedirs(folder, exist_ok=True)
 
@@ -58,11 +60,13 @@ CRIME_SCORES_FILE = os.path.join(PROCESSED_DIR, "crime_scores_by_town.csv")
 # ========================================
 # DATA FILES - RESULTS
 # ========================================
+# TODO: look into renaming COMMUTE_STATS_FILE since there are now 2 work addresses
 COMMUTE_STATS_FILE = os.path.join(RESULTS_DIR, "commute_stats.csv")
 HOUSING_STATS_FILE = os.path.join(RESULTS_DIR, "housing_stats.csv")
 API_TIER_TRACKING_FILE = os.path.join(LOGS_DIR, "monthly_API_usage_by_tier.txt")
 SCORED_LOCATIONS_FILE = os.path.join(RESULTS_DIR, "scored_locations.csv")
 SCORE_REPORT_FILE = os.path.join(RESULTS_DIR, "score_report.html")
+WORK2_DISTANCES_FILE = os.path.join(RESULTS_DIR, "work2_distances.csv")
 
 # ========================================
 # LOGS
@@ -112,9 +116,54 @@ MAX_ACCEPTABLE_DISCREPANCY = 183  # Elements between local/Google count
 # ========================================
 # COMMUTE DATA COLLECTION PARAMETERS
 # ========================================
-# Work Location
-WORK_ADDR = "123 Main St. Anytown, MA 00000"
-DENISE_WORK = "200 Chauncy St. Mansfield, MA 02048"
+# Work Address Configuration
+WORK_ADDRESSES_FILE = "work_addresses.txt"
+WORK_ADDRESSES_PATH = os.path.join(DATA_DIR, WORK_ADDRESSES_FILE)
+
+# TODO: Does this belong in constants?
+def _load_work_addresses():
+    """
+    Load work addresses from secure file.
+    
+    Expected format in work_addresses.txt:
+    WORK_ADDR1=123 Main St. City, State 12345
+    WORK_ADDR2=456 Oak Ave. Town, State 67890
+    
+    Returns:
+        dict: {'WORK_ADDR1': str, 'WORK_ADDR2': str}
+    """
+    addresses = {}
+    
+    if not os.path.exists(WORK_ADDRESSES_PATH):
+        # Fall back to hardcoded addresses for backward compatibility
+        return {
+            'WORK_ADDR1': "123 Main St. Anytown, MA 00000",
+            'WORK_ADDR2': "200 Chauncy St. Mansfield, MA 02048"
+        }
+    
+    try:
+        with open(WORK_ADDRESSES_PATH, 'r') as f:
+            for line in f:
+                line = line.strip()
+                if line and not line.startswith('#') and '=' in line:
+                    key, value = line.split('=', 1)
+                    addresses[key.strip()] = value.strip()
+        
+        return addresses
+    except Exception as e:
+        print(f"Error loading work addresses: {e}")
+        # Fall back to hardcoded addresses
+        return {
+            'WORK_ADDR1': "123 Main St. Anytown, MA 00000",
+            'WORK_ADDR2': "200 Chauncy St. Mansfield, MA 02048"
+        }
+
+# Load addresses
+_work_addresses = _load_work_addresses()
+WORK_ADDR1 = _work_addresses.get('WORK_ADDR1', "WORK_ADDRESS_1_NOT_SET")
+WORK_ADDR2 = _work_addresses.get('WORK_ADDR2', "WORK_ADDRESS_2_NOT_SET")
+ENABLE_SECOND_WORK_ADDRESS = True  # Set to True to enable second work address functionality
+
 
 # Geographic Scope
 TARGET_STATES = ['MA', 'RI', 'NH']
@@ -133,21 +182,23 @@ STATE_ABBR_TO_NAME = {
     'WI': 'Wisconsin', 'WV': 'West Virginia', 'WY': 'Wyoming'
 }
 
-MAX_RANGE = 40  # Maximum distance in miles from work
+# TODO: Rename MAX_RANGE to WORK1_MAX_RANGE
+MAX_RANGE = 40  # Maximum distance in miles from Work Address 1
+WORK2_MAX_RANGE = 40
 
-# Collection Schedule
+# Legacy Collection Schedule - currently scheduled using Github actions
 MORNING_TIMES = ['07:00']  # Morning collection times
 AFTERNOON_TIMES = ['17:00']  # Afternoon collection times
 NOON_HOUR = 17 # 12PM EST/EDT = 17:00 UTC (EST) or 16:00 UTC (EDT)
 
 # Data Grouping
+# TODO: Add description of what these are used for
 # LOCATION_GROUPING = 'zip'
 LOCATION_GROUPING = 'town'
 
 # ========================================
 # HOUSING DATA COLLECTION PARAMETERS
 # ========================================
-# Data Sources
 HOUSING_DATA_SOURCE = 'redfin'  # Primary: 'redfin', Fallback: 'hud'
 PROPERTY_TAX_FILE = os.path.join(RAW_DIR, 'property_tax_rates.csv')
 DEFAULT_MA_TAX_RATE = 12.1  # Default rate if town not found (per $1000)
@@ -176,6 +227,7 @@ MIN_SAMPLE_SIZE = 1  # Minimum homes sold
 # PROPERTY_TYPES = ['Townhouse']
 PROPERTY_TYPES = ['All']
 
+# ========================================
 # SCORE MODULE CONSTANTS
 # ========================================
 SCORE_CONFIG_FILE = os.path.join(DATA_DIR, 'score_config.json')
@@ -187,6 +239,7 @@ TIER_THRESHOLDS = {
     'D': 50, 'F': 0
 }
 
+# TODO: Rename to MA_CRIME_SEVERITY_WEIGHTS
 CRIME_SEVERITY_WEIGHTS = {
     # Massachusetts Crime Categories
     'Murder and Nonnegligent Manslaughter': 5,

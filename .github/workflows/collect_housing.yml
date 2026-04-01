@@ -21,12 +21,21 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Create directory structure
+            - name: Create directory structure
         run: |
           mkdir -p Data/Raw
           mkdir -p Data/Processed
           mkdir -p Data/Results
           mkdir -p Data/Logs
+
+      - name: Setup work addresses
+        env:
+          WORK_ADDR1: ${{ secrets.WORK_ADDR1 }}
+          WORK_ADDR2: ${{ secrets.WORK_ADDR2 }}
+        run: |
+          # Create work addresses file from secrets
+          echo "WORK_ADDR1=$WORK_ADDR1" > Data/work_addresses.txt
+          echo "WORK_ADDR2=$WORK_ADDR2" >> Data/work_addresses.txt
 
       - name: Run housing collection
         run: python main.py --housing --quiet

@@ -84,6 +84,37 @@ def run_scoring(logger, config=None, property_types=None):
         return False
 
 
+def run_work2_generation(logger, dry_run=False):
+    """Run Work Address 2 distance generation"""
+    logger.info("STARTED: Work Address 2 Distance Generation")
+    
+    try:
+        from Commute.generate_work2_distances import generate_work2_distances
+        from constants import ENABLE_SECOND_WORK_ADDRESS
+        
+        if not ENABLE_SECOND_WORK_ADDRESS:
+            logger.warning("Work Address 2 is disabled in constants.py")
+            logger.info("Set ENABLE_SECOND_WORK_ADDRESS = True to enable this feature")
+            return False
+        
+        if dry_run:
+            logger.info("DRY RUN: Would generate Work Address 2 distances")
+            return True
+            
+        success = generate_work2_distances()
+        if success:
+            logger.info("COMPLETED: Work Address 2 Distance Generation")
+        else:
+            logger.error("FAILED: Work Address 2 Distance Generation")
+        return success
+    except KeyboardInterrupt:
+        logger.warning("Work2 generation interrupted by user")
+        return False
+    except Exception as e:
+        logger.error(f"Work2 generation failed: {e}", exc_info=True)
+        return False
+
+
 def main():
     """Main entry point for House Hunt project"""
 
@@ -118,6 +149,11 @@ Examples:
         '--score',
         action='store_true',
         help='Score locations and generate report')
+
+    parser.add_argument(
+        '--work2',
+        action='store_true',
+        help='Generate Work Address 2 distance data')
 
     parser.add_argument(
         '--all',
@@ -158,8 +194,8 @@ Examples:
 
     args = parser.parse_args()
 
-    # If no arguments, show help
-    if not any([args.commute, args.score, args.housing, args.all]):
+        # If no arguments, show help
+    if not any([args.commute, args.score, args.housing, args.all, args.work2]):
         parser.print_help()
         sys.exit(0)
 
@@ -172,20 +208,23 @@ Examples:
 
     logger.info("STARTED: House Hunt Execution")
 
-    # Import here to avoid circular imports / missing references
+        # Import here to avoid circular imports / missing references
     from constants import PROPERTY_TYPES
     
-    # Track module success across all property types
-    module_success = {'commute': True, 'housing': True, 'score': True}
+    # Track module success (only for modules that actually run)
+    module_success = {}
 
-    # Run commute collection (independent of property types)
-    if args.all or args.commute:
-        success = run_commute_collection(
-            logger, limit=args.limit, dry_run=args.dry_run, force=args.force
-        )
-        module_success['commute'] = success
-    else:
-        module_success.pop('commute')
+    # Run Work Address 2 generation if requested
+    if args.work2:
+        success = run_work2_generation(logger, dry_run=args.dry_run)
+        module_success['work2'] = success
+
+        # Run commute collection (independent of property types)
+        if args.all or args.commute:
+            success = run_commute_collection(
+                logger, limit=args.limit, dry_run=args.dry_run, force=args.force
+            )
+            module_success['commute'] = success
 
     # Run housing/scoring iteratively for EACH property type
     if args.all or args.housing or args.score:
