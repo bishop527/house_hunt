@@ -212,14 +212,15 @@ def test_check_budget_once_exceeds_with_user_confirm(tmp_path, monkeypatch):
         }
 
         with patch('builtins.input', return_value='yes'):
-            result = _check_budget_once(1000)
+            with patch('sys.stdin.isatty', return_value=True):
+                result = _check_budget_once(1000)
 
     assert result['can_proceed'] is True
     assert result['projected'] == 10500
 
 
 def test_load_addresses_cache_hit(tmp_path, monkeypatch):
-    """Test loading addresses from cache (optimization path)"""
+    """Test loading addresses from cache (optimization path, Work2 disabled)"""
     # Setup cache file
     cache_file = tmp_path / "towns_within_40mi.csv"
     cache_df = pd.DataFrame({
@@ -231,6 +232,8 @@ def test_load_addresses_cache_hit(tmp_path, monkeypatch):
     monkeypatch.setattr('Commute.collect_commute_data.PROCESSED_DIR', str(tmp_path))
     monkeypatch.setattr('Commute.collect_commute_data.LOCATION_GROUPING', 'town')
     monkeypatch.setattr('Commute.collect_commute_data.MAX_RANGE', 40)
+    # Disable Work2 filter so we test Work1 cache path in isolation
+    monkeypatch.setattr('Commute.collect_commute_data.ENABLE_SECOND_WORK_ADDRESS', False)
 
     # Should NOT call get_zip_data or get_locations_within_range
     with patch('Commute.collect_commute_data.get_zip_data') as mock_zip:
@@ -247,11 +250,12 @@ def test_load_addresses_cache_hit(tmp_path, monkeypatch):
 
 
 def test_load_addresses_cache_miss(tmp_path, monkeypatch):
-    """Test loading addresses when cache doesn't exist"""
+    """Test loading addresses when cache doesn't exist (Work2 disabled)"""
     monkeypatch.setattr('Commute.collect_commute_data.PROCESSED_DIR',
                        str(tmp_path / 'nonexistent'))
     monkeypatch.setattr('Commute.collect_commute_data.LOCATION_GROUPING', 'town')
     monkeypatch.setattr('Commute.collect_commute_data.MAX_RANGE', 40)
+    monkeypatch.setattr('Commute.collect_commute_data.ENABLE_SECOND_WORK_ADDRESS', False)
 
     mock_zip_df = pd.DataFrame({
         'Zip': ['02421', '01730'],
@@ -276,7 +280,7 @@ def test_load_addresses_cache_miss(tmp_path, monkeypatch):
 
 
 def test_load_addresses_cache_corrupted(tmp_path, monkeypatch, caplog):
-    """Test handling of corrupted cache file"""
+    """Test handling of corrupted cache file (Work2 disabled)"""
     import logging
 
     # Create corrupted cache
@@ -286,6 +290,7 @@ def test_load_addresses_cache_corrupted(tmp_path, monkeypatch, caplog):
     monkeypatch.setattr('Commute.collect_commute_data.PROCESSED_DIR', str(tmp_path))
     monkeypatch.setattr('Commute.collect_commute_data.LOCATION_GROUPING', 'town')
     monkeypatch.setattr('Commute.collect_commute_data.MAX_RANGE', 40)
+    monkeypatch.setattr('Commute.collect_commute_data.ENABLE_SECOND_WORK_ADDRESS', False)
 
     mock_zip_df = pd.DataFrame({
         'Zip': ['02421'],
@@ -303,10 +308,73 @@ def test_load_addresses_cache_corrupted(tmp_path, monkeypatch, caplog):
             with caplog.at_level(logging.WARNING):
                 addresses = _load_addresses_within_range()
 
-    # Verify warning was logged
-    # assert 'Cache read failed' in caplog.text
     assert len(addresses) == 1
     assert 'Lexington, MA 02421' in addresses
+
+
+def test_load_addresses_work2_filter_applied(tmp_path, monkeypatch):
+    """Work2 filter removes addresses outside Work Address 2 range."""
+    # Setup Work1 cache with 3 towns
+    cache_file = tmp_path / "towns_within_40mi.csv"
+    cache_df = pd.DataFrame({
+        'Full_Address': [
+            'Lexington, MA 02421',   # in Work2 range
+            'Bedford, MA 01730',     # in Work2 range
+            'Worcester, MA 01602',   # NOT in Work2 range
+        ],
+        'Distance_Miles': [5.0, 10.0, 38.0]
+    })
+    cache_df.to_csv(cache_file, index=False)
+
+    # Setup Work2 distances file with only 2 of the 3 zips
+    work2_file = tmp_path / "work2_distances.csv"
+    work2_df = pd.DataFrame({
+        'Town': ['Lexington', 'Bedford'],
+        'State': ['MA', 'MA'],
+        'Zip': ['02421', '01730'],
+        'Distance': [8.0, 12.0]
+    })
+    work2_df.to_csv(work2_file, index=False)
+
+    monkeypatch.setattr('Commute.collect_commute_data.PROCESSED_DIR', str(tmp_path))
+    monkeypatch.setattr('Commute.collect_commute_data.LOCATION_GROUPING', 'town')
+    monkeypatch.setattr('Commute.collect_commute_data.MAX_RANGE', 40)
+    monkeypatch.setattr('Commute.collect_commute_data.ENABLE_SECOND_WORK_ADDRESS', True)
+    monkeypatch.setattr('Commute.collect_commute_data.WORK2_DISTANCES_FILE', str(work2_file))
+    monkeypatch.setattr('Commute.collect_commute_data.WORK2_MAX_RANGE', 40)
+
+    addresses = _load_addresses_within_range()
+
+    assert len(addresses) == 2
+    assert 'Lexington, MA 02421' in addresses
+    assert 'Bedford, MA 01730' in addresses
+    assert 'Worcester, MA 01602' not in addresses
+
+
+def test_load_addresses_work2_file_missing(tmp_path, monkeypatch):
+    """When Work2 file is missing, falls back to full Work1 list with a warning."""
+    cache_file = tmp_path / "towns_within_40mi.csv"
+    cache_df = pd.DataFrame({
+        'Full_Address': ['Lexington, MA 02421', 'Bedford, MA 01730'],
+        'Distance_Miles': [5.0, 10.0]
+    })
+    cache_df.to_csv(cache_file, index=False)
+
+    monkeypatch.setattr('Commute.collect_commute_data.PROCESSED_DIR', str(tmp_path))
+    monkeypatch.setattr('Commute.collect_commute_data.LOCATION_GROUPING', 'town')
+    monkeypatch.setattr('Commute.collect_commute_data.MAX_RANGE', 40)
+    monkeypatch.setattr('Commute.collect_commute_data.ENABLE_SECOND_WORK_ADDRESS', True)
+    # Point to a file that doesn't exist
+    monkeypatch.setattr('Commute.collect_commute_data.WORK2_DISTANCES_FILE',
+                        str(tmp_path / 'nonexistent_work2.csv'))
+
+    addresses = _load_addresses_within_range()
+
+    # Should return the full Work1 list as a safe fallback (no crash)
+    assert addresses is not None
+    assert len(addresses) == 2
+    assert 'Lexington, MA 02421' in addresses
+    assert 'Bedford, MA 01730' in addresses
 
 
 # --- Integration test for optimized flow ---
@@ -315,7 +383,7 @@ def test_load_addresses_cache_corrupted(tmp_path, monkeypatch, caplog):
 def test_collect_commute_data_optimized_flow(mock_client, tmp_path, monkeypatch):
     """Test complete optimized flow with cache hit"""
 
-    # Setup cache
+    # Setup cache (Work2 disabled so full Work1 list is used)
     cache_file = tmp_path / "towns_within_40mi.csv"
     cache_df = pd.DataFrame({
         'Full_Address': ['Lexington, MA 02421'],
@@ -334,6 +402,7 @@ def test_collect_commute_data_optimized_flow(mock_client, tmp_path, monkeypatch)
     monkeypatch.setattr('Commute.collect_commute_data.PROCESSED_DIR', str(tmp_path))
     monkeypatch.setattr('Commute.collect_commute_data.LOCATION_GROUPING', 'town')
     monkeypatch.setattr('Commute.collect_commute_data.MAX_RANGE', 40)
+    monkeypatch.setattr('Commute.collect_commute_data.ENABLE_SECOND_WORK_ADDRESS', False)
     monkeypatch.setattr('Commute.collect_commute_data.API_TIER_TRACKING_FILE',
                        str(tier_file))
     monkeypatch.setattr('Commute.collect_commute_data.COMMUTE_STATS_FILE',

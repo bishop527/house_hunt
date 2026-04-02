@@ -72,6 +72,8 @@ class LocationScorer:
         self.scored_locations = None
         self.prev_ranks = {}
         self.property_types = property_types if property_types is not None else PROPERTY_TYPES
+        self.work2_data = pd.DataFrame()
+        self.housing_filtered = pd.DataFrame()
         
         # Compute dynamic filename for scored locations based on PROPERTY_TYPES
         _prop_type_suffix = "_".join(pt.replace(" ", "_") for pt in self.property_types) if self.property_types else "All"

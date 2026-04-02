@@ -20,7 +20,7 @@ from logging_config import setup_logger, silence_verbose_loggers
 from constants import *
 from utils import (
     get_zip_data,
-    get_zips_within_range,
+    get_locations_within_range,
     load_csv_with_zip
 )
 
@@ -820,7 +820,7 @@ def collect_housing_data(limit=None, dry_run=False, force_refresh=False, propert
         f"Loading zip codes within {MAX_RANGE} miles of work..."
     )
     zip_data = get_zip_data()
-    addresses = get_zips_within_range(WORK_ADDR, zip_data, MAX_RANGE)
+    addresses = get_locations_within_range(WORK_ADDR1, zip_data, MAX_RANGE, group_by=LOCATION_GROUPING)
 
     if not addresses:
         logger.error("No addresses found within range. Aborting.")

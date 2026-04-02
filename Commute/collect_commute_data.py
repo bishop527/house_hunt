@@ -560,49 +560,105 @@ def _check_budget_once(estimated_elements, force=False):
 
 def _load_addresses_within_range():
     """
-    Load addresses within MAX_RANGE with OPTIMIZED cache-first logic.
+    Load addresses within MAX_RANGE of Work Address 1, optionally
+    intersected with addresses within WORK2_MAX_RANGE of Work Address 2.
 
-    OPTIMIZATION: Check cache existence BEFORE loading zip database.
-    Avoid parsing 44MB file when cache already exists.
+    OPTIMIZATION: Cache-first — skip ZIP database parsing when cache exists.
+    DUAL-WORK-FILTER: If ENABLE_SECOND_WORK_ADDRESS is True and
+    work2_distances.csv exists, addresses outside Work Address 2's range
+    are removed without any additional Google API calls.
 
     Returns:
-        list: Addresses within range, or None if none found
+        list: Addresses within range of both work addresses, or None if none found
     """
-    # Build cache filename
+    # Build Work Address 1 cache filename
     cache_file = os.path.join(
         PROCESSED_DIR,
         f"{LOCATION_GROUPING}s_within_{MAX_RANGE}mi.csv"
     )
 
-    # OPTIMIZATION: Check cache FIRST
+    # OPTIMIZATION: Check Work1 cache FIRST
+    addresses = None
     if os.path.exists(cache_file):
         try:
-            logger.info(f"Loading addresses from cache: {cache_file}")
+            logger.info(f"Loading Work Address 1 addresses from cache: {cache_file}")
             cached_df = pd.read_csv(cache_file)
             addresses = cached_df['Full_Address'].tolist()
             logger.info(
-                f"Found {len(addresses)} cached addresses "
-                f"(skipped zip database parsing)"
+                f"Found {len(addresses)} cached addresses within "
+                f"{MAX_RANGE}mi of Work Address 1 (skipped zip database parsing)"
             )
-            return addresses
         except Exception as e:
             logger.warning(f"Cache read failed: {e}. Building fresh...")
 
-    # Cache miss - do full pipeline
-    logger.info(
-        f"Cache not found, loading ZIP database and building address list..."
-    )
-    zip_codes_df = get_zip_data()
-    addresses = get_locations_within_range(
-        WORK_ADDR, zip_codes_df, MAX_RANGE,
-        group_by=LOCATION_GROUPING
-    )
+    if addresses is None:
+        # Cache miss — do full pipeline
+        logger.info(
+            "Cache not found, loading ZIP database and building address list..."
+        )
+        zip_codes_df = get_zip_data()
+        addresses = get_locations_within_range(
+            WORK_ADDR1, zip_codes_df, MAX_RANGE,
+            group_by=LOCATION_GROUPING
+        )
+
+        if not addresses:
+            logger.error("No addresses found within range of Work Address 1")
+            return None
+
+    logger.info(f"Found {len(addresses)} addresses within Work Address 1 range")
+
+    # ── Work Address 2 intersection filter ──────────────────────────────────
+    # Removes zip codes that are outside WORK2_MAX_RANGE of Work Address 2.
+    # Uses the pre-computed work2_distances.csv so no new API calls are needed.
+    if ENABLE_SECOND_WORK_ADDRESS:
+        if os.path.exists(WORK2_DISTANCES_FILE):
+            try:
+                work2_df = pd.read_csv(WORK2_DISTANCES_FILE)
+                # Build a set of zero-padded Zip codes within Work2 range
+                work2_zips = set(
+                    work2_df['Zip'].astype(str).str.zfill(5).tolist()
+                )
+
+                before_count = len(addresses)
+                # Each address is "Town, State XXXXX"; last token is the zip
+                addresses = [
+                    addr for addr in addresses
+                    if addr.split()[-1].zfill(5) in work2_zips
+                ]
+                removed = before_count - len(addresses)
+
+                if removed > 0:
+                    logger.info(
+                        f"Work Address 2 range filter: removed {removed} "
+                        f"address(es) outside {WORK2_MAX_RANGE}mi of "
+                        f"Work Address 2 | {len(addresses)} remaining"
+                    )
+                else:
+                    logger.info(
+                        "Work Address 2 range filter: all addresses are "
+                        "within range of both work addresses"
+                    )
+
+            except Exception as e:
+                logger.warning(
+                    f"Failed to apply Work Address 2 range filter: {e}. "
+                    "Proceeding with full Work Address 1 list."
+                )
+        else:
+            logger.warning(
+                f"ENABLE_SECOND_WORK_ADDRESS=True but {WORK2_DISTANCES_FILE} "
+                "not found — Work Address 2 range filter skipped. "
+                "Run 'python main.py --work2' to generate it."
+            )
 
     if not addresses:
-        logger.error("No addresses found within range")
+        logger.error(
+            "No addresses remain after Work Address 2 range filter. "
+            "Consider increasing WORK2_MAX_RANGE or checking work2_distances.csv."
+        )
         return None
 
-    logger.info(f"Found {len(addresses)} addresses within range")
     return addresses
 
 

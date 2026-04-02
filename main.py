@@ -123,13 +123,13 @@ def main():
         description='House Hunt Data Collection and Analysis',
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
-Examples:
-  python main.py --commute              Run commute collection
-  python main.py --housing              Run housing collection
-  python main.py --score                Run score module
-  python main.py --all                  Run all modules
-  python main.py --commute --housing    Run commute and schools
-  python main.py --quite                Suppresses console output
+            Examples:
+            python main.py --commute              Run commute collection
+            python main.py --housing              Run housing collection
+            python main.py --score                Run score module
+            python main.py --all                  Run all modules
+            python main.py --commute --housing    Run commute and schools
+            python main.py --quite                Suppresses console output
         """
     )
 
@@ -194,7 +194,7 @@ Examples:
 
     args = parser.parse_args()
 
-        # If no arguments, show help
+    # If no arguments, show help
     if not any([args.commute, args.score, args.housing, args.all, args.work2]):
         parser.print_help()
         sys.exit(0)
@@ -208,7 +208,7 @@ Examples:
 
     logger.info("STARTED: House Hunt Execution")
 
-        # Import here to avoid circular imports / missing references
+    # Import here to avoid circular imports / missing references
     from constants import PROPERTY_TYPES
     
     # Track module success (only for modules that actually run)
@@ -219,12 +219,12 @@ Examples:
         success = run_work2_generation(logger, dry_run=args.dry_run)
         module_success['work2'] = success
 
-        # Run commute collection (independent of property types)
-        if args.all or args.commute:
-            success = run_commute_collection(
-                logger, limit=args.limit, dry_run=args.dry_run, force=args.force
-            )
-            module_success['commute'] = success
+    # Run commute collection (independent of property types)
+    if args.all or args.commute:
+        success = run_commute_collection(
+            logger, limit=args.limit, dry_run=args.dry_run, force=args.force
+        )
+        module_success['commute'] = success
 
     # Run housing/scoring iteratively for EACH property type
     if args.all or args.housing or args.score:

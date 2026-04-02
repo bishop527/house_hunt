@@ -399,7 +399,8 @@ def test_get_redfin_data_success(tmp_path, mock_redfin_csv, monkeypatch):
     )
 
     redfin_df = pd.read_csv(str(redfin_file), sep='\t')
-    result = get_redfin_data('02421', redfin_df)
+    # Explicitly pass property types to match the mock data's "Single Family Residential"
+    result = get_redfin_data('02421', redfin_df, property_types=['Single Family'])
 
     assert result is not None
     assert result['zip'] == '02421'
@@ -465,7 +466,8 @@ def test_get_redfin_data_nan_inventory(tmp_path, monkeypatch):
     )
 
     redfin_df = pd.read_csv(str(redfin_file), sep='\t')
-    result = get_redfin_data('02421', redfin_df)
+    # Explicitly pass property types to match mock data
+    result = get_redfin_data('02421', redfin_df, property_types=['Single Family'])
 
     assert result is not None
     assert result['inventory'] == 0  # NaN converted to 0
@@ -485,7 +487,7 @@ def test_get_historical_redfin_data_success(tmp_path, mock_redfin_csv,
     )
 
     redfin_df = pd.read_csv(str(redfin_file), sep='\t')
-    result = get_historical_redfin_data('02421', redfin_df, months=3)
+    result = get_historical_redfin_data('02421', redfin_df, months=3, property_types=['Single Family'])
 
     assert result is not None
     assert result['months_of_data'] == 3
@@ -507,7 +509,7 @@ def test_get_historical_redfin_data_trend_increasing(tmp_path,
     )
 
     redfin_df = pd.read_csv(str(redfin_file), sep='\t')
-    result = get_historical_redfin_data('02421', redfin_df, months=3)
+    result = get_historical_redfin_data('02421', redfin_df, months=3, property_types=['Single Family'])
 
     # 850000 > 800000 * 1.05 = increasing
     assert result['price_trend'] == 'increasing'
@@ -564,10 +566,12 @@ def test_update_statistics_new_zip(tmp_path, monkeypatch):
             mock_dt.now.return_value = datetime(2026, 2, 1)
             update_statistics(results)
 
-    # Verify file was created
-    assert stats_file.exists()
+    # Verify file was created with suffix
+    # Property types defaults to ['All'] in constants, so suffix is _All
+    expected_file = tmp_path / "historical_housing_stats_All.csv"
+    assert expected_file.exists()
 
-    df = pd.read_csv(stats_file, dtype={'Zip': str})
+    df = pd.read_csv(expected_file, dtype={'Zip': str})
     assert len(df) == 1
     assert df.iloc[0]['Zip'] == '02421'
     assert df.iloc[0]['Average_Price'] == 850000
@@ -606,7 +610,9 @@ Lexington,MA,02421,1,2026-01-01,850000,850000,850000,850000,17.85,database"""
             mock_dt.now.return_value = datetime(2026, 2, 1)
             update_statistics(results)
 
-    df = pd.read_csv(stats_file, dtype={'Zip': str})
+    # Check for suffixed file
+    expected_file = tmp_path / "historical_housing_stats_All.csv"
+    df = pd.read_csv(expected_file, dtype={'Zip': str})
     assert df.iloc[0]['Total_Runs'] == 2
     assert df.iloc[0]['Max_Price'] == 900000
     # Average: (850000 + 900000) / 2 = 875000
