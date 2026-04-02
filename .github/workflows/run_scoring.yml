@@ -105,7 +105,7 @@ jobs:
       run: |
         TIMESTAMP=$(date +'%B %d, %Y at %H:%M UTC')
         
-        cat > docs/index.html <<INDEXEOF
+        cat > docs/index.html <<'INDEXEOF'
         <!DOCTYPE html>
         <html lang="en">
         <head>
@@ -147,11 +147,9 @@ jobs:
                 }
                 .report-card {
                     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                    padding: 30px;
                     border-radius: 10px;
                     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
                     transition: all 0.3s ease;
-                    cursor: pointer;
                     position: relative;
                     overflow: hidden;
                 }
@@ -165,6 +163,7 @@ jobs:
                     background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
                     opacity: 0;
                     transition: opacity 0.3s ease;
+                    pointer-events: none;
                 }
                 .report-card:hover {
                     transform: translateY(-5px);
@@ -177,6 +176,8 @@ jobs:
                     text-decoration: none;
                     color: white;
                     display: block;
+                    padding: 30px;
+                    height: 100%;
                 }
                 .report-title {
                     font-size: 22px;
@@ -263,24 +264,26 @@ jobs:
                 </div>
                 
                 <div class="timestamp">
-                    📅 Last updated: ${TIMESTAMP}
+                    📅 Last updated: TIMESTAMP_PLACEHOLDER
                 </div>
             </div>
         </body>
         </html>
         INDEXEOF
         
+        # Replace timestamp placeholder
+        sed -i "s/TIMESTAMP_PLACEHOLDER/${TIMESTAMP}/g" docs/index.html
+        
         echo "Index page created successfully"
-
-    - name: Upload scoring results
-      uses: actions/upload-artifact@v4
-      with:
-        name: scoring-results-${{ github.run_number }}
-        path: |
-          Data/Results/scored_locations.csv
-          Data/Results/score_report-*.html
-          docs/
-        retention-days: 90
+        - name: Upload scoring results
+          uses: actions/upload-artifact@v4
+          with:
+            name: scoring-results-${{ github.run_number }}
+            path: |
+              Data/Results/scored_locations.csv
+              Data/Results/score_report-*.html
+              docs/
+            retention-days: 90
 
     - name: Archive monthly report in Data/Results
       run: |
