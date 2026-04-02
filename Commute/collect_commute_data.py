@@ -270,12 +270,14 @@ def load_historical_data():
     return historical_df
 
 
-def update_statistics(results):
+def update_statistics(results, force_refresh=False, queried_addresses=None):
     """
     Update commute statistics with new results.
 
     Args:
         results (list): List of result dicts from fetch_commute_times()
+        force_refresh (bool): If True, remove historical data for queried zips
+        queried_addresses (list): List of addresses that were queried this run
     """
     if not results:
         logger.warning("No results to update statistics with.")
@@ -299,6 +301,18 @@ def update_statistics(results):
 
     # Load historical data
     historical_df = load_historical_data()
+
+    # If force_refresh, remove historical data for all queried zips
+    if force_refresh and queried_addresses and not historical_df.empty:
+        queried_zips = set([addr.split()[-1] for addr in queried_addresses])
+        original_count = len(historical_df)
+        historical_df = historical_df[~historical_df['Zip'].isin(queried_zips)]
+        removed_count = original_count - len(historical_df)
+        if removed_count > 0:
+            logger.info(
+                f"Force refresh: Removed {removed_count} historical records "
+                f"for queried zips"
+            )
 
     # Get today's date
     today = datetime.now().strftime('%Y-%m-%d')
@@ -615,6 +629,11 @@ def _load_addresses_within_range():
         if os.path.exists(WORK2_DISTANCES_FILE):
             try:
                 work2_df = pd.read_csv(WORK2_DISTANCES_FILE)
+                
+                # OPTIMIZATION: Filter by WORK2_MAX_RANGE dynamically from constants
+                # This ensures we respect the current config even if the file contains wider results.
+                work2_df = work2_df[work2_df['Distance'] <= WORK2_MAX_RANGE]
+                
                 # Build a set of zero-padded Zip codes within Work2 range
                 work2_zips = set(
                     work2_df['Zip'].astype(str).str.zfill(5).tolist()
@@ -636,8 +655,8 @@ def _load_addresses_within_range():
                     )
                 else:
                     logger.info(
-                        "Work Address 2 range filter: all addresses are "
-                        "within range of both work addresses"
+                        f"Work Address 2 range filter: all {len(addresses)} addresses are "
+                        f"within {WORK2_MAX_RANGE}mi of Work Address 2"
                     )
 
             except Exception as e:
@@ -666,7 +685,7 @@ def _load_addresses_within_range():
 # MAIN COLLECTION FUNCTION (OPTIMIZED)
 # ========================================
 
-def collect_commute_data(limit=None, dry_run=False, force=False):
+def collect_commute_data(limit=None, dry_run=False, force=False, force_refresh=False):
     """
     Main function to collect and store commute data - OPTIMIZED VERSION.
 
@@ -750,7 +769,7 @@ def collect_commute_data(limit=None, dry_run=False, force=False):
 
     # Update statistics
     if results:
-        update_statistics(results)
+        update_statistics(results, force_refresh=force_refresh, queried_addresses=addresses)
 
     # Update tier-specific tracking
     if not dry_run:

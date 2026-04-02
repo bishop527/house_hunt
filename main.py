@@ -25,12 +25,12 @@ from Score.calculate_scores import calculate_scores
 from Score.generate_report import generate_html_report
 
 
-def run_commute_collection(logger, limit=None, dry_run=False, force=False):
+def run_commute_collection(logger, limit=None, dry_run=False, force=False, force_refresh=False):
     """Run commute data collection module"""
     logger.info("STARTED: Commute Data Collection")
 
     try:
-        success = collect_commute_data(limit=limit, dry_run=dry_run, force=force)
+        success = collect_commute_data(limit=limit, dry_run=dry_run, force=force, force_refresh=force_refresh)
         if success:
             logger.info("COMPLETED: Commute Data Collection")
         else:
@@ -183,7 +183,7 @@ def main():
     parser.add_argument(
         '--force-refresh',
         action='store_true',
-        help='Force refresh: clear historical data for queried zips before updating (housing only)'
+        help='Force refresh: clear historical data for queried zips before updating (housing and commute)'
     )
 
     parser.add_argument(
@@ -222,7 +222,7 @@ def main():
     # Run commute collection (independent of property types)
     if args.all or args.commute:
         success = run_commute_collection(
-            logger, limit=args.limit, dry_run=args.dry_run, force=args.force
+            logger, limit=args.limit, dry_run=args.dry_run, force=args.force, force_refresh=args.force_refresh
         )
         module_success['commute'] = success
 
