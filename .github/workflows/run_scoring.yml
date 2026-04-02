@@ -69,22 +69,43 @@ jobs:
           echo "Error: scored_locations.csv was not created"
           exit 1
         fi
-        if [ ! -f "Data/Results/score_report.html" ]; then
-          echo "Error: score_report.html was not created"
+        if [ ! -f "Data/Results/score_report-Single_Family.html" ]; then
+          echo "Error: score_report-Single_Family.html was not created"
           exit 1
         fi
+        if [ ! -f "Data/Results/score_report-Condo.html" ]; then
+          echo "Error: score_report-Condo.html was not created"
+          exit 1
+        fi
+        if [ ! -f "Data/Results/score_report-Townhouse.html" ]; then
+          echo "Error: score_report-Townhouse.html was not created"
+          exit 1
+        fi
+        echo "All report files verified"
         
     - name: Prepare docs folder for GitHub Pages
       run: |
-        mkdir -p docs
+        set -e
+        mkdir -p docs/archive
         
         # Copy score reports to docs/
         cp Data/Results/score_report-Single_Family.html docs/score_report-Single_Family.html
         cp Data/Results/score_report-Condo.html docs/score_report-Condo.html
         cp Data/Results/score_report-Townhouse.html docs/score_report-Townhouse.html
         
-        # Create an index page with navigation to filtered reports
-        cat > docs/index.html << 'EOF'
+        # Archive monthly reports
+        MONTH_YEAR=$(date +'%B%Y')
+        cp Data/Results/score_report-Single_Family.html "docs/archive/score_report-Single_Family-${MONTH_YEAR}.html"
+        cp Data/Results/score_report-Condo.html "docs/archive/score_report-Condo-${MONTH_YEAR}.html"
+        cp Data/Results/score_report-Townhouse.html "docs/archive/score_report-Townhouse-${MONTH_YEAR}.html"
+        
+        echo "Reports copied to docs folder"
+
+    - name: Create index page
+      run: |
+        TIMESTAMP=$(date +'%B %d, %Y at %H:%M UTC')
+        
+        cat > docs/index.html <<INDEXEOF
         <!DOCTYPE html>
         <html lang="en">
         <head>
@@ -203,79 +224,53 @@ jobs:
         <body>
             <div class="container">
                 <h1>🏠 Location Scoring Reports</h1>
-                <p class="subtitle">Select a filtered view to explore scored locations</p>
+                <p class="subtitle">Select a property type to view scored locations</p>
                 
                 <div class="info-box">
-                    <p>These reports show location scores based on different filtering criteria. Click on any report below to view the detailed analysis.</p>
+                    <p>These reports show location scores filtered by property type. Click on any report below to view the detailed analysis.</p>
                 </div>
                 
                 <div class="report-grid">
                     <div class="report-card">
                         <a href="score_report-Single_Family.html">
-                            <div class="report-title">Single Family</div>
+                            <div class="report-title">Single Family Homes</div>
                             <div class="report-description">
-                                View locations filtered by [describe your first filter criteria here]
+                                View scored locations for single family homes
                             </div>
-                            <span class="filter-badge">Primary Filter</span>
+                            <span class="filter-badge">Single Family</span>
                         </a>
                     </div>
                     
                     <div class="report-card">
                         <a href="score_report-Condo.html">
-                            <div class="report-title">Condo</div>
+                            <div class="report-title">Condominiums</div>
                             <div class="report-description">
-                                View locations filtered by [describe your second filter criteria here]
+                                View scored locations for condos and apartments
                             </div>
-                            <span class="filter-badge">Alternative View</span>
+                            <span class="filter-badge">Condo</span>
                         </a>
                     </div>
                     
                     <div class="report-card">
                         <a href="score_report-Townhouse.html">
-                            <div class="report-title">Townhouse</div>
+                            <div class="report-title">Townhouses</div>
                             <div class="report-description">
-                                View locations filtered by [describe your third filter criteria here]
+                                View scored locations for townhouses
                             </div>
-                            <span class="filter-badge">Custom Filter</span>
+                            <span class="filter-badge">Townhouse</span>
                         </a>
                     </div>
                 </div>
                 
                 <div class="timestamp">
-                    📅 Last updated: $(date +'%B %d, %Y at %H:%M UTC')
+                    📅 Last updated: ${TIMESTAMP}
                 </div>
             </div>
         </body>
         </html>
-        EOF
-
-        # Archive monthly reports (optional)
-        MONTH_YEAR=$(date +'%B%Y')
-        mkdir -p "docs/archive"
-        cp Data/Results/score_report-Single_Family.html docs/score_report-Single_Family-${MONTH_YEAR}.html"
-        cp Data/Results/score_report-Condo.html docs/score_report-Condo-${MONTH_YEAR}.html"
-        cp Data/Results/score_report-Townhouse.html docs/score_report-${MONTH_YEAR}.html"
+        INDEXEOF
         
-        echo "GitHub Pages site created with index and 3 filtered reports"
-
-
-    - name: Prepare docs folder for GitHub Pages
-      run: |
-        # Create docs directory if it doesn't exist
-        mkdir -p docs
-        
-        # Copy HTML files to docs folder
-        cp Data/Results/score_report.html docs/index.html
-        
-        # Copy any additional HTML files (adjust paths as needed)
-        # If you have other HTML files, add them here:
-        # cp Data/Results/other_report.html docs/other_report.html
-        
-        # Archive monthly report in docs folder
-        MONTH_YEAR=$(date +'%B%Y')
-        cp Data/Results/score_report.html "docs/score_report-${MONTH_YEAR}.html"
-        
-        echo "HTML files copied to docs folder"
+        echo "Index page created successfully"
 
     - name: Upload scoring results
       uses: actions/upload-artifact@v4
@@ -283,23 +278,25 @@ jobs:
         name: scoring-results-${{ github.run_number }}
         path: |
           Data/Results/scored_locations.csv
-          Data/Results/score_report.html
+          Data/Results/score_report-*.html
           docs/
         retention-days: 90
 
-    - name: Archive monthly report
+    - name: Archive monthly report in Data/Results
       run: |
         MONTH_YEAR=$(date +'%B%Y')
-        cp Data/Results/score_report.html "Data/Results/score_report-${MONTH_YEAR}.html"
+        cp Data/Results/score_report-Single_Family.html "Data/Results/score_report-Single_Family-${MONTH_YEAR}.html"
+        cp Data/Results/score_report-Condo.html "Data/Results/score_report-Condo-${MONTH_YEAR}.html"
+        cp Data/Results/score_report-Townhouse.html "Data/Results/score_report-Townhouse-${MONTH_YEAR}.html"
 
     - name: Commit and push results
       run: |
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
         
-        git add Data/Logs/*
-        git add Data/Results/*
-        git add docs/*
+        git add Data/Logs/* || true
+        git add Data/Results/* || true
+        git add docs/* || true
         
         # Only commit if there are changes
         if ! git diff --staged --quiet; then
