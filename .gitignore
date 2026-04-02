@@ -20,10 +20,10 @@ ENV/
 
 # IDE
 .idea/
-.vscode/
 *.swp
 *.swo
-house_hunt.code-workspace
+#house_hunt.code-workspace
+#.vscode/
 
 # Data files (keep structure, ignore data)
 Data/Raw/*.csv
