@@ -1,0 +1,84 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Run Current File",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "Python: Debug Current File",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "House Hunt: Run Full Pipeline",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/main.py",
+            "args": [
+                "--all"
+            ],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "House Hunt: Run Commute",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/main.py",
+            "args": [
+                "--commute"
+            ],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "House Hunt: Run Housing",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/main.py",
+            "args": [
+                "--housing"
+            ],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "House Hunt: Run Housing with Force Refresh",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/main.py",
+            "args": [
+                "--housing",
+                "--force-refresh"
+            ],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "House Hunt: Run Scoring",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/main.py",
+            "args": [
+                "--score"
+            ],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "House Hunt: Run Housing and Score",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/main.py",
+            "args": [
+                "--housing",
+                "--force-refresh",
+                "--score"
+            ],
+            "console": "integratedTerminal"
+        }
+    ]
+}

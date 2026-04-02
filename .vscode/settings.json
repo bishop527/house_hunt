@@ -1,0 +1,9 @@
+{
+    "python.defaultInterpreterPath": "C:/Users/aedwa/workspace/house_hunt/.venv/Scripts/python.exe",
+    "python.testing.pytestEnabled": true,
+    "python.testing.unittestEnabled": false,
+    "python.testing.nosetestsEnabled": false,
+    "python.testing.pytestArgs": [
+        "Tests"
+    ]
+}
