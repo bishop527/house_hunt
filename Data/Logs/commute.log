@@ -427,3 +427,16 @@
 2026-04-02 13:41:11 Thu UTC [INFO] Commute.collect_commute_data: Successfully updated /home/runner/work/house_hunt/house_hunt/Data/Results/work1_commute_stats.csv with 101 records
 2026-04-02 13:41:12 Thu UTC [INFO] Commute.collect_commute_data: COMPLETED: Commute Data Collection (morning) | queried=101 ok=101 | elements=101 (advanced) | Basic=0/10,000 Advanced=465/5,000 | cost=$0.00
 2026-04-02 13:41:12 Thu UTC [WARNING] Commute.collect_commute_data: DISCREPANCY: 1,518 elements (76.6%)
+2026-04-02 22:21:02 Thu UTC [INFO] Commute.collect_commute_data: STARTED: Commute Data Collection (afternoon)
+2026-04-02 22:21:02 Thu UTC [INFO] Commute.collect_commute_data: Auto tier selection: Advanced tier free quota available (4,535 remaining)
+2026-04-02 22:21:02 Thu UTC [INFO] Commute.collect_commute_data: Loading Work Address 1 addresses from cache: /home/runner/work/house_hunt/house_hunt/Data/Processed/towns_within_40mi.csv
+2026-04-02 22:21:02 Thu UTC [INFO] Commute.collect_commute_data: Found 179 cached addresses within 40mi of Work Address 1 (skipped zip database parsing)
+2026-04-02 22:21:02 Thu UTC [INFO] Commute.collect_commute_data: Found 179 addresses within Work Address 1 range
+2026-04-02 22:21:02 Thu UTC [INFO] Commute.collect_commute_data: Work Address 2 range filter: removed 78 address(es) outside 40mi of Work Address 2 | 101 remaining
+2026-04-02 22:21:02 Thu UTC [INFO] Commute.collect_commute_data: Budget check passed: 566/5,000 (current=465 + estimated=101)
+2026-04-02 22:21:02 Thu UTC [INFO] Commute.collect_commute_data: Afternoon commute: 123 Main St. Anytown, MA 00000 -> 101 locations
+2026-04-02 22:21:03 Thu UTC [INFO] Commute.collect_commute_data: Completed 5 requests, processed 101 elements, collected 101 valid results
+2026-04-02 22:21:03 Thu UTC [INFO] Commute.collect_commute_data: Loaded 204 records from /home/runner/work/house_hunt/house_hunt/Data/Results/work1_commute_stats.csv
+2026-04-02 22:21:03 Thu UTC [INFO] Commute.collect_commute_data: Successfully updated /home/runner/work/house_hunt/house_hunt/Data/Results/work1_commute_stats.csv with 101 records
+2026-04-02 22:21:06 Thu UTC [INFO] Commute.collect_commute_data: COMPLETED: Commute Data Collection (afternoon) | queried=101 ok=101 | elements=101 (advanced) | Basic=0/10,000 Advanced=566/5,000 | cost=$0.00
+2026-04-02 22:21:06 Thu UTC [WARNING] Commute.collect_commute_data: DISCREPANCY: 1,518 elements (72.8%)
