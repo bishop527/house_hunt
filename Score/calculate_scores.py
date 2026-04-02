@@ -27,7 +27,7 @@ from constants import (
     SCORED_LOCATIONS_FILE, LOCATION_GROUPING, RESULTS_DIR,
     REDFIN_DATA_FILE, PROCESSED_DIR, WORK1_MAX_RANGE, PROPERTY_TYPES,
     ENABLE_SECOND_WORK_ADDRESS, WORK2_DISTANCES_FILE, WORK2_MAX_RANGE,
-    TIER_THRESHOLDS
+    TIER_THRESHOLDS, WORK_ADDR1
 )
 from utils import load_csv_with_zip
 from logging_config import setup_logger
@@ -87,8 +87,8 @@ class LocationScorer:
         Re-derive housing stats from the local Redfin CSV using the current
         PROPERTY_TYPES constant — no download required.
 
-        Reads the zip-within-range cache to get the address list, then calls
-        fetch_housing_data() which filters the local Redfin file by
+        Calls get_locations_within_range() to get the current list of zips,
+        then calls fetch_housing_data() which filters the local Redfin file by
         PROPERTY_TYPES and enriches each zip with property tax data.
 
         Returns:
@@ -97,19 +97,22 @@ class LocationScorer:
         """
         # Import here to avoid circular imports at module level
         from Housing.collect_housing_data import fetch_housing_data
+        from utils import get_locations_within_range
 
-        zip_cache = os.path.join(PROCESSED_DIR, f"zips_within_{WORK1_MAX_RANGE}mi.csv")
-        if not os.path.exists(zip_cache):
+        # Use unified range lookup to get the list of addresses (zips)
+        # This handles its own caching/loading.
+        addresses = get_locations_within_range(
+            WORK_ADDR1,
+            None, # Lazy load zip data inside the utility if cache miss
+            WORK1_MAX_RANGE,
+            group_by='zip'
+        )
+
+        if not addresses:
             logger.warning(
-                f"Zip cache not found ({zip_cache}). "
-                f"Run --housing first to build it, then re-score."
+                f"No zips found within range ({WORK1_MAX_RANGE}mi). "
+                f"Run --commute first to build the range cache."
             )
-            return None
-
-        try:
-            addresses = pd.read_csv(zip_cache)['Full_Address'].tolist()
-        except Exception as e:
-            logger.warning(f"Failed to read zip cache: {e}")
             return None
 
         logger.info(
