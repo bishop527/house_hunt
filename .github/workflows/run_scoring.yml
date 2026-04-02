@@ -42,9 +42,12 @@ jobs:
 
     - name: Verify required data files exist
       run: |
-        if [ ! -f "Data/Results/commute_stats.csv" ]; then
-          echo "Error: commute_stats.csv not found"
+        if [ ! -f "Data/Results/work1_commute_stats.csv" ]; then
+          echo "Error: work1_commute_stats.csv not found"
           exit 1
+        fi
+        if [ ! -f "Data/Results/work2_commute_stats.csv" ]; then
+          echo "Warning: work2_commute_stats.csv not found"
         fi
         if [ ! -f "Data/Results/housing_stats.csv" ]; then
           echo "Error: housing_stats.csv not found"
