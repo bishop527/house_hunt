@@ -100,7 +100,7 @@ jobs:
         cp Data/Results/score_report-Townhouse.html "docs/archive/score_report-Townhouse-${MONTH_YEAR}.html"
         
         echo "Reports copied to docs folder"
-
+    
     - name: Create index page
       run: |
         TIMESTAMP=$(date +'%B %d, %Y at %H:%M UTC')
