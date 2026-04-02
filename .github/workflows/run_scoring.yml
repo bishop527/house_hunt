@@ -73,6 +73,191 @@ jobs:
           echo "Error: score_report.html was not created"
           exit 1
         fi
+        
+    - name: Prepare docs folder for GitHub Pages
+      run: |
+        mkdir -p docs
+        
+        # Copy score reports to docs/
+        cp Data/Results/score_report-Single_Family.html docs/score_report-Single_Family.html
+        cp Data/Results/score_report-Condo.html docs/score_report-Condo.html
+        cp Data/Results/score_report-Townhouse.html docs/score_report-Townhouse.html
+        
+        # Create an index page with navigation to filtered reports
+        cat > docs/index.html << 'EOF'
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Location Scoring Reports</title>
+            <style>
+                body {
+                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+                    max-width: 900px;
+                    margin: 0 auto;
+                    padding: 40px 20px;
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    min-height: 100vh;
+                }
+                .container {
+                    background: white;
+                    border-radius: 12px;
+                    padding: 40px;
+                    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+                }
+                h1 {
+                    color: #333;
+                    text-align: center;
+                    margin-bottom: 10px;
+                    font-size: 32px;
+                }
+                .subtitle {
+                    text-align: center;
+                    color: #666;
+                    margin-bottom: 40px;
+                    font-size: 16px;
+                }
+                .report-grid {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                    gap: 25px;
+                    margin-top: 30px;
+                }
+                .report-card {
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    padding: 30px;
+                    border-radius: 10px;
+                    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                    transition: all 0.3s ease;
+                    cursor: pointer;
+                    position: relative;
+                    overflow: hidden;
+                }
+                .report-card::before {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
+                    opacity: 0;
+                    transition: opacity 0.3s ease;
+                }
+                .report-card:hover {
+                    transform: translateY(-5px);
+                    box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+                }
+                .report-card:hover::before {
+                    opacity: 1;
+                }
+                .report-card a {
+                    text-decoration: none;
+                    color: white;
+                    display: block;
+                }
+                .report-title {
+                    font-size: 22px;
+                    font-weight: bold;
+                    margin-bottom: 12px;
+                    color: white;
+                }
+                .report-description {
+                    color: rgba(255,255,255,0.9);
+                    line-height: 1.6;
+                    font-size: 14px;
+                }
+                .filter-badge {
+                    display: inline-block;
+                    background: rgba(255,255,255,0.2);
+                    padding: 4px 12px;
+                    border-radius: 12px;
+                    font-size: 12px;
+                    margin-top: 10px;
+                    color: white;
+                    font-weight: 500;
+                }
+                .timestamp {
+                    text-align: center;
+                    color: #999;
+                    margin-top: 50px;
+                    padding-top: 30px;
+                    border-top: 1px solid #eee;
+                    font-size: 14px;
+                }
+                .info-box {
+                    background: #f8f9fa;
+                    border-left: 4px solid #667eea;
+                    padding: 15px 20px;
+                    margin-bottom: 30px;
+                    border-radius: 4px;
+                }
+                .info-box p {
+                    margin: 0;
+                    color: #555;
+                    line-height: 1.6;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <h1>🏠 Location Scoring Reports</h1>
+                <p class="subtitle">Select a filtered view to explore scored locations</p>
+                
+                <div class="info-box">
+                    <p>These reports show location scores based on different filtering criteria. Click on any report below to view the detailed analysis.</p>
+                </div>
+                
+                <div class="report-grid">
+                    <div class="report-card">
+                        <a href="score_report-Single_Family.html">
+                            <div class="report-title">Single Family</div>
+                            <div class="report-description">
+                                View locations filtered by [describe your first filter criteria here]
+                            </div>
+                            <span class="filter-badge">Primary Filter</span>
+                        </a>
+                    </div>
+                    
+                    <div class="report-card">
+                        <a href="score_report-Condo.html">
+                            <div class="report-title">Condo</div>
+                            <div class="report-description">
+                                View locations filtered by [describe your second filter criteria here]
+                            </div>
+                            <span class="filter-badge">Alternative View</span>
+                        </a>
+                    </div>
+                    
+                    <div class="report-card">
+                        <a href="score_report-Townhouse.html">
+                            <div class="report-title">Townhouse</div>
+                            <div class="report-description">
+                                View locations filtered by [describe your third filter criteria here]
+                            </div>
+                            <span class="filter-badge">Custom Filter</span>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="timestamp">
+                    📅 Last updated: $(date +'%B %d, %Y at %H:%M UTC')
+                </div>
+            </div>
+        </body>
+        </html>
+        EOF
+
+        # Archive monthly reports (optional)
+        MONTH_YEAR=$(date +'%B%Y')
+        mkdir -p "docs/archive"
+        cp Data/Results/score_report-Single_Family.html docs/score_report-Single_Family-${MONTH_YEAR}.html"
+        cp Data/Results/score_report-Condo.html docs/score_report-Condo-${MONTH_YEAR}.html"
+        cp Data/Results/score_report-Townhouse.html docs/score_report-${MONTH_YEAR}.html"
+        
+        echo "GitHub Pages site created with index and 3 filtered reports"
+
 
     - name: Prepare docs folder for GitHub Pages
       run: |
