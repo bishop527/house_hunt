@@ -41,11 +41,16 @@ jobs:
         env:
           GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
           GCP_MONITOR_KEY: ${{ secrets.GCP_MONITOR_KEY_JSON }}
+          WORK_ADDR1: ${{ secrets.WORK_ADDR1 }}
+          WORK_ADDR2: ${{ secrets.WORK_ADDR2 }}
         run: |
           echo "$GOOGLE_API_KEY" > Data/google_api_key
           if [ ! -z "$GCP_MONITOR_KEY" ]; then
             echo "$GCP_MONITOR_KEY" > Data/monitor-key.json
           fi
+          # Create work addresses file from secrets
+          echo "WORK_ADDR1=$WORK_ADDR1" > Data/work_addresses.txt
+          echo "WORK_ADDR2=$WORK_ADDR2" >> Data/work_addresses.txt
 
       - name: Run commute collection
         run: |

@@ -26,6 +26,7 @@ from constants import (
     SCORE_CONFIG_FILE, COMMUTE_STATS_FILE, HOUSING_STATS_FILE, CRIME_SCORES_FILE,
     SCORED_LOCATIONS_FILE, LOCATION_GROUPING, RESULTS_DIR,
     REDFIN_DATA_FILE, PROCESSED_DIR, MAX_RANGE, PROPERTY_TYPES,
+    ENABLE_SECOND_WORK_ADDRESS, WORK2_DISTANCES_FILE, WORK2_MAX_RANGE,
     TIER_THRESHOLDS
 )
 from utils import load_csv_with_zip
@@ -46,8 +47,6 @@ WORST_COMMUTE_TIME_MULTIPLIER = 2.0  # Worst case is 2x max acceptable
 HOUSING_SCORE_MAX = 100
 PRICE_SCORE_MAX = 50
 TAX_SCORE_MAX = 50
-                             # e.g. 12.1 per $1k -> 1.21%
-
 
 class LocationScorer:
     """
@@ -190,15 +189,20 @@ class LocationScorer:
                 config = json.load(f)
             logger.info(f"Loaded config from {config_file}")
 
-            required_sections = [
-                'weights', 'commute_preferences', 'housing_preferences'
-            ]
+            required_sections = ['weights', 'housing_preferences']
             for section in required_sections:
                 if section not in config:
                     logger.error(
                         f"Missing required section '{section}' in config file"
                     )
                     sys.exit(1)
+            
+            # Check for work address config (support both old and new structure)
+            if 'work_address_1' not in config and 'commute_preferences' not in config:
+                logger.error(
+                    "Missing 'work_address_1' or 'commute_preferences' section in config file"
+                )
+                sys.exit(1)
 
             return config
 
@@ -219,7 +223,6 @@ class LocationScorer:
         logger.info("Loading commute and housing data...")
 
         # Load previous ranks to calculate rank changes
-        # Load previous ranks to calculate rank changes
         if os.path.exists(self.scored_locations_file):
             try:
                 prev_df = pd.read_csv(self.scored_locations_file, dtype={'Zip': str})
@@ -237,7 +240,34 @@ class LocationScorer:
         if self.commute_data.empty:
             logger.error(f"No commute data found at {COMMUTE_STATS_FILE}")
             return False
-        logger.info(f"Loaded {len(self.commute_data)} commute records")
+        logger.info(f"Loaded {len(self.commute_data)} commute records (Work Address 1)")
+        
+        if ENABLE_SECOND_WORK_ADDRESS:
+            self.work2_data = load_csv_with_zip(WORK2_DISTANCES_FILE)
+            if not self.work2_data.empty:
+                # Ensure consistent data types for merge keys
+                if 'State' in self.work2_data.columns:
+                    self.work2_data['State'] = self.work2_data['State'].astype(str)
+                if 'Town' in self.work2_data.columns:
+                    self.work2_data['Town'] = self.work2_data['Town'].astype(str)
+                if 'Zip' in self.work2_data.columns:
+                    self.work2_data['Zip'] = self.work2_data['Zip'].astype(str).str.zfill(5)
+                
+                # Rename columns to distinguish from Work1 data
+                self.work2_data = self.work2_data.rename(columns={
+                    'Distance': 'Work2_Distance',
+                    'Average_Time': 'Work2_Average_Time',
+                    'Min_Time': 'Work2_Min_Time',
+                    'Max_Time': 'Work2_Max_Time',
+                    'Total_Runs': 'Work2_Total_Runs',
+                    'Last_Run_Date': 'Work2_Last_Run_Date'
+                })
+                logger.info(f"Loaded {len(self.work2_data)} Work Address 2 distance records")
+            else:
+                logger.warning("Work Address 2 enabled but data not available - run generate_work2_distances.py")
+                self.work2_data = pd.DataFrame()
+        else:
+            self.work2_data = pd.DataFrame()
 
         # Re-derive housing from local Redfin CSV if available, so PROPERTY_TYPES
         # changes take effect immediately without re-running --housing.
@@ -299,9 +329,10 @@ class LocationScorer:
         Returns:
             float: Score 0-100
         """
-        prefs = self.config['commute_preferences']
-        ideal = prefs['ideal_time_minutes']
-        max_acceptable = prefs['max_acceptable_time']
+        # Support both old and new config structure
+        prefs = self.config.get('work_address_1', self.config.get('commute_preferences', {}))
+        ideal = prefs.get('ideal_time_minutes', 30)
+        max_acceptable = prefs.get('max_acceptable_time', 45)
 
         if avg_time <= ideal:
             return COMMUTE_SCORE_MAX
@@ -536,6 +567,28 @@ class LocationScorer:
                 f"Zip-grouping merge on Zip: {len(merged)} rows"
             )
 
+        # Merge Work Address 2 data if enabled
+        if ENABLE_SECOND_WORK_ADDRESS and not self.work2_data.empty:
+            if LOCATION_GROUPING == 'town':
+                work2_for_merge = self.work2_data.drop(
+                    columns=['Zip'], errors='ignore'
+                )
+                merged = pd.merge(
+                    merged,
+                    work2_for_merge,
+                    on=['Town', 'State'],
+                    how='left'
+                )
+            else:
+                merged = pd.merge(
+                    merged,
+                    self.work2_data,
+                    on='Zip',
+                    how='left',
+                    suffixes=('', '_work2')
+                )
+            logger.info(f"Merged Work Address 2 data: {merged['Work2_Distance'].notna().sum()} locations have Work2 data")
+
         return merged if len(merged) > 0 else None
 
     @staticmethod
@@ -550,7 +603,7 @@ class LocationScorer:
             val = row.get(key)
             if val is not None and not (
                 isinstance(val, float) and pd.isna(val)
-            ):
+                        ):
                 return val
         return None
 
@@ -576,11 +629,59 @@ class LocationScorer:
         if self.crime_data is not None and not self.crime_data.empty:
             merged = pd.merge(merged, self.crime_data, left_on='Resolved_Town', right_on='Town', how='left')
             logger.info("Joined crime scores.")
+        else:
+            logger.warning("Crime data not available - crime scores will be excluded from total score calculation")
 
         # Apply filters
         filters = self.config.get('filters', {})
 
         filtered_rows = []
+
+        # Apply Work Address 1 distance filter (if configured)
+        work1_config = self.config.get('work_address_1', {})
+        max_work1_distance = work1_config.get('max_distance_miles', MAX_RANGE)
+    
+                    
+        if 'Distance' in merged.columns:
+            mask = merged['Distance'] > max_work1_distance
+            dropped = merged[mask].copy()
+            if len(dropped) > 0:
+                dropped['Filter_Reason'] = dropped['Distance'].apply(
+                    lambda d: f"Too far from Work Address 1 (>{max_work1_distance} mi, actual: {d:.1f} mi)"
+                )
+                filtered_rows.append(dropped)
+                merged = merged[~mask]
+                logger.info(
+                    f"Work Address 1 distance filter: removed {len(dropped)} locations "
+                    f"exceeding {max_work1_distance} mi"
+                )
+
+                # Apply Work Address 2 distance filter (dual-accessibility)
+        if filters.get('require_dual_accessibility', False) and ENABLE_SECOND_WORK_ADDRESS:
+            if not self.work2_data.empty:
+                work2_config = self.config.get('work_address_2', {})
+                max_work2_distance = work2_config.get('max_distance_miles', WORK2_MAX_RANGE)
+                
+                # Check if Work2_Distance exists in merged data
+                if 'Work2_Distance' in merged.columns:
+                    mask = (merged['Work2_Distance'].isna()) | (merged['Work2_Distance'] > max_work2_distance)
+                    dropped = merged[mask].copy()
+                    if len(dropped) > 0:
+                        dropped['Filter_Reason'] = dropped['Work2_Distance'].apply(
+                            lambda d: f"Too far from Work Address 2 (>{max_work2_distance} mi, actual: {d:.1f} mi)" 
+                            if pd.notna(d) else "No Work Address 2 data"
+                        )
+                        filtered_rows.append(dropped)
+                        merged = merged[~mask]
+                        logger.info(
+                            f"Work Address 2 distance filter: removed {len(dropped)} locations "
+                            f"exceeding {max_work2_distance} mi or missing Work2 data"
+                        )
+                else:
+                    logger.warning(
+                        "Work Address 2 filtering enabled but no Work2_Distance column found. "
+                        "Run 'python main.py --work2' to generate Work Address 2 data."
+                    )
 
         if filters.get('max_commute_time'):
             max_time = filters['max_commute_time']
@@ -719,7 +820,7 @@ class LocationScorer:
                 'Price_Score':       housing_scores['price_score'],
                 'PPSF_Score':        housing_scores['ppsf_score'],
                 'Tax_Score':         housing_scores['tax_score'],
-                # Commute detail
+                # Work Address 1 Commute detail
                 'Avg_Commute_Min':   row['Average_Time'],
                 'Min_Commute_Min':   row['Min_Time'],
                 'Max_Commute_Min':   row['Max_Time'],
@@ -734,6 +835,11 @@ class LocationScorer:
                                          'Last_Run_Date_commute',
                                          'Last_Run_Date'
                                      ),
+                # Work Address 2 Commute detail (if enabled)
+                'Work2_Distance':    row.get('Work2_Distance') if ENABLE_SECOND_WORK_ADDRESS else None,
+                'Work2_Avg_Time':    row.get('Work2_Average_Time') if ENABLE_SECOND_WORK_ADDRESS else None,
+                'Work2_Min_Time':    row.get('Work2_Min_Time') if ENABLE_SECOND_WORK_ADDRESS else None,
+                'Work2_Max_Time':    row.get('Work2_Max_Time') if ENABLE_SECOND_WORK_ADDRESS else None,
                 # Housing detail
                 'Median_Price':      row.get('Latest_Median_Sale'),
                 'Price_Per_SqFt':    row.get('Latest_PPSF'),
@@ -840,17 +946,17 @@ def calculate_scores(config_file=SCORE_CONFIG_FILE, property_types=None):
 
     if not scorer.load_data():
         logger.error("Failed to load data. Aborting.")
-        return False, pd.DataFrame(), scorer.config
+        return False, None, pd.DataFrame(), scorer.config
 
     results = scorer.score_all_locations()
 
     if results is None or len(results) == 0:
         logger.error("No locations scored. Aborting.")
-        return False, pd.DataFrame(), scorer.config
+        return False, None, pd.DataFrame(), scorer.config
 
     if not scorer.save_results():
         logger.error("Failed to save results.")
-        return False, pd.DataFrame(), scorer.config
+        return False, scorer.scored_locations_file, pd.DataFrame(), scorer.config
 
     stats = scorer.get_summary_stats()
 
@@ -862,6 +968,22 @@ def calculate_scores(config_file=SCORE_CONFIG_FILE, property_types=None):
     print(f"Average commute score:     {stats['avg_commute_score']}/100")
     print(f"Average housing score:     {stats['avg_housing_score']}/100")
     print()
+    
+    # Show distance filter status
+    work1_config = scorer.config.get('work_address_1', {})
+    max_work1_dist = work1_config.get('max_distance_miles', MAX_RANGE)
+    
+    if ENABLE_SECOND_WORK_ADDRESS and scorer.config.get('filters', {}).get('require_dual_accessibility', False):
+        work2_config = scorer.config.get('work_address_2', {})
+        max_work2_dist = work2_config.get('max_distance_miles', WORK2_MAX_RANGE)
+        print(f"Dual-Accessibility Filter: Active")
+        print(f"  Work Address 1: ≤{max_work1_dist} mi")
+        print(f"  Work Address 2: ≤{max_work2_dist} mi")
+        print()
+    else:
+        print(f"Distance Filter: Work Address 1 ≤{max_work1_dist} mi")
+        print()
+    
     print("Tier Distribution:")
     for tier in sorted(stats['tier_counts'].keys()):
         print(f"  {tier}: {stats['tier_counts'][tier]} locations")

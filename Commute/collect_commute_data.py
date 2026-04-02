@@ -93,14 +93,14 @@ def fetch_commute_times(addresses, direction):
     else:
         gmaps = googlemaps.Client(key=api_key)
 
-    # Set origin and destination based on direction
+        # Set origin and destination based on direction
     if direction == 'morning':
-        logger.info(f"Morning commute: {len(addresses)} locations -> {WORK_ADDR}")
+        logger.info(f"Morning commute: {len(addresses)} locations -> {WORK_ADDR1}")
         origins = addresses
-        destinations = WORK_ADDR
+        destinations = WORK_ADDR1
     else:
-        logger.info(f"Afternoon commute: {WORK_ADDR} -> {len(addresses)} locations")
-        origins = WORK_ADDR
+        logger.info(f"Afternoon commute: {WORK_ADDR1} -> {len(addresses)} locations")
+        origins = WORK_ADDR1
         destinations = addresses
 
     results = []

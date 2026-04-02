@@ -28,12 +28,14 @@ house_hunt.code-workspace
 # Data files (keep structure, ignore data)
 Data/Raw/*.csv
 
-# API Keys
+# API Keys and Secrets
 google_api_key
 monitor-key.json
+Data/work_addresses.txt
 
 activate
 Archive/
+Documentation/
 
 *.docx
 *.xls

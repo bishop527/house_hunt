@@ -53,3 +53,98 @@
 2026-03-14 14:14:23 Sat UTC [INFO] Housing.collect_housing_data: Loaded 224 records from /home/runner/work/house_hunt/house_hunt/Data/Results/housing_stats.csv
 2026-03-14 14:14:24 Sat UTC [INFO] Housing.collect_housing_data: Successfully updated /home/runner/work/house_hunt/house_hunt/Data/Results/housing_stats.csv with 224 records
 2026-03-14 14:14:24 Sat UTC [INFO] Housing.collect_housing_data: COMPLETED: Housing collection | queried=229 collected=224 | source=Redfin cost=$0.00
+2026-04-01 12:49:43 Wed UTC [INFO] Housing.collect_housing_data: STARTED: Housing Data Collection (Single Family)
+2026-04-01 12:49:43 Wed UTC [INFO] Housing.collect_housing_data: Redfin data or cache tracker not found, downloading fresh copy...
+2026-04-01 12:49:43 Wed UTC [INFO] Housing.collect_housing_data: Downloading Redfin market data (this may take time)...
+2026-04-01 12:49:43 Wed UTC [INFO] Housing.collect_housing_data: URL: https://redfin-public-data.s3.us-west-2.amazonaws.com/redfin_market_tracker/zip_code_market_tracker.tsv000.gz
+2026-04-01 12:50:18 Wed UTC [INFO] Housing.collect_housing_data: Download complete. Decompressing and filtering...
+2026-04-01 12:51:52 Wed UTC [INFO] Housing.collect_housing_data: Saved 36,824 filtered records to /home/runner/work/house_hunt/house_hunt/Data/Raw/reduced-redfin_market_data.csv
+2026-04-01 12:51:52 Wed UTC [INFO] Housing.collect_housing_data: Successfully processed Redfin data
+2026-04-01 12:51:52 Wed UTC [INFO] Housing.collect_housing_data: Loading zip codes within 40 miles of work...
+2026-04-01 12:51:53 Wed UTC [INFO] Housing.collect_housing_data: Found 230 addresses within range
+2026-04-01 12:51:53 Wed UTC [INFO] Housing.collect_housing_data: Fetching housing data for 230 zip codes
+2026-04-01 12:51:53 Wed UTC [INFO] Housing.collect_housing_data: Loading /home/runner/work/house_hunt/house_hunt/Data/Raw/reduced-redfin_market_data.csv TSV into memory...
+2026-04-01 12:51:53 Wed UTC [INFO] Housing.collect_housing_data: Loaded 489 property tax rates
+2026-04-01 12:51:53 Wed UTC [WARNING] Housing.collect_housing_data: No housing data available for Acton, MA 01718
+2026-04-01 12:51:53 Wed UTC [WARNING] Housing.collect_housing_data: No housing data available for Boston, MA 02109
+2026-04-01 12:51:53 Wed UTC [WARNING] Housing.collect_housing_data: No housing data available for Boston, MA 02110
+2026-04-01 12:51:53 Wed UTC [WARNING] Housing.collect_housing_data: No housing data available for Boston, MA 02111
+2026-04-01 12:51:54 Wed UTC [WARNING] Housing.collect_housing_data: No housing data available for Boston, MA 02133
+2026-04-01 12:51:54 Wed UTC [WARNING] Housing.collect_housing_data: No housing data available for Boston, MA 02163
+2026-04-01 12:51:54 Wed UTC [WARNING] Housing.collect_housing_data: No housing data available for Boston, MA 02199
+2026-04-01 12:51:54 Wed UTC [WARNING] Housing.collect_housing_data: No housing data available for Boston, MA 02203
+2026-04-01 12:51:54 Wed UTC [WARNING] Housing.collect_housing_data: No housing data available for Boston, MA 02210
+2026-04-01 12:51:54 Wed UTC [WARNING] Housing.collect_housing_data: No housing data available for Boston, MA 02215
+2026-04-01 12:51:54 Wed UTC [WARNING] Housing.collect_housing_data: No housing data available for Boston, MA 02222
+2026-04-01 12:51:55 Wed UTC [WARNING] Housing.collect_housing_data: No housing data available for Hanscom AFB, MA 01731
+2026-04-01 12:51:57 Wed UTC [INFO] Housing.collect_housing_data: Successfully collected data for 218 out of 230 zip codes
+2026-04-01 12:51:57 Wed UTC [INFO] Housing.collect_housing_data: 12 zip codes excluded due to missing property type data
+2026-04-01 12:51:57 Wed UTC [INFO] Housing.collect_housing_data: Saved 12 filtered zips to /home/runner/work/house_hunt/house_hunt/Data/Results/housing_filtered_zips-Single_Family.csv
+2026-04-01 12:51:57 Wed UTC [INFO] Housing.collect_housing_data: No historical housing data found at /home/runner/work/house_hunt/house_hunt/Data/Results/housing_stats_Single_Family.csv. Starting fresh.
+2026-04-01 12:51:57 Wed UTC [INFO] Housing.collect_housing_data: Successfully updated /home/runner/work/house_hunt/house_hunt/Data/Results/housing_stats_Single_Family.csv with 218 records
+2026-04-01 12:51:57 Wed UTC [INFO] Housing.collect_housing_data: COMPLETED: Housing Data Collection (Single Family) | queried=230 ok=218 failed=12 | source=Redfin
+2026-04-01 12:51:57 Wed UTC [INFO] Housing.collect_housing_data: STARTED: Housing Data Collection (Condo)
+2026-04-01 12:51:57 Wed UTC [INFO] Housing.collect_housing_data: Using existing Redfin data (0 days old)
+2026-04-01 12:51:57 Wed UTC [INFO] Housing.collect_housing_data: Loading zip codes within 40 miles of work...
+2026-04-01 12:51:58 Wed UTC [INFO] Housing.collect_housing_data: Found 230 addresses within range
+2026-04-01 12:51:58 Wed UTC [INFO] Housing.collect_housing_data: Fetching housing data for 230 zip codes
+2026-04-01 12:51:58 Wed UTC [INFO] Housing.collect_housing_data: Loading /home/runner/work/house_hunt/house_hunt/Data/Raw/reduced-redfin_market_data.csv TSV into memory...
+2026-04-01 12:51:58 Wed UTC [WARNING] Housing.collect_housing_data: No housing data available for Avon, MA 02322
+2026-04-01 12:51:59 Wed UTC [WARNING] Housing.collect_housing_data: No housing data available for Boston, MA 02133
+2026-04-01 12:51:59 Wed UTC [WARNING] Housing.collect_housing_data: No housing data available for Boston, MA 02163
+2026-04-01 12:51:59 Wed UTC [WARNING] Housing.collect_housing_data: No housing data available for Boston, MA 02203
+2026-04-01 12:51:59 Wed UTC [WARNING] Housing.collect_housing_data: No housing data available for Boston, MA 02222
+2026-04-01 12:51:59 Wed UTC [WARNING] Housing.collect_housing_data: No housing data available for Boxford, MA 01921
+2026-04-01 12:51:59 Wed UTC [WARNING] Housing.collect_housing_data: No housing data available for Devens, MA 01434
+2026-04-01 12:51:59 Wed UTC [WARNING] Housing.collect_housing_data: No housing data available for Dunstable, MA 01827
+2026-04-01 12:51:59 Wed UTC [WARNING] Housing.collect_housing_data: No housing data available for Essex, MA 01929
+2026-04-01 12:51:59 Wed UTC [WARNING] Housing.collect_housing_data: No housing data available for Fayville, MA 01745
+2026-04-01 12:52:00 Wed UTC [WARNING] Housing.collect_housing_data: No housing data available for Hanscom AFB, MA 01731
+2026-04-01 12:52:00 Wed UTC [WARNING] Housing.collect_housing_data: No housing data available for Lancaster, MA 01523
+2026-04-01 12:52:02 Wed UTC [WARNING] Housing.collect_housing_data: No housing data available for Somerset, MA 02726
+2026-04-01 12:52:02 Wed UTC [INFO] Housing.collect_housing_data: Successfully collected data for 217 out of 230 zip codes
+2026-04-01 12:52:02 Wed UTC [INFO] Housing.collect_housing_data: 13 zip codes excluded due to missing property type data
+2026-04-01 12:52:03 Wed UTC [INFO] Housing.collect_housing_data: Saved 13 filtered zips to /home/runner/work/house_hunt/house_hunt/Data/Results/housing_filtered_zips-Condo.csv
+2026-04-01 12:52:03 Wed UTC [INFO] Housing.collect_housing_data: No historical housing data found at /home/runner/work/house_hunt/house_hunt/Data/Results/housing_stats_Condo.csv. Starting fresh.
+2026-04-01 12:52:03 Wed UTC [INFO] Housing.collect_housing_data: Successfully updated /home/runner/work/house_hunt/house_hunt/Data/Results/housing_stats_Condo.csv with 217 records
+2026-04-01 12:52:03 Wed UTC [INFO] Housing.collect_housing_data: COMPLETED: Housing Data Collection (Condo) | queried=230 ok=217 failed=13 | source=Redfin
+2026-04-01 12:52:03 Wed UTC [INFO] Housing.collect_housing_data: STARTED: Housing Data Collection (Townhouse)
+2026-04-01 12:52:03 Wed UTC [INFO] Housing.collect_housing_data: Using existing Redfin data (0 days old)
+2026-04-01 12:52:03 Wed UTC [INFO] Housing.collect_housing_data: Loading zip codes within 40 miles of work...
+2026-04-01 12:52:03 Wed UTC [INFO] Housing.collect_housing_data: Found 230 addresses within range
+2026-04-01 12:52:03 Wed UTC [INFO] Housing.collect_housing_data: Fetching housing data for 230 zip codes
+2026-04-01 12:52:03 Wed UTC [INFO] Housing.collect_housing_data: Loading /home/runner/work/house_hunt/house_hunt/Data/Raw/reduced-redfin_market_data.csv TSV into memory...
+2026-04-01 12:52:03 Wed UTC [WARNING] Housing.collect_housing_data: No housing data available for Avon, MA 02322
+2026-04-01 12:52:04 Wed UTC [WARNING] Housing.collect_housing_data: No housing data available for Boston, MA 02110
+2026-04-01 12:52:04 Wed UTC [WARNING] Housing.collect_housing_data: No housing data available for Boston, MA 02111
+2026-04-01 12:52:04 Wed UTC [WARNING] Housing.collect_housing_data: No housing data available for Boston, MA 02113
+2026-04-01 12:52:04 Wed UTC [WARNING] Housing.collect_housing_data: No housing data available for Boston, MA 02133
+2026-04-01 12:52:04 Wed UTC [WARNING] Housing.collect_housing_data: No housing data available for Boston, MA 02163
+2026-04-01 12:52:04 Wed UTC [WARNING] Housing.collect_housing_data: No housing data available for Boston, MA 02199
+2026-04-01 12:52:04 Wed UTC [WARNING] Housing.collect_housing_data: No housing data available for Boston, MA 02203
+2026-04-01 12:52:04 Wed UTC [WARNING] Housing.collect_housing_data: No housing data available for Boston, MA 02210
+2026-04-01 12:52:04 Wed UTC [WARNING] Housing.collect_housing_data: No housing data available for Boston, MA 02215
+2026-04-01 12:52:04 Wed UTC [WARNING] Housing.collect_housing_data: No housing data available for Boston, MA 02222
+2026-04-01 12:52:04 Wed UTC [WARNING] Housing.collect_housing_data: No housing data available for Cambridge, MA 02142
+2026-04-01 12:52:04 Wed UTC [WARNING] Housing.collect_housing_data: No housing data available for Dunstable, MA 01827
+2026-04-01 12:52:05 Wed UTC [WARNING] Housing.collect_housing_data: No housing data available for Fayville, MA 01745
+2026-04-01 12:52:05 Wed UTC [WARNING] Housing.collect_housing_data: No housing data available for Hanscom AFB, MA 01731
+2026-04-01 12:52:05 Wed UTC [WARNING] Housing.collect_housing_data: No housing data available for Hollis, NH 03049
+2026-04-01 12:52:05 Wed UTC [WARNING] Housing.collect_housing_data: No housing data available for Lawrence, MA 01840
+2026-04-01 12:52:05 Wed UTC [WARNING] Housing.collect_housing_data: No housing data available for Litchfield, NH 03052
+2026-04-01 12:52:05 Wed UTC [WARNING] Housing.collect_housing_data: No housing data available for Lynn, MA 01901
+2026-04-01 12:52:06 Wed UTC [WARNING] Housing.collect_housing_data: No housing data available for Nahant, MA 01908
+2026-04-01 12:52:06 Wed UTC [WARNING] Housing.collect_housing_data: No housing data available for Nashua, NH 03060
+2026-04-01 12:52:06 Wed UTC [WARNING] Housing.collect_housing_data: No housing data available for Newton, MA 02462
+2026-04-01 12:52:06 Wed UTC [WARNING] Housing.collect_housing_data: No housing data available for Pelham, NH 03076
+2026-04-01 12:52:06 Wed UTC [WARNING] Housing.collect_housing_data: No housing data available for Roxbury, MA 02120
+2026-04-01 12:52:07 Wed UTC [WARNING] Housing.collect_housing_data: No housing data available for Walpole, MA 02071
+2026-04-01 12:52:07 Wed UTC [WARNING] Housing.collect_housing_data: No housing data available for Townsend, MA 01469
+2026-04-01 12:52:07 Wed UTC [WARNING] Housing.collect_housing_data: No housing data available for Wellesley, MA 02481
+2026-04-01 12:52:07 Wed UTC [WARNING] Housing.collect_housing_data: No housing data available for Somerset, MA 02726
+2026-04-01 12:52:07 Wed UTC [INFO] Housing.collect_housing_data: Successfully collected data for 202 out of 230 zip codes
+2026-04-01 12:52:07 Wed UTC [INFO] Housing.collect_housing_data: 28 zip codes excluded due to missing property type data
+2026-04-01 12:52:07 Wed UTC [INFO] Housing.collect_housing_data: Saved 28 filtered zips to /home/runner/work/house_hunt/house_hunt/Data/Results/housing_filtered_zips-Townhouse.csv
+2026-04-01 12:52:07 Wed UTC [INFO] Housing.collect_housing_data: No historical housing data found at /home/runner/work/house_hunt/house_hunt/Data/Results/housing_stats_Townhouse.csv. Starting fresh.
+2026-04-01 12:52:07 Wed UTC [INFO] Housing.collect_housing_data: Successfully updated /home/runner/work/house_hunt/house_hunt/Data/Results/housing_stats_Townhouse.csv with 202 records
+2026-04-01 12:52:07 Wed UTC [INFO] Housing.collect_housing_data: COMPLETED: Housing Data Collection (Townhouse) | queried=230 ok=202 failed=28 | source=Redfin
