@@ -1,180 +1,163 @@
-  <!DOCTYPE html>
-  <html lang="en">
-  <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Location Scoring Reports</title>
-      <style>
-          body {
-              font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
-              max-width: 900px;
-              margin: 0 auto;
-              padding: 40px 20px;
-              background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-              min-height: 100vh;
-          }
-          .container {
-              background: white;
-              border-radius: 12px;
-              padding: 40px;
-              box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-          }
-          h1 {
-              color: #333;
-              text-align: center;
-              margin-bottom: 10px;
-              font-size: 32px;
-          }
-          .subtitle {
-              text-align: center;
-              color: #666;
-              margin-bottom: 40px;
-              font-size: 16px;
-          }
-          .report-grid {
-              display: grid;
-              grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-              gap: 25px;
-              margin-top: 30px;
-          }
-          .report-card {
-              background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-              border-radius: 10px;
-              box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-              transition: all 0.3s ease;
-              position: relative;
-              overflow: hidden;
-          }
-          .report-card::before {
-              content: '';
-              position: absolute;
-              top: 0;
-              left: 0;
-              width: 100%;
-              height: 100%;
-              background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
-              opacity: 0;
-              transition: opacity 0.3s ease;
-              pointer-events: none;
-          }
-          .report-card:hover {
-              transform: translateY(-5px);
-              box-shadow: 0 8px 15px rgba(0,0,0,0.2);
-          }
-          .report-card:hover::before {
-              opacity: 1;
-          }
-          .report-card a {
-              text-decoration: none;
-              color: white;
-              display: block;
-              padding: 30px;
-              height: 100%;
-          }
-          .report-title {
-              font-size: 22px;
-              font-weight: bold;
-              margin-bottom: 12px;
-              color: white;
-          }
-          .report-description {
-              color: rgba(255,255,255,0.9);
-              line-height: 1.6;
-              font-size: 14px;
-          }
-          .filter-badge {
-              display: inline-block;
-              background: rgba(255,255,255,0.2);
-              padding: 4px 12px;
-              border-radius: 12px;
-              font-size: 12px;
-              margin-top: 10px;
-              color: white;
-              font-weight: 500;
-          }
-          .timestamp {
-              text-align: center;
-              color: #999;
-              margin-top: 50px;
-              padding-top: 30px;
-              border-top: 1px solid #eee;
-              font-size: 14px;
-          }
-          .info-box {
-              background: #f8f9fa;
-              border-left: 4px solid #667eea;
-              padding: 15px 20px;
-              margin-bottom: 30px;
-              border-radius: 4px;
-          }
-          .info-box p {
-              margin: 0;
-              color: #555;
-              line-height: 1.6;
-          }
-      </style>
-  </head>
-  <body>
-      <div class="container">
-          <h1>🏠 Location Scoring Reports</h1>
-          <p class="subtitle">Select a property type to view scored locations</p>
-          
-          <div class="info-box">
-              <p>These reports show location scores filtered by property type. Click on any report below to view the detailed analysis.</p>
-          </div>
-          
-          <div class="report-grid">
-              <div class="report-card">
-                  <a href="score_report-Single_Family.html">
-                      <div class="report-title">Single Family Homes</div>
-                      <div class="report-description">
-                          View scored locations for single family homes
-                      </div>
-                      <span class="filter-badge">Single Family</span>
-                  </a>
-              </div>
-              
-              <div class="report-card">
-                  <a href="score_report-Condo.html">
-                      <div class="report-title">Condominiums</div>
-                      <div class="report-description">
-                          View scored locations for condos and apartments
-                      </div>
-                      <span class="filter-badge">Condo</span>
-                  </a>
-              </div>
-              
-              <div class="report-card">
-                  <a href="score_report-Townhouse.html">
-                      <div class="report-title">Townhouses</div>
-                      <div class="report-description">
-                          View scored locations for townhouses
-                      </div>
-                      <span class="filter-badge">Townhouse</span>
-                  </a>
-              </div>
-          </div>
-          
-          <div class="timestamp">
-              📅 Last updated: April 02, 2026 at 16:49 UTC
-          </div>
-      </div>
-  </body>
-  </html>
-  INDEXEOF
-  
-echo "Index page created successfully"
-    
-    # Replace timestamp placeholder
-    sed -i "s/TIMESTAMP_PLACEHOLDER/April 02, 2026 at 16:49 UTC/g" docs/index.html
-    
-    echo "Index page created successfully"
-    - name: Upload scoring results
-      uses: actions/upload-artifact@v4
-      with:
-        name: scoring-results-19
-        path: |
-          Data/Results/scored_locations.csv
-          Data/Results/score_report-*.html
-          docs/
-        retention-days: 90
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Location Scoring Reports</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 32px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 16px;
+        }
+        .report-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+        .report-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .report-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+        .report-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+        }
+        .report-card:hover::before {
+            opacity: 1;
+        }
+        .report-card a {
+            text-decoration: none;
+            color: white;
+            display: block;
+            padding: 30px;
+            height: 100%;
+        }
+        .report-title {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 12px;
+            color: white;
+        }
+        .report-description {
+            color: rgba(255,255,255,0.9);
+            line-height: 1.6;
+            font-size: 14px;
+        }
+        .filter-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            margin-top: 10px;
+            color: white;
+            font-weight: 500;
+        }
+        .timestamp {
+            text-align: center;
+            color: #999;
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 1px solid #eee;
+            font-size: 14px;
+        }
+        .info-box {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 15px 20px;
+            margin-bottom: 30px;
+            border-radius: 4px;
+        }
+        .info-box p {
+            margin: 0;
+            color: #555;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏠 Location Scoring Reports</h1>
+        <p class="subtitle">Select a property type to view scored locations</p>
+        
+        <div class="info-box">
+            <p>These reports show location scores filtered by property type. Click on any report below to view the detailed analysis.</p>
+        </div>
+        
+        <div class="report-grid">
+            <div class="report-card">
+                <a href="score_report-Single_Family.html">
+                    <div class="report-title">Single Family Homes</div>
+                    <div class="report-description">
+                        View scored locations for single family homes
+                    </div>
+                    <span class="filter-badge">Single Family</span>
+                </a>
+            </div>
+            
+            <div class="report-card">
+                <a href="score_report-Condo.html">
+                    <div class="report-title">Condominiums</div>
+                    <div class="report-description">
+                        View scored locations for condos and apartments
+                    </div>
+                    <span class="filter-badge">Condo</span>
+                </a>
+            </div>
+            
+            <div class="report-card">
+                <a href="score_report-Townhouse.html">
+                    <div class="report-title">Townhouses</div>
+                    <div class="report-description">
+                        View scored locations for townhouses
+                    </div>
+                    <span class="filter-badge">Townhouse</span>
+                </a>
+            </div>
+        </div>
+        
+        <div class="timestamp">
+            📅 Last updated: April 02, 2026 at 16:53 UTC
+        </div>
+    </div>
+</body>
+</html>
