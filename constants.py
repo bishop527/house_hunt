@@ -14,11 +14,11 @@ import holidays
 # ========================================
 # GENERAL CONFIGURATION
 # ========================================
-LOG_LEVEL = logging.DEBUG
-# LOG_LEVEL = logging.INFO
+# LOG_LEVEL = logging.DEBUG
+LOG_LEVEL = logging.INFO
 
 # Tier selection strategy
-AUTO_TIER_SELECTION = False  # If True, automatically choose optimal tier
+AUTO_TIER_SELECTION = True  # If True, automatically choose optimal tier
 USE_TRAFFIC = False           # Used when AUTO_TIER_SELECTION = False, Set to True for Advanced tier (with traffic data)
 TRAFFIC_MODEL = 'best_guess'  # Used when USE_TRAFFIC=True
 AVOID = None  # Options: None, 'highways', 'tolls'
@@ -37,15 +37,12 @@ PROCESSED_DIR = os.path.join(DATA_DIR, 'Processed')
 RESULTS_DIR = os.path.join(DATA_DIR, 'Results')
 LOGS_DIR = os.path.join(DATA_DIR, 'Logs')
 
-# Automatic Data Folder Creation
-# TODO: Does this belong in constants?
-for folder in [RAW_DIR, PROCESSED_DIR, RESULTS_DIR, LOGS_DIR]:
-    os.makedirs(folder, exist_ok=True)
+# Automatic Data Folder Creation removed from import-time execution.
+# Configured in environments.py / main.py
 
 # ========================================
 # DATA FILES - RAW
 # ========================================
-# ZIP_DATA_FILE = os.path.join(RAW_DIR, 'small-zip_code_database.csv')
 ZIP_DATA_FILE = os.path.join(RAW_DIR, 'zip_code_database.csv')
 REDFIN_DATA_FILE = os.path.join(RAW_DIR, 'reduced-redfin_market_data.csv')
 CRIME_DATA_FILE = os.path.join(RAW_DIR, 'MA-Crime_Data-2025.csv')
@@ -59,9 +56,7 @@ CRIME_SCORES_FILE = os.path.join(PROCESSED_DIR, "crime_scores_by_town.csv")
 
 # ========================================
 # DATA FILES - RESULTS
-# ========================================
-# TODO: look into renaming COMMUTE_STATS_FILE since there are now 2 work addresses
-COMMUTE_STATS_FILE = os.path.join(RESULTS_DIR, "commute_stats.csv")
+WORK1_COMMUTE_STATS_FILE = os.path.join(RESULTS_DIR, "work1_commute_stats.csv")
 HOUSING_STATS_FILE = os.path.join(RESULTS_DIR, "housing_stats.csv")
 API_TIER_TRACKING_FILE = os.path.join(LOGS_DIR, "monthly_API_usage_by_tier.txt")
 SCORED_LOCATIONS_FILE = os.path.join(RESULTS_DIR, "scored_locations.csv")
@@ -116,50 +111,13 @@ MAX_ACCEPTABLE_DISCREPANCY = 183  # Elements between local/Google count
 # ========================================
 # COMMUTE DATA COLLECTION PARAMETERS
 # ========================================
-# Work Address Configuration
 WORK_ADDRESSES_FILE = "work_addresses.txt"
 WORK_ADDRESSES_PATH = os.path.join(DATA_DIR, WORK_ADDRESSES_FILE)
 
-# TODO: Does this belong in constants?
-def _load_work_addresses():
-    """
-    Load work addresses from secure file.
-    
-    Expected format in work_addresses.txt:
-    WORK_ADDR1=123 Main St. City, State 12345
-    WORK_ADDR2=456 Oak Ave. Town, State 67890
-    
-    Returns:
-        dict: {'WORK_ADDR1': str, 'WORK_ADDR2': str}
-    """
-    addresses = {}
-    
-    if not os.path.exists(WORK_ADDRESSES_PATH):
-        # Fall back to hardcoded addresses for backward compatibility
-        return {
-            'WORK_ADDR1': "123 Main St. Anytown, MA 00000",
-            'WORK_ADDR2': "200 Chauncy St. Mansfield, MA 02048"
-        }
-    
-    try:
-        with open(WORK_ADDRESSES_PATH, 'r') as f:
-            for line in f:
-                line = line.strip()
-                if line and not line.startswith('#') and '=' in line:
-                    key, value = line.split('=', 1)
-                    addresses[key.strip()] = value.strip()
-        
-        return addresses
-    except Exception as e:
-        print(f"Error loading work addresses: {e}")
-        # Fall back to hardcoded addresses
-        return {
-            'WORK_ADDR1': "123 Main St. Anytown, MA 00000",
-            'WORK_ADDR2': "200 Chauncy St. Mansfield, MA 02048"
-        }
+from environments import load_work_addresses
 
 # Load addresses
-_work_addresses = _load_work_addresses()
+_work_addresses = load_work_addresses(WORK_ADDRESSES_PATH)
 WORK_ADDR1 = _work_addresses.get('WORK_ADDR1', "WORK_ADDRESS_1_NOT_SET")
 WORK_ADDR2 = _work_addresses.get('WORK_ADDR2', "WORK_ADDRESS_2_NOT_SET")
 ENABLE_SECOND_WORK_ADDRESS = True  # Set to True to enable second work address functionality
@@ -182,8 +140,7 @@ STATE_ABBR_TO_NAME = {
     'WI': 'Wisconsin', 'WV': 'West Virginia', 'WY': 'Wyoming'
 }
 
-# TODO: Rename MAX_RANGE to WORK1_MAX_RANGE
-MAX_RANGE = 40  # Maximum distance in miles from Work Address 1
+WORK1_MAX_RANGE = 40  # Maximum distance in miles from Work Address 1
 WORK2_MAX_RANGE = 40
 
 # Legacy Collection Schedule - currently scheduled using Github actions
@@ -192,7 +149,9 @@ AFTERNOON_TIMES = ['17:00']  # Afternoon collection times
 NOON_HOUR = 17 # 12PM EST/EDT = 17:00 UTC (EST) or 16:00 UTC (EDT)
 
 # Data Grouping
-# TODO: Add description of what these are used for
+# Determines the data aggregation level. 'town' groups all zip codes together 
+# and merges commute data to housing data via town name. 'zip' strictly separates 
+# and scores each individual zip code.
 # LOCATION_GROUPING = 'zip'
 LOCATION_GROUPING = 'town'
 
@@ -239,8 +198,7 @@ TIER_THRESHOLDS = {
     'D': 50, 'F': 0
 }
 
-# TODO: Rename to MA_CRIME_SEVERITY_WEIGHTS
-CRIME_SEVERITY_WEIGHTS = {
+MA_CRIME_SEVERITY_WEIGHTS = {
     # Massachusetts Crime Categories
     'Murder and Nonnegligent Manslaughter': 5,
     'Aggravated Assault': 5,
