@@ -231,7 +231,7 @@ def test_load_addresses_cache_hit(tmp_path, monkeypatch):
 
     monkeypatch.setattr('Commute.collect_commute_data.PROCESSED_DIR', str(tmp_path))
     monkeypatch.setattr('Commute.collect_commute_data.LOCATION_GROUPING', 'town')
-    monkeypatch.setattr('Commute.collect_commute_data.MAX_RANGE', 40)
+    monkeypatch.setattr('Commute.collect_commute_data.WORK1_MAX_RANGE', 40)
     # Disable Work2 filter so we test Work1 cache path in isolation
     monkeypatch.setattr('Commute.collect_commute_data.ENABLE_SECOND_WORK_ADDRESS', False)
 
@@ -254,7 +254,7 @@ def test_load_addresses_cache_miss(tmp_path, monkeypatch):
     monkeypatch.setattr('Commute.collect_commute_data.PROCESSED_DIR',
                        str(tmp_path / 'nonexistent'))
     monkeypatch.setattr('Commute.collect_commute_data.LOCATION_GROUPING', 'town')
-    monkeypatch.setattr('Commute.collect_commute_data.MAX_RANGE', 40)
+    monkeypatch.setattr('Commute.collect_commute_data.WORK1_MAX_RANGE', 40)
     monkeypatch.setattr('Commute.collect_commute_data.ENABLE_SECOND_WORK_ADDRESS', False)
 
     mock_zip_df = pd.DataFrame({
@@ -289,7 +289,7 @@ def test_load_addresses_cache_corrupted(tmp_path, monkeypatch, caplog):
 
     monkeypatch.setattr('Commute.collect_commute_data.PROCESSED_DIR', str(tmp_path))
     monkeypatch.setattr('Commute.collect_commute_data.LOCATION_GROUPING', 'town')
-    monkeypatch.setattr('Commute.collect_commute_data.MAX_RANGE', 40)
+    monkeypatch.setattr('Commute.collect_commute_data.WORK1_MAX_RANGE', 40)
     monkeypatch.setattr('Commute.collect_commute_data.ENABLE_SECOND_WORK_ADDRESS', False)
 
     mock_zip_df = pd.DataFrame({
@@ -338,7 +338,7 @@ def test_load_addresses_work2_filter_applied(tmp_path, monkeypatch):
 
     monkeypatch.setattr('Commute.collect_commute_data.PROCESSED_DIR', str(tmp_path))
     monkeypatch.setattr('Commute.collect_commute_data.LOCATION_GROUPING', 'town')
-    monkeypatch.setattr('Commute.collect_commute_data.MAX_RANGE', 40)
+    monkeypatch.setattr('Commute.collect_commute_data.WORK1_MAX_RANGE', 40)
     monkeypatch.setattr('Commute.collect_commute_data.ENABLE_SECOND_WORK_ADDRESS', True)
     monkeypatch.setattr('Commute.collect_commute_data.WORK2_DISTANCES_FILE', str(work2_file))
     monkeypatch.setattr('Commute.collect_commute_data.WORK2_MAX_RANGE', 40)
@@ -362,7 +362,7 @@ def test_load_addresses_work2_file_missing(tmp_path, monkeypatch):
 
     monkeypatch.setattr('Commute.collect_commute_data.PROCESSED_DIR', str(tmp_path))
     monkeypatch.setattr('Commute.collect_commute_data.LOCATION_GROUPING', 'town')
-    monkeypatch.setattr('Commute.collect_commute_data.MAX_RANGE', 40)
+    monkeypatch.setattr('Commute.collect_commute_data.WORK1_MAX_RANGE', 40)
     monkeypatch.setattr('Commute.collect_commute_data.ENABLE_SECOND_WORK_ADDRESS', True)
     # Point to a file that doesn't exist
     monkeypatch.setattr('Commute.collect_commute_data.WORK2_DISTANCES_FILE',
@@ -401,11 +401,11 @@ def test_collect_commute_data_optimized_flow(mock_client, tmp_path, monkeypatch)
     # Monkeypatch paths
     monkeypatch.setattr('Commute.collect_commute_data.PROCESSED_DIR', str(tmp_path))
     monkeypatch.setattr('Commute.collect_commute_data.LOCATION_GROUPING', 'town')
-    monkeypatch.setattr('Commute.collect_commute_data.MAX_RANGE', 40)
+    monkeypatch.setattr('Commute.collect_commute_data.WORK1_MAX_RANGE', 40)
     monkeypatch.setattr('Commute.collect_commute_data.ENABLE_SECOND_WORK_ADDRESS', False)
     monkeypatch.setattr('Commute.collect_commute_data.API_TIER_TRACKING_FILE',
                        str(tier_file))
-    monkeypatch.setattr('Commute.collect_commute_data.COMMUTE_STATS_FILE',
+    monkeypatch.setattr('Commute.collect_commute_data.WORK1_COMMUTE_STATS_FILE',
                        str(stats_file))
     monkeypatch.setattr('Commute.collect_commute_data.USE_TRAFFIC', False)
     monkeypatch.setattr('Commute.collect_commute_data.API_MONTHLY_LIMIT_BASIC', 10000)

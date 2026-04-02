@@ -2,7 +2,7 @@ import os
 import pandas as pd
 from constants import (
     CRIME_DATA_FILE, POPULATION_DATA_FILE, CRIME_SCORES_FILE,
-    CRIME_SEVERITY_WEIGHTS, HOUSING_LOG_FILE
+    MA_CRIME_SEVERITY_WEIGHTS, HOUSING_LOG_FILE
 )
 from logging_config import setup_logger
 
@@ -32,7 +32,7 @@ def process_crime_scores():
     pop_df['2024'] = pop_df['2024'].astype(str).str.replace(',', '').astype(int)
     
     # Map weights
-    crime_df['Weight'] = crime_df['Arrest Offense'].map(CRIME_SEVERITY_WEIGHTS).fillna(0)
+    crime_df['Weight'] = crime_df['Arrest Offense'].map(MA_CRIME_SEVERITY_WEIGHTS).fillna(0)
     
     crime_df['Town'] = crime_df['Town'].str.title().str.strip()
     

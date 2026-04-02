@@ -117,6 +117,11 @@ def run_work2_generation(logger, dry_run=False):
 
 def main():
     """Main entry point for House Hunt project"""
+    
+    # Setup required directories first
+    from constants import RAW_DIR, PROCESSED_DIR, RESULTS_DIR, LOGS_DIR
+    from environments import setup_directories
+    setup_directories(RAW_DIR, PROCESSED_DIR, RESULTS_DIR, LOGS_DIR)
 
     # Parse command-line arguments
     parser = argparse.ArgumentParser(

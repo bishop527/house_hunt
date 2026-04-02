@@ -23,9 +23,9 @@ import json
 import pandas as pd
 from constants import (
     LOG_LEVEL, APP_LOG_FILE, SCORE_LOG_FILE,
-    SCORE_CONFIG_FILE, COMMUTE_STATS_FILE, HOUSING_STATS_FILE, CRIME_SCORES_FILE,
+    SCORE_CONFIG_FILE, WORK1_COMMUTE_STATS_FILE, HOUSING_STATS_FILE, CRIME_SCORES_FILE,
     SCORED_LOCATIONS_FILE, LOCATION_GROUPING, RESULTS_DIR,
-    REDFIN_DATA_FILE, PROCESSED_DIR, MAX_RANGE, PROPERTY_TYPES,
+    REDFIN_DATA_FILE, PROCESSED_DIR, WORK1_MAX_RANGE, PROPERTY_TYPES,
     ENABLE_SECOND_WORK_ADDRESS, WORK2_DISTANCES_FILE, WORK2_MAX_RANGE,
     TIER_THRESHOLDS
 )
@@ -98,7 +98,7 @@ class LocationScorer:
         # Import here to avoid circular imports at module level
         from Housing.collect_housing_data import fetch_housing_data
 
-        zip_cache = os.path.join(PROCESSED_DIR, f"zips_within_{MAX_RANGE}mi.csv")
+        zip_cache = os.path.join(PROCESSED_DIR, f"zips_within_{WORK1_MAX_RANGE}mi.csv")
         if not os.path.exists(zip_cache):
             logger.warning(
                 f"Zip cache not found ({zip_cache}). "
@@ -260,9 +260,9 @@ class LocationScorer:
             except Exception as e:
                 logger.error(f"Error loading previous scored locations: {e}", exc_info=True)
 
-        self.commute_data = load_csv_with_zip(COMMUTE_STATS_FILE)
+        self.commute_data = load_csv_with_zip(WORK1_COMMUTE_STATS_FILE)
         if self.commute_data.empty:
-            logger.error(f"No commute data found at {COMMUTE_STATS_FILE}")
+            logger.error(f"No commute data found at {WORK1_COMMUTE_STATS_FILE}")
             return False
         logger.info(f"Loaded {len(self.commute_data)} commute records (Work Address 1)")
         
@@ -669,7 +669,7 @@ class LocationScorer:
 
         # Apply Work Address 1 distance filter (if configured)
         work1_config = self.config.get('work_address_1', {})
-        max_work1_distance = work1_config.get('max_distance_miles', MAX_RANGE)
+        max_work1_distance = work1_config.get('max_distance_miles', WORK1_MAX_RANGE)
     
                     
         if 'Distance' in merged.columns:
@@ -1001,7 +1001,7 @@ def calculate_scores(config_file=SCORE_CONFIG_FILE, property_types=None):
     
     # Show distance filter status
     work1_config = scorer.config.get('work_address_1', {})
-    max_work1_dist = work1_config.get('max_distance_miles', MAX_RANGE)
+    max_work1_dist = work1_config.get('max_distance_miles', WORK1_MAX_RANGE)
     
     if ENABLE_SECOND_WORK_ADDRESS and scorer.config.get('filters', {}).get('require_dual_accessibility', False):
         work2_config = scorer.config.get('work_address_2', {})

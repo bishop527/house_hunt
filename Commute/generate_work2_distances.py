@@ -15,7 +15,7 @@ from pathlib import Path
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
-from constants import WORK_ADDR2, WORK2_DISTANCES_FILE, COMMUTE_STATS_FILE
+from constants import WORK_ADDR2, WORK2_DISTANCES_FILE, WORK1_COMMUTE_STATS_FILE
 from utils import get_zip_data, get_locations_within_range
 from Commute.collect_commute_data import fetch_commute_times
 from logging_config import setup_logger
@@ -45,7 +45,7 @@ def generate_work2_distances(dry_run=False):
     logger.info("=" * 70)
     
     # Import here to avoid circular dependencies
-    from constants import MAX_RANGE, LOCATION_GROUPING, WORK2_MAX_RANGE
+    from constants import WORK1_MAX_RANGE, LOCATION_GROUPING, WORK2_MAX_RANGE
     
     # Temporarily use Work2 range for this operation
     range_to_use = WORK2_MAX_RANGE

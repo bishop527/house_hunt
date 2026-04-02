@@ -259,11 +259,11 @@ def load_historical_data():
     Returns:
         pd.DataFrame: Historical data, or empty DataFrame if missing
     """
-    historical_df = load_csv_with_zip(COMMUTE_STATS_FILE)
+    historical_df = load_csv_with_zip(WORK1_COMMUTE_STATS_FILE)
     if not historical_df.empty:
         logger.info(
             f"Loaded {len(historical_df)} records from "
-            f"{COMMUTE_STATS_FILE}"
+            f"{WORK1_COMMUTE_STATS_FILE}"
         )
     else:
         logger.info("No historical data found. Starting fresh.")
@@ -365,20 +365,20 @@ def update_statistics(results, force_refresh=False, queried_addresses=None):
 
     # Save to CSV
     try:
-        final_df.to_csv(COMMUTE_STATS_FILE, index=False)
+        final_df.to_csv(WORK1_COMMUTE_STATS_FILE, index=False)
         logger.info(
-            f"Successfully updated {COMMUTE_STATS_FILE} with "
+            f"Successfully updated {WORK1_COMMUTE_STATS_FILE} with "
             f"{len(updated_df)} records"
         )
     except PermissionError:
         handle_file_error(
             PermissionError(),
-            COMMUTE_STATS_FILE,
+            WORK1_COMMUTE_STATS_FILE,
             "write",
             reraise=True
         )
     except IOError as e:
-        handle_file_error(e, COMMUTE_STATS_FILE, "write", reraise=True)
+        handle_file_error(e, WORK1_COMMUTE_STATS_FILE, "write", reraise=True)
 
 
 def _update_location_record(row, historical_df, today):
@@ -574,7 +574,7 @@ def _check_budget_once(estimated_elements, force=False):
 
 def _load_addresses_within_range():
     """
-    Load addresses within MAX_RANGE of Work Address 1, optionally
+    Load addresses within WORK1_MAX_RANGE of Work Address 1, optionally
     intersected with addresses within WORK2_MAX_RANGE of Work Address 2.
 
     OPTIMIZATION: Cache-first — skip ZIP database parsing when cache exists.
@@ -588,7 +588,7 @@ def _load_addresses_within_range():
     # Build Work Address 1 cache filename
     cache_file = os.path.join(
         PROCESSED_DIR,
-        f"{LOCATION_GROUPING}s_within_{MAX_RANGE}mi.csv"
+        f"{LOCATION_GROUPING}s_within_{WORK1_MAX_RANGE}mi.csv"
     )
 
     # OPTIMIZATION: Check Work1 cache FIRST
@@ -600,7 +600,7 @@ def _load_addresses_within_range():
             addresses = cached_df['Full_Address'].tolist()
             logger.info(
                 f"Found {len(addresses)} cached addresses within "
-                f"{MAX_RANGE}mi of Work Address 1 (skipped zip database parsing)"
+                f"{WORK1_MAX_RANGE}mi of Work Address 1 (skipped zip database parsing)"
             )
         except Exception as e:
             logger.warning(f"Cache read failed: {e}. Building fresh...")
@@ -612,7 +612,7 @@ def _load_addresses_within_range():
         )
         zip_codes_df = get_zip_data()
         addresses = get_locations_within_range(
-            WORK_ADDR1, zip_codes_df, MAX_RANGE,
+            WORK_ADDR1, zip_codes_df, WORK1_MAX_RANGE,
             group_by=LOCATION_GROUPING
         )
 

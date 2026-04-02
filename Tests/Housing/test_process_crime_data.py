@@ -3,7 +3,7 @@ import pytest
 import pandas as pd
 from unittest.mock import patch, MagicMock
 from Housing.process_crime_data import process_crime_scores
-from constants import CRIME_SEVERITY_WEIGHTS
+from constants import MA_CRIME_SEVERITY_WEIGHTS
 
 @pytest.fixture
 def mock_crime_df():

@@ -822,10 +822,10 @@ def collect_housing_data(limit=None, dry_run=False, force_refresh=False, propert
 
     # Get zip codes within range
     logger.info(
-        f"Loading zip codes within {MAX_RANGE} miles of work..."
+        f"Loading zip codes within {WORK1_MAX_RANGE} miles of work..."
     )
     zip_data = get_zip_data()
-    addresses = get_locations_within_range(WORK_ADDR1, zip_data, MAX_RANGE, group_by=LOCATION_GROUPING)
+    addresses = get_locations_within_range(WORK_ADDR1, zip_data, WORK1_MAX_RANGE, group_by=LOCATION_GROUPING)
 
     if not addresses:
         logger.error("No addresses found within range. Aborting.")
