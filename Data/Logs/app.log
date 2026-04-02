@@ -954,3 +954,31 @@ EOFError: EOF when reading a line
 2026-04-02 16:26:58 Thu UTC [INFO] __main__: EXECUTION SUMMARY:
 2026-04-02 16:26:58 Thu UTC [INFO] __main__:   SCORE: SUCCESS
 2026-04-02 16:26:58 Thu UTC [INFO] __main__: COMPLETED: House Hunt | 1/1 modules successful
+2026-04-02 16:49:25 Thu UTC [INFO] __main__: STARTED: House Hunt Execution
+2026-04-02 16:49:25 Thu UTC [INFO] __main__: === Starting execution for Property Type: Single Family ===
+2026-04-02 16:49:25 Thu UTC [INFO] __main__: STARTED: Scoring (Single Family)
+2026-04-02 16:49:25 Thu UTC [INFO] utils: Loaded 204 records from /home/runner/work/house_hunt/house_hunt/Data/Results/work1_commute_stats.csv
+2026-04-02 16:49:25 Thu UTC [INFO] utils: Loaded 179 records from /home/runner/work/house_hunt/house_hunt/Data/Results/work2_distances.csv
+2026-04-02 16:49:25 Thu UTC [INFO] utils: Loaded 218 records from /home/runner/work/house_hunt/house_hunt/Data/Results/housing_stats_Single_Family.csv
+2026-04-02 16:49:25 Thu UTC [INFO] __main__: Generating HTML report from /home/runner/work/house_hunt/house_hunt/Data/Results/scored_locations-Single_Family.csv...
+2026-04-02 16:49:25 Thu UTC [INFO] utils: Loaded 62 records from /home/runner/work/house_hunt/house_hunt/Data/Results/scored_locations-Single_Family.csv
+2026-04-02 16:49:25 Thu UTC [INFO] __main__: COMPLETED: Scoring (Single Family)
+2026-04-02 16:49:25 Thu UTC [INFO] __main__: === Starting execution for Property Type: Condo ===
+2026-04-02 16:49:25 Thu UTC [INFO] __main__: STARTED: Scoring (Condo)
+2026-04-02 16:49:25 Thu UTC [INFO] utils: Loaded 204 records from /home/runner/work/house_hunt/house_hunt/Data/Results/work1_commute_stats.csv
+2026-04-02 16:49:25 Thu UTC [INFO] utils: Loaded 179 records from /home/runner/work/house_hunt/house_hunt/Data/Results/work2_distances.csv
+2026-04-02 16:49:25 Thu UTC [INFO] utils: Loaded 217 records from /home/runner/work/house_hunt/house_hunt/Data/Results/housing_stats_Condo.csv
+2026-04-02 16:49:25 Thu UTC [INFO] __main__: Generating HTML report from /home/runner/work/house_hunt/house_hunt/Data/Results/scored_locations-Condo.csv...
+2026-04-02 16:49:25 Thu UTC [INFO] utils: Loaded 92 records from /home/runner/work/house_hunt/house_hunt/Data/Results/scored_locations-Condo.csv
+2026-04-02 16:49:25 Thu UTC [INFO] __main__: COMPLETED: Scoring (Condo)
+2026-04-02 16:49:25 Thu UTC [INFO] __main__: === Starting execution for Property Type: Townhouse ===
+2026-04-02 16:49:25 Thu UTC [INFO] __main__: STARTED: Scoring (Townhouse)
+2026-04-02 16:49:25 Thu UTC [INFO] utils: Loaded 204 records from /home/runner/work/house_hunt/house_hunt/Data/Results/work1_commute_stats.csv
+2026-04-02 16:49:25 Thu UTC [INFO] utils: Loaded 179 records from /home/runner/work/house_hunt/house_hunt/Data/Results/work2_distances.csv
+2026-04-02 16:49:25 Thu UTC [INFO] utils: Loaded 202 records from /home/runner/work/house_hunt/house_hunt/Data/Results/housing_stats_Townhouse.csv
+2026-04-02 16:49:25 Thu UTC [INFO] __main__: Generating HTML report from /home/runner/work/house_hunt/house_hunt/Data/Results/scored_locations-Townhouse.csv...
+2026-04-02 16:49:25 Thu UTC [INFO] utils: Loaded 69 records from /home/runner/work/house_hunt/house_hunt/Data/Results/scored_locations-Townhouse.csv
+2026-04-02 16:49:25 Thu UTC [INFO] __main__: COMPLETED: Scoring (Townhouse)
+2026-04-02 16:49:25 Thu UTC [INFO] __main__: EXECUTION SUMMARY:
+2026-04-02 16:49:25 Thu UTC [INFO] __main__:   SCORE: SUCCESS
+2026-04-02 16:49:25 Thu UTC [INFO] __main__: COMPLETED: House Hunt | 1/1 modules successful
