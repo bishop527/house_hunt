@@ -212,11 +212,16 @@ def get_redfin_data(zip_code, redfin_df, property_types=None):
              months_supply = latest_data.iloc[0]['MONTHS_OF_SUPPLY']
              inventory_val = latest_data.iloc[0].get('INVENTORY', 0)
         else:
-             weights = latest_data['HOMES_SOLD'] / total_homes_sold
-             weights = weights.fillna(0)
-             median_sale = (latest_data['MEDIAN_SALE_PRICE'] * weights).sum()
-             median_list = (latest_data['MEDIAN_LIST_PRICE'] * weights).sum()
-             median_ppsf = (latest_data['MEDIAN_PPSF'] * weights).sum()
+             def safe_weighted_avg(col):
+                 valid = latest_data.dropna(subset=[col, 'HOMES_SOLD'])
+                 valid_sum = valid['HOMES_SOLD'].sum()
+                 if valid.empty or valid_sum == 0:
+                     return None
+                 return (valid[col] * (valid['HOMES_SOLD'] / valid_sum)).sum()
+
+             median_sale = safe_weighted_avg('MEDIAN_SALE_PRICE')
+             median_list = safe_weighted_avg('MEDIAN_LIST_PRICE')
+             median_ppsf = safe_weighted_avg('MEDIAN_PPSF')
              months_supply_series = latest_data['MONTHS_OF_SUPPLY'].dropna()
              months_supply = months_supply_series.mean() if len(months_supply_series) > 0 else None
              inventory_val = latest_data['INVENTORY'].sum(skipna=True)

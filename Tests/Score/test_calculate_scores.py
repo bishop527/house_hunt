@@ -134,6 +134,20 @@ def test_scorer_init_invalid_json(tmp_path):
     assert exc_info.value.code == 1
 
 
+def test_scorer_validate_weights_normalization(sample_config):
+    """Test that weights are normalized to sum to 1.0"""
+    sample_config['weights'] = {'commute': 10, 'housing': 10, 'crime': 0}
+    
+    with patch('os.path.exists', return_value=True):
+        with patch('builtins.open', MagicMock()):
+            with patch('json.load', return_value=sample_config):
+                scorer = LocationScorer(None)
+
+    assert scorer.config['weights']['commute'] == 0.5
+    assert scorer.config['weights']['housing'] == 0.5
+    assert scorer.config['weights']['crime'] == 0.0
+
+
 # --- Test commute scoring functions ---
 
 def test_score_commute_time_ideal(sample_config):
@@ -167,6 +181,21 @@ def test_score_commute_time_poor(sample_config):
     score = scorer._score_commute_time(55.0)
 
     assert 0.0 <= score <= 50.0
+
+
+def test_score_commute_time_zero_denominator(sample_config):
+    """Test commute scoring handles identical ideal/max acceptable to avoid div by zero"""
+    sample_config['commute_preferences']['ideal_time_minutes'] = 30
+    sample_config['commute_preferences']['max_acceptable_time'] = 30
+    scorer = LocationScorer(None)
+    scorer.config = sample_config
+    
+    # Should not crash with division by zero
+    score_ideal = scorer._score_commute_time(30.0)
+    score_over = scorer._score_commute_time(45.0)
+    
+    assert score_ideal == 100.0
+    assert 0.0 <= score_over <= 50.0
 
 
 def test_calculate_commute_score(sample_config, sample_commute_data):
@@ -221,6 +250,22 @@ def test_score_housing_price_over_budget_exponential(sample_config):
 
     # The gap should be significant (at least 3 points)
     assert (score_650k - score_700k) >= 3.0
+
+
+def test_score_housing_price_zero_denominator(sample_config):
+    """Test housing price scoring avoids division by zero"""
+    sample_config['housing_preferences']['budget_min'] = 500000
+    sample_config['housing_preferences']['budget_ideal'] = 500000
+    sample_config['housing_preferences']['budget_max'] = 500000
+    scorer = LocationScorer(None)
+    scorer.config = sample_config
+
+    # Should not crash
+    score_exact = scorer._score_housing_price(500000)
+    score_over = scorer._score_housing_price(600000)
+
+    assert score_exact == 50.0
+    assert score_over < 50.0
 
 
 def test_calculate_housing_score(sample_config, sample_housing_data):

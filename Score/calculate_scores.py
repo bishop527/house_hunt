@@ -67,6 +67,7 @@ class LocationScorer:
         """
         self.filtered_locations = None
         self.config = self._load_config(config_file)
+        self._validate_weights()
         self.commute_data = None
         self.housing_data = None
         self.scored_locations = None
@@ -215,6 +216,27 @@ class LocationScorer:
             logger.error(f"Error loading config: {e}")
             sys.exit(1)
 
+    def _validate_weights(self):
+        """Validate and normalize config weights to sum to exactly 1.0"""
+        weights = self.config.get('weights', {})
+        if weights:
+            total = sum(weights.values())
+            if total > 0 and abs(total - 1.0) > 0.001:
+                logger.warning(f"Main weights sum to {total:.3f}, normalizing to 1.0")
+                for key in weights:
+                    weights[key] = weights[key] / total
+                self.config['weights'] = weights
+
+        housing_prefs = self.config.get('housing_preferences', {})
+        housing_weights = housing_prefs.get('housing_weights', {})
+        if housing_weights:
+            h_total = sum(housing_weights.values())
+            if h_total > 0 and abs(h_total - 1.0) > 0.001:
+                logger.warning(f"Housing sub-weights sum to {h_total:.3f}, normalizing to 1.0")
+                for key in housing_weights:
+                    housing_weights[key] = housing_weights[key] / h_total
+                self.config['housing_preferences']['housing_weights'] = housing_weights
+
     def load_data(self):
         """
         Load commute and housing data from CSV files.
@@ -340,7 +362,8 @@ class LocationScorer:
             return COMMUTE_SCORE_MAX
         elif avg_time <= max_acceptable:
             # Linear scale from 100 down to 50
-            ratio = (avg_time - ideal) / (max_acceptable - ideal)
+            denom = max(max_acceptable - ideal, 0.001)
+            ratio = (avg_time - ideal) / denom
             return COMMUTE_SCORE_MAX - (ratio * (COMMUTE_SCORE_MAX / 2))
         else:
             # Linear scale from 50 down to 0
@@ -349,7 +372,8 @@ class LocationScorer:
             worst = max_acceptable * multiplier
             if avg_time >= worst:
                 return MIN_SCORE
-            ratio = (avg_time - max_acceptable) / (worst - max_acceptable)
+            denom = max(worst - max_acceptable, 0.001)
+            ratio = (avg_time - max_acceptable) / denom
             return (COMMUTE_SCORE_MAX / 2) - (ratio * (COMMUTE_SCORE_MAX / 2))
 
     def calculate_commute_score(self, row):
@@ -393,11 +417,13 @@ class LocationScorer:
         if price <= budget_ideal:
             if price <= budget_min:
                 return PRICE_SCORE_MAX
-            ratio = (budget_ideal - price) / (budget_ideal - budget_min)
+            denom = max(budget_ideal - budget_min, 0.001)
+            ratio = (budget_ideal - price) / denom
             return (PRICE_SCORE_MAX - bonus_points) + (ratio * bonus_points)
 
         elif price <= budget_max:
-            ratio = (price - budget_ideal) / (budget_max - budget_ideal)
+            denom = max(budget_max - budget_ideal, 0.001)
+            ratio = (price - budget_ideal) / denom
             return (PRICE_SCORE_MAX - bonus_points) - (ratio * penalty_range)
 
         else:
@@ -425,16 +451,16 @@ class LocationScorer:
         if tax_rate <= ideal:
             return TAX_SCORE_MAX
         elif tax_rate <= max_acceptable:
-            ratio = (tax_rate - ideal) / (max_acceptable - ideal)
+            denom = max(max_acceptable - ideal, 0.001)
+            ratio = (tax_rate - ideal) / denom
             return TAX_SCORE_MAX - (ratio * 25.0)
         else:
             behavior = self.config.get('scoring_behavior', {})
             worst_tax = behavior.get('worst_tax_rate_per_1000', 30.0)
             if tax_rate >= worst_tax:
                 return MIN_SCORE
-            ratio = (tax_rate - max_acceptable) / (
-                worst_tax - max_acceptable
-            )
+            denom = max(worst_tax - max_acceptable, 0.001)
+            ratio = (tax_rate - max_acceptable) / denom
             return 25.0 - (ratio * 25.0)
 
     def _score_housing_ppsf(self, ppsf):
@@ -457,14 +483,16 @@ class LocationScorer:
         if ppsf <= ideal:
             return TAX_SCORE_MAX
         elif ppsf <= max_acceptable:
-            ratio = (ppsf - ideal) / (max_acceptable - ideal)
+            denom = max(max_acceptable - ideal, 0.001)
+            ratio = (ppsf - ideal) / denom
             return TAX_SCORE_MAX - (ratio * 25.0)
         else:
             behavior = self.config.get('scoring_behavior', {})
             worst = behavior.get('worst_ppsf', 800.0)
             if ppsf >= worst:
                 return MIN_SCORE
-            ratio = (ppsf - max_acceptable) / (worst - max_acceptable)
+            denom = max(worst - max_acceptable, 0.001)
+            ratio = (ppsf - max_acceptable) / denom
             return 25.0 - (ratio * 25.0)
 
     def calculate_housing_score(self, row):

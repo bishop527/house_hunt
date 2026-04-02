@@ -473,6 +473,35 @@ def test_get_redfin_data_nan_inventory(tmp_path, monkeypatch):
     assert result['inventory'] == 0  # NaN converted to 0
 
 
+def test_get_redfin_data_nan_price(tmp_path, monkeypatch):
+    """Test that safe_weighted_avg handles NaN prices correctly without crashing or skewing"""
+    csv_with_nan_price = """PERIOD_END\tREGION_TYPE\tREGION\tSTATE\tPROPERTY_TYPE\tMEDIAN_SALE_PRICE\tMEDIAN_LIST_PRICE\tMEDIAN_PPSF\tHOMES_SOLD\tINVENTORY\tMONTHS_OF_SUPPLY
+2025-01-31\tzip code\tZip Code: 02421\tMassachusetts\tSingle Family Residential\t850000\t875000\t425\t10\t8\t2.5
+2025-01-31\tzip code\tZip Code: 02421\tMassachusetts\tCondo/Co-op\tnan\t500000\t300\t10\t5\t2.0"""
+
+    redfin_file = tmp_path / "redfin_market_data.csv"
+    redfin_file.write_text(csv_with_nan_price)
+
+    monkeypatch.setattr(
+        'Housing.collect_housing_data.REDFIN_DATA_FILE',
+        str(redfin_file)
+    )
+    monkeypatch.setattr(
+        'Housing.collect_housing_data.MIN_SAMPLE_SIZE',
+        5
+    )
+
+    redfin_df = pd.read_csv(str(redfin_file), sep='\t')
+    result = get_redfin_data('02421', redfin_df, property_types=['Single Family', 'Condo'])
+
+    assert result is not None
+    # 20 homes total, but only 10 have valid sale price. 
+    # Average sale price is just the valid 850k.
+    assert result['median_sale_price'] == 850000
+    # Both have valid list prices. Avg list: (875k*10 + 500k*10) / 20 = 687500
+    assert result['median_list_price'] == 687500
+
+
 # --- Test get_historical_redfin_data ---
 
 def test_get_historical_redfin_data_success(tmp_path, mock_redfin_csv,
