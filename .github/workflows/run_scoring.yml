@@ -71,6 +71,24 @@ jobs:
           exit 1
         fi
 
+    - name: Prepare docs folder for GitHub Pages
+      run: |
+        # Create docs directory if it doesn't exist
+        mkdir -p docs
+        
+        # Copy HTML files to docs folder
+        cp Data/Results/score_report.html docs/index.html
+        
+        # Copy any additional HTML files (adjust paths as needed)
+        # If you have other HTML files, add them here:
+        # cp Data/Results/other_report.html docs/other_report.html
+        
+        # Archive monthly report in docs folder
+        MONTH_YEAR=$(date +'%B%Y')
+        cp Data/Results/score_report.html "docs/score_report-${MONTH_YEAR}.html"
+        
+        echo "HTML files copied to docs folder"
+
     - name: Upload scoring results
       uses: actions/upload-artifact@v4
       with:
@@ -78,6 +96,7 @@ jobs:
         path: |
           Data/Results/scored_locations.csv
           Data/Results/score_report.html
+          docs/
         retention-days: 90
 
     - name: Archive monthly report
@@ -92,10 +111,11 @@ jobs:
         
         git add Data/Logs/*
         git add Data/Results/*
+        git add docs/*
         
         # Only commit if there are changes
         if ! git diff --staged --quiet; then
-          git commit -m "Update scoring results - $(date +'%Y-%m-%d %H:%M')"
+          git commit -m "Update scoring results and GitHub Pages - $(date +'%Y-%m-%d %H:%M')"
           git push
         else
           echo "No changes to commit"
