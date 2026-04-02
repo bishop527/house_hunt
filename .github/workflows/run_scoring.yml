@@ -271,7 +271,7 @@ jobs:
         </html>
         INDEXEOF
         
-        echo "Index page created successfully"
+          echo "Index page created successfully"
 
     - name: Upload scoring results
       uses: actions/upload-artifact@v4
