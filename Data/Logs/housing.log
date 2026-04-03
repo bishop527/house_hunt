@@ -302,3 +302,157 @@
 2026-04-03 02:23:47 Fri UTC [INFO] Housing.collect_housing_data: Loaded 204 records from /home/runner/work/house_hunt/house_hunt/Data/Results/housing_stats_Townhouse.csv
 2026-04-03 02:23:47 Fri UTC [INFO] Housing.collect_housing_data: Successfully updated /home/runner/work/house_hunt/house_hunt/Data/Results/housing_stats_Townhouse.csv with 170 records
 2026-04-03 02:23:47 Fri UTC [INFO] Housing.collect_housing_data: COMPLETED: Housing Data Collection (Townhouse) | queried=186 ok=170 failed=16 | source=Redfin
+2026-04-03 02:44:06 Fri UTC [INFO] Housing.collect_housing_data: STARTED: Housing Data Collection (Single Family)
+2026-04-03 02:44:06 Fri UTC [INFO] Housing.collect_housing_data: Redfin data or cache tracker not found, downloading fresh copy...
+2026-04-03 02:44:06 Fri UTC [INFO] Housing.collect_housing_data: Downloading Redfin market data (this may take time)...
+2026-04-03 02:44:06 Fri UTC [INFO] Housing.collect_housing_data: URL: https://redfin-public-data.s3.us-west-2.amazonaws.com/redfin_market_tracker/zip_code_market_tracker.tsv000.gz
+2026-04-03 02:44:34 Fri UTC [INFO] Housing.collect_housing_data: Download complete. Decompressing and filtering...
+2026-04-03 02:45:56 Fri UTC [INFO] Housing.collect_housing_data: Saved 36,824 filtered records to /home/runner/work/house_hunt/house_hunt/Data/Raw/reduced-redfin_market_data.csv
+2026-04-03 02:45:56 Fri UTC [INFO] Housing.collect_housing_data: Successfully processed Redfin data
+2026-04-03 02:45:56 Fri UTC [INFO] Housing.collect_housing_data: Loading zip codes within 40 miles of work...
+2026-04-03 02:45:57 Fri UTC [INFO] Housing.collect_housing_data: Found 186 addresses within range
+2026-04-03 02:45:57 Fri UTC [INFO] Housing.collect_housing_data: Fetching housing data for 186 zip codes
+2026-04-03 02:45:57 Fri UTC [INFO] Housing.collect_housing_data: Loading /home/runner/work/house_hunt/house_hunt/Data/Raw/reduced-redfin_market_data.csv TSV into memory...
+2026-04-03 02:45:57 Fri UTC [INFO] Housing.collect_housing_data: Loaded 489 property tax rates
+2026-04-03 02:45:57 Fri UTC [WARNING] Housing.collect_housing_data: No housing data available for Boston, MA 02163
+2026-04-03 02:45:58 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for Brookline, NH - using state default
+2026-04-03 02:45:58 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for Dorchester Center, MA - using state default
+2026-04-03 02:45:58 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for East Boston, MA - using state default
+2026-04-03 02:45:58 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for East Walpole, MA - using state default
+2026-04-03 02:45:58 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for East Weymouth, MA - using state default
+2026-04-03 02:45:58 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for Foxboro, MA - using state default
+2026-04-03 02:45:58 Fri UTC [WARNING] Housing.collect_housing_data: No housing data available for Hanscom AFB, MA 01731
+2026-04-03 02:45:59 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for Manchester, MA - using state default
+2026-04-03 02:45:59 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for Needham Heights, MA - using state default
+2026-04-03 02:45:59 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for Newton Center, MA - using state default
+2026-04-03 02:45:59 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for Newton Highlands, MA - using state default
+2026-04-03 02:45:59 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for Newton Lower Falls, MA - using state default
+2026-04-03 02:45:59 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for Newton Upper Falls, MA - using state default
+2026-04-03 02:45:59 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for Newtonville, MA - using state default
+2026-04-03 02:45:59 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for North Billerica, MA - using state default
+2026-04-03 02:45:59 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for North Chelmsford, MA - using state default
+2026-04-03 02:45:59 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for North Easton, MA - using state default
+2026-04-03 02:45:59 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for North Weymouth, MA - using state default
+2026-04-03 02:46:00 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for Roxbury Crossing, MA - using state default
+2026-04-03 02:46:00 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for South Boston, MA - using state default
+2026-04-03 02:46:00 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for South Easton, MA - using state default
+2026-04-03 02:46:00 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for South Grafton, MA - using state default
+2026-04-03 02:46:00 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for South Hamilton, MA - using state default
+2026-04-03 02:46:00 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for South Walpole, MA - using state default
+2026-04-03 02:46:00 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for South Weymouth, MA - using state default
+2026-04-03 02:46:00 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for Tyngsboro, MA - using state default
+2026-04-03 02:46:00 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for Waban, MA - using state default
+2026-04-03 02:46:00 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for Wellesley Hills, MA - using state default
+2026-04-03 02:46:00 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for West Newton, MA - using state default
+2026-04-03 02:46:00 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for West Roxbury, MA - using state default
+2026-04-03 02:46:00 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for West Townsend, MA - using state default
+2026-04-03 02:46:01 Fri UTC [INFO] Housing.collect_housing_data: Successfully collected data for 184 out of 186 zip codes
+2026-04-03 02:46:01 Fri UTC [INFO] Housing.collect_housing_data: 2 zip codes excluded due to missing property type data
+2026-04-03 02:46:01 Fri UTC [INFO] Housing.collect_housing_data: Saved 2 filtered zips to /home/runner/work/house_hunt/house_hunt/Data/Results/housing_filtered_zips-Single_Family.csv
+2026-04-03 02:46:01 Fri UTC [INFO] Housing.collect_housing_data: Loaded 221 records from /home/runner/work/house_hunt/house_hunt/Data/Results/housing_stats_Single_Family.csv
+2026-04-03 02:46:01 Fri UTC [INFO] Housing.collect_housing_data: Successfully updated /home/runner/work/house_hunt/house_hunt/Data/Results/housing_stats_Single_Family.csv with 184 records
+2026-04-03 02:46:01 Fri UTC [INFO] Housing.collect_housing_data: COMPLETED: Housing Data Collection (Single Family) | queried=186 ok=184 failed=2 | source=Redfin
+2026-04-03 02:46:01 Fri UTC [INFO] Housing.collect_housing_data: STARTED: Housing Data Collection (Condo)
+2026-04-03 02:46:01 Fri UTC [INFO] Housing.collect_housing_data: Using existing Redfin data (0 days old)
+2026-04-03 02:46:01 Fri UTC [INFO] Housing.collect_housing_data: Loading zip codes within 40 miles of work...
+2026-04-03 02:46:01 Fri UTC [INFO] Housing.collect_housing_data: Found 186 addresses within range
+2026-04-03 02:46:01 Fri UTC [INFO] Housing.collect_housing_data: Fetching housing data for 186 zip codes
+2026-04-03 02:46:01 Fri UTC [INFO] Housing.collect_housing_data: Loading /home/runner/work/house_hunt/house_hunt/Data/Raw/reduced-redfin_market_data.csv TSV into memory...
+2026-04-03 02:46:02 Fri UTC [WARNING] Housing.collect_housing_data: No housing data available for Avon, MA 02322
+2026-04-03 02:46:02 Fri UTC [WARNING] Housing.collect_housing_data: No housing data available for Boston, MA 02163
+2026-04-03 02:46:02 Fri UTC [WARNING] Housing.collect_housing_data: No housing data available for Boxford, MA 01921
+2026-04-03 02:46:02 Fri UTC [WARNING] Housing.collect_housing_data: No housing data available for Brookline, NH 03033
+2026-04-03 02:46:02 Fri UTC [WARNING] Housing.collect_housing_data: No housing data available for Devens, MA 01434
+2026-04-03 02:46:02 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for Dorchester Center, MA - using state default
+2026-04-03 02:46:02 Fri UTC [WARNING] Housing.collect_housing_data: No housing data available for Dunstable, MA 01827
+2026-04-03 02:46:02 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for East Boston, MA - using state default
+2026-04-03 02:46:02 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for East Walpole, MA - using state default
+2026-04-03 02:46:02 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for East Weymouth, MA - using state default
+2026-04-03 02:46:02 Fri UTC [WARNING] Housing.collect_housing_data: No housing data available for Essex, MA 01929
+2026-04-03 02:46:02 Fri UTC [WARNING] Housing.collect_housing_data: No housing data available for Fayville, MA 01745
+2026-04-03 02:46:02 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for Foxboro, MA - using state default
+2026-04-03 02:46:02 Fri UTC [WARNING] Housing.collect_housing_data: No housing data available for Hanscom AFB, MA 01731
+2026-04-03 02:46:03 Fri UTC [WARNING] Housing.collect_housing_data: No housing data available for Lancaster, MA 01523
+2026-04-03 02:46:03 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for Manchester, MA - using state default
+2026-04-03 02:46:03 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for Needham Heights, MA - using state default
+2026-04-03 02:46:03 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for Newton Center, MA - using state default
+2026-04-03 02:46:03 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for Newton Highlands, MA - using state default
+2026-04-03 02:46:03 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for Newton Lower Falls, MA - using state default
+2026-04-03 02:46:03 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for Newton Upper Falls, MA - using state default
+2026-04-03 02:46:03 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for Newtonville, MA - using state default
+2026-04-03 02:46:03 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for North Billerica, MA - using state default
+2026-04-03 02:46:04 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for North Chelmsford, MA - using state default
+2026-04-03 02:46:04 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for North Easton, MA - using state default
+2026-04-03 02:46:04 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for North Weymouth, MA - using state default
+2026-04-03 02:46:04 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for Roxbury Crossing, MA - using state default
+2026-04-03 02:46:04 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for South Boston, MA - using state default
+2026-04-03 02:46:04 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for South Easton, MA - using state default
+2026-04-03 02:46:04 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for South Grafton, MA - using state default
+2026-04-03 02:46:04 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for South Hamilton, MA - using state default
+2026-04-03 02:46:04 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for South Walpole, MA - using state default
+2026-04-03 02:46:04 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for South Weymouth, MA - using state default
+2026-04-03 02:46:04 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for Tyngsboro, MA - using state default
+2026-04-03 02:46:04 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for Waban, MA - using state default
+2026-04-03 02:46:04 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for Wellesley Hills, MA - using state default
+2026-04-03 02:46:05 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for West Newton, MA - using state default
+2026-04-03 02:46:05 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for West Roxbury, MA - using state default
+2026-04-03 02:46:05 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for West Townsend, MA - using state default
+2026-04-03 02:46:05 Fri UTC [INFO] Housing.collect_housing_data: Successfully collected data for 176 out of 186 zip codes
+2026-04-03 02:46:05 Fri UTC [INFO] Housing.collect_housing_data: 10 zip codes excluded due to missing property type data
+2026-04-03 02:46:05 Fri UTC [INFO] Housing.collect_housing_data: Saved 10 filtered zips to /home/runner/work/house_hunt/house_hunt/Data/Results/housing_filtered_zips-Condo.csv
+2026-04-03 02:46:05 Fri UTC [INFO] Housing.collect_housing_data: Loaded 219 records from /home/runner/work/house_hunt/house_hunt/Data/Results/housing_stats_Condo.csv
+2026-04-03 02:46:05 Fri UTC [INFO] Housing.collect_housing_data: Successfully updated /home/runner/work/house_hunt/house_hunt/Data/Results/housing_stats_Condo.csv with 176 records
+2026-04-03 02:46:05 Fri UTC [INFO] Housing.collect_housing_data: COMPLETED: Housing Data Collection (Condo) | queried=186 ok=176 failed=10 | source=Redfin
+2026-04-03 02:46:05 Fri UTC [INFO] Housing.collect_housing_data: STARTED: Housing Data Collection (Townhouse)
+2026-04-03 02:46:05 Fri UTC [INFO] Housing.collect_housing_data: Using existing Redfin data (0 days old)
+2026-04-03 02:46:05 Fri UTC [INFO] Housing.collect_housing_data: Loading zip codes within 40 miles of work...
+2026-04-03 02:46:06 Fri UTC [INFO] Housing.collect_housing_data: Found 186 addresses within range
+2026-04-03 02:46:06 Fri UTC [INFO] Housing.collect_housing_data: Fetching housing data for 186 zip codes
+2026-04-03 02:46:06 Fri UTC [INFO] Housing.collect_housing_data: Loading /home/runner/work/house_hunt/house_hunt/Data/Raw/reduced-redfin_market_data.csv TSV into memory...
+2026-04-03 02:46:06 Fri UTC [WARNING] Housing.collect_housing_data: No housing data available for Avon, MA 02322
+2026-04-03 02:46:06 Fri UTC [WARNING] Housing.collect_housing_data: No housing data available for Boston, MA 02163
+2026-04-03 02:46:06 Fri UTC [WARNING] Housing.collect_housing_data: No housing data available for Brookline, NH 03033
+2026-04-03 02:46:06 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for Dorchester Center, MA - using state default
+2026-04-03 02:46:06 Fri UTC [WARNING] Housing.collect_housing_data: No housing data available for Dunstable, MA 01827
+2026-04-03 02:46:06 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for East Boston, MA - using state default
+2026-04-03 02:46:06 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for East Walpole, MA - using state default
+2026-04-03 02:46:07 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for East Weymouth, MA - using state default
+2026-04-03 02:46:07 Fri UTC [WARNING] Housing.collect_housing_data: No housing data available for Fayville, MA 01745
+2026-04-03 02:46:07 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for Foxboro, MA - using state default
+2026-04-03 02:46:07 Fri UTC [WARNING] Housing.collect_housing_data: No housing data available for Hanscom AFB, MA 01731
+2026-04-03 02:46:07 Fri UTC [WARNING] Housing.collect_housing_data: No housing data available for Hollis, NH 03049
+2026-04-03 02:46:07 Fri UTC [WARNING] Housing.collect_housing_data: No housing data available for Litchfield, NH 03052
+2026-04-03 02:46:07 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for Manchester, MA - using state default
+2026-04-03 02:46:07 Fri UTC [WARNING] Housing.collect_housing_data: No housing data available for Nahant, MA 01908
+2026-04-03 02:46:07 Fri UTC [WARNING] Housing.collect_housing_data: No housing data available for Nashua, NH 03060
+2026-04-03 02:46:07 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for Needham Heights, MA - using state default
+2026-04-03 02:46:08 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for Newton Center, MA - using state default
+2026-04-03 02:46:08 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for Newton Highlands, MA - using state default
+2026-04-03 02:46:08 Fri UTC [WARNING] Housing.collect_housing_data: No housing data available for Newton Lower Falls, MA 02462
+2026-04-03 02:46:08 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for Newton Upper Falls, MA - using state default
+2026-04-03 02:46:08 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for Newtonville, MA - using state default
+2026-04-03 02:46:08 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for North Billerica, MA - using state default
+2026-04-03 02:46:08 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for North Chelmsford, MA - using state default
+2026-04-03 02:46:08 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for North Easton, MA - using state default
+2026-04-03 02:46:08 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for North Weymouth, MA - using state default
+2026-04-03 02:46:08 Fri UTC [WARNING] Housing.collect_housing_data: No housing data available for Pelham, NH 03076
+2026-04-03 02:46:08 Fri UTC [WARNING] Housing.collect_housing_data: No housing data available for Roxbury Crossing, MA 02120
+2026-04-03 02:46:08 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for South Boston, MA - using state default
+2026-04-03 02:46:08 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for South Easton, MA - using state default
+2026-04-03 02:46:08 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for South Grafton, MA - using state default
+2026-04-03 02:46:08 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for South Hamilton, MA - using state default
+2026-04-03 02:46:08 Fri UTC [WARNING] Housing.collect_housing_data: No housing data available for South Walpole, MA 02071
+2026-04-03 02:46:08 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for South Weymouth, MA - using state default
+2026-04-03 02:46:08 Fri UTC [WARNING] Housing.collect_housing_data: No housing data available for Townsend, MA 01469
+2026-04-03 02:46:08 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for Tyngsboro, MA - using state default
+2026-04-03 02:46:08 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for Waban, MA - using state default
+2026-04-03 02:46:09 Fri UTC [WARNING] Housing.collect_housing_data: No housing data available for Wellesley Hills, MA 02481
+2026-04-03 02:46:09 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for West Newton, MA - using state default
+2026-04-03 02:46:09 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for West Roxbury, MA - using state default
+2026-04-03 02:46:09 Fri UTC [WARNING] Housing.collect_housing_data: No tax rate found for West Townsend, MA - using state default
+2026-04-03 02:46:09 Fri UTC [INFO] Housing.collect_housing_data: Successfully collected data for 170 out of 186 zip codes
+2026-04-03 02:46:09 Fri UTC [INFO] Housing.collect_housing_data: 16 zip codes excluded due to missing property type data
+2026-04-03 02:46:09 Fri UTC [INFO] Housing.collect_housing_data: Saved 16 filtered zips to /home/runner/work/house_hunt/house_hunt/Data/Results/housing_filtered_zips-Townhouse.csv
+2026-04-03 02:46:09 Fri UTC [INFO] Housing.collect_housing_data: Loaded 204 records from /home/runner/work/house_hunt/house_hunt/Data/Results/housing_stats_Townhouse.csv
+2026-04-03 02:46:09 Fri UTC [INFO] Housing.collect_housing_data: Successfully updated /home/runner/work/house_hunt/house_hunt/Data/Results/housing_stats_Townhouse.csv with 170 records
+2026-04-03 02:46:09 Fri UTC [INFO] Housing.collect_housing_data: COMPLETED: Housing Data Collection (Townhouse) | queried=186 ok=170 failed=16 | source=Redfin
