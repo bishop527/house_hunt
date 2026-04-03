@@ -39,6 +39,7 @@ Data/work_addresses.txt
 activate
 Archive/
 Documentation/
+Artifacts/
 
 *.docx
 *.xls
