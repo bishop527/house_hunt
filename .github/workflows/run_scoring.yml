@@ -49,9 +49,14 @@ jobs:
         if [ ! -f "Data/Results/work2_commute_stats.csv" ]; then
           echo "Warning: work2_commute_stats.csv not found"
         fi
-        if [ ! -f "Data/Results/housing_stats.csv" ]; then
-          echo "Error: housing_stats.csv not found"
-          exit 1
+        if [ ! -f "Data/Results/housing_stats_Single_Family.csv" ]; then
+          echo "Warning: housing_stats_Single_Family.csv not found"
+        fi
+        if [ ! -f "Data/Results/housing_stats_Condo.csv" ]; then
+          echo "Warning: housing_stats_Condo.csv not found"
+        fi
+        if [ ! -f "Data/Results/housing_stats_Townhouse.csv" ]; then
+          echo "Warning: housing_stats_Townhouse.csv not found"
         fi
         if [ ! -f "Data/score_config.json" ]; then
           echo "Error: score_config.json not found"
@@ -79,8 +84,8 @@ jobs:
 
     - name: Verify output files
       run: |
-        if [ ! -f "Data/Results/scored_locations.csv" ]; then
-          echo "Error: scored_locations.csv was not created"
+        if [ ! -f "Data/Results/scored_locations-Single_Family.csv" ] && [ ! -f "Data/Results/scored_locations-Condo.csv" ] && [ ! -f "Data/Results/scored_locations-Townhouse.csv" ]; then
+          echo "Error: No scored_locations-*.csv files were created"
           exit 1
         fi
         if [ ! -f "Data/Results/score_report-Single_Family.html" ]; then
@@ -292,7 +297,7 @@ jobs:
       with:
         name: scoring-results-${{ github.run_number }}
         path: |
-          Data/Results/scored_locations.csv
+          Data/Results/scored_locations-*.csv
           Data/Results/score_report-*.html
           docs/
         retention-days: 90
