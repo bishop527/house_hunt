@@ -46,6 +46,7 @@ LOGS_DIR = os.path.join(DATA_DIR, 'Logs')
 ZIP_DATA_FILE = os.path.join(RAW_DIR, 'zip_code_database.csv')
 REDFIN_DATA_FILE = os.path.join(RAW_DIR, 'reduced-redfin_market_data.csv')
 CRIME_DATA_FILE = os.path.join(RAW_DIR, 'MA-Crime_Data-2025.csv')
+FBI_CRIME_DATA_FILE = os.path.join(RAW_DIR, 'FBI-Crime_Data.csv')
 POPULATION_DATA_FILE = os.path.join(RAW_DIR, 'MA-Town_Population-2024.csv')
 
 # ========================================
@@ -53,6 +54,7 @@ POPULATION_DATA_FILE = os.path.join(RAW_DIR, 'MA-Town_Population-2024.csv')
 # ========================================
 # HOUSING_LOOKUP_FILE = os.path.join(PROCESSED_DIR, "housing_lookup.csv")
 CRIME_SCORES_FILE = os.path.join(PROCESSED_DIR, "crime_scores_by_town.csv")
+FBI_CRIME_SCORES_FILE = os.path.join(PROCESSED_DIR, "fbi_crime_scores_by_town.csv")
 
 # ========================================
 # DATA FILES - RESULTS
@@ -160,6 +162,7 @@ LOCATION_GROUPING = 'town'
 # HOUSING DATA COLLECTION PARAMETERS
 # ========================================
 HOUSING_DATA_SOURCE = 'redfin'  # Primary: 'redfin', Fallback: 'hud'
+USE_FBI_CRIME_DATA = False      # Toggle to swap between FBI baseline and standard Crime Data
 PROPERTY_TAX_FILE = os.path.join(RAW_DIR, 'property_tax_rates.csv')
 DEFAULT_MA_TAX_RATE = 12.1  # Default rate if town not found (per $1000)
 DEFAULT_RI_TAX_RATE = 12.1  # Default rate if town not found (per $1000)

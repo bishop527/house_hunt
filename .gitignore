@@ -27,6 +27,9 @@ ENV/
 
 # Data files (keep structure, ignore data)
 Data/Raw/*.csv
+Data/Crime_Data/
+Data/*.zip
+Data/Raw/*.zip
 
 # API Keys and Secrets
 google_api_key

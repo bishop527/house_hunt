@@ -27,7 +27,8 @@ from constants import (
     SCORED_LOCATIONS_FILE, LOCATION_GROUPING, RESULTS_DIR,
     REDFIN_DATA_FILE, PROCESSED_DIR, WORK1_MAX_RANGE, PROPERTY_TYPES,
     ENABLE_SECOND_WORK_ADDRESS, WORK2_DISTANCES_FILE, WORK2_MAX_RANGE,
-    TIER_THRESHOLDS, WORK_ADDR1
+    TIER_THRESHOLDS, WORK_ADDR1,
+    USE_FBI_CRIME_DATA, FBI_CRIME_SCORES_FILE
 )
 from utils import load_csv_with_zip, get_zip_data
 from logging_config import setup_logger
@@ -337,12 +338,17 @@ class LocationScorer:
             self.housing_filtered = pd.DataFrame()
 
         self.crime_data = None
-        if os.path.exists(CRIME_SCORES_FILE):
+        target_crime_file = FBI_CRIME_SCORES_FILE if USE_FBI_CRIME_DATA else CRIME_SCORES_FILE
+        target_name = "FBI Crime" if USE_FBI_CRIME_DATA else "State Crime"
+        
+        if os.path.exists(target_crime_file):
             try:
-                self.crime_data = pd.read_csv(CRIME_SCORES_FILE)
-                logger.info(f"Loaded {len(self.crime_data)} crime records")
+                self.crime_data = pd.read_csv(target_crime_file)
+                logger.info(f"Loaded {len(self.crime_data)} {target_name} records")
             except Exception as e:
-                logger.warning(f"Failed to load crime data: {e}", exc_info=True)
+                logger.warning(f"Failed to load {target_name} data from {target_crime_file}: {e}", exc_info=True)
+        else:
+            logger.warning(f"Crime data file not found: {target_crime_file}. Crime scores will be excluded.")
 
         return True
 

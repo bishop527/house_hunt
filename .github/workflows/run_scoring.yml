@@ -57,6 +57,20 @@ jobs:
           echo "Error: score_config.json not found"
           exit 1
         fi
+        
+        # Determine crime file from constants.py
+        USE_FBI=$(grep "USE_FBI_CRIME_DATA =" constants.py | cut -d'=' -f2 | tr -d '[:space:]')
+        if [ "$USE_FBI" = "True" ]; then
+          CRIME_FILE="Data/Processed/fbi_crime_scores_by_town.csv"
+        else
+          CRIME_FILE="Data/Processed/crime_scores_by_town.csv"
+        fi
+        
+        if [ ! -f "$CRIME_FILE" ]; then
+          echo "Error: Required crime data source ($CRIME_FILE) not found."
+          exit 1
+        fi
+        
         echo "All required data files found"
 
     - name: Run location scoring

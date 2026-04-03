@@ -1,7 +1,2 @@
-<<<<<<< HEAD
-2026-04,basic,1594
-2026-04,advanced,1868
-=======
 2026-04,basic,0
-2026-04,advanced,566
->>>>>>> 3bb70eafe7c214983f3112c3ccadafdb34033337
+2026-04,advanced,567

@@ -240,6 +240,15 @@ def generate_html_report(scored_df, output_file, config=None, filtered_df=None, 
     max_price_score = int(weights.get('price', 0.6) * 100)
     max_ppsf_score  = int(weights.get('ppsf', 0.3) * 100)
     max_tax_score   = int(weights.get('tax', 0.1) * 100)
+    
+    # Extract main weights for transparent scoring display
+    main_weights = config.get('weights', {}) if config else {}
+    commute_weight = main_weights.get('commute', 0.5)
+    housing_weight = main_weights.get('housing', 0.35)
+    crime_weight = main_weights.get('crime', 0.15)
+
+    # Determine crime data source for modal display
+    crime_source = "FBI NIBRS Data" if USE_FBI_CRIME_DATA else "MA State Data"
 
     # Calculate summary stats
     stats = {
@@ -1043,8 +1052,11 @@ def generate_html_report(scored_df, output_file, config=None, filtered_df=None, 
                 </div>
 
                                 <div class="detail-section">
-                                    <div class="detail-section-title">
-                                        Commute Score &mdash; ${{d.commute_score}}/100
+                                    <div class="detail-section-title" style="display: flex; justify-content: space-between; align-items: baseline;">
+                                        <span>Commute Score &mdash; ${{d.commute_score}}/100</span>
+                                        <span style="font-weight: normal; font-size: 0.9em; text-transform: none; color: #667eea;">
+                                            {commute_weight * 100:.0f}% Weight &rarr; <b>+${{(d.commute_score * {commute_weight}).toFixed(1)}} pts</b>
+                                        </span>
                                     </div>
                                     <div class="score-row">
                                         <span class="score-label">Commute Score</span>
@@ -1134,8 +1146,11 @@ def generate_html_report(scored_df, output_file, config=None, filtered_df=None, 
                 ` : ''}}
 
                 <div class="detail-section">
-                    <div class="detail-section-title">
-                        Crime &mdash; ${{d.crime_score !== null ? d.crime_score + '/100' : 'N/A'}}
+                    <div class="detail-section-title" style="display: flex; justify-content: space-between; align-items: baseline;">
+                        <span>Crime &mdash; ${{d.crime_score !== null ? d.crime_score + '/100' : 'N/A'}} <span style="font-size:0.75em; font-weight:normal; opacity:0.8; margin-left:8px;">({crime_source})</span></span>
+                        <span style="font-weight: normal; font-size: 0.9em; text-transform: none; color: #667eea;">
+                            {crime_weight * 100:.0f}% Weight &rarr; <b>+${{d.crime_score !== null ? (d.crime_score * {crime_weight}).toFixed(1) : '0.0'}} pts</b>
+                        </span>
                     </div>
                     <div class="score-row">
                         <span class="score-label">Crime Score</span>
@@ -1151,28 +1166,31 @@ def generate_html_report(scored_df, output_file, config=None, filtered_df=None, 
                     <div class="detail-grid" style="margin-top:0.75rem;">
                         <div class="detail-item" style="grid-column: span 2;">
                             <span class="detail-key">High Severity Safety Score</span>
-                            <span class="detail-val">${{d.high_severity_score !== null ? d.high_severity_score.toFixed(1) + '/100' : 'N/A'}}</span>
+                            <span class="detail-val">${{d.high_severity_score !== null ? d.high_severity_score.toFixed(1) + '%' : 'N/A'}}</span>
                         </div>
                         <div class="detail-item" style="grid-column: span 2;">
                             <span class="detail-key">Medium Severity Safety Score</span>
-                            <span class="detail-val">${{d.medium_severity_score !== null ? d.medium_severity_score.toFixed(1) + '/100' : 'N/A'}}</span>
+                            <span class="detail-val">${{d.medium_severity_score !== null ? d.medium_severity_score.toFixed(1) + '%' : 'N/A'}}</span>
                         </div>
                         <div class="detail-item" style="grid-column: span 2;">
                             <span class="detail-key">Low Severity Safety Score</span>
-                            <span class="detail-val">${{d.low_severity_score !== null ? d.low_severity_score.toFixed(1) + '/100' : 'N/A'}}</span>
+                            <span class="detail-val">${{d.low_severity_score !== null ? d.low_severity_score.toFixed(1) + '%' : 'N/A'}}</span>
                         </div>
                     </div>
                 </div>
 
                 <div class="detail-section">
-                    <div class="detail-section-title">
-                        Housing &mdash; ${{d.housing_score}}/100
+                    <div class="detail-section-title" style="display: flex; justify-content: space-between; align-items: baseline;">
+                        <span>Housing &mdash; ${{d.housing_score}}/100</span>
+                        <span style="font-weight: normal; font-size: 0.9em; text-transform: none; color: #667eea;">
+                            {housing_weight * 100:.0f}% Weight &rarr; <b>+${{(d.housing_score * {housing_weight}).toFixed(1)}} pts</b>
+                        </span>
                     </div>
                     <div class="score-row">
                         <span class="score-label">Price Score</span>
                         <span class="score-pill"
                               style="background:${{scoreColor(d.price_score, {max_price_score})}}">
-                            ${{d.price_score}}/{max_price_score}
+                            ${{(d.price_score / {max_price_score} * 100).toFixed(0)}}%
                         </span>
                         <div class="score-bar-wrap">
                             <div class="score-bar-fill"
@@ -1183,7 +1201,7 @@ def generate_html_report(scored_df, output_file, config=None, filtered_df=None, 
                         <span class="score-label">PPSF Score</span>
                         <span class="score-pill"
                               style="background:${{scoreColor(d.ppsf_score, {max_ppsf_score})}}">
-                            ${{d.ppsf_score}}/{max_ppsf_score}
+                            ${{(d.ppsf_score / {max_ppsf_score} * 100).toFixed(0)}}%
                         </span>
                         <div class="score-bar-wrap">
                             <div class="score-bar-fill"
@@ -1194,7 +1212,7 @@ def generate_html_report(scored_df, output_file, config=None, filtered_df=None, 
                         <span class="score-label">Tax Score</span>
                         <span class="score-pill"
                               style="background:${{scoreColor(d.tax_score, {max_tax_score})}}">
-                            ${{d.tax_score}}/{max_tax_score}
+                            ${{(d.tax_score / {max_tax_score} * 100).toFixed(0)}}%
                         </span>
                         <div class="score-bar-wrap">
                             <div class="score-bar-fill"

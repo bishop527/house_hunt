@@ -8,6 +8,27 @@ from logging_config import setup_logger
 
 logger = setup_logger(__name__, log_file=HOUSING_LOG_FILE)
 
+def _calculate_score(rate, ideal, max_acc, worst):
+    """
+    Score crime linearly from 100 to 0.
+    rate <= ideal: 100
+    ideal < rate <= max_acc: 100 to 50
+    max_acc < rate <= worst: 50 to 0
+    rate > worst: 0
+    """
+    if pd.isna(rate):
+        return None
+    if rate <= ideal:
+        return 100.0
+    elif rate <= max_acc:
+        denom = max(max_acc - ideal, 0.001)
+        return 100.0 - ((rate - ideal) / denom) * 50.0
+    else:
+        if rate >= worst:
+            return 0.0
+        denom = max(worst - max_acc, 0.001)
+        return 50.0 - ((rate - max_acc) / denom) * 50.0
+
 def process_crime_scores():
     logger.info("STARTED: Crime Data Processing")
     if not os.path.exists(CRIME_DATA_FILE) or not os.path.exists(POPULATION_DATA_FILE):
@@ -61,21 +82,25 @@ def process_crime_scores():
     # Calculate per capita (per 1000 residents)
     merged['Crime_Rate_Per_1000'] = (merged['Total_Crime_Weight'] / merged['2024']) * 1000
     
-    # Normalize to 0-100 score (lower rate = higher score)
-    merged['Crime_Score'] = merged['Crime_Rate_Per_1000'].rank(pct=True, ascending=False) * 100
-    merged['Crime_Score'] = merged['Crime_Score'].round(1)
+    # Normalize to 0-100 score using piecewise linear scaling
+    merged['Crime_Score'] = merged['Crime_Rate_Per_1000'].apply(
+        lambda r: _calculate_score(r, ideal=0.0, max_acc=15.0, worst=30.0)
+    ).round(1)
     
     merged['High_Severity_Per_1000'] = (merged['High_Severity_Count'] / merged['2024']) * 1000
-    merged['High_Severity_Score'] = merged['High_Severity_Per_1000'].rank(pct=True, ascending=False) * 100
-    merged['High_Severity_Score'] = merged['High_Severity_Score'].round(1)
+    merged['High_Severity_Score'] = merged['High_Severity_Per_1000'].apply(
+        lambda r: _calculate_score(r, ideal=0.0, max_acc=1.0, worst=2.5)
+    ).round(1)
 
     merged['Medium_Severity_Per_1000'] = (merged['Medium_Severity_Count'] / merged['2024']) * 1000
-    merged['Medium_Severity_Score'] = merged['Medium_Severity_Per_1000'].rank(pct=True, ascending=False) * 100
-    merged['Medium_Severity_Score'] = merged['Medium_Severity_Score'].round(1)
+    merged['Medium_Severity_Score'] = merged['Medium_Severity_Per_1000'].apply(
+        lambda r: _calculate_score(r, ideal=0.0, max_acc=3.0, worst=7.0)
+    ).round(1)
 
     merged['Low_Severity_Per_1000'] = (merged['Low_Severity_Count'] / merged['2024']) * 1000
-    merged['Low_Severity_Score'] = merged['Low_Severity_Per_1000'].rank(pct=True, ascending=False) * 100
-    merged['Low_Severity_Score'] = merged['Low_Severity_Score'].round(1)
+    merged['Low_Severity_Score'] = merged['Low_Severity_Per_1000'].apply(
+        lambda r: _calculate_score(r, ideal=0.0, max_acc=5.0, worst=11.0)
+    ).round(1)
     
     output_df = merged.rename(columns={'2024': 'Population'})
     output_df = output_df[['Town', 'Crime_Score', 'Crime_Rate_Per_1000', 'Total_Crime_Weight', 'Population', 
