@@ -451,3 +451,14 @@
 2026-04-03 12:48:07 Fri UTC [INFO] Commute.collect_commute_data: Successfully updated /home/runner/work/house_hunt/house_hunt/Data/Results/work1_commute_stats.csv with 97 records
 2026-04-03 12:48:08 Fri UTC [INFO] Commute.collect_commute_data: COMPLETED: Commute Data Collection (morning) | queried=97 ok=97 | elements=97 (advanced) | Basic=0/10,000 Advanced=665/5,000 | cost=$0.00
 2026-04-03 12:48:08 Fri UTC [WARNING] Commute.collect_commute_data: DISCREPANCY: 3,207 elements (82.8%)
+2026-04-03 22:20:12 Fri UTC [INFO] Commute.collect_commute_data: STARTED: Commute Data Collection (afternoon)
+2026-04-03 22:20:12 Fri UTC [INFO] Commute.collect_commute_data: Auto tier selection: Advanced tier free quota available (4,335 remaining)
+2026-04-03 22:20:12 Fri UTC [INFO] Commute.collect_commute_data: Found 186 addresses within Work Address 1 range (town level)
+2026-04-03 22:20:12 Fri UTC [INFO] Commute.collect_commute_data: Work Address 2 range filter: removed 89 address(es) outside 40mi of Work Address 2 | 97 remaining
+2026-04-03 22:20:12 Fri UTC [INFO] Commute.collect_commute_data: Budget check passed: 762/5,000 (current=665 + estimated=97)
+2026-04-03 22:20:12 Fri UTC [INFO] Commute.collect_commute_data: Afternoon commute: 123 Main St. Anytown, MA 00000 -> 97 locations
+2026-04-03 22:20:13 Fri UTC [INFO] Commute.collect_commute_data: Completed 4 requests, processed 97 elements, collected 97 valid results
+2026-04-03 22:20:13 Fri UTC [INFO] Commute.collect_commute_data: Loaded 204 records from /home/runner/work/house_hunt/house_hunt/Data/Results/work1_commute_stats.csv
+2026-04-03 22:20:13 Fri UTC [INFO] Commute.collect_commute_data: Successfully updated /home/runner/work/house_hunt/house_hunt/Data/Results/work1_commute_stats.csv with 97 records
+2026-04-03 22:20:14 Fri UTC [INFO] Commute.collect_commute_data: COMPLETED: Commute Data Collection (afternoon) | queried=97 ok=97 | elements=97 (advanced) | Basic=0/10,000 Advanced=762/5,000 | cost=$0.00
+2026-04-03 22:20:14 Fri UTC [WARNING] Commute.collect_commute_data: DISCREPANCY: 3,207 elements (80.8%)
