@@ -83,12 +83,12 @@ def get_zip_data(states=None, include_county=False):
     logger.info(f"Parsing ZIP database: {ZIP_DATA_FILE}")
 
     cols_to_read = [
-        'zip', 'type', 'decommissioned', 'primary_city',
+        'zip', 'type', 'decommissioned', 'primary_city', 'acceptable_cities',
         'state', 'latitude', 'longitude'
     ]
     dtype_dict = {
         'zip': str, 'type': str, 'decommissioned': int,
-        'primary_city': str, 'state': str
+        'primary_city': str, 'acceptable_cities': str, 'state': str
     }
 
     if include_county:
@@ -115,13 +115,17 @@ def get_zip_data(states=None, include_county=False):
         sys.exit(1)
 
     rename_dict = {
-        'zip': 'Zip', 'primary_city': 'Town',
+        'zip': 'Zip', 'primary_city': 'Primary Town Name',
+        'acceptable_cities': 'Alternate Town Name',
         'state': 'State', 'latitude': 'Lat', 'longitude': 'Long'
     }
     if include_county:
         rename_dict['county'] = 'County'
 
     zip_df = zip_df.rename(columns=rename_dict)
+    
+    # Maintain Town backward compatibility
+    zip_df['Town'] = zip_df['Primary Town Name']
 
     filtered_df = zip_df[
         (zip_df['State'].isin(states)) &
@@ -132,7 +136,7 @@ def get_zip_data(states=None, include_county=False):
     filtered_df = filtered_df.drop(columns=['type', 'decommissioned'])
 
     missing_df = filtered_df[
-        filtered_df['Zip'].isna() | filtered_df['Town'].isna() |
+        filtered_df['Zip'].isna() | filtered_df['Primary Town Name'].isna() |
         filtered_df['State'].isna() | filtered_df['Lat'].isna() |
         filtered_df['Long'].isna()
         ]
@@ -142,12 +146,12 @@ def get_zip_data(states=None, include_county=False):
         for idx, row in missing_df.iterrows():
             logger.warning(
                 f"  Row {idx}: Zip={row.get('Zip', 'MISSING')}, "
-                f"Town={row.get('Town', 'MISSING')}"
+                f"Town={row.get('Primary Town Name', 'MISSING')}"
             )
 
     before_dropna = len(filtered_df)
     filtered_df = filtered_df.dropna(
-        subset=['Zip', 'Town', 'State', 'Lat', 'Long']
+        subset=['Zip', 'Primary Town Name', 'State', 'Lat', 'Long']
     )
     dropped = before_dropna - len(filtered_df)
 
@@ -683,31 +687,38 @@ def _fetch_distances_from_google(addresses, destination, current_usage):
 # LOCATION RANGE QUERIES
 # ========================================
 
-def get_zips_within_range(destination, zip_data_df, max_range,
-                          force_refresh=False, max_cache_age_days=30):
+def get_locations_within_range(destination, zip_data_df, max_range,
+                               group_by='zip', force_refresh=False,
+                               max_cache_age_days=30):
     """
-    Get zip codes within specified range of destination with cache age check.
+    Get zip codes or towns within specified range of destination with granular caching.
 
-    OPTIMIZATION: Added cache age validation.
+    OPTIMIZATION: High-granularity (ZIP) results are cached and reused for
+    town-level requests to avoid redundant API calls.
 
     Args:
         destination (str): Destination address
-        zip_data_df (pd.DataFrame): DataFrame with Zip, Town, State,
-                                    Lat, Long columns
+        zip_data_df (pd.DataFrame): DataFrame with Zip, Town, State, Lat, Long (can be None for lazy loading)
         max_range (float): Maximum distance in miles
+        group_by (str): 'zip' or 'town'
         force_refresh (bool): Ignore cache and fetch fresh
         max_cache_age_days (int): Invalidate cache older than this
 
     Returns:
         list: Addresses (Town, State Zip) within range
     """
-    logger.info(f"STARTED: Zip Range Check ({max_range}mi)")
+    logger.info(f"STARTED: Range Check ({max_range}mi, group_by={group_by})")
+    
+    # Unified cache filename
     cache_file = os.path.join(
         PROCESSED_DIR,
-        f"zips_within_{max_range}mi.csv"
+        f"locations_within_{max_range}mi.csv"
     )
 
-    # Check cache with age validation
+    results_in_range = []
+    granular_results = None
+
+    # 1. Attempt to load granular (ZIP) cache
     if os.path.exists(cache_file) and not force_refresh:
         cache_age = datetime.now() - datetime.fromtimestamp(
             os.path.getmtime(cache_file)
@@ -715,230 +726,106 @@ def get_zips_within_range(destination, zip_data_df, max_range,
 
         if cache_age.days < max_cache_age_days:
             try:
-                cached_df = pd.read_csv(cache_file)
-                cached_addresses = cached_df['Full_Address'].tolist()
+                granular_results = pd.read_csv(cache_file)
                 logger.info(
-                    f"Loaded {len(cached_addresses)} cached addresses "
-                    f"from {cache_file} ({cache_age.days} days old, "
-                    f"range: {max_range}mi)"
+                    f"Loaded {len(granular_results)} granular results "
+                    f"from unified cache: {cache_file} ({cache_age.days} days old)"
                 )
-                return cached_addresses
             except Exception as e:
-                logger.warning(f"Failed to read cache: {e}. Fetching fresh.")
+                logger.warning(f"Failed to read unified cache: {e}. Fetching fresh.")
         else:
-            logger.info(
-                f"Cache expired ({cache_age.days} days old, "
-                f"max: {max_cache_age_days}), refreshing..."
-            )
+            logger.info(f"Unified cache expired ({cache_age.days} days old).")
 
-    valid_coords_df = zip_data_df.dropna(subset=['Lat', 'Long'])
+    # 2. If no cache, perform fresh API lookup
+    if granular_results is None:
+        logger.info("Performing fresh granular API lookup for range check...")
+        
+        # Lazy load zip data if not provided
+        if zip_data_df is None:
+            logger.info("Zip data not provided, loading from database...")
+            zip_data_df = get_zip_data()
+            
+        valid_coords_df = zip_data_df.dropna(subset=['Lat', 'Long'])
+        
+        # Build ALL standard zips for states
+        addresses = [
+            f"{r.Town}, {r.State} {r.Zip}"
+            for r in valid_coords_df.itertuples()
+        ]
 
-    if len(valid_coords_df) < len(zip_data_df):
-        missing_count = len(zip_data_df) - len(valid_coords_df)
-        logger.warning(
-            f"Filtered out {missing_count} ZIP codes with missing "
-            f"coordinates"
-        )
+        # Check budget
+        estimated_elements = len(addresses)
+        can_proceed, current_usage = check_api_budget(estimated_elements)
 
-    # Build address list from valid coordinates only
-    addresses = [
-        f"{r.Town}, {r.State} {r.Zip}"
-        for r in valid_coords_df.itertuples()
-    ]
+        # Fetch distances
+        results_list, elements_processed, requests_made = \
+            _fetch_distances_from_google(addresses, destination, current_usage)
 
-    # Check budget
-    estimated_elements = len(addresses)
-    can_proceed, current_usage = check_api_budget(estimated_elements)
+        # Update tier-based usage tracking
+        update_api_usage_by_tier(elements_processed)
 
-    # Fetch distances
-    results_list, elements_processed, requests_made = \
-        _fetch_distances_from_google(addresses, destination, current_usage)
+        # Prepare granular results
+        if results_list:
+            granular_results = pd.DataFrame([
+                {
+                    'Full_Address': res['address'],
+                    'Distance_Miles': res['distance_miles']
+                }
+                for res in results_list
+            ])
+        else:
+            granular_results = pd.DataFrame(columns=['Full_Address', 'Distance_Miles'])
 
-    # Filter by range
-    zips_in_range = []
-    filtered_results = []
-    for result in results_list:
-        if result['distance_miles'] <= max_range:
-            zips_in_range.append(result['address'])
-            filtered_results.append({
-                'Full_Address': result['address'],
-                'Distance_Miles': result['distance_miles']
-            })
+        # Always filter by range for the cache file to keep it small
+        granular_results = granular_results[
+            granular_results['Distance_Miles'] <= max_range
+        ]
 
-    # Update tier-based usage tracking
-    update_api_usage_by_tier(elements_processed)
-
-    # Log combined API usage and result
-    tier_usage = get_current_usage_by_tier()
-    logger.info(
-        f"COMPLETED: Zip Range Check | {len(zips_in_range)}/{len(addresses)} within "
-        f"{max_range}mi | requests={requests_made} elements={elements_processed} | "
-        f"Monthly: Basic={tier_usage['basic']:,} Advanced={tier_usage['advanced']:,}"
-    )
-
-    # Save cache
-    if filtered_results:
-        output_df = pd.DataFrame(filtered_results)
+        # Save to unified cache
         try:
-            output_df.to_csv(cache_file, index=False)
-            logger.info(
-                f"Saved {len(filtered_results)} locations to {cache_file}"
-            )
+            granular_results.to_csv(cache_file, index=False)
+            logger.info(f"Saved {len(granular_results)} locations to unified cache: {cache_file}")
         except IOError as e:
-            logger.error(f"Failed to save results: {e}")
-    else:
-        logger.warning(
-            f"No locations found within {max_range} miles"
-        )
+            logger.error(f"Failed to save unified cache: {e}")
 
-    return zips_in_range
+    # 3. Process granular results into requested format
+    if group_by == 'zip':
+        results_in_range = granular_results['Full_Address'].tolist()
+    elif group_by == 'town':
+        # Group by Town, State (extracted from Full_Address)
+        temp_df = granular_results.copy()
+        # Format is "Town, ST XXXXX"
+        temp_df[['TownState', 'Zip']] = temp_df['Full_Address'].str.rsplit(' ', n=1, expand=True)
+        
+        # Group by Town+State and take the first
+        town_results = temp_df.sort_values('Distance_Miles').groupby('TownState').first().reset_index()
+        results_in_range = town_results['Full_Address'].tolist()
+        logger.info(f"Filtered {len(granular_results)} zips down to {len(results_in_range)} representative towns")
+    else:
+        raise ValueError(f"Invalid group_by: {group_by}")
+
+    logger.info(f"COMPLETED: Range Check | Found {len(results_in_range)} {group_by}s")
+    return results_in_range
+
+
+def get_zips_within_range(destination, zip_data_df, max_range,
+                          force_refresh=False, max_cache_age_days=30):
+    """Wrapper for backward compatibility."""
+    return get_locations_within_range(
+        destination, zip_data_df, max_range,
+        group_by='zip', force_refresh=force_refresh,
+        max_cache_age_days=max_cache_age_days
+    )
 
 
 def get_towns_within_range(destination, zip_data_df, max_range,
                            force_refresh=False, max_cache_age_days=30):
-    """
-    Get towns within specified range with cache age check.
-
-    OPTIMIZATION: Added cache age validation.
-
-    Args:
-        destination (str): Destination address
-        zip_data_df (pd.DataFrame): DataFrame with Zip, Town, State
-        max_range (float): Maximum distance in miles
-        force_refresh (bool): Ignore cache and fetch fresh
-        max_cache_age_days (int): Invalidate cache older than this
-
-    Returns:
-        list: Town addresses (Town, State Zip) within range
-    """
-    logger.info(f"STARTED: Town Range Check ({max_range}mi)")
-    cache_file = os.path.join(
-        PROCESSED_DIR,
-        f"towns_within_{max_range}mi.csv"
+    """Wrapper for backward compatibility."""
+    return get_locations_within_range(
+        destination, zip_data_df, max_range,
+        group_by='town', force_refresh=force_refresh,
+        max_cache_age_days=max_cache_age_days
     )
-
-    # Check cache with age validation
-    if os.path.exists(cache_file) and not force_refresh:
-        cache_age = datetime.now() - datetime.fromtimestamp(
-            os.path.getmtime(cache_file)
-        )
-
-        if cache_age.days < max_cache_age_days:
-            logger.info(f"Loading cached town results from {cache_file}")
-            try:
-                cached_df = pd.read_csv(cache_file)
-                cached_towns = cached_df['Full_Address'].tolist()
-                logger.info(
-                    f"Loaded {len(cached_towns)} cached towns "
-                    f"from {cache_file} ({cache_age.days} days old, "
-                    f"range: {max_range}mi)"
-                )
-                return cached_towns
-            except Exception as e:
-                logger.warning(f"Failed to read cache: {e}. Fetching fresh.")
-        else:
-            logger.info(
-                f"Cache expired ({cache_age.days} days old, "
-                f"max: {max_cache_age_days}), refreshing..."
-            )
-
-    valid_coords_df = zip_data_df.dropna(subset=['Lat', 'Long'])
-
-    if len(valid_coords_df) < len(zip_data_df):
-        missing_count = len(zip_data_df) - len(valid_coords_df)
-        logger.warning(
-            f"Filtered out {missing_count} ZIP codes with missing "
-            f"coordinates"
-        )
-
-    # Group by town (one representative zip per town)
-    town_groups_df = valid_coords_df.groupby(
-        ['Town', 'State']
-    ).first().reset_index()
-
-    # Build addresses
-    addresses = [
-        f"{r.Town}, {r.State} {r.Zip}"
-        for r in town_groups_df.itertuples()
-    ]
-
-    # Check budget
-    estimated_elements = len(addresses)
-    can_proceed, current_usage = check_api_budget(estimated_elements)
-
-    # Fetch distances
-    results_list, elements_processed, requests_made = \
-        _fetch_distances_from_google(addresses, destination, current_usage)
-
-    # Filter by range
-    towns_in_range = []
-    filtered_results = []
-    for result in results_list:
-        if result['distance_miles'] <= max_range:
-            towns_in_range.append(result['address'])
-            filtered_results.append({
-                'Full_Address': result['address'],
-                'Distance_Miles': result['distance_miles']
-            })
-
-    # Update tier-based usage tracking
-    update_api_usage_by_tier(elements_processed)
-
-    # Log combined API usage and result
-    tier_usage = get_current_usage_by_tier()
-    logger.info(
-        f"COMPLETED: Town Range Check | {len(towns_in_range)}/{len(addresses)} within "
-        f"{max_range}mi | requests={requests_made} elements={elements_processed} | "
-        f"Monthly: Basic={tier_usage['basic']:,} Advanced={tier_usage['advanced']:,}"
-    )
-
-    # Save cache
-    if filtered_results:
-        output_df = pd.DataFrame(filtered_results)
-        try:
-            output_df.to_csv(cache_file, index=False)
-            logger.info(f"Saved {len(filtered_results)} towns")
-        except IOError as e:
-            logger.error(f"Failed to save results: {e}")
-    else:
-        logger.warning(f"No towns found within {max_range} miles")
-
-    return towns_in_range
-
-
-def get_locations_within_range(destination, zip_data_df, max_range,
-                               group_by='zip', force_refresh=False,
-                               max_cache_age_days=30):
-    """
-    Dispatcher to get zips or towns within range with intelligent caching.
-
-    OPTIMIZATION: Added cache age validation and force_refresh parameter.
-
-    Args:
-        destination (str): Destination address
-        zip_data_df (pd.DataFrame): DataFrame with location data
-        max_range (float): Maximum distance in miles
-        group_by (str): 'zip' or 'town'
-        force_refresh (bool): Ignore cache and fetch fresh (default: False)
-        max_cache_age_days (int): Invalidate cache older than this (default: 30)
-
-    Returns:
-        list: Addresses within range
-    """
-    if group_by == 'zip':
-        return get_zips_within_range(
-            destination, zip_data_df, max_range, force_refresh,
-            max_cache_age_days
-        )
-    elif group_by == 'town':
-        return get_towns_within_range(
-            destination, zip_data_df, max_range, force_refresh,
-            max_cache_age_days
-        )
-    else:
-        raise ValueError(
-            f"group_by must be 'zip' or 'town', got '{group_by}'"
-        )
 
 
 # ========================================

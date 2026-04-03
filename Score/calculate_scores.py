@@ -29,7 +29,7 @@ from constants import (
     ENABLE_SECOND_WORK_ADDRESS, WORK2_DISTANCES_FILE, WORK2_MAX_RANGE,
     TIER_THRESHOLDS, WORK_ADDR1
 )
-from utils import load_csv_with_zip
+from utils import load_csv_with_zip, get_zip_data
 from logging_config import setup_logger
 
 logger = setup_logger(__name__, log_file=SCORE_LOG_FILE)
@@ -659,9 +659,52 @@ class LocationScorer:
             return None
 
         merged['Resolved_Town'] = merged.apply(lambda r: self._resolve(r, 'Town', 'Town_commute', 'Town_housing'), axis=1)
+        
+        # Inject Primary and Alternate Town Names from Zip database
+        zip_db = get_zip_data()
+        zip_mapping = zip_db[['Zip', 'Primary Town Name', 'Alternate Town Name']].drop_duplicates('Zip')
+        merged = pd.merge(merged, zip_mapping, on='Zip', how='left')
+        merged['Resolved_Town'] = merged.apply(lambda r: self._resolve(r, 'Primary Town Name', 'Resolved_Town'), axis=1)
+
         if self.crime_data is not None and not self.crime_data.empty:
-            merged = pd.merge(merged, self.crime_data, left_on='Resolved_Town', right_on='Town', how='left')
-            logger.info("Joined crime scores.")
+            def find_crime_record(row):
+                # 1. Check Primary Town Name
+                primary = str(row.get('Primary Town Name', '')).strip()
+                if primary and primary != 'nan':
+                    match = self.crime_data[self.crime_data['Town'].str.lower() == primary.lower()]
+                    if not match.empty:
+                        return match.iloc[0]
+                
+                # 2. Check Alternate Town Name(s)
+                alternate_str = str(row.get('Alternate Town Name', ''))
+                if alternate_str and alternate_str != 'nan':
+                    alts = [a.strip() for a in alternate_str.split(',')]
+                    for alt in alts:
+                        match = self.crime_data[self.crime_data['Town'].str.lower() == alt.lower()]
+                        if not match.empty:
+                            res = match.iloc[0].copy()
+                            res['Matched_Alias'] = alt
+                            return res
+                            
+                # 3. Fallback to Resolved_Town
+                resolved = str(row.get('Resolved_Town', '')).strip()
+                if resolved and resolved != 'nan':
+                    match = self.crime_data[self.crime_data['Town'].str.lower() == resolved.lower()]
+                    if not match.empty:
+                        res = match.iloc[0].copy()
+                        if resolved.lower() != primary.lower():
+                            res['Matched_Alias'] = resolved
+                        return res
+                        
+                return pd.Series(dtype='object')
+                
+            crime_matches = merged.apply(find_crime_record, axis=1)
+            # drop the 'Town' column from crime_matches to avoid index collisions
+            if 'Town' in crime_matches.columns:
+                crime_matches = crime_matches.drop(columns=['Town'])
+                
+            merged = pd.concat([merged, crime_matches], axis=1)
+            logger.info("Joined crime scores using Primary and Alternate Town Names.")
         else:
             logger.warning("Crime data not available - crime scores will be excluded from total score calculation")
 
@@ -763,11 +806,15 @@ class LocationScorer:
                 lambda r: self._resolve(r, 'State', 'State_commute', 'State_housing', 'State_x', 'State_y'),
                 axis=1
             )
-            filtered_standardized = filtered_combined[[
+            cols_to_keep = [
                 'Town', 'State', 'Zip', 'Filter_Reason',
                 'Average_Time', 'Distance', 'Latest_Median_Sale',
                 'Latest_PPSF', 'Tax_Rate_Per_1000'
-            ]].rename(columns={
+            ]
+            if 'Matched_Alias' in filtered_combined.columns:
+                cols_to_keep.append('Matched_Alias')
+                
+            filtered_standardized = filtered_combined[cols_to_keep].rename(columns={
                 'Average_Time': 'Avg_Commute_Min',
                 'Distance': 'Distance_Miles',
                 'Latest_Median_Sale': 'Median_Price',
@@ -838,6 +885,9 @@ class LocationScorer:
 
             result = {
                 'Town':              town,
+                'Primary Town Name': row.get('Primary Town Name'),
+                'Alternate Town Name': row.get('Alternate Town Name'),
+                'Matched_Alias':     row.get('Matched_Alias'),
                 'State':             state,
                 'Zip':               row['Zip'],
                 'Total_Score':       round(total_score, 1),

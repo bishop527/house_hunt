@@ -134,9 +134,15 @@ def _build_filtered_section(filtered_df):
 
     rows_html = ""
     for _, row in filtered_df.sort_values('Town').iterrows():
+        matched_alias = str(row.get('Matched_Alias', ''))
+        alt_display = ""
+        if matched_alias and matched_alias.lower() != 'nan':
+            # It was matched using an alias, so we show it
+            alt_display = f" <span style='font-size:0.85em; color:#78350f; font-weight:normal;'>({matched_alias})</span>"
+                
         rows_html += f"""
                     <tr>
-                        <td><strong>{row.get('Town', 'N/A')}</strong></td>
+                        <td><strong>{row.get('Town', 'N/A')}</strong>{alt_display}</td>
                         <td>{row.get('State', 'N/A')}</td>
                         <td>{row.get('Zip', 'N/A')}</td>
                         <td style="color:#ef4444; font-weight:500;">{row.get('Filter_Reason', 'N/A')}</td>
@@ -753,6 +759,11 @@ def generate_html_report(scored_df, output_file, config=None, filtered_df=None, 
             except ValueError:
                 change_html = f'<span class="rank-change trend-stable">{rank_change}</span>'
 
+        matched_alias = str(row.get('Matched_Alias', ''))
+        alt_display = ""
+        if matched_alias and matched_alias.lower() != 'nan':
+            alt_display = f" <br><span style='font-size:0.85em; color:#64748b; font-weight:normal;'>({matched_alias})</span>"
+
         html += f"""
                     <tr data-tier="{row['Tier'][0]}"
                         data-town="{row['Town'].lower()}"
@@ -765,7 +776,7 @@ def generate_html_report(scored_df, output_file, config=None, filtered_df=None, 
                                 {change_html}
                             </div>
                         </td>
-                        <td><strong>{row['Town']}</strong></td>
+                        <td><strong>{row['Town']}</strong>{alt_display}</td>
                         <td>{row['Zip']}</td>
                         <td>
                             <span class="tier-badge"

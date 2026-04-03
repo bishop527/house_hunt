@@ -32,13 +32,13 @@ from utils import (
 @pytest.fixture
 def mock_zip_csv():
     """Sample ZIP code CSV data"""
-    return """zip,type,decommissioned,primary_city,state,latitude,longitude
-02421,STANDARD,0,Lexington,MA,42.44,-71.23
-02420,STANDARD,0,Lexington,MA,42.46,-71.22
-99999,STANDARD,0,Test City,MA,,,
-88888,STANDARD,0,,MA,42.0,-71.0
-01195,STANDARD,1,Springfield,MA,42.1,-72.58
-06001,STANDARD,0,Avon,CT,41.8,-72.83"""
+    return """zip,type,decommissioned,primary_city,acceptable_cities,state,latitude,longitude
+02421,STANDARD,0,Lexington,,MA,42.44,-71.23
+02420,STANDARD,0,Lexington,,MA,42.46,-71.22
+99999,STANDARD,0,Test City,,MA,,,
+88888,STANDARD,0,,,MA,42.0,-71.0
+01195,STANDARD,1,Springfield,,MA,42.1,-72.58
+06001,STANDARD,0,Avon,,CT,41.8,-72.83"""
 
 
 @pytest.fixture
@@ -952,7 +952,7 @@ def test_get_zips_within_range_cache_age_valid(tmp_path, monkeypatch):
     """Test cache is used when age is within limit"""
     import time
 
-    cache_file = tmp_path / "zips_within_30mi.csv"
+    cache_file = tmp_path / "locations_within_30mi.csv"
     cache_df = pd.DataFrame({
         'Full_Address': ['Lexington, MA 02421'],
         'Distance_Miles': [5.0]
@@ -994,7 +994,7 @@ def test_get_zips_within_range_cache_age_expired(tmp_path, monkeypatch):
     """Test cache is refreshed when age exceeds limit"""
     import time
 
-    cache_file = tmp_path / "zips_within_30mi.csv"
+    cache_file = tmp_path / "locations_within_30mi.csv"
     cache_df = pd.DataFrame({
         'Full_Address': ['Lexington, MA 02421'],
         'Distance_Miles': [5.0]
@@ -1056,7 +1056,7 @@ def test_get_zips_within_range_cache_age_expired(tmp_path, monkeypatch):
 
 def test_get_zips_within_range_force_refresh(tmp_path, monkeypatch):
     """Test force_refresh ignores valid cache"""
-    cache_file = tmp_path / "zips_within_30mi.csv"
+    cache_file = tmp_path / "locations_within_30mi.csv"
     cache_df = pd.DataFrame({
         'Full_Address': ['Lexington, MA 02421'],
         'Distance_Miles': [5.0]

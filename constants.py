@@ -62,6 +62,7 @@ API_TIER_TRACKING_FILE = os.path.join(LOGS_DIR, "monthly_API_usage_by_tier.txt")
 SCORED_LOCATIONS_FILE = os.path.join(RESULTS_DIR, "scored_locations.csv")
 SCORE_REPORT_FILE = os.path.join(RESULTS_DIR, "score_report.html")
 WORK2_DISTANCES_FILE = os.path.join(RESULTS_DIR, "work2_distances.csv")
+RANGE_LOOKUP_FILE = os.path.join(PROCESSED_DIR, "locations_within_range.csv")
 
 # ========================================
 # LOGS
