@@ -751,7 +751,7 @@ class LocationScorer:
                     if len(dropped) > 0:
                         dropped['Filter_Reason'] = dropped['Work2_Distance'].apply(
                             lambda d: f"Too far from Work Address 2 (>{max_work2_distance} mi, actual: {d:.1f} mi)" 
-                            if pd.notna(d) else "No Work Address 2 data"
+                            if pd.notna(d) else f"Too far from Work Address 2 (>{max_work2_distance} mi)"
                         )
                         filtered_rows.append(dropped)
                         merged = merged[~mask]
