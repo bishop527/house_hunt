@@ -303,7 +303,7 @@ def test_load_addresses_work2_filter_applied(tmp_path, monkeypatch):
     monkeypatch.setattr('Commute.collect_commute_data.LOCATION_GROUPING', 'town')
     monkeypatch.setattr('Commute.collect_commute_data.WORK1_MAX_RANGE', 40)
     monkeypatch.setattr('Commute.collect_commute_data.ENABLE_SECOND_WORK_ADDRESS', True)
-    monkeypatch.setattr('Commute.collect_commute_data.WORK2_DISTANCES_FILE', str(work2_file))
+    monkeypatch.setattr('Commute.collect_commute_data.WORK2_COMMUTE_STATS_FILE', str(work2_file))
     monkeypatch.setattr('Commute.collect_commute_data.WORK2_MAX_RANGE', 40)
 
     # Mock Work1 lookup to return 3 addresses (one will be filtered by Work2)
@@ -325,10 +325,7 @@ def test_load_addresses_work2_file_missing(tmp_path, monkeypatch):
     """When Work2 file is missing, falls back to full Work1 list with a warning."""
     monkeypatch.setattr('Commute.collect_commute_data.PROCESSED_DIR', str(tmp_path))
     monkeypatch.setattr('Commute.collect_commute_data.LOCATION_GROUPING', 'town')
-    monkeypatch.setattr('Commute.collect_commute_data.WORK1_MAX_RANGE', 40)
-    monkeypatch.setattr('Commute.collect_commute_data.ENABLE_SECOND_WORK_ADDRESS', True)
-    # Point to a file that doesn't exist
-    monkeypatch.setattr('Commute.collect_commute_data.WORK2_DISTANCES_FILE',
+    monkeypatch.setattr('Commute.collect_commute_data.WORK2_COMMUTE_STATS_FILE',
                         str(tmp_path / 'nonexistent_work2.csv'))
 
     with patch('Commute.collect_commute_data.get_locations_within_range') as mock_range:

@@ -15,7 +15,7 @@ from pathlib import Path
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
-from constants import WORK_ADDR2, WORK2_DISTANCES_FILE, WORK1_COMMUTE_STATS_FILE
+from constants import WORK_ADDR2, WORK2_COMMUTE_STATS_FILE, WORK1_COMMUTE_STATS_FILE
 from utils import get_zip_data, get_locations_within_range
 from Commute.collect_commute_data import fetch_commute_times
 from logging_config import setup_logger
@@ -140,18 +140,18 @@ def generate_work2_distances(dry_run=False):
     df = df.sort_values('Distance').reset_index(drop=True)
     
     try:
-        df.to_csv(WORK2_DISTANCES_FILE, index=False)
+        df.to_csv(WORK2_COMMUTE_STATS_FILE, index=False)
         
         logger.info("=" * 70)
         logger.info("WORK ADDRESS 2 DISTANCE FILE GENERATED")
         logger.info("-" * 70)
         logger.info(f"Total locations processed: {len(df)}")
         logger.info(f"Within {range_to_use} mile range: {len(df)}")
-        logger.info(f"File saved to: {WORK2_DISTANCES_FILE}")
+        logger.info(f"File saved to: {WORK2_COMMUTE_STATS_FILE}")
         logger.info("=" * 70)
         
         print(f"\n✓ Success! Generated {len(df)} Work Address 2 distance records")
-        print(f"  File: {WORK2_DISTANCES_FILE}")
+        print(f"  File: {WORK2_COMMUTE_STATS_FILE}")
         
         return True
         

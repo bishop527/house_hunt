@@ -26,7 +26,7 @@ from constants import (
     SCORE_CONFIG_FILE, WORK1_COMMUTE_STATS_FILE, HOUSING_STATS_FILE, CRIME_SCORES_FILE,
     SCORED_LOCATIONS_FILE, LOCATION_GROUPING, RESULTS_DIR,
     REDFIN_DATA_FILE, PROCESSED_DIR, WORK1_MAX_RANGE, PROPERTY_TYPES,
-    ENABLE_SECOND_WORK_ADDRESS, WORK2_DISTANCES_FILE, WORK2_MAX_RANGE,
+    ENABLE_SECOND_WORK_ADDRESS, WORK2_COMMUTE_STATS_FILE, WORK2_MAX_RANGE,
     TIER_THRESHOLDS, WORK_ADDR1,
     USE_FBI_CRIME_DATA, FBI_CRIME_SCORES_FILE
 )
@@ -271,7 +271,7 @@ class LocationScorer:
         logger.info(f"Loaded {len(self.commute_data)} commute records (Work Address 1)")
         
         if ENABLE_SECOND_WORK_ADDRESS:
-            self.work2_data = load_csv_with_zip(WORK2_DISTANCES_FILE)
+            self.work2_data = load_csv_with_zip(WORK2_COMMUTE_STATS_FILE)
             if not self.work2_data.empty:
                 # Ensure consistent data types for merge keys
                 if 'State' in self.work2_data.columns:

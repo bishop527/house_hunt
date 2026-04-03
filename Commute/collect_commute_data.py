@@ -601,9 +601,9 @@ def _load_addresses_within_range():
     # Removes zip codes that are outside WORK2_MAX_RANGE of Work Address 2.
     # Uses the pre-computed work2_distances.csv so no new API calls are needed.
     if ENABLE_SECOND_WORK_ADDRESS:
-        if os.path.exists(WORK2_DISTANCES_FILE):
+        if os.path.exists(WORK2_COMMUTE_STATS_FILE):
             try:
-                work2_df = pd.read_csv(WORK2_DISTANCES_FILE)
+                work2_df = pd.read_csv(WORK2_COMMUTE_STATS_FILE)
                 
                 # OPTIMIZATION: Filter by WORK2_MAX_RANGE dynamically from constants
                 # This ensures we respect the current config even if the file contains wider results.
@@ -641,7 +641,7 @@ def _load_addresses_within_range():
                 )
         else:
             logger.warning(
-                f"ENABLE_SECOND_WORK_ADDRESS=True but {WORK2_DISTANCES_FILE} "
+                f"ENABLE_SECOND_WORK_ADDRESS=True but {WORK2_COMMUTE_STATS_FILE} "
                 "not found — Work Address 2 range filter skipped. "
                 "Run 'python main.py --work2' to generate it."
             )

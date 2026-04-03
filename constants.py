@@ -63,7 +63,7 @@ HOUSING_STATS_FILE = os.path.join(RESULTS_DIR, "housing_stats.csv")
 API_TIER_TRACKING_FILE = os.path.join(LOGS_DIR, "monthly_API_usage_by_tier.txt")
 SCORED_LOCATIONS_FILE = os.path.join(RESULTS_DIR, "scored_locations.csv")
 SCORE_REPORT_FILE = os.path.join(RESULTS_DIR, "score_report.html")
-WORK2_DISTANCES_FILE = os.path.join(RESULTS_DIR, "work2_distances.csv")
+WORK2_COMMUTE_STATS_FILE = os.path.join(RESULTS_DIR, "work2_commute_stats.csv")
 RANGE_LOOKUP_FILE = os.path.join(PROCESSED_DIR, "locations_within_range.csv")
 
 # ========================================
