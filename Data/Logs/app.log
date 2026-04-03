@@ -1258,3 +1258,23 @@ EOFError: EOF when reading a line
 2026-04-03 03:10:00 Fri UTC [INFO] __main__: EXECUTION SUMMARY:
 2026-04-03 03:10:00 Fri UTC [INFO] __main__:   SCORE: SUCCESS
 2026-04-03 03:10:00 Fri UTC [INFO] __main__: COMPLETED: House Hunt | 1/1 modules successful
+2026-04-03 12:48:06 Fri UTC [INFO] __main__: STARTED: House Hunt Execution
+2026-04-03 12:48:06 Fri UTC [INFO] __main__: STARTED: Commute Data Collection
+2026-04-03 12:48:06 Fri UTC [INFO] utils: Using ADVANCED tier (traffic data enabled) - 4,432 free calls remaining this month
+2026-04-03 12:48:06 Fri UTC [INFO] utils: STARTED: Range Check (40mi, group_by=town)
+2026-04-03 12:48:06 Fri UTC [INFO] utils: Loaded 232 granular results from unified cache: /home/runner/work/house_hunt/house_hunt/Data/Processed/locations_within_40mi.csv (0 days old)
+2026-04-03 12:48:06 Fri UTC [INFO] utils: Filtered 232 zips down to 186 representative towns
+2026-04-03 12:48:06 Fri UTC [INFO] utils: COMPLETED: Range Check | Found 186 towns
+2026-04-03 12:48:07 Fri UTC [INFO] utils: Loaded 204 records from /home/runner/work/house_hunt/house_hunt/Data/Results/work1_commute_stats.csv
+2026-04-03 12:48:07 Fri UTC [INFO] utils: Tier tracking updated: +97 (advanced) | Monthly: Basic=0 Advanced=665
+2026-04-03 12:48:07 Fri UTC [INFO] utils: STARTED: Tracking Validation
+2026-04-03 12:48:07 Fri UTC [INFO] utils: STARTED: Google Usage Check
+2026-04-03 12:48:08 Fri UTC [INFO] utils: Google-reported usage: 3,872 elements (Basic tier)
+2026-04-03 12:48:08 Fri UTC [INFO] utils: Free tier limit: 10,000, Remaining: 6,128
+2026-04-03 12:48:08 Fri UTC [INFO] utils: COMPLETED: Google Usage Check
+2026-04-03 12:48:08 Fri UTC [INFO] utils: COMPLETED: Tracking Validation | tier=Basic | local=665 google=3,872 delta=3,207 | Basic=0/10,000 Advanced=665/5,000 | cost=$0.00
+2026-04-03 12:48:08 Fri UTC [ERROR] utils: CRITICAL: Tracking severely out of sync - local=665 google=3,872 off=82.8% (3,207 elements) - check tier tracking file
+2026-04-03 12:48:08 Fri UTC [INFO] __main__: COMPLETED: Commute Data Collection
+2026-04-03 12:48:08 Fri UTC [INFO] __main__: EXECUTION SUMMARY:
+2026-04-03 12:48:08 Fri UTC [INFO] __main__:   COMMUTE: SUCCESS
+2026-04-03 12:48:08 Fri UTC [INFO] __main__: COMPLETED: House Hunt | 1/1 modules successful
