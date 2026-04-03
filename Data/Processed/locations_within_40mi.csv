@@ -1,0 +1,233 @@
+Full_Address,Distance_Miles
+"Fitchburg, MA 01420",34.51
+"Ayer, MA 01432",21.5
+"Devens, MA 01434",26.05
+"Groton, MA 01450",26.95
+"Harvard, MA 01451",21.51
+"Leominster, MA 01453",28.88
+"Littleton, MA 01460",17.27
+"Lunenburg, MA 01462",33.41
+"Pepperell, MA 01463",30.61
+"Shirley, MA 01464",26.74
+"Townsend, MA 01469",35.94
+"Westminster, MA 01473",39.22
+"West Townsend, MA 01474",38.39
+"Berlin, MA 01503",28.61
+"Boylston, MA 01505",38.17
+"Clinton, MA 01510",29.38
+"Lancaster, MA 01523",28.75
+"Northborough, MA 01532",33.78
+"Northbridge, MA 01534",39.03
+"Shrewsbury, MA 01545",38.14
+"South Grafton, MA 01560",39.96
+"Sterling, MA 01564",34.39
+"Upton, MA 01568",36.42
+"Westborough, MA 01581",32.56
+"West Boylston, MA 01583",39.41
+"Framingham, MA 01701",18.78
+"Framingham, MA 01702",22.36
+"Acton, MA 01718",13.78
+"Boxborough, MA 01719",17.59
+"Acton, MA 01720",12.95
+"Ashland, MA 01721",26.28
+"Bedford, MA 01730",3.72
+"Hanscom AFB, MA 01731",1.66
+"Bolton, MA 01740",25.08
+"Carlisle, MA 01741",8.25
+"Concord, MA 01742",6.31
+"Fayville, MA 01745",24.38
+"Holliston, MA 01746",25.13
+"Hopedale, MA 01747",39.13
+"Hopkinton, MA 01748",32.62
+"Hudson, MA 01749",20.37
+"Marlborough, MA 01752",21.98
+"Maynard, MA 01754",13.79
+"Milford, MA 01757",37.26
+"Natick, MA 01760",19.86
+"Sherborn, MA 01770",19.79
+"Southborough, MA 01772",26.32
+"Lincoln, MA 01773",5.39
+"Stow, MA 01775",16.46
+"Sudbury, MA 01776",13.65
+"Wayland, MA 01778",12.49
+"Woburn, MA 01801",9.33
+"Burlington, MA 01803",6.95
+"Andover, MA 01810",21.76
+"Billerica, MA 01821",7.3
+"Chelmsford, MA 01824",15.47
+"Dracut, MA 01826",18.97
+"Dunstable, MA 01827",25.87
+"Haverhill, MA 01830",37.2
+"Haverhill, MA 01832",33.28
+"Georgetown, MA 01833",33.67
+"Groveland, MA 01834",35.56
+"Haverhill, MA 01835",34.41
+"Lawrence, MA 01840",27.59
+"Lawrence, MA 01841",27.15
+"Lawrence, MA 01843",24.88
+"Methuen, MA 01844",26.0
+"North Andover, MA 01845",25.1
+"Lowell, MA 01850",18.08
+"Lowell, MA 01851",16.67
+"Lowell, MA 01852",17.61
+"Lowell, MA 01854",19.72
+"Merrimac, MA 01860",39.81
+"North Billerica, MA 01862",13.35
+"North Chelmsford, MA 01863",18.32
+"North Reading, MA 01864",16.07
+"Reading, MA 01867",13.97
+"Tewksbury, MA 01876",16.1
+"Tyngsboro, MA 01879",22.49
+"Wakefield, MA 01880",13.33
+"Westford, MA 01886",22.48
+"Wilmington, MA 01887",15.24
+"Winchester, MA 01890",7.5
+"Lynn, MA 01901",22.2
+"Lynn, MA 01902",22.0
+"Lynn, MA 01904",19.81
+"Lynn, MA 01905",19.96
+"Saugus, MA 01906",22.14
+"Swampscott, MA 01907",24.4
+"Nahant, MA 01908",25.71
+"Beverly, MA 01915",30.04
+"Boxford, MA 01921",30.15
+"Byfield, MA 01922",35.01
+"Danvers, MA 01923",23.94
+"Essex, MA 01929",35.26
+"Gloucester, MA 01930",36.98
+"Ipswich, MA 01938",33.45
+"Lynnfield, MA 01940",14.84
+"Manchester, MA 01944",31.23
+"Marblehead, MA 01945",28.14
+"Middleton, MA 01949",19.35
+"Peabody, MA 01960",20.52
+"Rowley, MA 01969",37.57
+"Salem, MA 01970",23.51
+"South Hamilton, MA 01982",28.33
+"Topsfield, MA 01983",26.51
+"Wenham, MA 01984",26.39
+"Canton, MA 02021",25.39
+"Dedham, MA 02026",17.95
+"Dover, MA 02030",17.59
+"East Walpole, MA 02032",28.47
+"Foxboro, MA 02035",35.06
+"Hingham, MA 02043",39.98
+"Mansfield, MA 02048",38.72
+"Medfield, MA 02052",25.46
+"Medway, MA 02053",31.65
+"Millis, MA 02054",29.39
+"Norfolk, MA 02056",30.94
+"Norwood, MA 02062",24.07
+"Sharon, MA 02067",30.34
+"South Walpole, MA 02071",32.49
+"Stoughton, MA 02072",29.32
+"Walpole, MA 02081",26.45
+"Westwood, MA 02090",20.79
+"Wrentham, MA 02093",37.1
+"Boston, MA 02108",21.54
+"Boston, MA 02109",22.84
+"Boston, MA 02110",20.98
+"Boston, MA 02111",21.72
+"Boston, MA 02113",20.9
+"Boston, MA 02114",20.73
+"Boston, MA 02115",20.67
+"Boston, MA 02116",21.75
+"Boston, MA 02118",22.85
+"Roxbury, MA 02119",24.42
+"Roxbury Crossing, MA 02120",16.89
+"Dorchester, MA 02121",22.1
+"Dorchester, MA 02122",26.01
+"Dorchester Center, MA 02124",27.16
+"Dorchester, MA 02125",24.81
+"Mattapan, MA 02126",28.33
+"South Boston, MA 02127",23.28
+"East Boston, MA 02128",22.98
+"Charlestown, MA 02129",19.47
+"Jamaica Plain, MA 02130",19.56
+"Roslindale, MA 02131",19.66
+"West Roxbury, MA 02132",17.33
+"Boston, MA 02133",21.01
+"Allston, MA 02134",18.91
+"Brighton, MA 02135",16.38
+"Hyde Park, MA 02136",23.54
+"Cambridge, MA 02138",11.42
+"Cambridge, MA 02139",14.03
+"Cambridge, MA 02140",10.65
+"Cambridge, MA 02141",21.15
+"Cambridge, MA 02142",21.66
+"Somerville, MA 02143",12.6
+"Somerville, MA 02144",11.03
+"Somerville, MA 02145",17.88
+"Malden, MA 02148",16.55
+"Everett, MA 02149",20.37
+"Chelsea, MA 02150",24.26
+"Revere, MA 02151",25.71
+"Winthrop, MA 02152",26.62
+"Medford, MA 02155",15.6
+"Boston, MA 02163",18.78
+"Quincy, MA 02169",31.08
+"Quincy, MA 02170",32.34
+"Quincy, MA 02171",28.82
+"Melrose, MA 02176",15.27
+"Stoneham, MA 02180",12.76
+"Braintree, MA 02184",30.51
+"Milton, MA 02186",26.82
+"Weymouth, MA 02188",33.94
+"East Weymouth, MA 02189",35.83
+"South Weymouth, MA 02190",35.09
+"North Weymouth, MA 02191",34.76
+"Boston, MA 02199",20.3
+"Boston, MA 02203",20.81
+"Boston, MA 02210",21.74
+"Boston, MA 02215",23.99
+"Boston, MA 02222",20.77
+"Brockton, MA 02301",34.82
+"Brockton, MA 02302",36.59
+"Avon, MA 02322",31.51
+"Holbrook, MA 02343",34.24
+"Abington, MA 02351",36.79
+"North Easton, MA 02356",37.07
+"Randolph, MA 02368",29.75
+"South Easton, MA 02375",36.91
+"West Bridgewater, MA 02379",39.41
+"Whitman, MA 02382",39.74
+"Lexington, MA 02420",3.62
+"Lexington, MA 02421",3.95
+"Brookline, MA 02445",17.6
+"Brookline, MA 02446",18.83
+"Waltham, MA 02451",6.34
+"Waltham, MA 02452",7.44
+"Waltham, MA 02453",9.54
+"Newton, MA 02458",15.35
+"Newton Center, MA 02459",15.88
+"Newtonville, MA 02460",14.03
+"Newton Highlands, MA 02461",13.91
+"Newton Lower Falls, MA 02462",11.17
+"Newton Upper Falls, MA 02464",12.99
+"West Newton, MA 02465",13.35
+"Auburndale, MA 02466",10.4
+"Chestnut Hill, MA 02467",16.21
+"Waban, MA 02468",12.04
+"Watertown, MA 02472",10.61
+"Arlington, MA 02474",10.0
+"Arlington, MA 02476",8.24
+"Belmont, MA 02478",8.9
+"Wellesley Hills, MA 02481",12.87
+"Wellesley, MA 02482",14.49
+"Needham, MA 02492",16.13
+"Weston, MA 02493",9.21
+"Needham Heights, MA 02494",14.17
+"Brookline, NH 03033",38.5
+"Hollis, NH 03049",32.94
+"Hudson, NH 03051",29.56
+"Litchfield, NH 03052",36.17
+"Merrimack, NH 03054",36.95
+"Nashua, NH 03060",28.59
+"Nashua, NH 03062",29.23
+"Nashua, NH 03063",32.34
+"Nashua, NH 03064",33.73
+"Pelham, NH 03076",23.38
+"Salem, NH 03079",31.14
+"Windham, NH 03087",35.48
+"Atkinson, NH 03811",37.36
+"Plaistow, NH 03865",36.41
