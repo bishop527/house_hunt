@@ -252,7 +252,7 @@ with patch('Commute.collect_commute_data.get_google_api_key',
 with patch('Commute.collect_commute_data.load_historical_data'):
     ...
 
-monkeypatch.setattr('Commute.collect_commute_data.COMMUTE_STATS_FILE', 
+monkeypatch.setattr('Commute.collect_commute_data.WORK1_COMMUTE_STATS_FILE', 
                    str(stats_file))
 ```
 
