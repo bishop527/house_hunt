@@ -2109,3 +2109,74 @@ googlemaps.exceptions.ApiError: API Error
 2026-04-04 12:57:51 Sat UTC [INFO] utils: Tier tracking updated: +1 (basic) | Monthly: Basic=1 Advanced=0
 2026-04-04 12:57:51 Sat UTC [INFO] utils: Saved 1 locations to unified cache: C:\Users\aedwa\AppData\Local\Temp\pytest-of-aedwa\pytest-108\test_get_zips_within_range_for0\locations_within_30mi.csv
 2026-04-04 12:57:51 Sat UTC [INFO] utils: COMPLETED: Range Check | Found 1 zips
+2026-04-04 13:29:40 Sat UTC [INFO] __main__: STARTED: House Hunt Execution
+2026-04-04 13:29:40 Sat UTC [INFO] __main__: === Starting execution for Property Type: Single Family ===
+2026-04-04 13:29:40 Sat UTC [INFO] __main__: STARTED: Housing Data Collection (Single Family)
+2026-04-04 13:29:40 Sat UTC [INFO] __main__: Force refresh enabled: Will clear historical data for queried zips
+2026-04-04 13:29:40 Sat UTC [INFO] utils: Parsing ZIP database: C:\Users\aedwa\workspace\house_hunt\Data\Raw\zip_code_database.csv
+2026-04-04 13:29:40 Sat UTC [INFO] utils: Loaded 795 active standard ZIPs for MA, RI, NH
+2026-04-04 13:29:40 Sat UTC [INFO] utils: STARTED: Range Check (40mi, group_by=town)
+2026-04-04 13:29:40 Sat UTC [INFO] utils: Loaded 232 granular results from unified cache: C:\Users\aedwa\workspace\house_hunt\Data\Processed\locations_within_40mi.csv (1 days old)
+2026-04-04 13:29:40 Sat UTC [INFO] utils: Filtered 232 zips down to 186 representative towns
+2026-04-04 13:29:40 Sat UTC [INFO] utils: COMPLETED: Range Check | Found 186 towns
+2026-04-04 13:29:43 Sat UTC [INFO] utils: Loaded 221 records from C:\Users\aedwa\workspace\house_hunt\Data\Results\housing_stats_Single_Family.csv
+2026-04-04 13:29:43 Sat UTC [INFO] __main__: COMPLETED: Housing Data Collection (Single Family)
+2026-04-04 13:29:43 Sat UTC [INFO] __main__: STARTED: Scoring (Single Family)
+2026-04-04 13:29:43 Sat UTC [INFO] utils: Loaded 204 records from C:\Users\aedwa\workspace\house_hunt\Data\Results\work1_commute_stats.csv
+2026-04-04 13:29:43 Sat UTC [INFO] utils: Loaded 179 records from C:\Users\aedwa\workspace\house_hunt\Data\Results\work2_commute_stats.csv
+2026-04-04 13:29:43 Sat UTC [INFO] utils: STARTED: Range Check (40mi, group_by=zip)
+2026-04-04 13:29:43 Sat UTC [INFO] utils: Loaded 232 granular results from unified cache: C:\Users\aedwa\workspace\house_hunt\Data\Processed\locations_within_40mi.csv (1 days old)
+2026-04-04 13:29:43 Sat UTC [INFO] utils: COMPLETED: Range Check | Found 232 zips
+2026-04-04 13:29:46 Sat UTC [INFO] utils: Parsing ZIP database: C:\Users\aedwa\workspace\house_hunt\Data\Raw\zip_code_database.csv
+2026-04-04 13:29:46 Sat UTC [INFO] utils: Loaded 795 active standard ZIPs for MA, RI, NH
+2026-04-04 13:29:47 Sat UTC [INFO] __main__: Generating HTML report from C:\Users\aedwa\workspace\house_hunt\Data\Results\scored_locations-Single_Family.csv...
+2026-04-04 13:29:47 Sat UTC [INFO] utils: Loaded 65 records from C:\Users\aedwa\workspace\house_hunt\Data\Results\scored_locations-Single_Family.csv
+2026-04-04 13:29:47 Sat UTC [INFO] __main__: COMPLETED: Scoring (Single Family)
+2026-04-04 13:29:47 Sat UTC [INFO] __main__: === Starting execution for Property Type: Condo ===
+2026-04-04 13:29:47 Sat UTC [INFO] __main__: STARTED: Housing Data Collection (Condo)
+2026-04-04 13:29:47 Sat UTC [INFO] __main__: Force refresh enabled: Will clear historical data for queried zips
+2026-04-04 13:29:47 Sat UTC [INFO] utils: Parsing ZIP database: C:\Users\aedwa\workspace\house_hunt\Data\Raw\zip_code_database.csv
+2026-04-04 13:29:47 Sat UTC [INFO] utils: Loaded 795 active standard ZIPs for MA, RI, NH
+2026-04-04 13:29:47 Sat UTC [INFO] utils: STARTED: Range Check (40mi, group_by=town)
+2026-04-04 13:29:47 Sat UTC [INFO] utils: Loaded 232 granular results from unified cache: C:\Users\aedwa\workspace\house_hunt\Data\Processed\locations_within_40mi.csv (1 days old)
+2026-04-04 13:29:47 Sat UTC [INFO] utils: Filtered 232 zips down to 186 representative towns
+2026-04-04 13:29:47 Sat UTC [INFO] utils: COMPLETED: Range Check | Found 186 towns
+2026-04-04 13:29:49 Sat UTC [INFO] utils: Loaded 219 records from C:\Users\aedwa\workspace\house_hunt\Data\Results\housing_stats_Condo.csv
+2026-04-04 13:29:49 Sat UTC [INFO] __main__: COMPLETED: Housing Data Collection (Condo)
+2026-04-04 13:29:49 Sat UTC [INFO] __main__: STARTED: Scoring (Condo)
+2026-04-04 13:29:49 Sat UTC [INFO] utils: Loaded 204 records from C:\Users\aedwa\workspace\house_hunt\Data\Results\work1_commute_stats.csv
+2026-04-04 13:29:49 Sat UTC [INFO] utils: Loaded 179 records from C:\Users\aedwa\workspace\house_hunt\Data\Results\work2_commute_stats.csv
+2026-04-04 13:29:49 Sat UTC [INFO] utils: STARTED: Range Check (40mi, group_by=zip)
+2026-04-04 13:29:49 Sat UTC [INFO] utils: Loaded 232 granular results from unified cache: C:\Users\aedwa\workspace\house_hunt\Data\Processed\locations_within_40mi.csv (1 days old)
+2026-04-04 13:29:49 Sat UTC [INFO] utils: COMPLETED: Range Check | Found 232 zips
+2026-04-04 13:29:52 Sat UTC [INFO] utils: Parsing ZIP database: C:\Users\aedwa\workspace\house_hunt\Data\Raw\zip_code_database.csv
+2026-04-04 13:29:53 Sat UTC [INFO] utils: Loaded 795 active standard ZIPs for MA, RI, NH
+2026-04-04 13:29:53 Sat UTC [INFO] __main__: Generating HTML report from C:\Users\aedwa\workspace\house_hunt\Data\Results\scored_locations-Condo.csv...
+2026-04-04 13:29:53 Sat UTC [INFO] utils: Loaded 95 records from C:\Users\aedwa\workspace\house_hunt\Data\Results\scored_locations-Condo.csv
+2026-04-04 13:29:53 Sat UTC [INFO] __main__: COMPLETED: Scoring (Condo)
+2026-04-04 13:29:53 Sat UTC [INFO] __main__: === Starting execution for Property Type: Townhouse ===
+2026-04-04 13:29:53 Sat UTC [INFO] __main__: STARTED: Housing Data Collection (Townhouse)
+2026-04-04 13:29:53 Sat UTC [INFO] __main__: Force refresh enabled: Will clear historical data for queried zips
+2026-04-04 13:29:53 Sat UTC [INFO] utils: Parsing ZIP database: C:\Users\aedwa\workspace\house_hunt\Data\Raw\zip_code_database.csv
+2026-04-04 13:29:53 Sat UTC [INFO] utils: Loaded 795 active standard ZIPs for MA, RI, NH
+2026-04-04 13:29:53 Sat UTC [INFO] utils: STARTED: Range Check (40mi, group_by=town)
+2026-04-04 13:29:53 Sat UTC [INFO] utils: Loaded 232 granular results from unified cache: C:\Users\aedwa\workspace\house_hunt\Data\Processed\locations_within_40mi.csv (1 days old)
+2026-04-04 13:29:53 Sat UTC [INFO] utils: Filtered 232 zips down to 186 representative towns
+2026-04-04 13:29:53 Sat UTC [INFO] utils: COMPLETED: Range Check | Found 186 towns
+2026-04-04 13:29:56 Sat UTC [INFO] utils: Loaded 204 records from C:\Users\aedwa\workspace\house_hunt\Data\Results\housing_stats_Townhouse.csv
+2026-04-04 13:29:56 Sat UTC [INFO] __main__: COMPLETED: Housing Data Collection (Townhouse)
+2026-04-04 13:29:56 Sat UTC [INFO] __main__: STARTED: Scoring (Townhouse)
+2026-04-04 13:29:56 Sat UTC [INFO] utils: Loaded 204 records from C:\Users\aedwa\workspace\house_hunt\Data\Results\work1_commute_stats.csv
+2026-04-04 13:29:56 Sat UTC [INFO] utils: Loaded 179 records from C:\Users\aedwa\workspace\house_hunt\Data\Results\work2_commute_stats.csv
+2026-04-04 13:29:56 Sat UTC [INFO] utils: STARTED: Range Check (40mi, group_by=zip)
+2026-04-04 13:29:56 Sat UTC [INFO] utils: Loaded 232 granular results from unified cache: C:\Users\aedwa\workspace\house_hunt\Data\Processed\locations_within_40mi.csv (1 days old)
+2026-04-04 13:29:56 Sat UTC [INFO] utils: COMPLETED: Range Check | Found 232 zips
+2026-04-04 13:29:59 Sat UTC [INFO] utils: Parsing ZIP database: C:\Users\aedwa\workspace\house_hunt\Data\Raw\zip_code_database.csv
+2026-04-04 13:29:59 Sat UTC [INFO] utils: Loaded 795 active standard ZIPs for MA, RI, NH
+2026-04-04 13:29:59 Sat UTC [INFO] __main__: Generating HTML report from C:\Users\aedwa\workspace\house_hunt\Data\Results\scored_locations-Townhouse.csv...
+2026-04-04 13:29:59 Sat UTC [INFO] utils: Loaded 72 records from C:\Users\aedwa\workspace\house_hunt\Data\Results\scored_locations-Townhouse.csv
+2026-04-04 13:29:59 Sat UTC [INFO] __main__: COMPLETED: Scoring (Townhouse)
+2026-04-04 13:29:59 Sat UTC [INFO] __main__: EXECUTION SUMMARY:
+2026-04-04 13:29:59 Sat UTC [INFO] __main__:   HOUSING: SUCCESS
+2026-04-04 13:29:59 Sat UTC [INFO] __main__:   SCORE: SUCCESS
+2026-04-04 13:29:59 Sat UTC [INFO] __main__: COMPLETED: House Hunt | 2/2 modules successful
