@@ -562,14 +562,7 @@ def _fetch_distances_from_google(addresses, destination, current_usage):
         sys.exit(1)
 
     # Initialize client
-    if PROXY_ON:
-        logger.info("Initializing with Proxy")
-        gmaps = googlemaps.Client(
-            key=api_key,
-            requests_kwargs={'proxies': {'https': PROXY}}
-        )
-    else:
-        gmaps = googlemaps.Client(key=api_key)
+    gmaps = googlemaps.Client(key=api_key)
 
     results_list = []
     elements_processed = 0
@@ -843,7 +836,7 @@ def get_monthly_element_usage_from_google():
             .from_service_account_file(GCP_MONITOR_KEY)
 
         client = monitoring_v3.MetricServiceClient(credentials=credentials)
-        project_name = f"projects/{GCP_PROJECT_ID}"
+        project_name = f"projects/{credentials.project_id}"
 
         now = datetime.now(timezone.utc)
 

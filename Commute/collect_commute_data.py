@@ -84,14 +84,7 @@ def fetch_commute_times(addresses, direction):
         raise SystemExit(1)
 
     # Initialize client
-    if PROXY_ON:
-        logger.info("Initializing Google Maps client with Proxy")
-        gmaps = googlemaps.Client(
-            key=api_key,
-            requests_kwargs={'proxies': {'https': PROXY}}
-        )
-    else:
-        gmaps = googlemaps.Client(key=api_key)
+    gmaps = googlemaps.Client(key=api_key)
 
         # Set origin and destination based on direction
     if direction == 'morning':

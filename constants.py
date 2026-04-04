@@ -4,7 +4,6 @@ Configuration constants for House Hunt project.
 Created: 18 June 2025
 Updated: 30 Jan 2026
 
-@author: AD23883
 """
 import os
 import logging
@@ -75,8 +74,6 @@ HOUSING_LOG_FILE = os.path.join(LOGS_DIR, 'housing.log')
 SCORE_LOG_FILE = os.path.join(LOGS_DIR, 'score.log')
 
 US_HOLIDAYS = holidays.country_holidays('US')
-PROXY_ON = False
-PROXY = 'http://localhost:8080'
 
 # ========================================
 # UNIT CONVERSIONS
@@ -95,7 +92,6 @@ KEY_LOC = DATA_DIR
 KEY_FILE = "google_api_key"
 
 # GCP Monitoring
-GCP_PROJECT_ID = "house-hunt-project"
 GCP_MONITOR_KEY = os.path.join(DATA_DIR, "monitor-key.json")
 
 # Request Parameters

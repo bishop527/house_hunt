@@ -1,0 +1,5 @@
+localhost==>localhost
+house-hunt-project==>house-hunt-project
+123 Main St, Anytown, MA 00000, USA==>123 Main St, Anytown, MA 00000, USA
+123 Main St, Anytown, MA 00000==>123 Main St, Anytown, MA 00000
+123 Main St. Anytown, MA 00000==>123 Main St. Anytown, MA 00000

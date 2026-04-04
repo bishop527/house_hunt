@@ -919,3 +919,328 @@
 2026-04-03 03:10:00 Fri UTC [INFO] Score.generate_report: Generating HTML report for 72 locations
 2026-04-03 03:10:00 Fri UTC [INFO] Score.generate_report: Including 140 filtered locations in report
 2026-04-03 03:10:00 Fri UTC [INFO] Score.generate_report: HTML report generated: /home/runner/work/house_hunt/house_hunt/Data/Results/score_report-Townhouse.html
+2026-04-04 12:19:05 Sat UTC [INFO] Score.calculate_scores: Loaded config from C:\Users\aedwa\AppData\Local\Temp\pytest-of-aedwa\pytest-100\test_scorer_init_with_config0\test_config.json
+2026-04-04 12:19:05 Sat UTC [INFO] Score.calculate_scores: Loaded config from c:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:19:05 Sat UTC [ERROR] Score.calculate_scores: Invalid JSON in config file: Expecting property name enclosed in double quotes: line 1 column 3 (char 2)
+2026-04-04 12:19:05 Sat UTC [INFO] Score.calculate_scores: Loaded config from c:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:19:05 Sat UTC [WARNING] Score.calculate_scores: Main weights sum to 20.000, normalizing to 1.0
+2026-04-04 12:19:05 Sat UTC [INFO] Score.calculate_scores: Loaded config from c:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:19:05 Sat UTC [INFO] Score.calculate_scores: Loaded config from c:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:19:05 Sat UTC [INFO] Score.calculate_scores: Loaded config from c:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:19:05 Sat UTC [INFO] Score.calculate_scores: Loaded config from c:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:19:05 Sat UTC [INFO] Score.calculate_scores: Loaded config from c:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:19:05 Sat UTC [INFO] Score.calculate_scores: Loaded config from c:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:19:05 Sat UTC [INFO] Score.calculate_scores: Loaded config from c:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:19:05 Sat UTC [INFO] Score.calculate_scores: Loaded config from c:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:19:05 Sat UTC [INFO] Score.calculate_scores: Loaded config from c:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:19:05 Sat UTC [INFO] Score.calculate_scores: Loaded config from c:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:19:05 Sat UTC [INFO] Score.calculate_scores: Loaded config from c:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:19:05 Sat UTC [INFO] Score.calculate_scores: Loaded config from c:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:19:05 Sat UTC [INFO] Score.calculate_scores: Loaded config from c:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:19:05 Sat UTC [INFO] Score.calculate_scores: Loaded config from c:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:19:05 Sat UTC [INFO] Score.calculate_scores: Scoring all locations...
+2026-04-04 12:19:05 Sat UTC [INFO] Score.calculate_scores: Town-grouping merge on Town+State: 4 commute towns x 4 housing zips -> 4 rows
+2026-04-04 12:19:06 Sat UTC [INFO] Score.calculate_scores: Joined crime scores using Primary and Alternate Town Names.
+2026-04-04 12:19:06 Sat UTC [INFO] Score.calculate_scores: Commute filter: removed 0 locations exceeding 60 min
+2026-04-04 12:19:06 Sat UTC [INFO] Score.calculate_scores: Price filter: removed 1 locations exceeding $800,000
+2026-04-04 12:19:06 Sat UTC [INFO] Score.calculate_scores: Scored 3 locations
+2026-04-04 12:19:06 Sat UTC [INFO] Score.calculate_scores: Loaded config from c:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:19:06 Sat UTC [INFO] Score.calculate_scores: Scoring all locations...
+2026-04-04 12:19:06 Sat UTC [INFO] Score.calculate_scores: Town-grouping merge on Town+State: 4 commute towns x 4 housing zips -> 4 rows
+2026-04-04 12:19:06 Sat UTC [INFO] Score.calculate_scores: Joined crime scores using Primary and Alternate Town Names.
+2026-04-04 12:19:06 Sat UTC [INFO] Score.calculate_scores: Commute filter: removed 2 locations exceeding 20 min
+2026-04-04 12:19:06 Sat UTC [INFO] Score.calculate_scores: Price filter: removed 1 locations exceeding $800,000
+2026-04-04 12:19:06 Sat UTC [INFO] Score.calculate_scores: Scored 1 locations
+2026-04-04 12:19:06 Sat UTC [INFO] Score.calculate_scores: Loaded config from c:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:19:06 Sat UTC [ERROR] Score.calculate_scores: Data not loaded. Call load_data() first.
+2026-04-04 12:19:06 Sat UTC [INFO] Score.calculate_scores: Loaded config from c:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:19:06 Sat UTC [INFO] Score.calculate_scores: Scoring all locations...
+2026-04-04 12:19:06 Sat UTC [INFO] Score.calculate_scores: Town-grouping merge on Town+State: 4 commute towns x 4 housing zips -> 4 rows
+2026-04-04 12:19:07 Sat UTC [INFO] Score.calculate_scores: Joined crime scores using Primary and Alternate Town Names.
+2026-04-04 12:19:07 Sat UTC [INFO] Score.calculate_scores: Commute filter: removed 0 locations exceeding 60 min
+2026-04-04 12:19:07 Sat UTC [INFO] Score.calculate_scores: Price filter: removed 1 locations exceeding $800,000
+2026-04-04 12:19:07 Sat UTC [INFO] Score.calculate_scores: Scored 3 locations
+2026-04-04 12:19:07 Sat UTC [INFO] Score.calculate_scores: Saved 3 scored locations to C:\Users\aedwa\AppData\Local\Temp\pytest-of-aedwa\pytest-100\test_save_results0\scored_locations-TestType.csv
+2026-04-04 12:19:07 Sat UTC [INFO] Score.calculate_scores: Loaded config from c:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:19:07 Sat UTC [INFO] Score.calculate_scores: Scoring all locations...
+2026-04-04 12:19:07 Sat UTC [INFO] Score.calculate_scores: Town-grouping merge on Town+State: 4 commute towns x 4 housing zips -> 4 rows
+2026-04-04 12:19:07 Sat UTC [INFO] Score.calculate_scores: Joined crime scores using Primary and Alternate Town Names.
+2026-04-04 12:19:07 Sat UTC [INFO] Score.calculate_scores: Commute filter: removed 0 locations exceeding 60 min
+2026-04-04 12:19:07 Sat UTC [INFO] Score.calculate_scores: Price filter: removed 1 locations exceeding $800,000
+2026-04-04 12:19:07 Sat UTC [INFO] Score.calculate_scores: Scored 3 locations
+2026-04-04 12:19:07 Sat UTC [INFO] Score.calculate_scores: STARTED: Scoring (All)
+2026-04-04 12:19:07 Sat UTC [INFO] Score.calculate_scores: Loaded config from C:\Users\aedwa\AppData\Local\Temp\pytest-of-aedwa\pytest-100\test_calculate_scores_main_fun0\config.json
+2026-04-04 12:19:07 Sat UTC [INFO] Score.calculate_scores: Loading commute and housing data...
+2026-04-04 12:19:07 Sat UTC [INFO] Score.calculate_scores: Loaded 4 commute records (Work Address 1)
+2026-04-04 12:19:07 Sat UTC [INFO] Score.calculate_scores: Loaded 4 Work Address 2 distance records
+2026-04-04 12:19:07 Sat UTC [INFO] Score.calculate_scores: Loaded 4 housing records
+2026-04-04 12:19:07 Sat UTC [INFO] Score.calculate_scores: Loaded 311 FBI Crime records
+2026-04-04 12:19:07 Sat UTC [INFO] Score.calculate_scores: Scoring all locations...
+2026-04-04 12:19:07 Sat UTC [INFO] Score.calculate_scores: Town-grouping merge on Town+State: 4 commute towns x 4 housing zips -> 4 rows
+2026-04-04 12:19:07 Sat UTC [INFO] Score.calculate_scores: Merged Work Address 2 data: 4 locations have Work2 data
+2026-04-04 12:19:07 Sat UTC [INFO] Score.calculate_scores: Joined crime scores using Primary and Alternate Town Names.
+2026-04-04 12:19:07 Sat UTC [INFO] Score.calculate_scores: Commute filter: removed 0 locations exceeding 60 min
+2026-04-04 12:19:07 Sat UTC [INFO] Score.calculate_scores: Price filter: removed 1 locations exceeding $800,000
+2026-04-04 12:19:07 Sat UTC [INFO] Score.calculate_scores: Scored 3 locations
+2026-04-04 12:19:07 Sat UTC [INFO] Score.calculate_scores: Saved 3 scored locations to C:\Users\aedwa\AppData\Local\Temp\pytest-of-aedwa\pytest-100\test_calculate_scores_main_fun0\scored_locations-MainTest.csv
+2026-04-04 12:19:07 Sat UTC [INFO] Score.calculate_scores: COMPLETED: Scoring (All) | scored=3 avg=82.4
+2026-04-04 12:29:01 Sat UTC [INFO] Score.calculate_scores: Loaded config from C:\Users\aedwa\AppData\Local\Temp\pytest-of-aedwa\pytest-105\test_scorer_init_with_config0\test_config.json
+2026-04-04 12:29:01 Sat UTC [INFO] Score.calculate_scores: Loaded config from c:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:29:01 Sat UTC [ERROR] Score.calculate_scores: Invalid JSON in config file: Expecting property name enclosed in double quotes: line 1 column 3 (char 2)
+2026-04-04 12:29:01 Sat UTC [INFO] Score.calculate_scores: Loaded config from c:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:29:01 Sat UTC [WARNING] Score.calculate_scores: Main weights sum to 20.000, normalizing to 1.0
+2026-04-04 12:29:01 Sat UTC [INFO] Score.calculate_scores: Loaded config from c:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:29:01 Sat UTC [INFO] Score.calculate_scores: Loaded config from c:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:29:01 Sat UTC [INFO] Score.calculate_scores: Loaded config from c:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:29:01 Sat UTC [INFO] Score.calculate_scores: Loaded config from c:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:29:01 Sat UTC [INFO] Score.calculate_scores: Loaded config from c:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:29:01 Sat UTC [INFO] Score.calculate_scores: Loaded config from c:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:29:01 Sat UTC [INFO] Score.calculate_scores: Loaded config from c:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:29:01 Sat UTC [INFO] Score.calculate_scores: Loaded config from c:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:29:01 Sat UTC [INFO] Score.calculate_scores: Loaded config from c:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:29:01 Sat UTC [INFO] Score.calculate_scores: Loaded config from c:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:29:01 Sat UTC [INFO] Score.calculate_scores: Loaded config from c:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:29:01 Sat UTC [INFO] Score.calculate_scores: Loaded config from c:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:29:01 Sat UTC [INFO] Score.calculate_scores: Loaded config from c:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:29:01 Sat UTC [INFO] Score.calculate_scores: Loaded config from c:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:29:01 Sat UTC [INFO] Score.calculate_scores: Scoring all locations...
+2026-04-04 12:29:01 Sat UTC [INFO] Score.calculate_scores: Town-grouping merge on Town+State: 4 commute towns x 4 housing zips -> 4 rows
+2026-04-04 12:29:01 Sat UTC [INFO] Score.calculate_scores: Joined crime scores using Primary and Alternate Town Names.
+2026-04-04 12:29:01 Sat UTC [INFO] Score.calculate_scores: Commute filter: removed 0 locations exceeding 60 min
+2026-04-04 12:29:01 Sat UTC [INFO] Score.calculate_scores: Price filter: removed 1 locations exceeding $800,000
+2026-04-04 12:29:01 Sat UTC [INFO] Score.calculate_scores: Scored 3 locations
+2026-04-04 12:29:01 Sat UTC [INFO] Score.calculate_scores: Loaded config from c:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:29:01 Sat UTC [INFO] Score.calculate_scores: Scoring all locations...
+2026-04-04 12:29:01 Sat UTC [INFO] Score.calculate_scores: Town-grouping merge on Town+State: 4 commute towns x 4 housing zips -> 4 rows
+2026-04-04 12:29:01 Sat UTC [INFO] Score.calculate_scores: Joined crime scores using Primary and Alternate Town Names.
+2026-04-04 12:29:01 Sat UTC [INFO] Score.calculate_scores: Commute filter: removed 2 locations exceeding 20 min
+2026-04-04 12:29:01 Sat UTC [INFO] Score.calculate_scores: Price filter: removed 1 locations exceeding $800,000
+2026-04-04 12:29:01 Sat UTC [INFO] Score.calculate_scores: Scored 1 locations
+2026-04-04 12:29:01 Sat UTC [INFO] Score.calculate_scores: Loaded config from c:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:29:01 Sat UTC [ERROR] Score.calculate_scores: Data not loaded. Call load_data() first.
+2026-04-04 12:29:01 Sat UTC [INFO] Score.calculate_scores: Loaded config from c:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:29:01 Sat UTC [INFO] Score.calculate_scores: Scoring all locations...
+2026-04-04 12:29:01 Sat UTC [INFO] Score.calculate_scores: Town-grouping merge on Town+State: 4 commute towns x 4 housing zips -> 4 rows
+2026-04-04 12:29:02 Sat UTC [INFO] Score.calculate_scores: Joined crime scores using Primary and Alternate Town Names.
+2026-04-04 12:29:02 Sat UTC [INFO] Score.calculate_scores: Commute filter: removed 0 locations exceeding 60 min
+2026-04-04 12:29:02 Sat UTC [INFO] Score.calculate_scores: Price filter: removed 1 locations exceeding $800,000
+2026-04-04 12:29:02 Sat UTC [INFO] Score.calculate_scores: Scored 3 locations
+2026-04-04 12:29:02 Sat UTC [INFO] Score.calculate_scores: Saved 3 scored locations to C:\Users\aedwa\AppData\Local\Temp\pytest-of-aedwa\pytest-105\test_save_results0\scored_locations-TestType.csv
+2026-04-04 12:29:02 Sat UTC [INFO] Score.calculate_scores: Loaded config from c:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:29:02 Sat UTC [INFO] Score.calculate_scores: Scoring all locations...
+2026-04-04 12:29:02 Sat UTC [INFO] Score.calculate_scores: Town-grouping merge on Town+State: 4 commute towns x 4 housing zips -> 4 rows
+2026-04-04 12:29:02 Sat UTC [INFO] Score.calculate_scores: Joined crime scores using Primary and Alternate Town Names.
+2026-04-04 12:29:02 Sat UTC [INFO] Score.calculate_scores: Commute filter: removed 0 locations exceeding 60 min
+2026-04-04 12:29:02 Sat UTC [INFO] Score.calculate_scores: Price filter: removed 1 locations exceeding $800,000
+2026-04-04 12:29:02 Sat UTC [INFO] Score.calculate_scores: Scored 3 locations
+2026-04-04 12:29:02 Sat UTC [INFO] Score.calculate_scores: STARTED: Scoring (All)
+2026-04-04 12:29:02 Sat UTC [INFO] Score.calculate_scores: Loaded config from C:\Users\aedwa\AppData\Local\Temp\pytest-of-aedwa\pytest-105\test_calculate_scores_main_fun0\config.json
+2026-04-04 12:29:02 Sat UTC [INFO] Score.calculate_scores: Loading commute and housing data...
+2026-04-04 12:29:02 Sat UTC [INFO] Score.calculate_scores: Loaded 4 commute records (Work Address 1)
+2026-04-04 12:29:02 Sat UTC [INFO] Score.calculate_scores: Loaded 4 Work Address 2 distance records
+2026-04-04 12:29:02 Sat UTC [INFO] Score.calculate_scores: Loaded 4 housing records
+2026-04-04 12:29:02 Sat UTC [INFO] Score.calculate_scores: Loaded 311 FBI Crime records
+2026-04-04 12:29:02 Sat UTC [INFO] Score.calculate_scores: Scoring all locations...
+2026-04-04 12:29:02 Sat UTC [INFO] Score.calculate_scores: Town-grouping merge on Town+State: 4 commute towns x 4 housing zips -> 4 rows
+2026-04-04 12:29:02 Sat UTC [INFO] Score.calculate_scores: Merged Work Address 2 data: 4 locations have Work2 data
+2026-04-04 12:29:03 Sat UTC [INFO] Score.calculate_scores: Joined crime scores using Primary and Alternate Town Names.
+2026-04-04 12:29:03 Sat UTC [INFO] Score.calculate_scores: Commute filter: removed 0 locations exceeding 60 min
+2026-04-04 12:29:03 Sat UTC [INFO] Score.calculate_scores: Price filter: removed 1 locations exceeding $800,000
+2026-04-04 12:29:03 Sat UTC [INFO] Score.calculate_scores: Scored 3 locations
+2026-04-04 12:29:03 Sat UTC [INFO] Score.calculate_scores: Saved 3 scored locations to C:\Users\aedwa\AppData\Local\Temp\pytest-of-aedwa\pytest-105\test_calculate_scores_main_fun0\scored_locations-MainTest.csv
+2026-04-04 12:29:03 Sat UTC [INFO] Score.calculate_scores: COMPLETED: Scoring (All) | scored=3 avg=82.4
+2026-04-04 12:41:59 Sat UTC [INFO] Score.calculate_scores: Loaded config from C:\Users\aedwa\AppData\Local\Temp\pytest-of-aedwa\pytest-106\test_scorer_init_with_config0\test_config.json
+2026-04-04 12:41:59 Sat UTC [INFO] Score.calculate_scores: Loaded config from C:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:41:59 Sat UTC [ERROR] Score.calculate_scores: Invalid JSON in config file: Expecting property name enclosed in double quotes: line 1 column 3 (char 2)
+2026-04-04 12:41:59 Sat UTC [INFO] Score.calculate_scores: Loaded config from C:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:41:59 Sat UTC [WARNING] Score.calculate_scores: Main weights sum to 20.000, normalizing to 1.0
+2026-04-04 12:41:59 Sat UTC [INFO] Score.calculate_scores: Loaded config from C:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:41:59 Sat UTC [INFO] Score.calculate_scores: Loaded config from C:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:41:59 Sat UTC [INFO] Score.calculate_scores: Loaded config from C:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:41:59 Sat UTC [INFO] Score.calculate_scores: Loaded config from C:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:41:59 Sat UTC [INFO] Score.calculate_scores: Loaded config from C:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:41:59 Sat UTC [INFO] Score.calculate_scores: Loaded config from C:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:41:59 Sat UTC [INFO] Score.calculate_scores: Loaded config from C:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:41:59 Sat UTC [INFO] Score.calculate_scores: Loaded config from C:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:41:59 Sat UTC [INFO] Score.calculate_scores: Loaded config from C:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:41:59 Sat UTC [INFO] Score.calculate_scores: Loaded config from C:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:41:59 Sat UTC [INFO] Score.calculate_scores: Loaded config from C:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:41:59 Sat UTC [INFO] Score.calculate_scores: Loaded config from C:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:41:59 Sat UTC [INFO] Score.calculate_scores: Loaded config from C:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:41:59 Sat UTC [INFO] Score.calculate_scores: Loaded config from C:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:41:59 Sat UTC [INFO] Score.calculate_scores: Scoring all locations...
+2026-04-04 12:41:59 Sat UTC [INFO] Score.calculate_scores: Town-grouping merge on Town+State: 4 commute towns x 4 housing zips -> 4 rows
+2026-04-04 12:42:00 Sat UTC [INFO] Score.calculate_scores: Joined crime scores using Primary and Alternate Town Names.
+2026-04-04 12:42:00 Sat UTC [INFO] Score.calculate_scores: Commute filter: removed 0 locations exceeding 60 min
+2026-04-04 12:42:00 Sat UTC [INFO] Score.calculate_scores: Price filter: removed 1 locations exceeding $800,000
+2026-04-04 12:42:00 Sat UTC [INFO] Score.calculate_scores: Scored 3 locations
+2026-04-04 12:42:00 Sat UTC [INFO] Score.calculate_scores: Loaded config from C:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:42:00 Sat UTC [INFO] Score.calculate_scores: Scoring all locations...
+2026-04-04 12:42:00 Sat UTC [INFO] Score.calculate_scores: Town-grouping merge on Town+State: 4 commute towns x 4 housing zips -> 4 rows
+2026-04-04 12:42:00 Sat UTC [INFO] Score.calculate_scores: Joined crime scores using Primary and Alternate Town Names.
+2026-04-04 12:42:00 Sat UTC [INFO] Score.calculate_scores: Commute filter: removed 2 locations exceeding 20 min
+2026-04-04 12:42:00 Sat UTC [INFO] Score.calculate_scores: Price filter: removed 1 locations exceeding $800,000
+2026-04-04 12:42:00 Sat UTC [INFO] Score.calculate_scores: Scored 1 locations
+2026-04-04 12:42:00 Sat UTC [INFO] Score.calculate_scores: Loaded config from C:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:42:00 Sat UTC [ERROR] Score.calculate_scores: Data not loaded. Call load_data() first.
+2026-04-04 12:42:00 Sat UTC [INFO] Score.calculate_scores: Loaded config from C:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:42:00 Sat UTC [INFO] Score.calculate_scores: Scoring all locations...
+2026-04-04 12:42:00 Sat UTC [INFO] Score.calculate_scores: Town-grouping merge on Town+State: 4 commute towns x 4 housing zips -> 4 rows
+2026-04-04 12:42:01 Sat UTC [INFO] Score.calculate_scores: Joined crime scores using Primary and Alternate Town Names.
+2026-04-04 12:42:01 Sat UTC [INFO] Score.calculate_scores: Commute filter: removed 0 locations exceeding 60 min
+2026-04-04 12:42:01 Sat UTC [INFO] Score.calculate_scores: Price filter: removed 1 locations exceeding $800,000
+2026-04-04 12:42:01 Sat UTC [INFO] Score.calculate_scores: Scored 3 locations
+2026-04-04 12:42:01 Sat UTC [INFO] Score.calculate_scores: Saved 3 scored locations to C:\Users\aedwa\AppData\Local\Temp\pytest-of-aedwa\pytest-106\test_save_results0\scored_locations-TestType.csv
+2026-04-04 12:42:01 Sat UTC [INFO] Score.calculate_scores: Loaded config from C:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:42:01 Sat UTC [INFO] Score.calculate_scores: Scoring all locations...
+2026-04-04 12:42:01 Sat UTC [INFO] Score.calculate_scores: Town-grouping merge on Town+State: 4 commute towns x 4 housing zips -> 4 rows
+2026-04-04 12:42:01 Sat UTC [INFO] Score.calculate_scores: Joined crime scores using Primary and Alternate Town Names.
+2026-04-04 12:42:01 Sat UTC [INFO] Score.calculate_scores: Commute filter: removed 0 locations exceeding 60 min
+2026-04-04 12:42:01 Sat UTC [INFO] Score.calculate_scores: Price filter: removed 1 locations exceeding $800,000
+2026-04-04 12:42:01 Sat UTC [INFO] Score.calculate_scores: Scored 3 locations
+2026-04-04 12:42:01 Sat UTC [INFO] Score.calculate_scores: STARTED: Scoring (All)
+2026-04-04 12:42:01 Sat UTC [INFO] Score.calculate_scores: Loaded config from C:\Users\aedwa\AppData\Local\Temp\pytest-of-aedwa\pytest-106\test_calculate_scores_main_fun0\config.json
+2026-04-04 12:42:01 Sat UTC [INFO] Score.calculate_scores: Loading commute and housing data...
+2026-04-04 12:42:01 Sat UTC [INFO] Score.calculate_scores: Loaded 4 commute records (Work Address 1)
+2026-04-04 12:42:01 Sat UTC [INFO] Score.calculate_scores: Loaded 4 Work Address 2 distance records
+2026-04-04 12:42:01 Sat UTC [INFO] Score.calculate_scores: Loaded 4 housing records
+2026-04-04 12:42:01 Sat UTC [INFO] Score.calculate_scores: Loaded 311 FBI Crime records
+2026-04-04 12:42:01 Sat UTC [INFO] Score.calculate_scores: Scoring all locations...
+2026-04-04 12:42:01 Sat UTC [INFO] Score.calculate_scores: Town-grouping merge on Town+State: 4 commute towns x 4 housing zips -> 4 rows
+2026-04-04 12:42:01 Sat UTC [INFO] Score.calculate_scores: Merged Work Address 2 data: 4 locations have Work2 data
+2026-04-04 12:42:01 Sat UTC [INFO] Score.calculate_scores: Joined crime scores using Primary and Alternate Town Names.
+2026-04-04 12:42:01 Sat UTC [INFO] Score.calculate_scores: Commute filter: removed 0 locations exceeding 60 min
+2026-04-04 12:42:01 Sat UTC [INFO] Score.calculate_scores: Price filter: removed 1 locations exceeding $800,000
+2026-04-04 12:42:01 Sat UTC [INFO] Score.calculate_scores: Scored 3 locations
+2026-04-04 12:42:01 Sat UTC [INFO] Score.calculate_scores: Saved 3 scored locations to C:\Users\aedwa\AppData\Local\Temp\pytest-of-aedwa\pytest-106\test_calculate_scores_main_fun0\scored_locations-MainTest.csv
+2026-04-04 12:42:02 Sat UTC [INFO] Score.calculate_scores: COMPLETED: Scoring (All) | scored=3 avg=82.4
+2026-04-04 12:50:28 Sat UTC [INFO] Score.calculate_scores: Loaded config from C:\Users\aedwa\AppData\Local\Temp\pytest-of-aedwa\pytest-107\test_scorer_init_with_config0\test_config.json
+2026-04-04 12:50:28 Sat UTC [INFO] Score.calculate_scores: Loaded config from C:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:50:28 Sat UTC [ERROR] Score.calculate_scores: Invalid JSON in config file: Expecting property name enclosed in double quotes: line 1 column 3 (char 2)
+2026-04-04 12:50:28 Sat UTC [INFO] Score.calculate_scores: Loaded config from C:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:50:28 Sat UTC [WARNING] Score.calculate_scores: Main weights sum to 20.000, normalizing to 1.0
+2026-04-04 12:50:28 Sat UTC [INFO] Score.calculate_scores: Loaded config from C:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:50:28 Sat UTC [INFO] Score.calculate_scores: Loaded config from C:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:50:28 Sat UTC [INFO] Score.calculate_scores: Loaded config from C:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:50:28 Sat UTC [INFO] Score.calculate_scores: Loaded config from C:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:50:28 Sat UTC [INFO] Score.calculate_scores: Loaded config from C:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:50:28 Sat UTC [INFO] Score.calculate_scores: Loaded config from C:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:50:28 Sat UTC [INFO] Score.calculate_scores: Loaded config from C:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:50:28 Sat UTC [INFO] Score.calculate_scores: Loaded config from C:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:50:28 Sat UTC [INFO] Score.calculate_scores: Loaded config from C:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:50:28 Sat UTC [INFO] Score.calculate_scores: Loaded config from C:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:50:28 Sat UTC [INFO] Score.calculate_scores: Loaded config from C:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:50:28 Sat UTC [INFO] Score.calculate_scores: Loaded config from C:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:50:28 Sat UTC [INFO] Score.calculate_scores: Loaded config from C:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:50:28 Sat UTC [INFO] Score.calculate_scores: Loaded config from C:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:50:28 Sat UTC [INFO] Score.calculate_scores: Scoring all locations...
+2026-04-04 12:50:28 Sat UTC [INFO] Score.calculate_scores: Town-grouping merge on Town+State: 4 commute towns x 4 housing zips -> 4 rows
+2026-04-04 12:50:28 Sat UTC [INFO] Score.calculate_scores: Joined crime scores using Primary and Alternate Town Names.
+2026-04-04 12:50:28 Sat UTC [INFO] Score.calculate_scores: Commute filter: removed 0 locations exceeding 60 min
+2026-04-04 12:50:28 Sat UTC [INFO] Score.calculate_scores: Price filter: removed 1 locations exceeding $800,000
+2026-04-04 12:50:28 Sat UTC [INFO] Score.calculate_scores: Scored 3 locations
+2026-04-04 12:50:28 Sat UTC [INFO] Score.calculate_scores: Loaded config from C:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:50:28 Sat UTC [INFO] Score.calculate_scores: Scoring all locations...
+2026-04-04 12:50:28 Sat UTC [INFO] Score.calculate_scores: Town-grouping merge on Town+State: 4 commute towns x 4 housing zips -> 4 rows
+2026-04-04 12:50:29 Sat UTC [INFO] Score.calculate_scores: Joined crime scores using Primary and Alternate Town Names.
+2026-04-04 12:50:29 Sat UTC [INFO] Score.calculate_scores: Commute filter: removed 2 locations exceeding 20 min
+2026-04-04 12:50:29 Sat UTC [INFO] Score.calculate_scores: Price filter: removed 1 locations exceeding $800,000
+2026-04-04 12:50:29 Sat UTC [INFO] Score.calculate_scores: Scored 1 locations
+2026-04-04 12:50:29 Sat UTC [INFO] Score.calculate_scores: Loaded config from C:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:50:29 Sat UTC [ERROR] Score.calculate_scores: Data not loaded. Call load_data() first.
+2026-04-04 12:50:29 Sat UTC [INFO] Score.calculate_scores: Loaded config from C:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:50:29 Sat UTC [INFO] Score.calculate_scores: Scoring all locations...
+2026-04-04 12:50:29 Sat UTC [INFO] Score.calculate_scores: Town-grouping merge on Town+State: 4 commute towns x 4 housing zips -> 4 rows
+2026-04-04 12:50:29 Sat UTC [INFO] Score.calculate_scores: Joined crime scores using Primary and Alternate Town Names.
+2026-04-04 12:50:29 Sat UTC [INFO] Score.calculate_scores: Commute filter: removed 0 locations exceeding 60 min
+2026-04-04 12:50:29 Sat UTC [INFO] Score.calculate_scores: Price filter: removed 1 locations exceeding $800,000
+2026-04-04 12:50:29 Sat UTC [INFO] Score.calculate_scores: Scored 3 locations
+2026-04-04 12:50:29 Sat UTC [INFO] Score.calculate_scores: Saved 3 scored locations to C:\Users\aedwa\AppData\Local\Temp\pytest-of-aedwa\pytest-107\test_save_results0\scored_locations-TestType.csv
+2026-04-04 12:50:29 Sat UTC [INFO] Score.calculate_scores: Loaded config from C:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:50:29 Sat UTC [INFO] Score.calculate_scores: Scoring all locations...
+2026-04-04 12:50:29 Sat UTC [INFO] Score.calculate_scores: Town-grouping merge on Town+State: 4 commute towns x 4 housing zips -> 4 rows
+2026-04-04 12:50:30 Sat UTC [INFO] Score.calculate_scores: Joined crime scores using Primary and Alternate Town Names.
+2026-04-04 12:50:30 Sat UTC [INFO] Score.calculate_scores: Commute filter: removed 0 locations exceeding 60 min
+2026-04-04 12:50:30 Sat UTC [INFO] Score.calculate_scores: Price filter: removed 1 locations exceeding $800,000
+2026-04-04 12:50:30 Sat UTC [INFO] Score.calculate_scores: Scored 3 locations
+2026-04-04 12:50:30 Sat UTC [INFO] Score.calculate_scores: STARTED: Scoring (All)
+2026-04-04 12:50:30 Sat UTC [INFO] Score.calculate_scores: Loaded config from C:\Users\aedwa\AppData\Local\Temp\pytest-of-aedwa\pytest-107\test_calculate_scores_main_fun0\config.json
+2026-04-04 12:50:30 Sat UTC [INFO] Score.calculate_scores: Loading commute and housing data...
+2026-04-04 12:50:30 Sat UTC [INFO] Score.calculate_scores: Loaded 4 commute records (Work Address 1)
+2026-04-04 12:50:30 Sat UTC [INFO] Score.calculate_scores: Loaded 4 Work Address 2 distance records
+2026-04-04 12:50:30 Sat UTC [INFO] Score.calculate_scores: Loaded 4 housing records
+2026-04-04 12:50:30 Sat UTC [INFO] Score.calculate_scores: Loaded 311 FBI Crime records
+2026-04-04 12:50:30 Sat UTC [INFO] Score.calculate_scores: Scoring all locations...
+2026-04-04 12:50:30 Sat UTC [INFO] Score.calculate_scores: Town-grouping merge on Town+State: 4 commute towns x 4 housing zips -> 4 rows
+2026-04-04 12:50:30 Sat UTC [INFO] Score.calculate_scores: Merged Work Address 2 data: 4 locations have Work2 data
+2026-04-04 12:50:30 Sat UTC [INFO] Score.calculate_scores: Joined crime scores using Primary and Alternate Town Names.
+2026-04-04 12:50:30 Sat UTC [INFO] Score.calculate_scores: Commute filter: removed 0 locations exceeding 60 min
+2026-04-04 12:50:30 Sat UTC [INFO] Score.calculate_scores: Price filter: removed 1 locations exceeding $800,000
+2026-04-04 12:50:30 Sat UTC [INFO] Score.calculate_scores: Scored 3 locations
+2026-04-04 12:50:30 Sat UTC [INFO] Score.calculate_scores: Saved 3 scored locations to C:\Users\aedwa\AppData\Local\Temp\pytest-of-aedwa\pytest-107\test_calculate_scores_main_fun0\scored_locations-MainTest.csv
+2026-04-04 12:50:30 Sat UTC [INFO] Score.calculate_scores: COMPLETED: Scoring (All) | scored=3 avg=82.4
+2026-04-04 12:57:49 Sat UTC [INFO] Score.calculate_scores: Loaded config from C:\Users\aedwa\AppData\Local\Temp\pytest-of-aedwa\pytest-108\test_scorer_init_with_config0\test_config.json
+2026-04-04 12:57:49 Sat UTC [INFO] Score.calculate_scores: Loaded config from c:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:57:49 Sat UTC [ERROR] Score.calculate_scores: Invalid JSON in config file: Expecting property name enclosed in double quotes: line 1 column 3 (char 2)
+2026-04-04 12:57:49 Sat UTC [INFO] Score.calculate_scores: Loaded config from c:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:57:49 Sat UTC [WARNING] Score.calculate_scores: Main weights sum to 20.000, normalizing to 1.0
+2026-04-04 12:57:49 Sat UTC [INFO] Score.calculate_scores: Loaded config from c:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:57:49 Sat UTC [INFO] Score.calculate_scores: Loaded config from c:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:57:49 Sat UTC [INFO] Score.calculate_scores: Loaded config from c:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:57:49 Sat UTC [INFO] Score.calculate_scores: Loaded config from c:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:57:49 Sat UTC [INFO] Score.calculate_scores: Loaded config from c:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:57:49 Sat UTC [INFO] Score.calculate_scores: Loaded config from c:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:57:49 Sat UTC [INFO] Score.calculate_scores: Loaded config from c:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:57:49 Sat UTC [INFO] Score.calculate_scores: Loaded config from c:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:57:49 Sat UTC [INFO] Score.calculate_scores: Loaded config from c:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:57:49 Sat UTC [INFO] Score.calculate_scores: Loaded config from c:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:57:49 Sat UTC [INFO] Score.calculate_scores: Loaded config from c:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:57:49 Sat UTC [INFO] Score.calculate_scores: Loaded config from c:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:57:49 Sat UTC [INFO] Score.calculate_scores: Loaded config from c:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:57:49 Sat UTC [INFO] Score.calculate_scores: Loaded config from c:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:57:49 Sat UTC [INFO] Score.calculate_scores: Scoring all locations...
+2026-04-04 12:57:49 Sat UTC [INFO] Score.calculate_scores: Town-grouping merge on Town+State: 4 commute towns x 4 housing zips -> 4 rows
+2026-04-04 12:57:49 Sat UTC [INFO] Score.calculate_scores: Joined crime scores using Primary and Alternate Town Names.
+2026-04-04 12:57:49 Sat UTC [INFO] Score.calculate_scores: Commute filter: removed 0 locations exceeding 60 min
+2026-04-04 12:57:49 Sat UTC [INFO] Score.calculate_scores: Price filter: removed 1 locations exceeding $800,000
+2026-04-04 12:57:49 Sat UTC [INFO] Score.calculate_scores: Scored 3 locations
+2026-04-04 12:57:49 Sat UTC [INFO] Score.calculate_scores: Loaded config from c:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:57:49 Sat UTC [INFO] Score.calculate_scores: Scoring all locations...
+2026-04-04 12:57:49 Sat UTC [INFO] Score.calculate_scores: Town-grouping merge on Town+State: 4 commute towns x 4 housing zips -> 4 rows
+2026-04-04 12:57:49 Sat UTC [INFO] Score.calculate_scores: Joined crime scores using Primary and Alternate Town Names.
+2026-04-04 12:57:49 Sat UTC [INFO] Score.calculate_scores: Commute filter: removed 2 locations exceeding 20 min
+2026-04-04 12:57:49 Sat UTC [INFO] Score.calculate_scores: Price filter: removed 1 locations exceeding $800,000
+2026-04-04 12:57:49 Sat UTC [INFO] Score.calculate_scores: Scored 1 locations
+2026-04-04 12:57:49 Sat UTC [INFO] Score.calculate_scores: Loaded config from c:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:57:49 Sat UTC [ERROR] Score.calculate_scores: Data not loaded. Call load_data() first.
+2026-04-04 12:57:49 Sat UTC [INFO] Score.calculate_scores: Loaded config from c:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:57:49 Sat UTC [INFO] Score.calculate_scores: Scoring all locations...
+2026-04-04 12:57:49 Sat UTC [INFO] Score.calculate_scores: Town-grouping merge on Town+State: 4 commute towns x 4 housing zips -> 4 rows
+2026-04-04 12:57:50 Sat UTC [INFO] Score.calculate_scores: Joined crime scores using Primary and Alternate Town Names.
+2026-04-04 12:57:50 Sat UTC [INFO] Score.calculate_scores: Commute filter: removed 0 locations exceeding 60 min
+2026-04-04 12:57:50 Sat UTC [INFO] Score.calculate_scores: Price filter: removed 1 locations exceeding $800,000
+2026-04-04 12:57:50 Sat UTC [INFO] Score.calculate_scores: Scored 3 locations
+2026-04-04 12:57:50 Sat UTC [INFO] Score.calculate_scores: Saved 3 scored locations to C:\Users\aedwa\AppData\Local\Temp\pytest-of-aedwa\pytest-108\test_save_results0\scored_locations-TestType.csv
+2026-04-04 12:57:50 Sat UTC [INFO] Score.calculate_scores: Loaded config from c:\Users\aedwa\workspace\house_hunt\Data\score_config.json
+2026-04-04 12:57:50 Sat UTC [INFO] Score.calculate_scores: Scoring all locations...
+2026-04-04 12:57:50 Sat UTC [INFO] Score.calculate_scores: Town-grouping merge on Town+State: 4 commute towns x 4 housing zips -> 4 rows
+2026-04-04 12:57:50 Sat UTC [INFO] Score.calculate_scores: Joined crime scores using Primary and Alternate Town Names.
+2026-04-04 12:57:50 Sat UTC [INFO] Score.calculate_scores: Commute filter: removed 0 locations exceeding 60 min
+2026-04-04 12:57:50 Sat UTC [INFO] Score.calculate_scores: Price filter: removed 1 locations exceeding $800,000
+2026-04-04 12:57:50 Sat UTC [INFO] Score.calculate_scores: Scored 3 locations
+2026-04-04 12:57:50 Sat UTC [INFO] Score.calculate_scores: STARTED: Scoring (All)
+2026-04-04 12:57:50 Sat UTC [INFO] Score.calculate_scores: Loaded config from C:\Users\aedwa\AppData\Local\Temp\pytest-of-aedwa\pytest-108\test_calculate_scores_main_fun0\config.json
+2026-04-04 12:57:50 Sat UTC [INFO] Score.calculate_scores: Loading commute and housing data...
+2026-04-04 12:57:50 Sat UTC [INFO] Score.calculate_scores: Loaded 4 commute records (Work Address 1)
+2026-04-04 12:57:50 Sat UTC [INFO] Score.calculate_scores: Loaded 4 Work Address 2 distance records
+2026-04-04 12:57:50 Sat UTC [INFO] Score.calculate_scores: Loaded 4 housing records
+2026-04-04 12:57:50 Sat UTC [INFO] Score.calculate_scores: Loaded 311 FBI Crime records
+2026-04-04 12:57:50 Sat UTC [INFO] Score.calculate_scores: Scoring all locations...
+2026-04-04 12:57:50 Sat UTC [INFO] Score.calculate_scores: Town-grouping merge on Town+State: 4 commute towns x 4 housing zips -> 4 rows
+2026-04-04 12:57:50 Sat UTC [INFO] Score.calculate_scores: Merged Work Address 2 data: 4 locations have Work2 data
+2026-04-04 12:57:51 Sat UTC [INFO] Score.calculate_scores: Joined crime scores using Primary and Alternate Town Names.
+2026-04-04 12:57:51 Sat UTC [INFO] Score.calculate_scores: Commute filter: removed 0 locations exceeding 60 min
+2026-04-04 12:57:51 Sat UTC [INFO] Score.calculate_scores: Price filter: removed 1 locations exceeding $800,000
+2026-04-04 12:57:51 Sat UTC [INFO] Score.calculate_scores: Scored 3 locations
+2026-04-04 12:57:51 Sat UTC [INFO] Score.calculate_scores: Saved 3 scored locations to C:\Users\aedwa\AppData\Local\Temp\pytest-of-aedwa\pytest-108\test_calculate_scores_main_fun0\scored_locations-MainTest.csv
+2026-04-04 12:57:51 Sat UTC [INFO] Score.calculate_scores: COMPLETED: Scoring (All) | scored=3 avg=82.4

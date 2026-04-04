@@ -462,3 +462,135 @@
 2026-04-03 22:20:13 Fri UTC [INFO] Commute.collect_commute_data: Successfully updated /home/runner/work/house_hunt/house_hunt/Data/Results/work1_commute_stats.csv with 97 records
 2026-04-03 22:20:14 Fri UTC [INFO] Commute.collect_commute_data: COMPLETED: Commute Data Collection (afternoon) | queried=97 ok=97 | elements=97 (advanced) | Basic=0/10,000 Advanced=762/5,000 | cost=$0.00
 2026-04-03 22:20:14 Fri UTC [WARNING] Commute.collect_commute_data: DISCREPANCY: 3,207 elements (80.8%)
+2026-04-04 12:19:05 Sat UTC [INFO] Commute.collect_commute_data: Budget check passed: 5,100/10,000 (current=5,000 + estimated=100)
+2026-04-04 12:19:05 Sat UTC [CRITICAL] Commute.collect_commute_data: MONTHLY BUDGET LIMIT REACHED: 10,000 / 10,000
+2026-04-04 12:19:05 Sat UTC [WARNING] Commute.collect_commute_data: Budget warning: projected=10,500 exceeds limit=10,000 (current=9,500 + estimated=1,000)
+2026-04-04 12:19:05 Sat UTC [WARNING] Commute.collect_commute_data: Non-interactive environment detected. Aborting to prevent exceeding budget.
+2026-04-04 12:19:05 Sat UTC [WARNING] Commute.collect_commute_data: Budget warning: projected=10,500 exceeds limit=10,000 (current=9,500 + estimated=1,000)
+2026-04-04 12:19:05 Sat UTC [INFO] Commute.collect_commute_data: Budget check passed: 10,500/10,000 (current=9,500 + estimated=1,000)
+2026-04-04 12:19:05 Sat UTC [INFO] Commute.collect_commute_data: Found 2 addresses within Work Address 1 range (town level)
+2026-04-04 12:19:05 Sat UTC [INFO] Commute.collect_commute_data: Found 1 addresses within Work Address 1 range (town level)
+2026-04-04 12:19:05 Sat UTC [INFO] Commute.collect_commute_data: Found 1 addresses within Work Address 1 range (town level)
+2026-04-04 12:19:05 Sat UTC [INFO] Commute.collect_commute_data: Found 3 addresses within Work Address 1 range (town level)
+2026-04-04 12:19:05 Sat UTC [INFO] Commute.collect_commute_data: Work Address 2 range filter: removed 1 address(es) outside 40mi of Work Address 2 | 2 remaining
+2026-04-04 12:19:05 Sat UTC [INFO] Commute.collect_commute_data: Found 2 addresses within Work Address 1 range (town level)
+2026-04-04 12:19:05 Sat UTC [WARNING] Commute.collect_commute_data: ENABLE_SECOND_WORK_ADDRESS=True but C:\Users\aedwa\AppData\Local\Temp\pytest-of-aedwa\pytest-100\test_load_addresses_work2_file0\nonexistent_work2.csv not found — Work Address 2 range filter skipped. Run 'python main.py --work2' to generate it.
+2026-04-04 12:20:47 Sat UTC [INFO] Commute.collect_commute_data: STARTED: Commute Data Collection (morning)
+2026-04-04 12:20:47 Sat UTC [INFO] Commute.collect_commute_data: Auto tier selection: Advanced tier free quota available (4,238 remaining)
+2026-04-04 12:20:47 Sat UTC [INFO] Commute.collect_commute_data: Found 1 addresses within Work Address 1 range (town level)
+2026-04-04 12:20:47 Sat UTC [INFO] Commute.collect_commute_data: Budget check passed: 763/5,000 (current=762 + estimated=1)
+2026-04-04 12:26:07 Sat UTC [INFO] Commute.collect_commute_data: Budget check passed: 5,100/10,000 (current=5,000 + estimated=100)
+2026-04-04 12:26:07 Sat UTC [CRITICAL] Commute.collect_commute_data: MONTHLY BUDGET LIMIT REACHED: 10,000 / 10,000
+2026-04-04 12:26:07 Sat UTC [WARNING] Commute.collect_commute_data: Budget warning: projected=10,500 exceeds limit=10,000 (current=9,500 + estimated=1,000)
+2026-04-04 12:26:07 Sat UTC [WARNING] Commute.collect_commute_data: Non-interactive environment detected. Aborting to prevent exceeding budget.
+2026-04-04 12:26:07 Sat UTC [WARNING] Commute.collect_commute_data: Budget warning: projected=10,500 exceeds limit=10,000 (current=9,500 + estimated=1,000)
+2026-04-04 12:26:07 Sat UTC [INFO] Commute.collect_commute_data: Budget check passed: 10,500/10,000 (current=9,500 + estimated=1,000)
+2026-04-04 12:26:07 Sat UTC [INFO] Commute.collect_commute_data: Found 2 addresses within Work Address 1 range (town level)
+2026-04-04 12:26:07 Sat UTC [INFO] Commute.collect_commute_data: Found 1 addresses within Work Address 1 range (town level)
+2026-04-04 12:26:07 Sat UTC [INFO] Commute.collect_commute_data: Found 1 addresses within Work Address 1 range (town level)
+2026-04-04 12:26:07 Sat UTC [INFO] Commute.collect_commute_data: Found 3 addresses within Work Address 1 range (town level)
+2026-04-04 12:26:07 Sat UTC [INFO] Commute.collect_commute_data: Work Address 2 range filter: removed 1 address(es) outside 40mi of Work Address 2 | 2 remaining
+2026-04-04 12:26:07 Sat UTC [INFO] Commute.collect_commute_data: Found 2 addresses within Work Address 1 range (town level)
+2026-04-04 12:26:07 Sat UTC [WARNING] Commute.collect_commute_data: ENABLE_SECOND_WORK_ADDRESS=True but C:\Users\aedwa\AppData\Local\Temp\pytest-of-aedwa\pytest-103\test_load_addresses_work2_file0\nonexistent_work2.csv not found — Work Address 2 range filter skipped. Run 'python main.py --work2' to generate it.
+2026-04-04 12:26:07 Sat UTC [INFO] Commute.collect_commute_data: STARTED: Commute Data Collection (morning)
+2026-04-04 12:26:07 Sat UTC [INFO] Commute.collect_commute_data: Auto tier selection: Advanced tier free quota available (4,238 remaining)
+2026-04-04 12:26:07 Sat UTC [INFO] Commute.collect_commute_data: Found 1 addresses within Work Address 1 range (town level)
+2026-04-04 12:26:07 Sat UTC [INFO] Commute.collect_commute_data: Budget check passed: 763/5,000 (current=762 + estimated=1)
+2026-04-04 12:26:07 Sat UTC [INFO] Commute.collect_commute_data: Morning commute: 1 locations -> WORK_ADDRESS_1_NOT_SET
+2026-04-04 12:26:07 Sat UTC [INFO] Commute.collect_commute_data: Completed 1 requests, processed 1 elements, collected 1 valid results
+2026-04-04 12:26:07 Sat UTC [INFO] Commute.collect_commute_data: No historical data found. Starting fresh.
+2026-04-04 12:26:07 Sat UTC [INFO] Commute.collect_commute_data: Successfully updated C:\Users\aedwa\AppData\Local\Temp\pytest-of-aedwa\pytest-103\test_collect_commute_data_opti0\commute_stats.csv with 1 records
+2026-04-04 12:26:07 Sat UTC [INFO] Commute.collect_commute_data: COMPLETED: Commute Data Collection (morning) | queried=1 ok=1 | elements=1 (advanced) | Basic=101/10,000 Advanced=0/5,000 | cost=$0.00
+2026-04-04 12:26:07 Sat UTC [ERROR] Commute.collect_commute_data: Validation failed during commute collection
+2026-04-04 12:29:01 Sat UTC [INFO] Commute.collect_commute_data: Budget check passed: 5,100/10,000 (current=5,000 + estimated=100)
+2026-04-04 12:29:01 Sat UTC [CRITICAL] Commute.collect_commute_data: MONTHLY BUDGET LIMIT REACHED: 10,000 / 10,000
+2026-04-04 12:29:01 Sat UTC [WARNING] Commute.collect_commute_data: Budget warning: projected=10,500 exceeds limit=10,000 (current=9,500 + estimated=1,000)
+2026-04-04 12:29:01 Sat UTC [WARNING] Commute.collect_commute_data: Non-interactive environment detected. Aborting to prevent exceeding budget.
+2026-04-04 12:29:01 Sat UTC [WARNING] Commute.collect_commute_data: Budget warning: projected=10,500 exceeds limit=10,000 (current=9,500 + estimated=1,000)
+2026-04-04 12:29:01 Sat UTC [INFO] Commute.collect_commute_data: Budget check passed: 10,500/10,000 (current=9,500 + estimated=1,000)
+2026-04-04 12:29:01 Sat UTC [INFO] Commute.collect_commute_data: Found 2 addresses within Work Address 1 range (town level)
+2026-04-04 12:29:01 Sat UTC [INFO] Commute.collect_commute_data: Found 1 addresses within Work Address 1 range (town level)
+2026-04-04 12:29:01 Sat UTC [INFO] Commute.collect_commute_data: Found 1 addresses within Work Address 1 range (town level)
+2026-04-04 12:29:01 Sat UTC [INFO] Commute.collect_commute_data: Found 3 addresses within Work Address 1 range (town level)
+2026-04-04 12:29:01 Sat UTC [INFO] Commute.collect_commute_data: Work Address 2 range filter: removed 1 address(es) outside 40mi of Work Address 2 | 2 remaining
+2026-04-04 12:29:01 Sat UTC [INFO] Commute.collect_commute_data: Found 2 addresses within Work Address 1 range (town level)
+2026-04-04 12:29:01 Sat UTC [WARNING] Commute.collect_commute_data: ENABLE_SECOND_WORK_ADDRESS=True but C:\Users\aedwa\AppData\Local\Temp\pytest-of-aedwa\pytest-105\test_load_addresses_work2_file0\nonexistent_work2.csv not found — Work Address 2 range filter skipped. Run 'python main.py --work2' to generate it.
+2026-04-04 12:29:01 Sat UTC [INFO] Commute.collect_commute_data: STARTED: Commute Data Collection (morning)
+2026-04-04 12:29:01 Sat UTC [INFO] Commute.collect_commute_data: Auto tier selection: Advanced tier free quota available (4,237 remaining)
+2026-04-04 12:29:01 Sat UTC [INFO] Commute.collect_commute_data: Found 1 addresses within Work Address 1 range (town level)
+2026-04-04 12:29:01 Sat UTC [INFO] Commute.collect_commute_data: Budget check passed: 764/5,000 (current=763 + estimated=1)
+2026-04-04 12:29:01 Sat UTC [INFO] Commute.collect_commute_data: Morning commute: 1 locations -> WORK_ADDRESS_1_NOT_SET
+2026-04-04 12:29:01 Sat UTC [INFO] Commute.collect_commute_data: Completed 1 requests, processed 1 elements, collected 1 valid results
+2026-04-04 12:29:01 Sat UTC [INFO] Commute.collect_commute_data: No historical data found. Starting fresh.
+2026-04-04 12:29:01 Sat UTC [INFO] Commute.collect_commute_data: Successfully updated C:\Users\aedwa\AppData\Local\Temp\pytest-of-aedwa\pytest-105\test_collect_commute_data_opti0\commute_stats.csv with 1 records
+2026-04-04 12:29:01 Sat UTC [INFO] Commute.collect_commute_data: COMPLETED: Commute Data Collection (morning) | queried=1 ok=1 | elements=1 (advanced) | Basic=101/10,000 Advanced=0/5,000 | cost=$0.00
+2026-04-04 12:29:01 Sat UTC [ERROR] Commute.collect_commute_data: Validation failed during commute collection
+2026-04-04 12:41:59 Sat UTC [INFO] Commute.collect_commute_data: Budget check passed: 5,100/10,000 (current=5,000 + estimated=100)
+2026-04-04 12:41:59 Sat UTC [CRITICAL] Commute.collect_commute_data: MONTHLY BUDGET LIMIT REACHED: 10,000 / 10,000
+2026-04-04 12:41:59 Sat UTC [WARNING] Commute.collect_commute_data: Budget warning: projected=10,500 exceeds limit=10,000 (current=9,500 + estimated=1,000)
+2026-04-04 12:41:59 Sat UTC [WARNING] Commute.collect_commute_data: Non-interactive environment detected. Aborting to prevent exceeding budget.
+2026-04-04 12:41:59 Sat UTC [WARNING] Commute.collect_commute_data: Budget warning: projected=10,500 exceeds limit=10,000 (current=9,500 + estimated=1,000)
+2026-04-04 12:41:59 Sat UTC [INFO] Commute.collect_commute_data: Budget check passed: 10,500/10,000 (current=9,500 + estimated=1,000)
+2026-04-04 12:41:59 Sat UTC [INFO] Commute.collect_commute_data: Found 2 addresses within Work Address 1 range (town level)
+2026-04-04 12:41:59 Sat UTC [INFO] Commute.collect_commute_data: Found 1 addresses within Work Address 1 range (town level)
+2026-04-04 12:41:59 Sat UTC [INFO] Commute.collect_commute_data: Found 1 addresses within Work Address 1 range (town level)
+2026-04-04 12:41:59 Sat UTC [INFO] Commute.collect_commute_data: Found 3 addresses within Work Address 1 range (town level)
+2026-04-04 12:41:59 Sat UTC [INFO] Commute.collect_commute_data: Work Address 2 range filter: removed 1 address(es) outside 40mi of Work Address 2 | 2 remaining
+2026-04-04 12:41:59 Sat UTC [INFO] Commute.collect_commute_data: Found 2 addresses within Work Address 1 range (town level)
+2026-04-04 12:41:59 Sat UTC [WARNING] Commute.collect_commute_data: ENABLE_SECOND_WORK_ADDRESS=True but C:\Users\aedwa\AppData\Local\Temp\pytest-of-aedwa\pytest-106\test_load_addresses_work2_file0\nonexistent_work2.csv not found — Work Address 2 range filter skipped. Run 'python main.py --work2' to generate it.
+2026-04-04 12:41:59 Sat UTC [INFO] Commute.collect_commute_data: STARTED: Commute Data Collection (morning)
+2026-04-04 12:41:59 Sat UTC [INFO] Commute.collect_commute_data: Auto tier selection: Advanced tier free quota available (4,236 remaining)
+2026-04-04 12:41:59 Sat UTC [INFO] Commute.collect_commute_data: Found 1 addresses within Work Address 1 range (town level)
+2026-04-04 12:41:59 Sat UTC [INFO] Commute.collect_commute_data: Budget check passed: 765/5,000 (current=764 + estimated=1)
+2026-04-04 12:41:59 Sat UTC [INFO] Commute.collect_commute_data: Morning commute: 1 locations -> WORK_ADDRESS_1_NOT_SET
+2026-04-04 12:41:59 Sat UTC [INFO] Commute.collect_commute_data: Completed 1 requests, processed 1 elements, collected 1 valid results
+2026-04-04 12:41:59 Sat UTC [INFO] Commute.collect_commute_data: No historical data found. Starting fresh.
+2026-04-04 12:41:59 Sat UTC [INFO] Commute.collect_commute_data: Successfully updated C:\Users\aedwa\AppData\Local\Temp\pytest-of-aedwa\pytest-106\test_collect_commute_data_opti0\commute_stats.csv with 1 records
+2026-04-04 12:41:59 Sat UTC [INFO] Commute.collect_commute_data: COMPLETED: Commute Data Collection (morning) | queried=1 ok=1 | elements=1 (advanced) | Basic=101/10,000 Advanced=0/5,000 | cost=$0.00
+2026-04-04 12:41:59 Sat UTC [ERROR] Commute.collect_commute_data: Validation failed during commute collection
+2026-04-04 12:50:28 Sat UTC [INFO] Commute.collect_commute_data: Budget check passed: 5,100/10,000 (current=5,000 + estimated=100)
+2026-04-04 12:50:28 Sat UTC [CRITICAL] Commute.collect_commute_data: MONTHLY BUDGET LIMIT REACHED: 10,000 / 10,000
+2026-04-04 12:50:28 Sat UTC [WARNING] Commute.collect_commute_data: Budget warning: projected=10,500 exceeds limit=10,000 (current=9,500 + estimated=1,000)
+2026-04-04 12:50:28 Sat UTC [WARNING] Commute.collect_commute_data: Non-interactive environment detected. Aborting to prevent exceeding budget.
+2026-04-04 12:50:28 Sat UTC [WARNING] Commute.collect_commute_data: Budget warning: projected=10,500 exceeds limit=10,000 (current=9,500 + estimated=1,000)
+2026-04-04 12:50:28 Sat UTC [INFO] Commute.collect_commute_data: Budget check passed: 10,500/10,000 (current=9,500 + estimated=1,000)
+2026-04-04 12:50:28 Sat UTC [INFO] Commute.collect_commute_data: Found 2 addresses within Work Address 1 range (town level)
+2026-04-04 12:50:28 Sat UTC [INFO] Commute.collect_commute_data: Found 1 addresses within Work Address 1 range (town level)
+2026-04-04 12:50:28 Sat UTC [INFO] Commute.collect_commute_data: Found 1 addresses within Work Address 1 range (town level)
+2026-04-04 12:50:28 Sat UTC [INFO] Commute.collect_commute_data: Found 3 addresses within Work Address 1 range (town level)
+2026-04-04 12:50:28 Sat UTC [INFO] Commute.collect_commute_data: Work Address 2 range filter: removed 1 address(es) outside 40mi of Work Address 2 | 2 remaining
+2026-04-04 12:50:28 Sat UTC [INFO] Commute.collect_commute_data: Found 2 addresses within Work Address 1 range (town level)
+2026-04-04 12:50:28 Sat UTC [WARNING] Commute.collect_commute_data: ENABLE_SECOND_WORK_ADDRESS=True but C:\Users\aedwa\AppData\Local\Temp\pytest-of-aedwa\pytest-107\test_load_addresses_work2_file0\nonexistent_work2.csv not found — Work Address 2 range filter skipped. Run 'python main.py --work2' to generate it.
+2026-04-04 12:50:28 Sat UTC [INFO] Commute.collect_commute_data: STARTED: Commute Data Collection (morning)
+2026-04-04 12:50:28 Sat UTC [INFO] Commute.collect_commute_data: Auto tier selection: Advanced tier free quota available (4,235 remaining)
+2026-04-04 12:50:28 Sat UTC [INFO] Commute.collect_commute_data: Found 1 addresses within Work Address 1 range (town level)
+2026-04-04 12:50:28 Sat UTC [INFO] Commute.collect_commute_data: Budget check passed: 766/5,000 (current=765 + estimated=1)
+2026-04-04 12:50:28 Sat UTC [INFO] Commute.collect_commute_data: Morning commute: 1 locations -> WORK_ADDRESS_1_NOT_SET
+2026-04-04 12:50:28 Sat UTC [INFO] Commute.collect_commute_data: Completed 1 requests, processed 1 elements, collected 1 valid results
+2026-04-04 12:50:28 Sat UTC [INFO] Commute.collect_commute_data: No historical data found. Starting fresh.
+2026-04-04 12:50:28 Sat UTC [INFO] Commute.collect_commute_data: Successfully updated C:\Users\aedwa\AppData\Local\Temp\pytest-of-aedwa\pytest-107\test_collect_commute_data_opti0\commute_stats.csv with 1 records
+2026-04-04 12:50:28 Sat UTC [INFO] Commute.collect_commute_data: COMPLETED: Commute Data Collection (morning) | queried=1 ok=1 | elements=1 (advanced) | Basic=101/10,000 Advanced=0/5,000 | cost=$0.00
+2026-04-04 12:50:28 Sat UTC [ERROR] Commute.collect_commute_data: Validation failed during commute collection
+2026-04-04 12:57:49 Sat UTC [INFO] Commute.collect_commute_data: Budget check passed: 5,100/10,000 (current=5,000 + estimated=100)
+2026-04-04 12:57:49 Sat UTC [CRITICAL] Commute.collect_commute_data: MONTHLY BUDGET LIMIT REACHED: 10,000 / 10,000
+2026-04-04 12:57:49 Sat UTC [WARNING] Commute.collect_commute_data: Budget warning: projected=10,500 exceeds limit=10,000 (current=9,500 + estimated=1,000)
+2026-04-04 12:57:49 Sat UTC [WARNING] Commute.collect_commute_data: Non-interactive environment detected. Aborting to prevent exceeding budget.
+2026-04-04 12:57:49 Sat UTC [WARNING] Commute.collect_commute_data: Budget warning: projected=10,500 exceeds limit=10,000 (current=9,500 + estimated=1,000)
+2026-04-04 12:57:49 Sat UTC [INFO] Commute.collect_commute_data: Budget check passed: 10,500/10,000 (current=9,500 + estimated=1,000)
+2026-04-04 12:57:49 Sat UTC [INFO] Commute.collect_commute_data: Found 2 addresses within Work Address 1 range (town level)
+2026-04-04 12:57:49 Sat UTC [INFO] Commute.collect_commute_data: Found 1 addresses within Work Address 1 range (town level)
+2026-04-04 12:57:49 Sat UTC [INFO] Commute.collect_commute_data: Found 1 addresses within Work Address 1 range (town level)
+2026-04-04 12:57:49 Sat UTC [INFO] Commute.collect_commute_data: Found 3 addresses within Work Address 1 range (town level)
+2026-04-04 12:57:49 Sat UTC [INFO] Commute.collect_commute_data: Work Address 2 range filter: removed 1 address(es) outside 40mi of Work Address 2 | 2 remaining
+2026-04-04 12:57:49 Sat UTC [INFO] Commute.collect_commute_data: Found 2 addresses within Work Address 1 range (town level)
+2026-04-04 12:57:49 Sat UTC [WARNING] Commute.collect_commute_data: ENABLE_SECOND_WORK_ADDRESS=True but C:\Users\aedwa\AppData\Local\Temp\pytest-of-aedwa\pytest-108\test_load_addresses_work2_file0\nonexistent_work2.csv not found — Work Address 2 range filter skipped. Run 'python main.py --work2' to generate it.
+2026-04-04 12:57:49 Sat UTC [INFO] Commute.collect_commute_data: STARTED: Commute Data Collection (morning)
+2026-04-04 12:57:49 Sat UTC [INFO] Commute.collect_commute_data: Auto tier selection: Advanced tier free quota available (4,234 remaining)
+2026-04-04 12:57:49 Sat UTC [INFO] Commute.collect_commute_data: Found 1 addresses within Work Address 1 range (town level)
+2026-04-04 12:57:49 Sat UTC [INFO] Commute.collect_commute_data: Budget check passed: 767/5,000 (current=766 + estimated=1)
+2026-04-04 12:57:49 Sat UTC [INFO] Commute.collect_commute_data: Morning commute: 1 locations -> WORK_ADDRESS_1_NOT_SET
+2026-04-04 12:57:49 Sat UTC [INFO] Commute.collect_commute_data: Completed 1 requests, processed 1 elements, collected 1 valid results
+2026-04-04 12:57:49 Sat UTC [INFO] Commute.collect_commute_data: No historical data found. Starting fresh.
+2026-04-04 12:57:49 Sat UTC [INFO] Commute.collect_commute_data: Successfully updated C:\Users\aedwa\AppData\Local\Temp\pytest-of-aedwa\pytest-108\test_collect_commute_data_opti0\commute_stats.csv with 1 records
+2026-04-04 12:57:49 Sat UTC [INFO] Commute.collect_commute_data: COMPLETED: Commute Data Collection (morning) | queried=1 ok=1 | elements=1 (advanced) | Basic=101/10,000 Advanced=0/5,000 | cost=$0.00
+2026-04-04 12:57:49 Sat UTC [ERROR] Commute.collect_commute_data: Validation failed during commute collection

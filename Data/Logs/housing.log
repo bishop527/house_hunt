@@ -456,3 +456,153 @@
 2026-04-03 02:46:09 Fri UTC [INFO] Housing.collect_housing_data: Loaded 204 records from /home/runner/work/house_hunt/house_hunt/Data/Results/housing_stats_Townhouse.csv
 2026-04-03 02:46:09 Fri UTC [INFO] Housing.collect_housing_data: Successfully updated /home/runner/work/house_hunt/house_hunt/Data/Results/housing_stats_Townhouse.csv with 170 records
 2026-04-03 02:46:09 Fri UTC [INFO] Housing.collect_housing_data: COMPLETED: Housing Data Collection (Townhouse) | queried=186 ok=170 failed=16 | source=Redfin
+2026-04-04 12:19:05 Sat UTC [INFO] Housing.collect_housing_data: Loaded 4 property tax rates
+2026-04-04 12:19:05 Sat UTC [WARNING] Housing.collect_housing_data: Property tax file not found: C:\Users\aedwa\AppData\Local\Temp\pytest-of-aedwa\pytest-100\test_load_property_tax_rates_m0\nonexistent.csv
+2026-04-04 12:19:05 Sat UTC [INFO] Housing.collect_housing_data: Loaded 4 property tax rates
+2026-04-04 12:19:05 Sat UTC [INFO] Housing.collect_housing_data: Loaded 4 property tax rates
+2026-04-04 12:19:05 Sat UTC [INFO] Housing.collect_housing_data: Loaded 4 property tax rates
+2026-04-04 12:19:05 Sat UTC [INFO] Housing.collect_housing_data: Loaded 4 property tax rates
+2026-04-04 12:19:05 Sat UTC [WARNING] Housing.collect_housing_data: No tax rate found for Unknown Town, MA - using state default
+2026-04-04 12:19:05 Sat UTC [INFO] Housing.collect_housing_data: Loaded 4 property tax rates
+2026-04-04 12:19:05 Sat UTC [WARNING] Housing.collect_housing_data: No tax rate found for Unknown Town, RI - using state default
+2026-04-04 12:19:05 Sat UTC [INFO] Housing.collect_housing_data: Loaded 4 property tax rates
+2026-04-04 12:19:05 Sat UTC [WARNING] Housing.collect_housing_data: No tax rate found for Unknown Town, NH - using state default
+2026-04-04 12:19:05 Sat UTC [INFO] Housing.collect_housing_data: Loaded 4 property tax rates
+2026-04-04 12:19:05 Sat UTC [WARNING] Housing.collect_housing_data: No tax rate found for Some Town, CA - using state default
+2026-04-04 12:19:05 Sat UTC [WARNING] Housing.collect_housing_data: Unknown state 'CA', using MA default rate
+2026-04-04 12:19:05 Sat UTC [INFO] Housing.collect_housing_data: Loaded 4 property tax rates
+2026-04-04 12:19:05 Sat UTC [INFO] Housing.collect_housing_data: Loaded 4 property tax rates
+2026-04-04 12:19:05 Sat UTC [WARNING] Housing.collect_housing_data: No tax rate found for Unknown Town, MA - using state default
+2026-04-04 12:19:05 Sat UTC [INFO] Housing.collect_housing_data: Loaded 4 property tax rates
+2026-04-04 12:19:05 Sat UTC [WARNING] Housing.collect_housing_data: Missing town or state in data - cannot calculate tax
+2026-04-04 12:19:05 Sat UTC [INFO] Housing.collect_housing_data: Successfully updated C:\Users\aedwa\AppData\Local\Temp\pytest-of-aedwa\pytest-100\test_update_statistics_new_zip0\historical_housing_stats_All.csv with 1 records
+2026-04-04 12:19:05 Sat UTC [INFO] Housing.collect_housing_data: Loaded 1 records from C:\Users\aedwa\AppData\Local\Temp\pytest-of-aedwa\pytest-100\test_update_statistics_existin0\historical_housing_stats_All.csv
+2026-04-04 12:19:05 Sat UTC [INFO] Housing.collect_housing_data: Successfully updated C:\Users\aedwa\AppData\Local\Temp\pytest-of-aedwa\pytest-100\test_update_statistics_existin0\historical_housing_stats_All.csv with 1 records
+2026-04-04 12:19:05 Sat UTC [WARNING] Housing.collect_housing_data: No results to update statistics with.
+2026-04-04 12:19:05 Sat UTC [INFO] Housing.process_crime_data: STARTED: Crime Data Processing
+2026-04-04 12:19:05 Sat UTC [INFO] Housing.process_crime_data: Loading crime data...
+2026-04-04 12:19:05 Sat UTC [INFO] Housing.process_crime_data: Loading population data...
+2026-04-04 12:19:05 Sat UTC [INFO] Housing.process_crime_data: Successfully processed crime data and saved to c:\Users\aedwa\workspace\house_hunt\Data\Processed\crime_scores_by_town.csv
+2026-04-04 12:19:05 Sat UTC [INFO] Housing.process_crime_data: COMPLETED: Crime Data Processing
+2026-04-04 12:19:05 Sat UTC [INFO] Housing.process_crime_data: STARTED: Crime Data Processing
+2026-04-04 12:19:05 Sat UTC [ERROR] Housing.process_crime_data: Missing crime or population raw data files.
+2026-04-04 12:29:01 Sat UTC [INFO] Housing.collect_housing_data: Loaded 4 property tax rates
+2026-04-04 12:29:01 Sat UTC [WARNING] Housing.collect_housing_data: Property tax file not found: C:\Users\aedwa\AppData\Local\Temp\pytest-of-aedwa\pytest-105\test_load_property_tax_rates_m0\nonexistent.csv
+2026-04-04 12:29:01 Sat UTC [INFO] Housing.collect_housing_data: Loaded 4 property tax rates
+2026-04-04 12:29:01 Sat UTC [INFO] Housing.collect_housing_data: Loaded 4 property tax rates
+2026-04-04 12:29:01 Sat UTC [INFO] Housing.collect_housing_data: Loaded 4 property tax rates
+2026-04-04 12:29:01 Sat UTC [INFO] Housing.collect_housing_data: Loaded 4 property tax rates
+2026-04-04 12:29:01 Sat UTC [WARNING] Housing.collect_housing_data: No tax rate found for Unknown Town, MA - using state default
+2026-04-04 12:29:01 Sat UTC [INFO] Housing.collect_housing_data: Loaded 4 property tax rates
+2026-04-04 12:29:01 Sat UTC [WARNING] Housing.collect_housing_data: No tax rate found for Unknown Town, RI - using state default
+2026-04-04 12:29:01 Sat UTC [INFO] Housing.collect_housing_data: Loaded 4 property tax rates
+2026-04-04 12:29:01 Sat UTC [WARNING] Housing.collect_housing_data: No tax rate found for Unknown Town, NH - using state default
+2026-04-04 12:29:01 Sat UTC [INFO] Housing.collect_housing_data: Loaded 4 property tax rates
+2026-04-04 12:29:01 Sat UTC [WARNING] Housing.collect_housing_data: No tax rate found for Some Town, CA - using state default
+2026-04-04 12:29:01 Sat UTC [WARNING] Housing.collect_housing_data: Unknown state 'CA', using MA default rate
+2026-04-04 12:29:01 Sat UTC [INFO] Housing.collect_housing_data: Loaded 4 property tax rates
+2026-04-04 12:29:01 Sat UTC [INFO] Housing.collect_housing_data: Loaded 4 property tax rates
+2026-04-04 12:29:01 Sat UTC [WARNING] Housing.collect_housing_data: No tax rate found for Unknown Town, MA - using state default
+2026-04-04 12:29:01 Sat UTC [INFO] Housing.collect_housing_data: Loaded 4 property tax rates
+2026-04-04 12:29:01 Sat UTC [WARNING] Housing.collect_housing_data: Missing town or state in data - cannot calculate tax
+2026-04-04 12:29:01 Sat UTC [INFO] Housing.collect_housing_data: Successfully updated C:\Users\aedwa\AppData\Local\Temp\pytest-of-aedwa\pytest-105\test_update_statistics_new_zip0\historical_housing_stats_All.csv with 1 records
+2026-04-04 12:29:01 Sat UTC [INFO] Housing.collect_housing_data: Loaded 1 records from C:\Users\aedwa\AppData\Local\Temp\pytest-of-aedwa\pytest-105\test_update_statistics_existin0\historical_housing_stats_All.csv
+2026-04-04 12:29:01 Sat UTC [INFO] Housing.collect_housing_data: Successfully updated C:\Users\aedwa\AppData\Local\Temp\pytest-of-aedwa\pytest-105\test_update_statistics_existin0\historical_housing_stats_All.csv with 1 records
+2026-04-04 12:29:01 Sat UTC [WARNING] Housing.collect_housing_data: No results to update statistics with.
+2026-04-04 12:29:01 Sat UTC [INFO] Housing.process_crime_data: STARTED: Crime Data Processing
+2026-04-04 12:29:01 Sat UTC [INFO] Housing.process_crime_data: Loading crime data...
+2026-04-04 12:29:01 Sat UTC [INFO] Housing.process_crime_data: Loading population data...
+2026-04-04 12:29:01 Sat UTC [INFO] Housing.process_crime_data: Successfully processed crime data and saved to c:\Users\aedwa\workspace\house_hunt\Data\Processed\crime_scores_by_town.csv
+2026-04-04 12:29:01 Sat UTC [INFO] Housing.process_crime_data: COMPLETED: Crime Data Processing
+2026-04-04 12:29:01 Sat UTC [INFO] Housing.process_crime_data: STARTED: Crime Data Processing
+2026-04-04 12:29:01 Sat UTC [ERROR] Housing.process_crime_data: Missing crime or population raw data files.
+2026-04-04 12:41:59 Sat UTC [INFO] Housing.collect_housing_data: Loaded 4 property tax rates
+2026-04-04 12:41:59 Sat UTC [WARNING] Housing.collect_housing_data: Property tax file not found: C:\Users\aedwa\AppData\Local\Temp\pytest-of-aedwa\pytest-106\test_load_property_tax_rates_m0\nonexistent.csv
+2026-04-04 12:41:59 Sat UTC [INFO] Housing.collect_housing_data: Loaded 4 property tax rates
+2026-04-04 12:41:59 Sat UTC [INFO] Housing.collect_housing_data: Loaded 4 property tax rates
+2026-04-04 12:41:59 Sat UTC [INFO] Housing.collect_housing_data: Loaded 4 property tax rates
+2026-04-04 12:41:59 Sat UTC [INFO] Housing.collect_housing_data: Loaded 4 property tax rates
+2026-04-04 12:41:59 Sat UTC [WARNING] Housing.collect_housing_data: No tax rate found for Unknown Town, MA - using state default
+2026-04-04 12:41:59 Sat UTC [INFO] Housing.collect_housing_data: Loaded 4 property tax rates
+2026-04-04 12:41:59 Sat UTC [WARNING] Housing.collect_housing_data: No tax rate found for Unknown Town, RI - using state default
+2026-04-04 12:41:59 Sat UTC [INFO] Housing.collect_housing_data: Loaded 4 property tax rates
+2026-04-04 12:41:59 Sat UTC [WARNING] Housing.collect_housing_data: No tax rate found for Unknown Town, NH - using state default
+2026-04-04 12:41:59 Sat UTC [INFO] Housing.collect_housing_data: Loaded 4 property tax rates
+2026-04-04 12:41:59 Sat UTC [WARNING] Housing.collect_housing_data: No tax rate found for Some Town, CA - using state default
+2026-04-04 12:41:59 Sat UTC [WARNING] Housing.collect_housing_data: Unknown state 'CA', using MA default rate
+2026-04-04 12:41:59 Sat UTC [INFO] Housing.collect_housing_data: Loaded 4 property tax rates
+2026-04-04 12:41:59 Sat UTC [INFO] Housing.collect_housing_data: Loaded 4 property tax rates
+2026-04-04 12:41:59 Sat UTC [WARNING] Housing.collect_housing_data: No tax rate found for Unknown Town, MA - using state default
+2026-04-04 12:41:59 Sat UTC [INFO] Housing.collect_housing_data: Loaded 4 property tax rates
+2026-04-04 12:41:59 Sat UTC [WARNING] Housing.collect_housing_data: Missing town or state in data - cannot calculate tax
+2026-04-04 12:41:59 Sat UTC [INFO] Housing.collect_housing_data: Successfully updated C:\Users\aedwa\AppData\Local\Temp\pytest-of-aedwa\pytest-106\test_update_statistics_new_zip0\historical_housing_stats_All.csv with 1 records
+2026-04-04 12:41:59 Sat UTC [INFO] Housing.collect_housing_data: Loaded 1 records from C:\Users\aedwa\AppData\Local\Temp\pytest-of-aedwa\pytest-106\test_update_statistics_existin0\historical_housing_stats_All.csv
+2026-04-04 12:41:59 Sat UTC [INFO] Housing.collect_housing_data: Successfully updated C:\Users\aedwa\AppData\Local\Temp\pytest-of-aedwa\pytest-106\test_update_statistics_existin0\historical_housing_stats_All.csv with 1 records
+2026-04-04 12:41:59 Sat UTC [WARNING] Housing.collect_housing_data: No results to update statistics with.
+2026-04-04 12:41:59 Sat UTC [INFO] Housing.process_crime_data: STARTED: Crime Data Processing
+2026-04-04 12:41:59 Sat UTC [INFO] Housing.process_crime_data: Loading crime data...
+2026-04-04 12:41:59 Sat UTC [INFO] Housing.process_crime_data: Loading population data...
+2026-04-04 12:41:59 Sat UTC [INFO] Housing.process_crime_data: Successfully processed crime data and saved to C:\Users\aedwa\workspace\house_hunt\Data\Processed\crime_scores_by_town.csv
+2026-04-04 12:41:59 Sat UTC [INFO] Housing.process_crime_data: COMPLETED: Crime Data Processing
+2026-04-04 12:41:59 Sat UTC [INFO] Housing.process_crime_data: STARTED: Crime Data Processing
+2026-04-04 12:41:59 Sat UTC [ERROR] Housing.process_crime_data: Missing crime or population raw data files.
+2026-04-04 12:50:28 Sat UTC [INFO] Housing.collect_housing_data: Loaded 4 property tax rates
+2026-04-04 12:50:28 Sat UTC [WARNING] Housing.collect_housing_data: Property tax file not found: C:\Users\aedwa\AppData\Local\Temp\pytest-of-aedwa\pytest-107\test_load_property_tax_rates_m0\nonexistent.csv
+2026-04-04 12:50:28 Sat UTC [INFO] Housing.collect_housing_data: Loaded 4 property tax rates
+2026-04-04 12:50:28 Sat UTC [INFO] Housing.collect_housing_data: Loaded 4 property tax rates
+2026-04-04 12:50:28 Sat UTC [INFO] Housing.collect_housing_data: Loaded 4 property tax rates
+2026-04-04 12:50:28 Sat UTC [INFO] Housing.collect_housing_data: Loaded 4 property tax rates
+2026-04-04 12:50:28 Sat UTC [WARNING] Housing.collect_housing_data: No tax rate found for Unknown Town, MA - using state default
+2026-04-04 12:50:28 Sat UTC [INFO] Housing.collect_housing_data: Loaded 4 property tax rates
+2026-04-04 12:50:28 Sat UTC [WARNING] Housing.collect_housing_data: No tax rate found for Unknown Town, RI - using state default
+2026-04-04 12:50:28 Sat UTC [INFO] Housing.collect_housing_data: Loaded 4 property tax rates
+2026-04-04 12:50:28 Sat UTC [WARNING] Housing.collect_housing_data: No tax rate found for Unknown Town, NH - using state default
+2026-04-04 12:50:28 Sat UTC [INFO] Housing.collect_housing_data: Loaded 4 property tax rates
+2026-04-04 12:50:28 Sat UTC [WARNING] Housing.collect_housing_data: No tax rate found for Some Town, CA - using state default
+2026-04-04 12:50:28 Sat UTC [WARNING] Housing.collect_housing_data: Unknown state 'CA', using MA default rate
+2026-04-04 12:50:28 Sat UTC [INFO] Housing.collect_housing_data: Loaded 4 property tax rates
+2026-04-04 12:50:28 Sat UTC [INFO] Housing.collect_housing_data: Loaded 4 property tax rates
+2026-04-04 12:50:28 Sat UTC [WARNING] Housing.collect_housing_data: No tax rate found for Unknown Town, MA - using state default
+2026-04-04 12:50:28 Sat UTC [INFO] Housing.collect_housing_data: Loaded 4 property tax rates
+2026-04-04 12:50:28 Sat UTC [WARNING] Housing.collect_housing_data: Missing town or state in data - cannot calculate tax
+2026-04-04 12:50:28 Sat UTC [INFO] Housing.collect_housing_data: Successfully updated C:\Users\aedwa\AppData\Local\Temp\pytest-of-aedwa\pytest-107\test_update_statistics_new_zip0\historical_housing_stats_All.csv with 1 records
+2026-04-04 12:50:28 Sat UTC [INFO] Housing.collect_housing_data: Loaded 1 records from C:\Users\aedwa\AppData\Local\Temp\pytest-of-aedwa\pytest-107\test_update_statistics_existin0\historical_housing_stats_All.csv
+2026-04-04 12:50:28 Sat UTC [INFO] Housing.collect_housing_data: Successfully updated C:\Users\aedwa\AppData\Local\Temp\pytest-of-aedwa\pytest-107\test_update_statistics_existin0\historical_housing_stats_All.csv with 1 records
+2026-04-04 12:50:28 Sat UTC [WARNING] Housing.collect_housing_data: No results to update statistics with.
+2026-04-04 12:50:28 Sat UTC [INFO] Housing.process_crime_data: STARTED: Crime Data Processing
+2026-04-04 12:50:28 Sat UTC [INFO] Housing.process_crime_data: Loading crime data...
+2026-04-04 12:50:28 Sat UTC [INFO] Housing.process_crime_data: Loading population data...
+2026-04-04 12:50:28 Sat UTC [INFO] Housing.process_crime_data: Successfully processed crime data and saved to C:\Users\aedwa\workspace\house_hunt\Data\Processed\crime_scores_by_town.csv
+2026-04-04 12:50:28 Sat UTC [INFO] Housing.process_crime_data: COMPLETED: Crime Data Processing
+2026-04-04 12:50:28 Sat UTC [INFO] Housing.process_crime_data: STARTED: Crime Data Processing
+2026-04-04 12:50:28 Sat UTC [ERROR] Housing.process_crime_data: Missing crime or population raw data files.
+2026-04-04 12:57:49 Sat UTC [INFO] Housing.collect_housing_data: Loaded 4 property tax rates
+2026-04-04 12:57:49 Sat UTC [WARNING] Housing.collect_housing_data: Property tax file not found: C:\Users\aedwa\AppData\Local\Temp\pytest-of-aedwa\pytest-108\test_load_property_tax_rates_m0\nonexistent.csv
+2026-04-04 12:57:49 Sat UTC [INFO] Housing.collect_housing_data: Loaded 4 property tax rates
+2026-04-04 12:57:49 Sat UTC [INFO] Housing.collect_housing_data: Loaded 4 property tax rates
+2026-04-04 12:57:49 Sat UTC [INFO] Housing.collect_housing_data: Loaded 4 property tax rates
+2026-04-04 12:57:49 Sat UTC [INFO] Housing.collect_housing_data: Loaded 4 property tax rates
+2026-04-04 12:57:49 Sat UTC [WARNING] Housing.collect_housing_data: No tax rate found for Unknown Town, MA - using state default
+2026-04-04 12:57:49 Sat UTC [INFO] Housing.collect_housing_data: Loaded 4 property tax rates
+2026-04-04 12:57:49 Sat UTC [WARNING] Housing.collect_housing_data: No tax rate found for Unknown Town, RI - using state default
+2026-04-04 12:57:49 Sat UTC [INFO] Housing.collect_housing_data: Loaded 4 property tax rates
+2026-04-04 12:57:49 Sat UTC [WARNING] Housing.collect_housing_data: No tax rate found for Unknown Town, NH - using state default
+2026-04-04 12:57:49 Sat UTC [INFO] Housing.collect_housing_data: Loaded 4 property tax rates
+2026-04-04 12:57:49 Sat UTC [WARNING] Housing.collect_housing_data: No tax rate found for Some Town, CA - using state default
+2026-04-04 12:57:49 Sat UTC [WARNING] Housing.collect_housing_data: Unknown state 'CA', using MA default rate
+2026-04-04 12:57:49 Sat UTC [INFO] Housing.collect_housing_data: Loaded 4 property tax rates
+2026-04-04 12:57:49 Sat UTC [INFO] Housing.collect_housing_data: Loaded 4 property tax rates
+2026-04-04 12:57:49 Sat UTC [WARNING] Housing.collect_housing_data: No tax rate found for Unknown Town, MA - using state default
+2026-04-04 12:57:49 Sat UTC [INFO] Housing.collect_housing_data: Loaded 4 property tax rates
+2026-04-04 12:57:49 Sat UTC [WARNING] Housing.collect_housing_data: Missing town or state in data - cannot calculate tax
+2026-04-04 12:57:49 Sat UTC [INFO] Housing.collect_housing_data: Successfully updated C:\Users\aedwa\AppData\Local\Temp\pytest-of-aedwa\pytest-108\test_update_statistics_new_zip0\historical_housing_stats_All.csv with 1 records
+2026-04-04 12:57:49 Sat UTC [INFO] Housing.collect_housing_data: Loaded 1 records from C:\Users\aedwa\AppData\Local\Temp\pytest-of-aedwa\pytest-108\test_update_statistics_existin0\historical_housing_stats_All.csv
+2026-04-04 12:57:49 Sat UTC [INFO] Housing.collect_housing_data: Successfully updated C:\Users\aedwa\AppData\Local\Temp\pytest-of-aedwa\pytest-108\test_update_statistics_existin0\historical_housing_stats_All.csv with 1 records
+2026-04-04 12:57:49 Sat UTC [WARNING] Housing.collect_housing_data: No results to update statistics with.
+2026-04-04 12:57:49 Sat UTC [INFO] Housing.process_crime_data: STARTED: Crime Data Processing
+2026-04-04 12:57:49 Sat UTC [INFO] Housing.process_crime_data: Loading crime data...
+2026-04-04 12:57:49 Sat UTC [INFO] Housing.process_crime_data: Loading population data...
+2026-04-04 12:57:49 Sat UTC [INFO] Housing.process_crime_data: Successfully processed crime data and saved to c:\Users\aedwa\workspace\house_hunt\Data\Processed\crime_scores_by_town.csv
+2026-04-04 12:57:49 Sat UTC [INFO] Housing.process_crime_data: COMPLETED: Crime Data Processing
+2026-04-04 12:57:49 Sat UTC [INFO] Housing.process_crime_data: STARTED: Crime Data Processing
+2026-04-04 12:57:49 Sat UTC [ERROR] Housing.process_crime_data: Missing crime or population raw data files.

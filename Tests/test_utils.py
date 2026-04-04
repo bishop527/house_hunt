@@ -338,7 +338,6 @@ def test_get_zips_within_range_success(mock_client, tmp_path, monkeypatch,
     monkeypatch.setattr('utils.USE_TRAFFIC', False)
     monkeypatch.setattr('utils.PROCESSED_DIR', str(processed_dir))
     monkeypatch.setattr('utils.CHUNK_SIZE', 3)
-    monkeypatch.setattr('utils.PROXY_ON', False)
 
     # Mock API
     mock_instance = MagicMock()
@@ -384,7 +383,6 @@ def test_get_zips_within_range_filters_no_coords(mock_client, tmp_path,
     monkeypatch.setattr('utils.API_MONTHLY_LIMIT_BASIC', 20000)
     monkeypatch.setattr('utils.USE_TRAFFIC', False)
     monkeypatch.setattr('utils.PROCESSED_DIR', str(processed_dir))
-    monkeypatch.setattr('utils.PROXY_ON', False)
 
     mock_instance = MagicMock()
     mock_instance.distance_matrix.return_value = {'status': 'OK', 'rows': []}
@@ -429,7 +427,6 @@ def test_get_zips_within_range_api_error(mock_client, tmp_path, monkeypatch):
     monkeypatch.setattr('utils.API_MONTHLY_LIMIT_BASIC', 20000)
     monkeypatch.setattr('utils.USE_TRAFFIC', False)
     monkeypatch.setattr('utils.PROCESSED_DIR', str(processed_dir))
-    monkeypatch.setattr('utils.PROXY_ON', False)
 
     # Mock API error
     mock_instance = MagicMock()
@@ -964,7 +961,6 @@ def test_get_zips_within_range_cache_age_valid(tmp_path, monkeypatch):
     os.utime(cache_file, (old_time, old_time))
 
     monkeypatch.setattr('utils.PROCESSED_DIR', str(tmp_path))
-    monkeypatch.setattr('utils.PROXY_ON', False)
 
     zip_data = pd.DataFrame({
         'Zip': ['02421'],
@@ -1014,7 +1010,6 @@ def test_get_zips_within_range_cache_age_expired(tmp_path, monkeypatch):
     monkeypatch.setattr('utils.API_TIER_TRACKING_FILE', str(tier_file))
     monkeypatch.setattr('utils.API_MONTHLY_LIMIT_BASIC', 20000)
     monkeypatch.setattr('utils.USE_TRAFFIC', False)
-    monkeypatch.setattr('utils.PROXY_ON', False)
     monkeypatch.setattr('utils.CHUNK_SIZE', 25)
 
     zip_data = pd.DataFrame({
@@ -1072,7 +1067,6 @@ def test_get_zips_within_range_force_refresh(tmp_path, monkeypatch):
     monkeypatch.setattr('utils.API_TIER_TRACKING_FILE', str(tier_file))
     monkeypatch.setattr('utils.API_MONTHLY_LIMIT_BASIC', 20000)
     monkeypatch.setattr('utils.USE_TRAFFIC', False)
-    monkeypatch.setattr('utils.PROXY_ON', False)
     monkeypatch.setattr('utils.CHUNK_SIZE', 25)
 
     zip_data = pd.DataFrame({

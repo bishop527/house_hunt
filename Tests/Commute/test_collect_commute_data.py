@@ -361,7 +361,6 @@ def test_collect_commute_data_optimized_flow(mock_client, tmp_path, monkeypatch)
     monkeypatch.setattr('Commute.collect_commute_data.USE_TRAFFIC', False)
     monkeypatch.setattr('Commute.collect_commute_data.API_MONTHLY_LIMIT_BASIC', 10000)
     monkeypatch.setattr('Commute.collect_commute_data.CHUNK_SIZE', 25)
-    monkeypatch.setattr('Commute.collect_commute_data.PROXY_ON', False)
 
     # Mock API
     mock_instance = MagicMock()

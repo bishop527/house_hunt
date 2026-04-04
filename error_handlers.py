@@ -39,10 +39,7 @@ def handle_api_error(error, context, reraise=False):
             "an overloaded API endpoint."
         )
     elif isinstance(error, googlemaps.exceptions.TransportError):
-        logger.error(
-            "Network/transport error. Check your internet connection "
-            "and proxy settings."
-        )
+        logger.error("Network/transport error. Check your internet connection.")
     elif isinstance(error, googlemaps.exceptions.HTTPError):
         logger.error(
             f"HTTP error. The API returned an error status code."

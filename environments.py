@@ -1,4 +1,7 @@
 import os
+import logging
+
+logger = logging.getLogger(__name__)
 
 def setup_directories(*folders):
     """Create essential data directories if they do not exist."""
@@ -19,11 +22,8 @@ def load_work_addresses(path):
     addresses = {}
     
     if not os.path.exists(path):
-        # Fall back to hardcoded addresses for backward compatibility
-        return {
-            'WORK_ADDR1': "123 Main St. Anytown, MA 00000",
-            'WORK_ADDR2': "200 Chauncy St. Mansfield, MA 02048"
-        }
+        logger.warning(f"Work addresses file not found: {path}. Returning empty dictionary.")
+        return {}
     
     try:
         with open(path, 'r') as f:
@@ -35,9 +35,5 @@ def load_work_addresses(path):
         
         return addresses
     except Exception as e:
-        print(f"Error loading work addresses: {e}")
-        # Fall back to hardcoded addresses
-        return {
-            'WORK_ADDR1': "123 Main St. Anytown, MA 00000",
-            'WORK_ADDR2': "200 Chauncy St. Mansfield, MA 02048"
-        }
+        logger.error(f"Error loading work addresses: {e}")
+        return {}
