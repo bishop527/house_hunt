@@ -64,7 +64,7 @@ jobs:
         fi
         
         # Determine crime file from constants.py
-        USE_FBI=$(grep "USE_FBI_CRIME_DATA =" constants.py | cut -d'=' -f2 | tr -d '[:space:]')
+        USE_FBI=$(grep "USE_FBI_CRIME_DATA =" config/housing_config.py | cut -d'=' -f2 | tr -d '[:space:]')
         if [ "$USE_FBI" = "True" ]; then
           CRIME_FILE="Data/Processed/fbi_crime_scores_by_town.csv"
         else

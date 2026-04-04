@@ -1,129 +1,30 @@
 """
 Configuration constants for House Hunt project.
+Bridge module that re-exports constants from specialized modules for backward compatibility.
 
 Created: 18 June 2025
-Updated: 30 Jan 2026
-
+Updated: 04 April 2026 (Final Reorganization & Lazy Loading)
 """
-import os
-import logging
 import holidays
 
+# Re-export from specialized modules
+from config.paths import *
+from config.app_config import *
+from config.scoring_config import *
+from config.housing_config import *
+from config.commute_config import *
 
 # ========================================
-# GENERAL CONFIGURATION
+# UNIVERSAL CONSTANTS
 # ========================================
-# LOG_LEVEL = logging.DEBUG
-LOG_LEVEL = logging.INFO
-
-# Tier selection strategy
-AUTO_TIER_SELECTION = True  # If True, automatically choose optimal tier
-USE_TRAFFIC = False           # Used when AUTO_TIER_SELECTION = False, Set to True for Advanced tier (with traffic data)
-TRAFFIC_MODEL = 'best_guess'  # Used when USE_TRAFFIC=True
-AVOID = None  # Options: None, 'highways', 'tolls'
-API_MONTHLY_LIMIT_BASIC = 10000  # Basic tier (no traffic)
-API_MONTHLY_LIMIT_ADVANCED = 5000  # Advanced tier (with traffic)
-API_MONTHLY_LIMIT = API_MONTHLY_LIMIT_BASIC  # Current project limit
-
-# ========================================
-# Main Data Directory and Subdirectories
-# ========================================
-# Use location of this file to determine root directory
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = os.path.join(BASE_DIR, 'Data')
-RAW_DIR = os.path.join(DATA_DIR, 'Raw')
-PROCESSED_DIR = os.path.join(DATA_DIR, 'Processed')
-RESULTS_DIR = os.path.join(DATA_DIR, 'Results')
-LOGS_DIR = os.path.join(DATA_DIR, 'Logs')
-
-# Automatic Data Folder Creation removed from import-time execution.
-# Configured in environments.py / main.py
-
-# ========================================
-# DATA FILES - RAW
-# ========================================
-ZIP_DATA_FILE = os.path.join(RAW_DIR, 'zip_code_database.csv')
-REDFIN_DATA_FILE = os.path.join(RAW_DIR, 'reduced-redfin_market_data.csv')
-CRIME_DATA_FILE = os.path.join(RAW_DIR, 'MA-Crime_Data-2025.csv')
-FBI_CRIME_DATA_FILE = os.path.join(RAW_DIR, 'FBI-Crime_Data.csv')
-POPULATION_DATA_FILE = os.path.join(RAW_DIR, 'MA-Town_Population-2024.csv')
-
-# ========================================
-# DATA FILES - PROCESSED
-# ========================================
-# HOUSING_LOOKUP_FILE = os.path.join(PROCESSED_DIR, "housing_lookup.csv")
-CRIME_SCORES_FILE = os.path.join(PROCESSED_DIR, "crime_scores_by_town.csv")
-FBI_CRIME_SCORES_FILE = os.path.join(PROCESSED_DIR, "fbi_crime_scores_by_town.csv")
-
-# ========================================
-# DATA FILES - RESULTS
-WORK1_COMMUTE_STATS_FILE = os.path.join(RESULTS_DIR, "work1_commute_stats.csv")
-HOUSING_STATS_FILE = os.path.join(RESULTS_DIR, "housing_stats.csv")
-API_TIER_TRACKING_FILE = os.path.join(LOGS_DIR, "monthly_API_usage_by_tier.txt")
-SCORED_LOCATIONS_FILE = os.path.join(RESULTS_DIR, "scored_locations.csv")
-SCORE_REPORT_FILE = os.path.join(RESULTS_DIR, "score_report.html")
-WORK2_COMMUTE_STATS_FILE = os.path.join(RESULTS_DIR, "work2_commute_stats.csv")
-RANGE_LOOKUP_FILE = os.path.join(PROCESSED_DIR, "locations_within_range.csv")
-
-# ========================================
-# LOGS
-# ========================================
-APP_LOG_FILE = os.path.join(LOGS_DIR, "app.log")
-COMMUTE_LOG_FILE = os.path.join(LOGS_DIR, 'commute.log')
-HOUSING_LOG_FILE = os.path.join(LOGS_DIR, 'housing.log')
-SCORE_LOG_FILE = os.path.join(LOGS_DIR, 'score.log')
-
 US_HOLIDAYS = holidays.country_holidays('US')
+TARGET_STATES = ['MA', 'RI', 'NH']
 
-# ========================================
-# UNIT CONVERSIONS
-# ========================================
 METERS_PER_MILE = 1609.34
 SECONDS_PER_MINUTE = 60
 MINUTES_PER_HOUR = 60
 HOURS_PER_DAY = 24
 DAYS_PER_WEEK = 7
-
-# ========================================
-# GOOGLE MAPS API CONFIGURATION
-# ========================================
-# API Key Location
-KEY_LOC = DATA_DIR
-KEY_FILE = "google_api_key"
-
-# GCP Monitoring
-GCP_MONITOR_KEY = os.path.join(DATA_DIR, "monitor-key.json")
-
-# Request Parameters
-CHUNK_SIZE = 25  # Addresses per API request
-MODE = 'driving'
-LANGUAGE = 'en'
-UNITS = 'imperial'
-
-# ========================================
-# API RATE LIMITING & BUDGET
-# ========================================
-RATE_LIMIT_WAIT_SECONDS = 2  # Wait time when hitting rate limits
-MAX_API_RETRIES = 3  # Maximum retry attempts for failed requests
-MAX_ACCEPTABLE_DISCREPANCY = 183  # Elements between local/Google count
-
-# ========================================
-# COMMUTE DATA COLLECTION PARAMETERS
-# ========================================
-WORK_ADDRESSES_FILE = "work_addresses.txt"
-WORK_ADDRESSES_PATH = os.path.join(DATA_DIR, WORK_ADDRESSES_FILE)
-
-from environments import load_work_addresses
-
-# Load addresses
-_work_addresses = load_work_addresses(WORK_ADDRESSES_PATH)
-WORK_ADDR1 = _work_addresses.get('WORK_ADDR1', "WORK_ADDRESS_1_NOT_SET")
-WORK_ADDR2 = _work_addresses.get('WORK_ADDR2', "WORK_ADDRESS_2_NOT_SET")
-ENABLE_SECOND_WORK_ADDRESS = True  # Set to True to enable second work address functionality
-
-
-# Geographic Scope
-TARGET_STATES = ['MA', 'RI', 'NH']
 
 STATE_ABBR_TO_NAME = {
     'AK': 'Alaska', 'AL': 'Alabama', 'AR': 'Arkansas', 'AZ': 'Arizona', 'CA': 'California',
@@ -139,118 +40,31 @@ STATE_ABBR_TO_NAME = {
     'WI': 'Wisconsin', 'WV': 'West Virginia', 'WY': 'Wyoming'
 }
 
-WORK1_MAX_RANGE = 40  # Maximum distance in miles from Work Address 1
-WORK2_MAX_RANGE = 40
+# ========================================
+# DYNAMIC LOADING (Lazy)
+# ========================================
+def __getattr__(name):
+    """
+    Handle lazy loading of WORK_ADDR1 and WORK_ADDR2.
+    Ensures that file I/O only happens when these variables are actually accessed.
+    Delegates actual implementation to environments.py.
+    """
+    if name in ('WORK_ADDR1', 'WORK_ADDR2'):
+        try:
+            from environments import get_work_address
+            # WORK_ADDRESSES_PATH is imported from config.commute_config via wildcard above
+            return get_work_address(name, WORK_ADDRESSES_PATH)
+        except Exception:
+            return f"{name}_NOT_SET"
+            
+    raise AttributeError(f"module {__name__} has no attribute {name}")
 
-# Legacy Collection Schedule - currently scheduled using Github actions
-MORNING_TIMES = ['07:00']  # Morning collection times
-AFTERNOON_TIMES = ['17:00']  # Afternoon collection times
-NOON_HOUR = 17 # 12PM EST/EDT = 17:00 UTC (EST) or 16:00 UTC (EDT)
-
-# Data Grouping
-# Determines the data aggregation level. 'town' groups all zip codes together 
-# and merges commute data to housing data via town name. 'zip' strictly separates 
-# and scores each individual zip code.
-# LOCATION_GROUPING = 'zip'
-LOCATION_GROUPING = 'town'
 
 # ========================================
-# HOUSING DATA COLLECTION PARAMETERS
+# WILDCARD IMPORT SUPPORT
 # ========================================
-HOUSING_DATA_SOURCE = 'redfin'  # Primary: 'redfin', Fallback: 'hud'
-USE_FBI_CRIME_DATA = True      # Toggle to swap between FBI baseline and standard Crime Data
-PROPERTY_TAX_FILE = os.path.join(RAW_DIR, 'property_tax_rates.csv')
-DEFAULT_MA_TAX_RATE = 12.1  # Default rate if town not found (per $1000)
-DEFAULT_RI_TAX_RATE = 12.1  # Default rate if town not found (per $1000)
-DEFAULT_NH_TAX_RATE = 17.6  # Default rate if town not found (per $1000)
-
-# Redfin Configuration
-REDFIN_DOWNLOAD_URL = (
-    'https://redfin-public-data.s3.us-west-2.amazonaws.com/'
-    'redfin_market_tracker/zip_code_market_tracker.tsv000.gz'
-)
-REDFIN_DATA_MAX_AGE_DAYS = 30  # Refresh if older than this
-
-# HUD Fair Market Rent API (backup/supplementary)
-HUD_FMR_API_URL = 'https://www.huduser.gov/hudapi/public/fmr/listcounties'
-HUD_FMR_YEAR = '2025'  # Update annually
-
-MIN_SAMPLE_SIZE = 1  # Minimum homes sold
-# Property Type Filter - select 1 or more of the following options
-# Single Family
-# Condo
-# Townhouse
-# All (will use all residential property types)
-# PROPERTY_TYPES = ['Single Family']
-# PROPERTY_TYPES = ['Condo']
-# PROPERTY_TYPES = ['Townhouse']
-PROPERTY_TYPES = ['All']
-
-# ========================================
-# SCORE MODULE CONSTANTS
-# ========================================
-SCORE_CONFIG_FILE = os.path.join(DATA_DIR, 'score_config.json')
-
-TIER_THRESHOLDS = {
-    'A+': 95, 'A': 90, 'A-': 85,
-    'B+': 80, 'B': 75, 'B-': 70,
-    'C+': 65, 'C': 60, 'C-': 55,
-    'D': 50, 'F': 0
-}
-
-MA_CRIME_SEVERITY_WEIGHTS = {
-    # Massachusetts Crime Categories
-    'Murder and Nonnegligent Manslaughter': 5,
-    'Aggravated Assault': 5,
-    'Robbery': 5,
-    'Statutory Rape': 5,
-    'Rape': 5,
-    'Sodomy': 5,
-    'Criminal Sexual Contact': 5,
-    'Incest': 5,
-    'Human Trafficking, Commercial Sex Acts': 5,
-    'Human Trafficking, Involuntary Servitude': 5,
-    'Negligent Manslaughter': 5,
-    'Kidnapping/Abduction': 5,
-
-    'Burglary/Breaking & Entering': 3,
-    'Motor Vehicle Theft': 3,
-    'Simple Assault': 3,
-    'Arson': 3,
-    'Weapon Law Violations': 3,
-    'Animal Cruelty': 3,
-    'Purse-snatching': 3,
-    #'Assisting or Promoting Prostitution': 3,
-    #'Embezzlement': 3,
-    #'Wire Fraud': 3,
-    #'Intimidation': 3,
-    #'Extortion/Blackmail': 3,
-
-    'Driving Under the Influence': 1,
-    'Disorderly Conduct': 1,
-    'Drug/Narcotic Violations': 1,
-    'Trespass of Real Property': 1,
-    'Stolen Property Offenses': 1,
-    'Counterfeiting/Forgery': 1,
-    'Credit Card/Automatic Teller Fraud': 1,
-    'All Other Larceny': 1,
-    'Destruction/Damage/Vandalism of Property': 1,    
-    'Theft From Building': 1,
-    'Theft From Motor Vehicle': 1,
-    'Theft of Motor Vehicle Parts/Accessories': 1,
-    'Pocket-picking': 1,
-    'Drug Equipment Violations': 1,
-    'Impersonation': 1,
-    #'All Other Offenses': 1,
-    #'False Pretenses/Swindle/Confidence Game': 1,
-    #'Family Offenses (Nonviolent)': 1,
-    #'Liquor Law Violations': 1,
-    #'Pornography/Obscene Material': 1,
-    #'Shoplifting': 1,
-    #'Identity Theft': 1,
-    #'Purchasing Prostitution': 1,
-    #'Prostitution': 1,
-    #'Curfew/Loitering/Vagrancy Violations': 1,
-    #'Operating/Promoting/Assisting Gambling': 1,
-    #'Welfare Fraud': 1,
-}
+# Since WORK_ADDR1/2 are dynamic, we must define __all__ to ensure 
+# "from constants import *" picks them up correctly.
+__all__ = [
+    name for name in dir() if not name.startswith('_') 
+] + ['WORK_ADDR1', 'WORK_ADDR2']

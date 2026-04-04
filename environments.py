@@ -37,3 +37,22 @@ def load_work_addresses(path):
     except Exception as e:
         logger.error(f"Error loading work addresses: {e}")
         return {}
+
+_WORK_ADDRESS_CACHE = None
+
+def get_work_address(name, path):
+    """
+    Lazily load and cache work addresses.
+    
+    Args:
+        name (str): Key to look up (e.g., 'WORK_ADDR1')
+        path (str): Path to the work addresses file.
+        
+    Returns:
+        str: The address if found, otherwise a default placeholder.
+    """
+    global _WORK_ADDRESS_CACHE
+    if _WORK_ADDRESS_CACHE is None:
+        _WORK_ADDRESS_CACHE = load_work_addresses(path)
+        
+    return _WORK_ADDRESS_CACHE.get(name, f"{name}_NOT_SET")
