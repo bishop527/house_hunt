@@ -2740,3 +2740,23 @@ googlemaps.exceptions.ApiError: API Error
 2026-04-23 22:31:47 Thu UTC [INFO] __main__: EXECUTION SUMMARY:
 2026-04-23 22:31:47 Thu UTC [INFO] __main__:   COMMUTE: SUCCESS
 2026-04-23 22:31:47 Thu UTC [INFO] __main__: COMPLETED: House Hunt | 1/1 modules successful
+2026-04-24 13:08:25 Fri UTC [INFO] __main__: STARTED: House Hunt Execution
+2026-04-24 13:08:25 Fri UTC [INFO] __main__: STARTED: Commute Data Collection
+2026-04-24 13:08:25 Fri UTC [INFO] utils: Using ADVANCED tier (traffic data enabled) - 61 free calls remaining this month
+2026-04-24 13:08:25 Fri UTC [INFO] utils: STARTED: Range Check (40mi, group_by=town)
+2026-04-24 13:08:25 Fri UTC [INFO] utils: Loaded 232 granular results from unified cache: /home/runner/work/house_hunt/house_hunt/Data/Processed/locations_within_40mi.csv (0 days old)
+2026-04-24 13:08:25 Fri UTC [INFO] utils: Filtered 232 zips down to 186 representative towns
+2026-04-24 13:08:25 Fri UTC [INFO] utils: COMPLETED: Range Check | Found 186 towns
+2026-04-24 13:08:26 Fri UTC [INFO] utils: Loaded 204 records from /home/runner/work/house_hunt/house_hunt/Data/Results/work1_commute_stats.csv
+2026-04-24 13:08:26 Fri UTC [INFO] utils: Tier tracking updated: +97 (basic) | Monthly: Basic=1,940 Advanced=4,939
+2026-04-24 13:08:26 Fri UTC [INFO] utils: STARTED: Tracking Validation
+2026-04-24 13:08:26 Fri UTC [INFO] utils: STARTED: Google Usage Check
+2026-04-24 13:08:27 Fri UTC [INFO] utils: Google-reported usage: 6,782 elements (Basic tier)
+2026-04-24 13:08:27 Fri UTC [INFO] utils: Free tier limit: 10,000, Remaining: 3,218
+2026-04-24 13:08:27 Fri UTC [INFO] utils: COMPLETED: Google Usage Check
+2026-04-24 13:08:27 Fri UTC [INFO] utils: COMPLETED: Tracking Validation | tier=Basic | local=6,879 google=6,782 delta=97 | Basic=1,940/10,000 Advanced=4,939/5,000 | cost=$0.00
+2026-04-24 13:08:27 Fri UTC [INFO] utils: Tracking validation passed (delta=97 within 183 tolerance)
+2026-04-24 13:08:27 Fri UTC [INFO] __main__: COMPLETED: Commute Data Collection
+2026-04-24 13:08:27 Fri UTC [INFO] __main__: EXECUTION SUMMARY:
+2026-04-24 13:08:27 Fri UTC [INFO] __main__:   COMMUTE: SUCCESS
+2026-04-24 13:08:27 Fri UTC [INFO] __main__: COMPLETED: House Hunt | 1/1 modules successful
