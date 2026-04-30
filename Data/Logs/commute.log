@@ -982,3 +982,14 @@
 2026-04-29 22:43:11 Wed UTC [INFO] Commute.collect_commute_data: Loaded 204 records from /home/runner/work/house_hunt/house_hunt/Data/Results/work1_commute_stats.csv
 2026-04-29 22:43:11 Wed UTC [INFO] Commute.collect_commute_data: Successfully updated /home/runner/work/house_hunt/house_hunt/Data/Results/work1_commute_stats.csv with 97 records
 2026-04-29 22:43:12 Wed UTC [INFO] Commute.collect_commute_data: COMPLETED: Commute Data Collection (afternoon) | queried=97 ok=97 | elements=97 (basic) | Basic=2,619/10,000 Advanced=4,939/5,000 | cost=$0.00
+2026-04-30 13:27:28 Thu UTC [INFO] Commute.collect_commute_data: STARTED: Commute Data Collection (morning)
+2026-04-30 13:27:28 Thu UTC [INFO] Commute.collect_commute_data: Auto tier selection: Advanced tier free quota available (61 remaining)
+2026-04-30 13:27:28 Thu UTC [INFO] Commute.collect_commute_data: Found 186 addresses within Work Address 1 range (town level)
+2026-04-30 13:27:28 Thu UTC [INFO] Commute.collect_commute_data: Work Address 2 range filter: removed 89 address(es) outside 40mi of Work Address 2 | 97 remaining
+2026-04-30 13:27:28 Thu UTC [INFO] Commute.collect_commute_data: Projected advanced tier usage (5036) exceeds budget (5000). Auto-downgrading to Basic tier.
+2026-04-30 13:27:28 Thu UTC [INFO] Commute.collect_commute_data: Basic tier budget is sufficient for this run.
+2026-04-30 13:27:28 Thu UTC [INFO] Commute.collect_commute_data: Morning commute: 97 locations -> 244 Wood St. Lexington, MA 02421
+2026-04-30 13:27:29 Thu UTC [INFO] Commute.collect_commute_data: Completed 4 requests, processed 97 elements, collected 97 valid results
+2026-04-30 13:27:29 Thu UTC [INFO] Commute.collect_commute_data: Loaded 204 records from /home/runner/work/house_hunt/house_hunt/Data/Results/work1_commute_stats.csv
+2026-04-30 13:27:29 Thu UTC [INFO] Commute.collect_commute_data: Successfully updated /home/runner/work/house_hunt/house_hunt/Data/Results/work1_commute_stats.csv with 97 records
+2026-04-30 13:27:30 Thu UTC [INFO] Commute.collect_commute_data: COMPLETED: Commute Data Collection (morning) | queried=97 ok=97 | elements=97 (basic) | Basic=2,716/10,000 Advanced=4,939/5,000 | cost=$0.00
