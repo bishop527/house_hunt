@@ -2974,3 +2974,37 @@ googlemaps.exceptions.ApiError: API Error
 2026-05-01 13:01:36 Fri UTC [INFO] __main__: EXECUTION SUMMARY:
 2026-05-01 13:01:36 Fri UTC [INFO] __main__:   HOUSING: SUCCESS
 2026-05-01 13:01:36 Fri UTC [INFO] __main__: COMPLETED: House Hunt | 1/1 modules successful
+2026-05-01 13:02:06 Fri UTC [INFO] __main__: STARTED: House Hunt Execution
+2026-05-01 13:02:06 Fri UTC [INFO] __main__: === Starting execution for Property Type: Single Family ===
+2026-05-01 13:02:06 Fri UTC [INFO] __main__: STARTED: Scoring (Single Family)
+2026-05-01 13:02:06 Fri UTC [INFO] utils: Loaded 204 records from /home/runner/work/house_hunt/house_hunt/Data/Results/work1_commute_stats.csv
+2026-05-01 13:02:06 Fri UTC [INFO] utils: Loaded 179 records from /home/runner/work/house_hunt/house_hunt/Data/Results/work2_commute_stats.csv
+2026-05-01 13:02:06 Fri UTC [INFO] utils: Loaded 221 records from /home/runner/work/house_hunt/house_hunt/Data/Results/housing_stats_Single_Family.csv
+2026-05-01 13:02:06 Fri UTC [INFO] utils: Parsing ZIP database: /home/runner/work/house_hunt/house_hunt/Data/Raw/zip_code_database.csv
+2026-05-01 13:02:07 Fri UTC [INFO] utils: Loaded 795 active standard ZIPs for MA, RI, NH
+2026-05-01 13:02:07 Fri UTC [INFO] __main__: Generating HTML report from /home/runner/work/house_hunt/house_hunt/Data/Results/scored_locations-Single_Family.csv...
+2026-05-01 13:02:07 Fri UTC [INFO] utils: Loaded 60 records from /home/runner/work/house_hunt/house_hunt/Data/Results/scored_locations-Single_Family.csv
+2026-05-01 13:02:07 Fri UTC [INFO] __main__: COMPLETED: Scoring (Single Family)
+2026-05-01 13:02:07 Fri UTC [INFO] __main__: === Starting execution for Property Type: Condo ===
+2026-05-01 13:02:07 Fri UTC [INFO] __main__: STARTED: Scoring (Condo)
+2026-05-01 13:02:07 Fri UTC [INFO] utils: Loaded 204 records from /home/runner/work/house_hunt/house_hunt/Data/Results/work1_commute_stats.csv
+2026-05-01 13:02:07 Fri UTC [INFO] utils: Loaded 179 records from /home/runner/work/house_hunt/house_hunt/Data/Results/work2_commute_stats.csv
+2026-05-01 13:02:07 Fri UTC [INFO] utils: Loaded 219 records from /home/runner/work/house_hunt/house_hunt/Data/Results/housing_stats_Condo.csv
+2026-05-01 13:02:07 Fri UTC [INFO] utils: Parsing ZIP database: /home/runner/work/house_hunt/house_hunt/Data/Raw/zip_code_database.csv
+2026-05-01 13:02:08 Fri UTC [INFO] utils: Loaded 795 active standard ZIPs for MA, RI, NH
+2026-05-01 13:02:08 Fri UTC [INFO] __main__: Generating HTML report from /home/runner/work/house_hunt/house_hunt/Data/Results/scored_locations-Condo.csv...
+2026-05-01 13:02:08 Fri UTC [INFO] utils: Loaded 97 records from /home/runner/work/house_hunt/house_hunt/Data/Results/scored_locations-Condo.csv
+2026-05-01 13:02:08 Fri UTC [INFO] __main__: COMPLETED: Scoring (Condo)
+2026-05-01 13:02:08 Fri UTC [INFO] __main__: === Starting execution for Property Type: Townhouse ===
+2026-05-01 13:02:08 Fri UTC [INFO] __main__: STARTED: Scoring (Townhouse)
+2026-05-01 13:02:08 Fri UTC [INFO] utils: Loaded 204 records from /home/runner/work/house_hunt/house_hunt/Data/Results/work1_commute_stats.csv
+2026-05-01 13:02:08 Fri UTC [INFO] utils: Loaded 179 records from /home/runner/work/house_hunt/house_hunt/Data/Results/work2_commute_stats.csv
+2026-05-01 13:02:08 Fri UTC [INFO] utils: Loaded 204 records from /home/runner/work/house_hunt/house_hunt/Data/Results/housing_stats_Townhouse.csv
+2026-05-01 13:02:08 Fri UTC [INFO] utils: Parsing ZIP database: /home/runner/work/house_hunt/house_hunt/Data/Raw/zip_code_database.csv
+2026-05-01 13:02:09 Fri UTC [INFO] utils: Loaded 795 active standard ZIPs for MA, RI, NH
+2026-05-01 13:02:09 Fri UTC [INFO] __main__: Generating HTML report from /home/runner/work/house_hunt/house_hunt/Data/Results/scored_locations-Townhouse.csv...
+2026-05-01 13:02:09 Fri UTC [INFO] utils: Loaded 74 records from /home/runner/work/house_hunt/house_hunt/Data/Results/scored_locations-Townhouse.csv
+2026-05-01 13:02:09 Fri UTC [INFO] __main__: COMPLETED: Scoring (Townhouse)
+2026-05-01 13:02:09 Fri UTC [INFO] __main__: EXECUTION SUMMARY:
+2026-05-01 13:02:09 Fri UTC [INFO] __main__:   SCORE: SUCCESS
+2026-05-01 13:02:09 Fri UTC [INFO] __main__: COMPLETED: House Hunt | 1/1 modules successful
