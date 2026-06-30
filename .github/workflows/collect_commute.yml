@@ -70,7 +70,7 @@ jobs:
           # Only commit if there are changes
           if ! git diff --staged --quiet; then
             git commit -m "Auto: Ran Commute module $(date -u +%Y-%m-%d_%H:%M_%a_UTC)"
-            git push
+            git push --force-with-lease
           else
             echo "No changes to commit"
           fi
