@@ -2,10 +2,10 @@ name: Collect Commute Data
 
 on:
   schedule:
-    # Monday-Friday at 7am EST (12pm UTC)
-    - cron: '0 12 * * 1-5'
-    # Monday-Friday at 5pm EST (10pm UTC)
-    - cron: '0 22 * * 1-5'
+    # Monday-Friday at 7am EDT (12pm UTC)
+    - cron: '0 11 * * 1-5'
+    # Monday-Friday at 5pm EDT (10pm UTC)
+    - cron: '0 21 * * 1-5'
 
   workflow_dispatch:  # Allows manual trigger from GitHub UI
 
