@@ -1,11 +1,9 @@
 name: Run Score Module
 
 on:
-  # Trigger automatically when the Housing Collection workflow completes
-  workflow_run:
-    workflows: ["Collect Housing Data"]
-    types:
-      - completed
+  schedule:
+    - cron: '0 00 1 * *'  # 1st of every month at 12:00am EST
+      timezone: "America/New_York"
 
   workflow_dispatch:        # Allows manual trigger from GitHub UI
 
@@ -104,17 +102,8 @@ jobs:
         
     - name: Prepare docs folder for GitHub Pages
       run: |
-        set -e
-        PREV_MONTH=$(date -d "$(date +%Y-%m-01) -1 month" '+%B')
-        PREV_YEAR=$(date -d "$(date +%Y-%m-01) -1 month" '+%Y')
-    
-        mkdir -p docs/archive/${PREV_YEAR}/${PREV_MONTH}
- 
-        # Archive last months reports
-        cp docs/*.html "docs/archive/${PREV_YEAR}/${PREV_MONTH}"
-        echo "Last months reports copied to archive folder"
-
         # Copy current score reports to docs/
+        mkdir -p docs
         cp Data/Results/*.html docs/
         echo "Reports copied to docs folder"
     
@@ -300,13 +289,6 @@ jobs:
           Data/Results/score_report-*.html
           docs/
         retention-days: 90
-
-    - name: Archive monthly report in Data/Results
-      run: |
-        MONTH_YEAR=$(date +'%B%Y')
-        cp Data/Results/score_report-Single_Family.html "Data/Results/score_report-Single_Family-${MONTH_YEAR}.html"
-        cp Data/Results/score_report-Condo.html "Data/Results/score_report-Condo-${MONTH_YEAR}.html"
-        cp Data/Results/score_report-Townhouse.html "Data/Results/score_report-Townhouse-${MONTH_YEAR}.html"
 
     - name: Commit and push results
       run: |
