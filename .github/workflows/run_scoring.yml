@@ -105,24 +105,23 @@ jobs:
     - name: Prepare docs folder for GitHub Pages
       run: |
         set -e
-        mkdir -p docs/archive
-        
-        # Copy score reports to docs/
-        cp Data/Results/score_report-Single_Family.html docs/score_report-Single_Family.html
-        cp Data/Results/score_report-Condo.html docs/score_report-Condo.html
-        cp Data/Results/score_report-Townhouse.html docs/score_report-Townhouse.html
-        
-        # Archive monthly reports
-        MONTH_YEAR=$(date +'%B%Y')
-        cp Data/Results/score_report-Single_Family.html "docs/archive/score_report-Single_Family-${MONTH_YEAR}.html"
-        cp Data/Results/score_report-Condo.html "docs/archive/score_report-Condo-${MONTH_YEAR}.html"
-        cp Data/Results/score_report-Townhouse.html "docs/archive/score_report-Townhouse-${MONTH_YEAR}.html"
-        
+        PREV_MONTH=$(date -d "$(date +%Y-%m-01) -1 month" '+%B')
+        PREV_YEAR=$(date -d "$(date +%Y-%m-01) -1 month" '+%Y')
+    
+        mkdir -p docs/archive/${PREV_YEAR}/${PREV_MONTH}
+ 
+        # Archive last months reports
+        cp docs/*.html "docs/archive/${PREV_YEAR}/${PREV_MONTH}"
+        echo "Last months reports copied to archive folder"
+
+        # Copy current score reports to docs/
+        cp Data/Results/*.html docs/
         echo "Reports copied to docs folder"
     
     - name: Create index page
       run: |
         TIMESTAMP=$(date +'%B %d, %Y at %H:%M UTC')
+        MONTH_YEAR=$(date '+%B %Y')
         
         cat > docs/index.html <<INDEXEOF
         <!DOCTYPE html>
@@ -130,7 +129,7 @@ jobs:
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Location Scoring Reports</title>
+            <title>Location Scoring Reports - ${MONTH_YEAR}</title>
             <style>
                 body {
                     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
@@ -243,7 +242,7 @@ jobs:
         </head>
         <body>
             <div class="container">
-                <h1>🏠 Location Scoring Reports</h1>
+                <h1>🏠 Location Scoring Reports - ${MONTH_YEAR}</h1>
                 <p class="subtitle">Select a property type to view scored locations</p>
                 
                 <div class="info-box">
