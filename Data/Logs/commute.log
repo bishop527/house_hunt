@@ -2092,3 +2092,14 @@
 2026-07-16 22:01:31 Thu UTC [INFO] Commute.collect_commute_data: Successfully updated /home/runner/work/house_hunt/house_hunt/Data/Results/work1_commute_stats.csv with 97 records
 2026-07-16 22:01:33 Thu UTC [INFO] Commute.collect_commute_data: COMPLETED: Commute Data Collection (afternoon) | queried=97 ok=97 | elements=97 (advanced) | Basic=0/10,000 Advanced=2,231/5,000 | cost=$0.00
 2026-07-16 22:01:33 Thu UTC [WARNING] Commute.collect_commute_data: DISCREPANCY: 698 elements (23.8%)
+2026-07-17 12:16:47 Fri UTC [INFO] Commute.collect_commute_data: STARTED: Commute Data Collection (morning)
+2026-07-17 12:16:47 Fri UTC [INFO] Commute.collect_commute_data: Auto tier selection: Advanced tier free quota available (2,769 remaining)
+2026-07-17 12:16:47 Fri UTC [INFO] Commute.collect_commute_data: Found 186 addresses within Work Address 1 range (town level)
+2026-07-17 12:16:47 Fri UTC [INFO] Commute.collect_commute_data: Work Address 2 range filter: removed 89 address(es) outside 40mi of Work Address 2 | 97 remaining
+2026-07-17 12:16:47 Fri UTC [INFO] Commute.collect_commute_data: Budget check passed: 2,328/5,000 (current=2,231 + estimated=97)
+2026-07-17 12:16:47 Fri UTC [INFO] Commute.collect_commute_data: Morning commute: 97 locations -> 244 Wood St. Lexington, MA 02421
+2026-07-17 12:16:48 Fri UTC [INFO] Commute.collect_commute_data: Completed 4 requests, processed 97 elements, collected 97 valid results
+2026-07-17 12:16:48 Fri UTC [INFO] Commute.collect_commute_data: Loaded 204 records from /home/runner/work/house_hunt/house_hunt/Data/Results/work1_commute_stats.csv
+2026-07-17 12:16:48 Fri UTC [INFO] Commute.collect_commute_data: Successfully updated /home/runner/work/house_hunt/house_hunt/Data/Results/work1_commute_stats.csv with 97 records
+2026-07-17 12:16:49 Fri UTC [INFO] Commute.collect_commute_data: COMPLETED: Commute Data Collection (morning) | queried=97 ok=97 | elements=97 (advanced) | Basic=0/10,000 Advanced=2,328/5,000 | cost=$0.00
+2026-07-17 12:16:49 Fri UTC [WARNING] Commute.collect_commute_data: DISCREPANCY: 698 elements (23.1%)
