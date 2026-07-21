@@ -32,4 +32,4 @@ AFTERNOON_TIMES = ['17:00']  # Afternoon collection times
 NOON_HOUR = 17 # 12PM EST/EDT = 17:00 UTC (EST) or 16:00 UTC (EDT)
 
 # Data Grouping
-LOCATION_GROUPING = 'town'
+LOCATION_GROUPING = 'zip'
