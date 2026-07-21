@@ -1,10 +1,13 @@
 import os
 import json
 import pandas as pd
-from constants import RESULTS_DIR, SCORE_CONFIG_FILE, SCORE_REPORT_FILE
+from constants import RESULTS_DIR, SCORE_CONFIG_FILE, SCORE_REPORT_FILE, SCORE_LOG_FILE
+from logging_config import setup_logger
 
 # Output path for the dashboard
 DASHBOARD_OUTPUT_FILE = os.path.join(os.path.dirname(SCORE_REPORT_FILE), "dashboard.html")
+
+logger = setup_logger(__name__, log_file=SCORE_LOG_FILE)
 
 def generate_dashboard():
     """
@@ -18,7 +21,7 @@ def generate_dashboard():
             with open(SCORE_CONFIG_FILE, 'r') as f:
                 config = json.load(f)
         except Exception as e:
-            print(f"Warning: Failed to load config file: {e}")
+            logger.warning(f"Failed to load config file: {e}")
     
     # 2. Load scored locations for each property type
     property_types = ['Single_Family', 'Condo', 'Townhouse']
@@ -35,14 +38,14 @@ def generate_dashboard():
                 # Convert NaN to None for proper JSON serialization
                 df = df.where(df.notnull(), None)
                 data_by_type[pt_display] = df.to_dict(orient='records')
-                print(f"Loaded {len(df)} records for {pt_display}")
+                logger.info(f"Loaded {len(df)} records for {pt_display}")
             except Exception as e:
-                print(f"Warning: Failed to load {csv_file}: {e}")
+                logger.warning(f"Failed to load {csv_file}: {e}")
         else:
-            print(f"Info: {csv_file} not found, skipping property type {pt_display}")
+            logger.info(f"{csv_file} not found, skipping property type {pt_display}")
 
     if not data_by_type:
-        print("Error: No scored locations CSV files found. Cannot generate dashboard.")
+        logger.error("No scored locations CSV files found. Cannot generate dashboard.")
         return False
 
     # 3. Generate self-contained HTML
@@ -54,10 +57,10 @@ def generate_dashboard():
     try:
         with open(DASHBOARD_OUTPUT_FILE, 'w', encoding='utf-8') as f:
             f.write(html_content)
-        print(f"Successfully generated static dashboard at: {DASHBOARD_OUTPUT_FILE}")
+        logger.info(f"Successfully generated static dashboard at: {DASHBOARD_OUTPUT_FILE}")
         return True
     except Exception as e:
-        print(f"Error: Failed to write dashboard file: {e}")
+        logger.error(f"Failed to write dashboard HTML: {e}")
         return False
 
 def get_dashboard_html_template(data_by_type, config):
