@@ -167,6 +167,12 @@ def main():
     )
 
     parser.add_argument(
+        '--dashboard',
+        action='store_true',
+        help='Launch the interactive scoring dashboard'
+    )
+
+    parser.add_argument(
         '--quiet',
         action='store_true',
         help='Suppress console output (log to file only)'
@@ -200,7 +206,7 @@ def main():
     args = parser.parse_args()
 
     # If no arguments, show help
-    if not any([args.commute, args.score, args.housing, args.all, args.work2]):
+    if not any([args.commute, args.score, args.housing, args.all, args.work2, args.dashboard]):
         parser.print_help()
         sys.exit(0)
 
@@ -212,6 +218,12 @@ def main():
     )
 
     logger.info("STARTED: House Hunt Execution")
+
+    if args.dashboard:
+        import uvicorn
+        logger.info("Starting Interactive Dashboard on http://localhost:8000")
+        uvicorn.run("api.server:app", host="0.0.0.0", port=8000, reload=False)
+        sys.exit(0)
 
     # Import here to avoid circular imports / missing references
     from constants import PROPERTY_TYPES
