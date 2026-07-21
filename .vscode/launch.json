@@ -2,6 +2,17 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Python: Debug Commute",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/main.py",
+            "args": [
+                "--commute",
+                "--force-refresh"
+            ],
+            "console": "integratedTerminal"
+        },
+        {
             "name": "Python: Run Current File",
             "type": "debugpy",
             "request": "launch",
@@ -77,6 +88,16 @@
                 "--housing",
                 "--force-refresh",
                 "--score"
+            ],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "House Hunt: Run Dashboard",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/main.py",
+            "args": [
+                "--dashboard"
             ],
             "console": "integratedTerminal"
         }
