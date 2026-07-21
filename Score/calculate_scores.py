@@ -57,7 +57,7 @@ class LocationScorer:
     for each location, then ranks and assigns tiers.
     """
 
-    def __init__(self, config_file=None, property_types=None):
+    def __init__(self, config_file=None, property_types=None, config_dict=None):
         """
         Initialize scorer with configuration.
 
@@ -65,9 +65,10 @@ class LocationScorer:
             config_file (str): Path to JSON config file. If None,
                              uses default config.
             property_types (list, optional): Property types to use for execution.
+            config_dict (dict, optional): Override config loaded from file.
         """
         self.filtered_locations = None
-        self.config = self._load_config(config_file)
+        self.config = config_dict if config_dict is not None else self._load_config(config_file)
         self._validate_weights()
         self.commute_data = None
         self.housing_data = None
