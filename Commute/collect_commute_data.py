@@ -565,7 +565,7 @@ def _check_budget_once(estimated_elements, force=False):
     }
 
 
-def _load_addresses_within_range():
+def _load_addresses_within_range(force_refresh=False):
     """
     Load addresses within WORK1_MAX_RANGE of Work Address 1, optionally
     intersected with addresses within WORK2_MAX_RANGE of Work Address 2.
@@ -580,8 +580,8 @@ def _load_addresses_within_range():
     """
     # Rely on get_locations_within_range for high-level caching and lazy loading
     addresses = get_locations_within_range(
-        WORK_ADDR1, None, WORK1_MAX_RANGE,
-        group_by=LOCATION_GROUPING
+        destination=WORK_ADDR1, zip_data_df=None, max_range=WORK1_MAX_RANGE,
+        group_by=LOCATION_GROUPING, force_refresh=force_refresh
     )
 
     if not addresses:
@@ -706,7 +706,7 @@ def collect_commute_data(limit=None, dry_run=False, force=False, force_refresh=F
             )
 
     # OPTIMIZATION: Load addresses (cache-first, skip zip DB if possible)
-    addresses = _load_addresses_within_range()
+    addresses = _load_addresses_within_range(force_refresh=force_refresh)
     if not addresses:
         return False
 
