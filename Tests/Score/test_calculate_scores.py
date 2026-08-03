@@ -156,7 +156,7 @@ def test_score_commute_time_ideal(sample_config):
     scorer.config = sample_config
 
     # 15 min < 20 min ideal = full points
-    score = scorer._score_commute_time(15.0)
+    score = scorer._score_commute_time(15.0, sample_config['commute_preferences'])
 
     assert score == 100.0
 
@@ -167,7 +167,7 @@ def test_score_commute_time_acceptable(sample_config):
     scorer.config = sample_config
 
     # 30 min between ideal (20) and max (45)
-    score = scorer._score_commute_time(30.0)
+    score = scorer._score_commute_time(30.0, sample_config['commute_preferences'])
 
     assert 50.0 <= score <= 100.0
 
@@ -178,7 +178,7 @@ def test_score_commute_time_poor(sample_config):
     scorer.config = sample_config
 
     # 55 min > max acceptable (45)
-    score = scorer._score_commute_time(55.0)
+    score = scorer._score_commute_time(55.0, sample_config['commute_preferences'])
 
     assert 0.0 <= score <= 50.0
 
@@ -191,8 +191,8 @@ def test_score_commute_time_zero_denominator(sample_config):
     scorer.config = sample_config
     
     # Should not crash with division by zero
-    score_ideal = scorer._score_commute_time(30.0)
-    score_over = scorer._score_commute_time(45.0)
+    score_ideal = scorer._score_commute_time(30.0, sample_config['commute_preferences'])
+    score_over = scorer._score_commute_time(45.0, sample_config['commute_preferences'])
     
     assert score_ideal == 100.0
     assert 0.0 <= score_over <= 50.0

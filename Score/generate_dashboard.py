@@ -33,12 +33,22 @@ def generate_dashboard():
         if os.path.exists(csv_file):
             try:
                 df = pd.read_csv(csv_file, dtype={'Zip': str})
+                
+                filtered_csv = os.path.join(RESULTS_DIR, f"filtered_locations-{pt}.csv")
+                if os.path.exists(filtered_csv):
+                    try:
+                        filtered_df = pd.read_csv(filtered_csv, dtype={'Zip': str})
+                        df = pd.concat([df, filtered_df], ignore_index=True)
+                        logger.info(f"Appended {len(filtered_df)} filtered records for {pt_display}")
+                    except Exception as fe:
+                        logger.warning(f"Failed to load filtered locations {filtered_csv}: {fe}")
+                        
                 if 'Zip' in df.columns:
                     df['Zip'] = df['Zip'].fillna('').astype(str).str.zfill(5)
                 # Convert NaN to None for proper JSON serialization
                 df = df.where(df.notnull(), None)
                 data_by_type[pt_display] = df.to_dict(orient='records')
-                logger.info(f"Loaded {len(df)} records for {pt_display}")
+                logger.info(f"Loaded {len(df)} total records for {pt_display}")
             except Exception as e:
                 logger.warning(f"Failed to load {csv_file}: {e}")
         else:
@@ -513,6 +523,13 @@ def get_dashboard_html_template(data_by_type, config):
 
                 <!-- Commute Preferences -->
                 <div class="control-group">
+                    <h3>Commute Split</h3>
+                    <div class="slider-container">
+                        <label>W1 (<span id="val-weight-work1">50</span>%) / W2 (<span id="val-weight-work2">50</span>%)</label>
+                        <input type="range" id="weight-work1" min="0" max="100" value="50" step="5" class="slider primary">
+                    </div>
+                </div>
+                <div class="control-group">
                     <h3>Commute (Work 1)</h3>
                     <div class="slider-container">
                         <label>Ideal Time (<span id="val-commute-ideal">30</span>m)</label>
@@ -521,6 +538,17 @@ def get_dashboard_html_template(data_by_type, config):
                     <div class="slider-container">
                         <label>Max Time (<span id="val-commute-max">60</span>m)</label>
                         <input type="range" id="commute-max" min="10" max="120" value="60" step="5" class="slider">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <h3>Commute (Work 2)</h3>
+                    <div class="slider-container">
+                        <label>Ideal Time (<span id="val-commute2-ideal">30</span>m)</label>
+                        <input type="range" id="commute2-ideal" min="5" max="120" value="30" step="5" class="slider">
+                    </div>
+                    <div class="slider-container">
+                        <label>Max Time (<span id="val-commute2-max">60</span>m)</label>
+                        <input type="range" id="commute2-max" min="10" max="120" value="60" step="5" class="slider">
                     </div>
                 </div>
 
@@ -599,8 +627,11 @@ def get_dashboard_html_template(data_by_type, config):
             hweightPrice: document.getElementById('hweight-price'),
             hweightPpsf: document.getElementById('hweight-ppsf'),
             hweightTax: document.getElementById('hweight-tax'),
+            weightWork1: document.getElementById('weight-work1'),
             commuteIdeal: document.getElementById('commute-ideal'),
             commuteMax: document.getElementById('commute-max'),
+            commute2Ideal: document.getElementById('commute2-ideal'),
+            commute2Max: document.getElementById('commute2-max'),
             budgetMin: document.getElementById('budget-min'),
             budgetIdeal: document.getElementById('budget-ideal'),
             budgetMax: document.getElementById('budget-max'),
@@ -610,8 +641,12 @@ def get_dashboard_html_template(data_by_type, config):
             valHweightPrice: document.getElementById('val-hweight-price'),
             valHweightPpsf: document.getElementById('val-hweight-ppsf'),
             valHweightTax: document.getElementById('val-hweight-tax'),
+            valWeightWork1: document.getElementById('val-weight-work1'),
+            valWeightWork2: document.getElementById('val-weight-work2'),
             valCommuteIdeal: document.getElementById('val-commute-ideal'),
             valCommuteMax: document.getElementById('val-commute-max'),
+            valCommute2Ideal: document.getElementById('val-commute2-ideal'),
+            valCommute2Max: document.getElementById('val-commute2-max'),
             valBudgetMin: document.getElementById('val-budget-min'),
             valBudgetIdeal: document.getElementById('val-budget-ideal'),
             valBudgetMax: document.getElementById('val-budget-max'),
@@ -798,11 +833,32 @@ def get_dashboard_html_template(data_by_type, config):
             
             const processed = targetLocations.map(loc => {{
                 // commute
-                const commuteScore = scoreCommuteTime(
+                const c1Score = scoreCommuteTime(
                     loc.Avg_Commute_Min,
                     config.work_address_1 ? config.work_address_1.preferences || config.work_address_1 : {{}},
                     config.scoring_behavior || {{}}
                 );
+                const c2Score = scoreCommuteTime(
+                    loc.Work2_Avg_Time,
+                    config.work_address_2 ? config.work_address_2.preferences || config.work_address_2 : {{}},
+                    config.scoring_behavior || {{}}
+                );
+
+                const cWeights = config.weights.commute_weights || {{ work1: 0.5, work2: 0.5 }};
+                let commuteScore = 0;
+                
+                const hasW1 = (loc.Avg_Commute_Min !== null && loc.Avg_Commute_Min !== undefined);
+                const hasW2 = (loc.Work2_Avg_Time !== null && loc.Work2_Avg_Time !== undefined);
+                
+                if (hasW1 && hasW2) {{
+                    commuteScore = (c1Score * cWeights.work1) + (c2Score * cWeights.work2);
+                }} else if (hasW1) {{
+                    commuteScore = c1Score;
+                }} else if (hasW2) {{
+                    commuteScore = c2Score;
+                }} else {{
+                    commuteScore = 0;
+                }}
                 
                 // housing
                 const pScore = scoreHousingPrice(loc.Median_Price || loc.Latest_Median_Sale, config.housing_preferences);
@@ -914,8 +970,14 @@ def get_dashboard_html_template(data_by_type, config):
             elements.valHweightPpsf.innerText = elements.hweightPpsf.value;
             elements.valHweightTax.innerText = elements.hweightTax.value;
             
+            const w1 = parseInt(elements.weightWork1.value);
+            elements.valWeightWork1.innerText = w1;
+            elements.valWeightWork2.innerText = 100 - w1;
+            
             elements.valCommuteIdeal.innerText = elements.commuteIdeal.value;
             elements.valCommuteMax.innerText = elements.commuteMax.value;
+            elements.valCommute2Ideal.innerText = elements.commute2Ideal.value;
+            elements.valCommute2Max.innerText = elements.commute2Max.value;
             
             elements.valBudgetMin.innerText = elements.budgetMin.value;
             elements.valBudgetIdeal.innerText = elements.budgetIdeal.value;
@@ -951,10 +1013,22 @@ def get_dashboard_html_template(data_by_type, config):
                 tax: parseInt(elements.hweightTax.value) / 100
             }};
 
+            if (!config.weights.commute_weights) config.weights.commute_weights = {{}};
+            const w1Val = parseInt(elements.weightWork1.value) / 100.0;
+            config.weights.commute_weights = {{
+                work1: w1Val,
+                work2: 1 - w1Val
+            }};
+
             if (!config.work_address_1) config.work_address_1 = {{}};
             const workPrefs = config.work_address_1.preferences || config.work_address_1;
             workPrefs.ideal_time_minutes = parseInt(elements.commuteIdeal.value);
             workPrefs.max_acceptable_time = parseInt(elements.commuteMax.value);
+
+            if (!config.work_address_2) config.work_address_2 = {{}};
+            const work2Prefs = config.work_address_2.preferences || config.work_address_2;
+            work2Prefs.ideal_time_minutes = parseInt(elements.commute2Ideal.value);
+            work2Prefs.max_acceptable_time = parseInt(elements.commute2Max.value);
 
             config.housing_preferences.budget_min = parseInt(elements.budgetMin.value) * 1000;
             config.housing_preferences.budget_ideal = parseInt(elements.budgetIdeal.value) * 1000;

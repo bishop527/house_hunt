@@ -258,9 +258,9 @@ def test_load_addresses_cache_miss(tmp_path, monkeypatch):
 
     # Verify delegation parameters
     mock_range.assert_called_once()
-    args, _ = mock_range.call_args
-    # First arg is address, second is zip_data_df
-    assert args[1] is None  # Ensures lazy load is requested
+    _, kwargs = mock_range.call_args
+    # zip_data_df is passed as kwarg
+    assert kwargs.get('zip_data_df') is None  # Ensures lazy load is requested
     assert len(addresses) == 1
 
 
