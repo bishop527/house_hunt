@@ -1,2 +1,2 @@
 2026-09,basic,0
-2026-09,advanced,97
+2026-09,advanced,194
