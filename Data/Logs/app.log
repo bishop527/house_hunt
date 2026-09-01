@@ -6784,3 +6784,37 @@ googlemaps.exceptions.ApiError: API Error
 2026-09-01 15:26:58 Tue UTC [INFO] __main__: EXECUTION SUMMARY:
 2026-09-01 15:26:58 Tue UTC [INFO] __main__:   COMMUTE: SUCCESS
 2026-09-01 15:26:58 Tue UTC [INFO] __main__: COMPLETED: House Hunt | 1/1 modules successful
+2026-09-01 15:37:49 Tue UTC [INFO] __main__: STARTED: House Hunt Execution
+2026-09-01 15:37:49 Tue UTC [INFO] __main__: === Starting execution for Property Type: Single Family ===
+2026-09-01 15:37:49 Tue UTC [INFO] __main__: STARTED: Housing Data Collection (Single Family)
+2026-09-01 15:40:04 Tue UTC [INFO] utils: Parsing ZIP database: /home/runner/work/house_hunt/house_hunt/Data/Raw/zip_code_database.csv
+2026-09-01 15:40:05 Tue UTC [INFO] utils: Loaded 795 active standard ZIPs for MA, RI, NH
+2026-09-01 15:40:05 Tue UTC [INFO] utils: STARTED: Range Check (40mi, group_by=town)
+2026-09-01 15:40:05 Tue UTC [INFO] utils: Loaded 232 granular results from unified cache: /home/runner/work/house_hunt/house_hunt/Data/Processed/locations_within_40mi.csv (0 days old)
+2026-09-01 15:40:05 Tue UTC [INFO] utils: Filtered 232 zips down to 186 representative towns
+2026-09-01 15:40:05 Tue UTC [INFO] utils: COMPLETED: Range Check | Found 186 towns
+2026-09-01 15:40:09 Tue UTC [INFO] utils: Loaded 221 records from /home/runner/work/house_hunt/house_hunt/Data/Results/housing_stats_Single_Family.csv
+2026-09-01 15:40:09 Tue UTC [INFO] __main__: COMPLETED: Housing Data Collection (Single Family)
+2026-09-01 15:40:09 Tue UTC [INFO] __main__: === Starting execution for Property Type: Condo ===
+2026-09-01 15:40:09 Tue UTC [INFO] __main__: STARTED: Housing Data Collection (Condo)
+2026-09-01 15:40:09 Tue UTC [INFO] utils: Parsing ZIP database: /home/runner/work/house_hunt/house_hunt/Data/Raw/zip_code_database.csv
+2026-09-01 15:40:10 Tue UTC [INFO] utils: Loaded 795 active standard ZIPs for MA, RI, NH
+2026-09-01 15:40:10 Tue UTC [INFO] utils: STARTED: Range Check (40mi, group_by=town)
+2026-09-01 15:40:10 Tue UTC [INFO] utils: Loaded 232 granular results from unified cache: /home/runner/work/house_hunt/house_hunt/Data/Processed/locations_within_40mi.csv (0 days old)
+2026-09-01 15:40:10 Tue UTC [INFO] utils: Filtered 232 zips down to 186 representative towns
+2026-09-01 15:40:10 Tue UTC [INFO] utils: COMPLETED: Range Check | Found 186 towns
+2026-09-01 15:40:14 Tue UTC [INFO] utils: Loaded 220 records from /home/runner/work/house_hunt/house_hunt/Data/Results/housing_stats_Condo.csv
+2026-09-01 15:40:14 Tue UTC [INFO] __main__: COMPLETED: Housing Data Collection (Condo)
+2026-09-01 15:40:14 Tue UTC [INFO] __main__: === Starting execution for Property Type: Townhouse ===
+2026-09-01 15:40:14 Tue UTC [INFO] __main__: STARTED: Housing Data Collection (Townhouse)
+2026-09-01 15:40:14 Tue UTC [INFO] utils: Parsing ZIP database: /home/runner/work/house_hunt/house_hunt/Data/Raw/zip_code_database.csv
+2026-09-01 15:40:15 Tue UTC [INFO] utils: Loaded 795 active standard ZIPs for MA, RI, NH
+2026-09-01 15:40:15 Tue UTC [INFO] utils: STARTED: Range Check (40mi, group_by=town)
+2026-09-01 15:40:15 Tue UTC [INFO] utils: Loaded 232 granular results from unified cache: /home/runner/work/house_hunt/house_hunt/Data/Processed/locations_within_40mi.csv (0 days old)
+2026-09-01 15:40:15 Tue UTC [INFO] utils: Filtered 232 zips down to 186 representative towns
+2026-09-01 15:40:15 Tue UTC [INFO] utils: COMPLETED: Range Check | Found 186 towns
+2026-09-01 15:40:19 Tue UTC [INFO] utils: Loaded 205 records from /home/runner/work/house_hunt/house_hunt/Data/Results/housing_stats_Townhouse.csv
+2026-09-01 15:40:19 Tue UTC [INFO] __main__: COMPLETED: Housing Data Collection (Townhouse)
+2026-09-01 15:40:19 Tue UTC [INFO] __main__: EXECUTION SUMMARY:
+2026-09-01 15:40:19 Tue UTC [INFO] __main__:   HOUSING: SUCCESS
+2026-09-01 15:40:19 Tue UTC [INFO] __main__: COMPLETED: House Hunt | 1/1 modules successful
