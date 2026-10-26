@@ -4,8 +4,6 @@
 
 ## Past Reports
 
-[View March 2026 Location Scoring Reports](https://bishop527.github.io/house_hunt/archive/2026/March/)
-
 [View April 2026 Location Scoring Reports](https://bishop527.github.io/house_hunt/archive/2026/April/)
 
 [View May 2026 Location Scoring Reports](https://bishop527.github.io/house_hunt/archive/2026/May/)
