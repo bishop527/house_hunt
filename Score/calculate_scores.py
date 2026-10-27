@@ -20,6 +20,7 @@ Updated:
 import os
 import sys
 import json
+import math
 import pandas as pd
 from constants import (
     LOG_LEVEL, APP_LOG_FILE, SCORE_LOG_FILE,
@@ -57,7 +58,7 @@ class LocationScorer:
     for each location, then ranks and assigns tiers.
     """
 
-    def __init__(self, config_file=None, property_types=None):
+    def __init__(self, config_file=None, property_types=None, config_dict=None):
         """
         Initialize scorer with configuration.
 
@@ -65,9 +66,10 @@ class LocationScorer:
             config_file (str): Path to JSON config file. If None,
                              uses default config.
             property_types (list, optional): Property types to use for execution.
+            config_dict (dict, optional): Override config loaded from file.
         """
         self.filtered_locations = None
-        self.config = self._load_config(config_file)
+        self.config = config_dict if config_dict is not None else self._load_config(config_file)
         self._validate_weights()
         self.commute_data = None
         self.housing_data = None
@@ -224,11 +226,14 @@ class LocationScorer:
         """Validate and normalize config weights to sum to exactly 1.0"""
         weights = self.config.get('weights', {})
         if weights:
-            total = sum(weights.values())
-            if total > 0 and abs(total - 1.0) > 0.001:
+            # Only sum top-level numeric weights, ignore nested dicts like commute_weights
+            numeric_weights = [v for v in weights.values() if isinstance(v, (int, float))]
+            total = sum(numeric_weights)
+            if not math.isclose(total, 1.0, rel_tol=1e-5):
                 logger.warning(f"Main weights sum to {total:.3f}, normalizing to 1.0")
                 for key in weights:
-                    weights[key] = weights[key] / total
+                    if isinstance(weights[key], (int, float)):
+                        weights[key] = weights[key] / total
                 self.config['weights'] = weights
 
         housing_prefs = self.config.get('housing_preferences', {})
@@ -352,20 +357,19 @@ class LocationScorer:
 
         return True
 
-    def _score_commute_time(self, avg_time):
+    def _score_commute_time(self, avg_time, work_prefs):
         """
         Score commute time (0-100 points).
 
         Args:
             avg_time (float): Average commute time in minutes
+            work_prefs (dict): Preferences for this specific work address
 
         Returns:
             float: Score 0-100
         """
-        # Support both old and new config structure
-        prefs = self.config.get('work_address_1', self.config.get('commute_preferences', {}))
-        ideal = prefs.get('ideal_time_minutes', 30)
-        max_acceptable = prefs.get('max_acceptable_time', 45)
+        ideal = work_prefs.get('ideal_time_minutes', 30)
+        max_acceptable = work_prefs.get('max_acceptable_time', 45)
 
         if avg_time <= ideal:
             return COMMUTE_SCORE_MAX
@@ -395,7 +399,26 @@ class LocationScorer:
         Returns:
             dict: {'commute_score': float}
         """
-        commute_score = self._score_commute_time(row['Average_Time'])
+        w1_prefs = self.config.get('work_address_1', self.config.get('commute_preferences', {}))
+        w2_prefs = self.config.get('work_address_2', {})
+        
+        has_w1 = pd.notna(row.get('Average_Time'))
+        has_w2 = pd.notna(row.get('Work2_Average_Time'))
+        
+        commute_weights = self.config.get('weights', {}).get('commute_weights', {'work1': 0.5, 'work2': 0.5})
+        
+        c1_score = self._score_commute_time(row['Average_Time'], w1_prefs) if has_w1 else 0
+        c2_score = self._score_commute_time(row['Work2_Average_Time'], w2_prefs) if has_w2 else 0
+        
+        if has_w1 and has_w2:
+            commute_score = (c1_score * commute_weights.get('work1', 0.5)) + (c2_score * commute_weights.get('work2', 0.5))
+        elif has_w1:
+            commute_score = c1_score
+        elif has_w2:
+            commute_score = c2_score
+        else:
+            commute_score = 0
+            
         return {'commute_score': round(commute_score, 1)}
 
     def _score_housing_price(self, price):
@@ -982,6 +1005,13 @@ class LocationScorer:
                 f"Saved {len(self.scored_locations)} scored locations "
                 f"to {self.scored_locations_file}"
             )
+            
+            # Save filtered locations as well for the interactive dashboard
+            if hasattr(self, 'filtered_locations') and not self.filtered_locations.empty:
+                filtered_file = self.scored_locations_file.replace('scored_locations', 'filtered_locations')
+                self.filtered_locations.to_csv(filtered_file, index=False)
+                logger.info(f"Saved {len(self.filtered_locations)} filtered locations to {filtered_file}")
+                
             return True
         except Exception as e:
             logger.error(f"Failed to save results: {e}", exc_info=True)

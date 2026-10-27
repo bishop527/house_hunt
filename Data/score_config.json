@@ -2,7 +2,11 @@
   "weights": {
     "commute": 0.50,
     "housing": 0.35,
-    "crime": 0.15
+    "crime": 0.15,
+    "commute_weights": {
+      "work1": 0.5,
+      "work2": 0.5
+    }
   },
   "work_address_1": {
     "max_distance_miles": 40,
@@ -10,7 +14,9 @@
     "max_acceptable_time": 45
   },
     "work_address_2": {
-    "max_distance_miles": 40
+    "max_distance_miles": 40,
+    "ideal_time_minutes": 30,
+    "max_acceptable_time": 45
   },
   
   "housing_preferences": {

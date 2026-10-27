@@ -80,6 +80,10 @@ jobs:
       run: |
         python main.py --score
 
+    - name: Generate static dashboard
+      run: |
+        python -m Score.generate_dashboard
+
     - name: Verify output files
       run: |
         if [ ! -f "Data/Results/scored_locations-Single_Family.csv" ] && [ ! -f "Data/Results/scored_locations-Condo.csv" ] && [ ! -f "Data/Results/scored_locations-Townhouse.csv" ]; then
@@ -96,6 +100,10 @@ jobs:
         fi
         if [ ! -f "Data/Results/score_report-Townhouse.html" ]; then
           echo "Error: score_report-Townhouse.html was not created"
+          exit 1
+        fi
+        if [ ! -f "Data/Results/dashboard.html" ]; then
+          echo "Error: dashboard.html was not created"
           exit 1
         fi
         echo "All report files verified"
@@ -239,6 +247,16 @@ jobs:
                 </div>
                 
                 <div class="report-grid">
+                    <div class="report-card" style="background: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%);">
+                        <a href="dashboard.html">
+                            <div class="report-title">⚡ Interactive Dashboard</div>
+                            <div class="report-description">
+                                Adjust scoring weights, budgets, and commutes in real-time with our interactive dashboard.
+                            </div>
+                            <span class="filter-badge">Interactive</span>
+                        </a>
+                    </div>
+                    
                     <div class="report-card">
                         <a href="score_report-Single_Family.html">
                             <div class="report-title">Single Family Homes</div>

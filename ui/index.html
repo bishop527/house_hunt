@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>House Hunt Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar for Controls -->
+        <aside class="sidebar glass-panel">
+            <div class="sidebar-header">
+                <h2>House Hunt</h2>
+                <div class="toggle-group">
+                    <label class="toggle-label">Group By:</label>
+                    <div class="switch-field">
+                        <input type="radio" id="group_zip" name="grouping_mode" value="zip" checked/>
+                        <label for="group_zip">ZIP</label>
+                        <input type="radio" id="group_town" name="grouping_mode" value="town" />
+                        <label for="group_town">Town</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="controls-section">
+                <!-- Global Weights -->
+                <div class="control-group">
+                    <h3>Global Weights</h3>
+                    <div class="slider-container">
+                        <label>Commute (<span id="val-weight-commute">50</span>%)</label>
+                        <input type="range" id="weight-commute" min="0" max="100" value="50" class="slider primary">
+                    </div>
+                    <div class="slider-container">
+                        <label>Housing (<span id="val-weight-housing">35</span>%)</label>
+                        <input type="range" id="weight-housing" min="0" max="100" value="35" class="slider primary">
+                    </div>
+                    <div class="slider-container">
+                        <label>Crime (<span id="val-weight-crime">15</span>%)</label>
+                        <input type="range" id="weight-crime" min="0" max="100" value="15" class="slider primary">
+                    </div>
+                    <small id="weight-warning" class="warning-text hidden">Weights must sum to 100%</small>
+                </div>
+
+                <!-- Housing Sub-Weights -->
+                <div class="control-group">
+                    <h3>Housing Priority</h3>
+                    <div class="slider-container">
+                        <label>Price (<span id="val-hweight-price">60</span>%)</label>
+                        <input type="range" id="hweight-price" min="0" max="100" value="60" class="slider accent">
+                    </div>
+                    <div class="slider-container">
+                        <label>Price/SqFt (<span id="val-hweight-ppsf">30</span>%)</label>
+                        <input type="range" id="hweight-ppsf" min="0" max="100" value="30" class="slider accent">
+                    </div>
+                    <div class="slider-container">
+                        <label>Tax Rate (<span id="val-hweight-tax">10</span>%)</label>
+                        <input type="range" id="hweight-tax" min="0" max="100" value="10" class="slider accent">
+                    </div>
+                    <small id="hweight-warning" class="warning-text hidden">Weights must sum to 100%</small>
+                </div>
+
+                <!-- Commute Preferences -->
+                <div class="control-group">
+                    <h3>Commute (Work 1)</h3>
+                    <div class="slider-container">
+                        <label>Ideal Time (<span id="val-commute-ideal">30</span>m)</label>
+                        <input type="range" id="commute-ideal" min="5" max="120" value="30" step="5" class="slider">
+                    </div>
+                    <div class="slider-container">
+                        <label>Max Time (<span id="val-commute-max">60</span>m)</label>
+                        <input type="range" id="commute-max" min="10" max="120" value="60" step="5" class="slider">
+                    </div>
+                </div>
+
+                <!-- Housing Budgets -->
+                <div class="control-group">
+                    <h3>Budget ($k)</h3>
+                    <div class="slider-container">
+                        <label>Min (<span id="val-budget-min">400</span>k)</label>
+                        <input type="range" id="budget-min" min="100" max="2000" value="400" step="25" class="slider success">
+                    </div>
+                    <div class="slider-container">
+                        <label>Ideal (<span id="val-budget-ideal">650</span>k)</label>
+                        <input type="range" id="budget-ideal" min="200" max="2500" value="650" step="25" class="slider success">
+                    </div>
+                    <div class="slider-container">
+                        <label>Max (<span id="val-budget-max">850</span>k)</label>
+                        <input type="range" id="budget-max" min="300" max="3000" value="850" step="25" class="slider success">
+                    </div>
+                </div>
+
+            </div>
+            
+            <div class="sidebar-footer">
+                <button id="btn-save" class="btn primary-btn">Save Configuration</button>
+            </div>
+        </aside>
+
+        <!-- Main Content for Table -->
+        <main class="main-content">
+            <header class="main-header glass-panel">
+                <div class="header-info">
+                    <h1>Ranked Locations</h1>
+                    <span id="result-count" class="badge">0 Results</span>
+                </div>
+                <div class="loader hidden" id="loading-indicator"></div>
+            </header>
+
+            <div class="table-container glass-panel">
+                <table id="results-table">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Tier</th>
+                            <th>Town</th>
+                            <th>Zip</th>
+                            <th>Score</th>
+                            <th>Commute Score</th>
+                            <th>Housing Score</th>
+                            <th>Crime Score</th>
+                            <th>Price</th>
+                            <th>Time (m)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body">
+                        <!-- Data rows will be injected here -->
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>
