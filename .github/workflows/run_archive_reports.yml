@@ -2,7 +2,7 @@ name: Archive Last Months Reports
 
 on:
   schedule:
-    - cron: '0 01 1 * *'  # 1st of every month at 12:00am EST
+    - cron: '0 0 1 * *'  # 1st of every month at 12:00am EST
       timezone: "America/New_York"
 
   workflow_dispatch:        # Allows manual trigger from GitHub UI
@@ -11,31 +11,34 @@ jobs:
   archive-reports:
     runs-on: ubuntu-latest
 
-    # Only run if previous workflow succeeded (when triggered by workflow_run)
-    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
-
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    - name: Archive previous month's reports in docs/archive
+    - name: Archive previous month reports in docs/archive
       run: |
         set -e
         PREV_MONTH=$(date -d "$(date +%Y-%m-01) -1 month" '+%B')
         PREV_YEAR=$(date -d "$(date +%Y-%m-01) -1 month" '+%Y')
-    
-        mkdir -p docs/archive/${PREV_YEAR}/${PREV_MONTH}
+        TARGET_DIR="docs/archive/${PREV_YEAR}/${PREV_MONTH}"
+        
+        mkdir -p "$TARGET_DIR"
  
-        # Archive last months reports
-        cp docs/*.html "docs/archive/${PREV_YEAR}/${PREV_MONTH}"
-        echo "Last months reports copied to archive folder"
+        shopt -s nullglob
+        files=(docs/*.html)
+        if [ ${#files[@]} -gt 0 ]; then
+          cp "${files[@]}" "$TARGET_DIR/"
+          echo "Copied ${#files[@]} report(s) to $TARGET_DIR"
+        else
+          echo "No HTML reports found in docs/ to archive."
+        fi
 
     - name: Commit and push results
       run: |
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
         
-        git add docs/* || true
+        git add docs/archive/
         
         # Only commit if there are changes
         if ! git diff --staged --quiet; then
