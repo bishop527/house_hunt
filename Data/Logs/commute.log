@@ -3554,3 +3554,13 @@
 2026-10-30 00:35:04 Fri UTC [INFO] Commute.collect_commute_data: Loaded 204 records from /home/runner/work/house_hunt/house_hunt/Data/Results/work1_commute_stats.csv
 2026-10-30 00:35:04 Fri UTC [INFO] Commute.collect_commute_data: Successfully updated /home/runner/work/house_hunt/house_hunt/Data/Results/work1_commute_stats.csv with 101 records
 2026-10-30 00:35:05 Fri UTC [INFO] Commute.collect_commute_data: COMPLETED: Commute Data Collection (morning) | queried=101 ok=101 | elements=101 (advanced) | Basic=0/10,000 Advanced=3,613/5,000 | cost=$0.00
+2026-10-30 16:58:50 Fri UTC [INFO] Commute.collect_commute_data: STARTED: Commute Data Collection (morning)
+2026-10-30 16:58:50 Fri UTC [INFO] Commute.collect_commute_data: Auto tier selection: Advanced tier free quota available (1,387 remaining)
+2026-10-30 16:58:50 Fri UTC [INFO] Commute.collect_commute_data: Found 232 addresses within Work Address 1 range (zip level)
+2026-10-30 16:58:50 Fri UTC [INFO] Commute.collect_commute_data: Work Address 2 range filter: removed 131 address(es) outside 40mi of Work Address 2 | 101 remaining
+2026-10-30 16:58:50 Fri UTC [INFO] Commute.collect_commute_data: Budget check passed: 3,714/5,000 (current=3,613 + estimated=101)
+2026-10-30 16:58:50 Fri UTC [INFO] Commute.collect_commute_data: Morning commute: 101 locations -> 244 Wood St. Lexington, MA 02421
+2026-10-30 16:58:52 Fri UTC [INFO] Commute.collect_commute_data: Completed 5 requests, processed 101 elements, collected 101 valid results
+2026-10-30 16:58:52 Fri UTC [INFO] Commute.collect_commute_data: Loaded 204 records from /home/runner/work/house_hunt/house_hunt/Data/Results/work1_commute_stats.csv
+2026-10-30 16:58:52 Fri UTC [INFO] Commute.collect_commute_data: Successfully updated /home/runner/work/house_hunt/house_hunt/Data/Results/work1_commute_stats.csv with 101 records
+2026-10-30 16:58:53 Fri UTC [INFO] Commute.collect_commute_data: COMPLETED: Commute Data Collection (morning) | queried=101 ok=101 | elements=101 (advanced) | Basic=0/10,000 Advanced=3,714/5,000 | cost=$0.00
